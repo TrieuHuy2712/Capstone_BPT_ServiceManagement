@@ -1,0 +1,8 @@
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/bin/Debug/netstandard2.1/BPT-Service.Common.deps.json
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/bin/Debug/netstandard2.1/BPT-Service.Common.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/bin/Debug/netstandard2.1/BPT-Service.Common.pdb
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.csprojAssemblyReference.cache
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.AssemblyInfoInputs.cache
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.AssemblyInfo.cs
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.pdb

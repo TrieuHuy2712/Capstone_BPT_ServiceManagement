@@ -1,0 +1,13 @@
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Application.deps.json
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Application.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Application.pdb
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.csprojAssemblyReference.cache
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.AssemblyInfoInputs.cache
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.AssemblyInfo.cs
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.csproj.CopyComplete
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.pdb
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Common.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Common.pdb
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Model.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/Business/BPT-Service.Application/bin/Debug/netstandard2.1/BPT-Service.Model.pdb

@@ -1,0 +1,19 @@
+{
+  "FilePath": "/home/acer/Desktop/BPT-Service-Management/Back-end/DataEF/BPT-Service.Data/BPT-Service.Data.csproj",
+  "Configuration": {
+    "ConfigurationName": "MVC-3.0",
+    "LanguageVersion": "3.0",
+    "Extensions": [
+      {
+        "ExtensionName": "MVC-3.0"
+      }
+    ]
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 800
+  },
+  "RootNamespace": "BPT_Service.Data",
+  "Documents": [],
+  "SerializationFormat": "0.2"
+}
