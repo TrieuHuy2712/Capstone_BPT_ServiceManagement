@@ -1,21 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using AutoMapper;
 using BPT_Service.Data;
 using BPT_Service.Model.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using BPT_Service.Application.Interfaces;
+using BPT_Service.Application.Implementation;
+using BPT_Service.Common.Helpers;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 namespace BPT_Service.WebAPI
 {
     public class Startup
@@ -33,11 +34,12 @@ namespace BPT_Service.WebAPI
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
                 o => o.MigrationsAssembly("DataEF/BPT-Service.Data")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddMvc()
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<Data.DbInitializer>();
@@ -61,7 +63,34 @@ namespace BPT_Service.WebAPI
             });
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); 
+            //Authenticate service
+            services.AddScoped<IAuthenticateService, AuthenticateService>();
+            services.AddSingleton<IAuthenticateService, AuthenticateService>();
+            services.AddTransient<IAuthenticateService, AuthenticateService>();
+            ////////
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,8 +104,18 @@ namespace BPT_Service.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseEndpoints(endpoints =>
             {

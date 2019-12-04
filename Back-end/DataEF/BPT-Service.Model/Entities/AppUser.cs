@@ -25,7 +25,7 @@ namespace BPT_Service.Model.Entities
 
         public DateTime? BirthDay { set; get; }
 
-        public decimal Balance { get; set; }
+        public string Token { get; set; }
 
         public string Avatar { get; set; }
 

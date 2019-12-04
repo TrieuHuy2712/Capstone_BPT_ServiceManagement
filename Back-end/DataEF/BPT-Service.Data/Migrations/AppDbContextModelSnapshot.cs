@@ -109,9 +109,6 @@ namespace BPT_Service.Data.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime?>("BirthDay")
                         .HasColumnType("TEXT");
 
@@ -159,6 +156,9 @@ namespace BPT_Service.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");

@@ -20,7 +20,8 @@ namespace BPT_Service.Application.ViewModels.System
         public string PhoneNumber { set; get; }
         public string Avatar { get; set; }
         public Status Status { get; set; }
-
+         public string Token {get;set;}
+         public string Expiration {get;set;}
         public string Gender { get; set; }
 
         public DateTime DateCreated { get; set; }

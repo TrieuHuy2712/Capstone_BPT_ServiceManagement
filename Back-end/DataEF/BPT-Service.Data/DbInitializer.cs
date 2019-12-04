@@ -50,7 +50,6 @@ namespace BPT_Service.Data
                     UserName = "admin",
                     FullName = "Administrator",
                     Email = "admin@gmail.com",
-                    Balance = 0,
                     DateCreated = DateTime.Now,
                     DateModified = DateTime.Now,
                     Status = Status.Active

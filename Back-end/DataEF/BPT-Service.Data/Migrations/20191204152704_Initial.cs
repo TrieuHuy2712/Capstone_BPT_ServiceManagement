@@ -99,7 +99,7 @@ namespace BPT_Service.Data.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FullName = table.Column<string>(nullable: true),
                     BirthDay = table.Column<DateTime>(nullable: true),
-                    Balance = table.Column<decimal>(nullable: false),
+                    Token = table.Column<string>(nullable: true),
                     Avatar = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
