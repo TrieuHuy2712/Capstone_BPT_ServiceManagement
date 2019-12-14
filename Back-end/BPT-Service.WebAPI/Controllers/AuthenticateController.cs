@@ -31,7 +31,6 @@ namespace BPT_Service.WebAPI.Controllers
 
         // [Authorize(Roles = Role.Admin)]
         [HttpGet("getAll")]
-        [Authorize]
         public IActionResult GetAll()
         {
             var users =  _userService.GetAll();

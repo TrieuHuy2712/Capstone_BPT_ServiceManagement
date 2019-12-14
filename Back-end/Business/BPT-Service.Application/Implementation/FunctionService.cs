@@ -17,18 +17,13 @@ namespace BPT_Service.Application.Implementation
     {
         private IRepository<Function, string> _functionRepository;
         private IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private MapperConfiguration _config;
 
-        public FunctionService(IMapper mapper,
+        public FunctionService(
             IRepository<Function, string> functionRepository,
-            IUnitOfWork unitOfWork,
-            MapperConfiguration config)
+            IUnitOfWork unitOfWork)
         {
             _functionRepository = functionRepository;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _config=config;
         }
 
         public bool CheckExistedId(string id)
@@ -38,7 +33,15 @@ namespace BPT_Service.Application.Implementation
 
         public void Add(FunctionViewModel functionVm)
         {
-            var function = _mapper.Map<Function>(functionVm);
+            //var function = _mapper.Map<Function>(functionVm);
+            Function function = new Function();
+            function.Id = functionVm.Id;
+            function.IconCss = functionVm.IconCss;
+            function.Name = functionVm.Name;
+            function.ParentId = functionVm.ParentId;
+            function.SortOrder = functionVm.SortOrder;
+            function.Status = functionVm.Status;
+            function.URL = functionVm.URL;
             _functionRepository.Add(function);
         }
 
@@ -50,7 +53,16 @@ namespace BPT_Service.Application.Implementation
         public FunctionViewModel GetById(string id)
         {
             var function = _functionRepository.FindSingle(x => x.Id == id);
-            return _mapper.Map<Function, FunctionViewModel>(function);
+            //return _mapper.Map<Function, FunctionViewModel>(function);
+            FunctionViewModel functionViewModel = new FunctionViewModel();
+            functionViewModel.IconCss = function.IconCss;
+            functionViewModel.Id = function.Id;
+            functionViewModel.Name = function.Name;
+            functionViewModel.ParentId = function.ParentId;
+            functionViewModel.SortOrder = function.SortOrder;
+            functionViewModel.Status = function.Status;
+            functionViewModel.URL = function.URL;
+            return functionViewModel;
         }
 
         public Task<List<FunctionViewModel>> GetAll(string filter)
@@ -58,12 +70,31 @@ namespace BPT_Service.Application.Implementation
             var query = _functionRepository.FindAll(x => x.Status == Status.Active);
             if (!string.IsNullOrEmpty(filter))
                 query = query.Where(x => x.Name.Contains(filter));
-            return query.OrderBy(x => x.ParentId).ProjectTo<FunctionViewModel>(_config).ToListAsync();
+            var queryFunction = query.OrderBy(x => x.ParentId).Select(x => new FunctionViewModel
+            {
+                IconCss = x.IconCss,
+                Id = x.Id,
+                Name = x.Name,
+                ParentId = x.ParentId,
+                SortOrder = x.SortOrder,
+                Status = x.Status,
+                URL = x.URL
+            });
+            return queryFunction.ToListAsync();
         }
 
         public IEnumerable<FunctionViewModel> GetAllWithParentId(string parentId)
         {
-            return _functionRepository.FindAll(x => x.ParentId == parentId).ProjectTo<FunctionViewModel>(_config);
+            //return _functionRepository.FindAll(x => x.ParentId == parentId).ProjectTo<FunctionViewModel>(_config);
+            return _functionRepository.FindAll(x => x.ParentId == parentId).Select(x=>new FunctionViewModel{
+                IconCss = x.IconCss,
+                Id = x.Id,
+                Name = x.Name,
+                ParentId = x.ParentId,
+                SortOrder = x.SortOrder,
+                Status = x.Status,
+                URL = x.URL
+            });
         }
 
         public void Save()
@@ -74,7 +105,20 @@ namespace BPT_Service.Application.Implementation
         public void Update(FunctionViewModel functionVm)
         {
             var functionDb = _functionRepository.FindById(functionVm.Id);
-            var function = _mapper.Map<Function>(functionVm);
+            //var function = _mapper.Map<Function>(functionVm);
+            if (functionDb != null)
+            {
+                Function function = new Function();
+                function.IconCss = functionVm.IconCss;
+                function.Id = functionVm.Id;
+                function.Name = functionVm.Name;
+                function.ParentId = functionVm.ParentId;
+                function.SortOrder = functionVm.SortOrder;
+                function.Status = functionVm.Status;
+                function.URL = functionVm.URL;
+                _functionRepository.Update(function);
+            }
+
         }
 
         public void ReOrder(string sourceId, string targetId)

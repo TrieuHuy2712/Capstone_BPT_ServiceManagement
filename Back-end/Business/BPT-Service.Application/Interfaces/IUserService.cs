@@ -9,7 +9,7 @@ namespace BPT_Service.Application.Interfaces
     {
         Task<bool> AddAsync(AppUserViewModel userVm);
 
-        Task DeleteAsync(string id);
+        Task<bool> DeleteAsync(string id);
 
         Task<List<AppUserViewModel>> GetAllAsync();
 
@@ -18,6 +18,6 @@ namespace BPT_Service.Application.Interfaces
         Task<AppUserViewModel> GetById(string id);
 
 
-        Task UpdateAsync(AppUserViewModel userVm);
+        Task<bool> UpdateAsync(AppUserViewModel userVm);
     }
 }

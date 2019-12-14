@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Common.Dtos;
@@ -16,16 +14,9 @@ namespace BPT_Service.Application.Implementation
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        private MapperConfiguration _config;
-        private readonly IMapper _mapper;
-        public UserService(UserManager<AppUser> userManager,
-        MapperConfiguration config,
-        IMapper mapper
-        )
+        public UserService(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
-            _config = config;
-            _mapper = mapper;
         }
 
         public async Task<bool> AddAsync(AppUserViewModel userVm)
@@ -50,15 +41,30 @@ namespace BPT_Service.Application.Implementation
             return true;
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
+            if(user !=null){
+                await _userManager.DeleteAsync(user);
+                return true;
+            }
+            return false;
+            
         }
 
         public async Task<List<AppUserViewModel>> GetAllAsync()
         {
-            return await _userManager.Users.ProjectTo<AppUserViewModel>(_config).ToListAsync();
+            //return await _userManager.Users.ProjectTo<AppUserViewModel>(_config).ToListAsync();
+            return await _userManager.Users.Select(x=> new AppUserViewModel(){
+                BirthDay = x.BirthDay.ToString(),
+                Avatar = x.Avatar,
+                DateCreated = x.DateCreated,
+                Email= x.Email,
+                FullName = x.FullName,
+                PhoneNumber = x.PhoneNumber,
+                Token = x.Token,
+                UserName = x.UserName
+            }).ToListAsync();
         }
 
         public PagedResult<AppUserViewModel> GetAllPagingAsync(string keyword, int page, int pageSize)
@@ -101,12 +107,20 @@ namespace BPT_Service.Application.Implementation
         {
             var user = await _userManager.FindByIdAsync(id);
             var roles = await _userManager.GetRolesAsync(user);
-            var userVm = _mapper.Map<AppUser, AppUserViewModel>(user);
+            //var userVm = _mapper.Map<AppUser, AppUserViewModel>(user);
+            AppUserViewModel userVm= new AppUserViewModel();
+            userVm.Avatar = user.Avatar;
+            userVm.BirthDay= user.BirthDay.ToString();
+            userVm.DateCreated = user.DateCreated;
+            userVm.Email = user.Email;
+            userVm.FullName = user.FullName;
+            userVm.UserName = user.UserName;
+            userVm.Token = user.Token;
             userVm.Roles = roles.ToList();
             return userVm;
         }
 
-        public async Task UpdateAsync(AppUserViewModel userVm)
+        public async Task<bool> UpdateAsync(AppUserViewModel userVm)
         {
             var user = await _userManager.FindByIdAsync(userVm.Id.ToString());
             //Remove current roles in db
@@ -126,7 +140,9 @@ namespace BPT_Service.Application.Implementation
                 user.Email = userVm.Email;
                 user.PhoneNumber = userVm.PhoneNumber;
                 await _userManager.UpdateAsync(user);
+                return true;
             }
+            return false;
 
         }
     }

@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using System.Linq;
-using AutoMapper;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Application.Interfaces;
 
@@ -63,6 +62,7 @@ namespace BPT_Service.Application.Implementation
             var model = _userManager.Users.ToList();
             IEnumerable<AppUserViewModel> modelVm = model.Select(x => new AppUserViewModel
             {
+                Id = x.Id,
                 UserName = x.UserName,
                 Avatar = x.Avatar,
             });
@@ -80,6 +80,7 @@ namespace BPT_Service.Application.Implementation
             else
             {
                 AppUserViewModel modelVm = new AppUserViewModel();
+                modelVm.Id = user.Id;
                 modelVm.UserName = user.UserName;
                 modelVm.Avatar = user.Avatar;
                 return modelVm;

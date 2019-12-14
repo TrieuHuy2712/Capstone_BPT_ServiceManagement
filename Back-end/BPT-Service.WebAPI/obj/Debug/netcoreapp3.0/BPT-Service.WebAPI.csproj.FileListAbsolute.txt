@@ -63,3 +63,4 @@
 /home/acer/Desktop/BPT-Service-Management/Back-end/BPT-Service.WebAPI/bin/Debug/netcoreapp3.0/Microsoft.AspNetCore.JsonPatch.dll
 /home/acer/Desktop/BPT-Service-Management/Back-end/BPT-Service.WebAPI/bin/Debug/netcoreapp3.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /home/acer/Desktop/BPT-Service-Management/Back-end/BPT-Service.WebAPI/bin/Debug/netcoreapp3.0/Newtonsoft.Json.Bson.dll
+/home/acer/Desktop/BPT-Service-Management/Back-end/BPT-Service.WebAPI/bin/Debug/netcoreapp3.0/Microsoft.AspNet.Identity.Core.dll

@@ -17,6 +17,8 @@ using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.Implementation;
 using BPT_Service.Common.Helpers;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using BPT_Service.Model.Infrastructure.Interfaces;
+
 namespace BPT_Service.WebAPI
 {
     public class Startup
@@ -41,9 +43,8 @@ namespace BPT_Service.WebAPI
             services.AddMvc()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
-            services.AddAutoMapper(typeof(Startup));
-            services.AddTransient<Data.DbInitializer>();
-            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
+            services.AddAutoMapper(typeof(RoleService).Assembly);
+            services.AddTransient<DbInitializer>();
             // Configure Identity
             services.Configure<IdentityOptions>(options =>
             {
@@ -63,11 +64,20 @@ namespace BPT_Service.WebAPI
             });
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
+
+            // Auto Mapper Configurations
             //Authenticate service
             services.AddScoped<IAuthenticateService, AuthenticateService>();
             services.AddSingleton<IAuthenticateService, AuthenticateService>();
+
             services.AddTransient<IAuthenticateService, AuthenticateService>();
-            ////////
+            //////// Services 
+            services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
+            services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddTransient<IRoleService, RoleService>();
+
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");

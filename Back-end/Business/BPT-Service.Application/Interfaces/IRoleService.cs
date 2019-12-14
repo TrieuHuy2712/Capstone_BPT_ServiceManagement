@@ -8,7 +8,8 @@ namespace BPT_Service.Application.Interfaces
 {
     public interface IRoleService
     {
-        Task<bool> AddAsync(AppRoleViewModel userVm);
+        Task<bool> AddAsync(AnnouncementViewModel announcement, List<AnnouncementUserViewModel> announcementUsers, AppRoleViewModel userVm);
+
         Task DeleteAsync(Guid id);
 
         Task<List<AppRoleViewModel>> GetAllAsync();
@@ -16,7 +17,6 @@ namespace BPT_Service.Application.Interfaces
         PagedResult<AppRoleViewModel> GetAllPagingAsync(string keyword, int page, int pageSize);
 
         Task<AppRoleViewModel> GetById(Guid id);
-
 
         Task UpdateAsync(AppRoleViewModel userVm);
 

@@ -19,5 +19,6 @@ namespace BPT_Service.Application.ViewModels.System
         public DateTime DateCreated { set; get; }
         public DateTime DateModified { set; get; }
         public Status Status { set; get; }
+
     }
 }
