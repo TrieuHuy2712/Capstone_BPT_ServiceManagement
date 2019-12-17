@@ -77,6 +77,8 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRoleService, RoleService>();
             services.AddTransient<IRoleService, RoleService>();
 
+            services.AddScoped<IFunctionService,FunctionService>();
+            services.AddTransient<IFunctionService,FunctionService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // configure strongly typed settings objects

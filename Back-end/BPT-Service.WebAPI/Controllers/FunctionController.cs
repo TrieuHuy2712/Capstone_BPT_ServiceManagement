@@ -32,26 +32,37 @@ namespace BPT_Service.WebAPI.Controllers
             return new ObjectResult(model);
         }
 
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("GetAll/{nameUser}")]
+        public async Task<IActionResult> GetAll(string nameUser)
         {
             var model = await _functionService.GetAll(string.Empty);
             var rootFunctions = model.Where(c => c.ParentId == null);
             var items = new List<FunctionViewModel>();
-            foreach (var function in rootFunctions)
+            if (nameUser == "admin")
             {
-                //add the parent category to the item list
-                items.Add(function);
-                //now get all its children (separate Category in case you need recursion)
-                GetByParentId(model.ToList(), function, items);
+                foreach (var function in rootFunctions)
+                {
+                    //add the parent category to the item list
+                    items.Add(function);
+                    //now get all its children (separate Category in case you need recursion)
+                    GetByParentId(model.ToList(), function, items);
+                }
+                var result = items.Where(x => x.ParentId != null).GroupBy(t => t.ParentId).Select(group => new
+                {
+                    ParentId = group.Key,
+                    ChildrenId = group.ToList()
+                }).ToList();
+                return new ObjectResult(result);
+            }else{
+                return new ObjectResult("abc");
             }
-            return new ObjectResult(items);
+
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("GetById/{id}")]
         public IActionResult GetById(string id)
         {
-            var model = _functionService.GetAll(id);
+            var model = _functionService.GetById(id);
 
             return new ObjectResult(model);
         }
@@ -80,7 +91,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("UpdateParentId/{sourceId}/{targetId}")]
-        public IActionResult UpdateParentId(string sourceId, string targetId,[FromBody]Dictionary<string, int> items)
+        public IActionResult UpdateParentId(string sourceId, string targetId, [FromBody]Dictionary<string, int> items)
         {
             if (!ModelState.IsValid)
             {

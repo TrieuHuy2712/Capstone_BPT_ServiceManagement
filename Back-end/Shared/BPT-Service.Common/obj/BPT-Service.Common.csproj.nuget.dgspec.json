@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {}
+    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {}
   },
   "projects": {
-    "/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
         "projectName": "BPT-Service.Common",
-        "projectPath": "/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj",
-        "packagesPath": "/home/acer/.nuget/packages/",
-        "outputPath": "/home/acer/Desktop/BPT-Service-Management/Back-end/Shared/BPT-Service.Common/obj/",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+        "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/acer/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -50,7 +52,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
