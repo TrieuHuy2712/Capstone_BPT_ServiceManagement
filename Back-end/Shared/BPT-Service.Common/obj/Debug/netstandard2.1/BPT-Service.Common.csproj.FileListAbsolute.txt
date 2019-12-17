@@ -9,7 +9,6 @@
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.deps.json
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.dll
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
-C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.csprojAssemblyReference.cache
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.AssemblyInfoInputs.cache
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.AssemblyInfo.cs
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.dll
