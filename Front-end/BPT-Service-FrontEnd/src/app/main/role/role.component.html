@@ -39,12 +39,12 @@
             </thead>
             <tbody>
               <tr *ngFor="let role of roles">
-                <td>{{role.Name}}</td>
-                <td>{{role.Description}}</td>
+                <td>{{role.name}}</td>
+                <td>{{role.description}}</td>
                 <td>
-                  <button *ngIf="role.Name != 'Admin'" class="btn btn-primary" (click)="showEditModal(role.Id)"><i
+                  <button *ngIf="role.name != 'Admin'" class="btn btn-primary" (click)="showEditModal(role.id)"><i
                       class="fa fa-pencil-square-o"></i></button>
-                  <button *ngIf="role.Name != 'Admin'" class="btn btn-danger" (click)="deleteItem(role.Id)"><i class="fa fa-trash"></i></button>
+                  <button *ngIf="role.name != 'Admin'" class="btn btn-danger" (click)="deleteItem(role.id)"><i class="fa fa-trash"></i></button>
   
                 </td>
               </tr>
@@ -77,8 +77,8 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên nhóm</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="hidden" [(ngModel)]="entity.Id" name="id" />
-                <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name"
+                <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3" name="name"
                   class="form-control">
                 <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
                   Bạn phải nhập tên ít nhất 3 ký tự
@@ -88,7 +88,7 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả </label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.Description"
+                <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.description"
                   name="description" rows="3"></textarea>
                 <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
                   class="text-danger">

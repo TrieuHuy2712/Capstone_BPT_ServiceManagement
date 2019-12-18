@@ -24,12 +24,13 @@ export class RoleComponent implements OnInit {
   }
 
   loadData() {
-    this._dataService.get('/api/appRole/getlistpaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&filter=' + this.filter)
+    this._dataService.get('/AdminRole/GetAllPaging?page=' + this.pageIndex + '&pageSize=' + this.pageSize + '&keyword=' + this.filter)
       .subscribe((response: any) => {
-        this.roles = response.Items;
-        this.pageIndex = response.PageIndex;
-        this.pageSize = response.PageSize;
-        this.totalRow = response.TotalRows;
+        console.log(response);
+        this.roles = response.results;
+        this.pageIndex = response.currentPage;
+        this.pageSize = response.pageSize;
+        this.totalRow = response.rowCount;
       });
   }
   pageChanged(event: any): void {
@@ -41,7 +42,7 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    this._dataService.get('/api/appRole/detail/' + id)
+    this._dataService.get('/AdminRole/GetById/' + id)
       .subscribe((response: any) => {
         this.entity = response;
         console.log(this.entity);
@@ -53,17 +54,18 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
+    debugger
     if (valid) {
       if (this.entity.Id == undefined) {
         console.log('vo day duoc')
-        this._dataService.post('/api/appRole/add', this.entity)
+        this._dataService.post('/AdminRole/SaveEntity', this.entity)
           .subscribe((response: any) => {
             this.loadData();
             this.modalAddEdit.hide();
             this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
           }, error => this._dataService.handleError(error));
       } else {
-        this._dataService.put('/api/appRole/update', this.entity)
+        this._dataService.post('/AdminRole/SaveEntity', this.entity)
           .subscribe((response: any) => {
             this.loadData();
             this.modalAddEdit.hide();
@@ -76,7 +78,7 @@ export class RoleComponent implements OnInit {
     this._notificationService.printConfirmationDialog(MessageConstants.CONFIRM_DELETE_MSG, () => this.deleteItemConfirm(id));
   }
   deleteItemConfirm(id: any) {
-      this._dataService.delete('/api/appRole/delete','id',id).subscribe((response: Response)=>{
+      this._dataService.delete('/AdminRole/Delete','id',id).subscribe((response: Response)=>{
         this._notificationService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
         this.loadData();
       })

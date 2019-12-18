@@ -19,32 +19,34 @@ export class DataService {
       this.headers.set('Content-Type','application/json');
      }
   get(uri:string){
-    debugger
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    console.log(this.headers);
-    return this._http.get(SystemConstants.BASE_API+uri,{headers:new HttpHeaders().set('Content-Type', 'application/json')
-    .set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
+    return this._http.get(SystemConstants.BASE_API+uri,
+      {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   post(uri:string,data?:any){
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    return this._http.post(SystemConstants.BASE_API+uri,data,{headers:this.headers}).pipe(map(this.extractData));
+    return this._http.post(SystemConstants.BASE_API+uri,data,
+      {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   put(uri:string, data?:any){
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    return this._http.put(SystemConstants.BASE_API+uri,data,{headers:this.headers}).pipe(map(this.extractData));
+    return this._http.put(SystemConstants.BASE_API+uri,data,
+      {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   putStatus(uri:string,id:string){
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    return this._http.put(SystemConstants.BASE_API+uri+"/"+id,{headers:this.headers}).pipe(map(this.extractData));
+    return this._http.put(SystemConstants.BASE_API+uri+"/"+id,
+    {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   delete(uri:string,key:string,id:string){
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    return this._http.delete(SystemConstants.BASE_API+uri+"/?"+key+"="+id,{headers:this.headers}).pipe(map(this.extractData));
+    return this._http.delete(SystemConstants.BASE_API+uri+"/?"+key+"="+id,
+    {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   deleteWithMultiParams(uri: string, params) {
     this.headers.delete('Authorization');
@@ -54,14 +56,15 @@ export class DataService {
     for (let param in params) {
       paramStr += param + "=" + params[param] + '&';
     }
-    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + paramStr, { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + paramStr, 
+    {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
 
   }
   postFile(uri:string, data?:any){
     let newHeader = new HttpHeaders();
     newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: newHeader })
-    .pipe(map(this.extractData));
+    return this._http.post(SystemConstants.BASE_API + uri, data, 
+      {headers:new HttpHeaders().set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   private extractData(res:Response){
     let body = res;

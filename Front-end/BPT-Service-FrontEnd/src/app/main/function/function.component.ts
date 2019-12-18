@@ -69,7 +69,7 @@ export class FunctionComponent implements OnInit {
   //Load data
   public search() {
     this._dataService
-      .get("/api/function/getall?filter=" + this.filter)
+      .get("function/GetAllFillter?filter=" + this.filter)
       .subscribe(
         (response: any[]) => {
           this._functions = response.filter(x => x.ParentId == null);

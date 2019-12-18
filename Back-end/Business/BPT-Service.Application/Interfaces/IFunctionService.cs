@@ -15,6 +15,8 @@ namespace BPT_Service.Application.Interfaces
 
         FunctionViewModel GetById(string id);
 
+        Task<List<FunctionViewModel>> GetListFunctionWithPermission(string userName);
+
         void Update(FunctionViewModel function);
 
         void Delete(string id);

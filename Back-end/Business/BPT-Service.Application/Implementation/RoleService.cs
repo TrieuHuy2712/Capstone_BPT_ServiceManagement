@@ -7,6 +7,7 @@ using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,26 +18,19 @@ namespace BPT_Service.Application.Implementation
         private RoleManager<AppRole> _roleManager;
         private IRepository<Function, string> _functionRepository;
         private IRepository<Permission, int> _permissionRepository;
-        private IRepository<Announcement, string> _announRepository;
-        private IRepository<AnnouncementUser, int> _announUserRepository;
         private IUnitOfWork _unitOfWork;
         public RoleService(RoleManager<AppRole> roleManager,
             IUnitOfWork unitOfWork,
-            IRepository<AnnouncementUser, int> announUserRepository,
-         IRepository<Function, string> functionRepository,
-         IRepository<Permission, int> permissionRepository,
-            IRepository<Announcement, string> announRepository)
+            IRepository<Function, string> functionRepository,
+            IRepository<Permission, int> permissionRepository)
         {
             _unitOfWork = unitOfWork;
             _roleManager = roleManager;
-            _announRepository = announRepository;
             _functionRepository = functionRepository;
-            _announUserRepository = announUserRepository;
             _permissionRepository = permissionRepository;
         }
 
-        public async Task<bool> AddAsync(AnnouncementViewModel announcementVm,
-            List<AnnouncementUserViewModel> announcementUsers, AppRoleViewModel roleVm)
+        public async Task<bool> AddAsync(AppRoleViewModel roleVm)
         {
             var role = new AppRole()
             {
@@ -44,26 +38,6 @@ namespace BPT_Service.Application.Implementation
                 Description = roleVm.Description
             };
             var result = await _roleManager.CreateAsync(role);
-            Announcement announcement= new Announcement();
-            announcement.Id= announcementVm.Id;
-            announcementVm.Content = announcementVm.Content;
-            announcementVm.DateCreated= announcementVm.DateCreated;
-            announcementVm.DateModified = announcementVm.DateModified;
-            announcementVm.Status = announcementVm.Status;
-            announcementVm.Title = announcementVm.Title;
-            announcementVm.UserId = announcementVm.UserId;
-
-
-            _announRepository.Add(announcement);
-            foreach (var userVm in announcementUsers)
-            {
-                AnnouncementUser user= new AnnouncementUser();
-                user.Id = userVm.Id;
-                user.UserId = userVm.UserId;
-                user.AnnouncementId = userVm.AnnouncementId;
-                user.HasRead = userVm.HasRead;
-                _announUserRepository.Add(user);
-            }
             _unitOfWork.Commit();
             return result.Succeeded;
         }
@@ -159,25 +133,82 @@ namespace BPT_Service.Application.Implementation
             return query.ToList();
         }
 
-        public void SavePermission(List<PermissionViewModel> permissions, Guid roleId)
+        public List<PermissionViewModel> GetAllPermission(string functionId)
         {
-            throw new NotImplementedException();
+            List<PermissionViewModel> permissions = new List<PermissionViewModel>();
+            var roles = _roleManager.Roles.Where(x => x.Name != "Admin").ToList();
+            var getPermission = _permissionRepository.FindAll();
+            var listPermission = _permissionRepository.FindAll().Where(x => x.FunctionId == functionId).ToList();
+            if (listPermission.Count == 0)
+            {
+                foreach (var item in roles)
+                {
+                    permissions.Add(new PermissionViewModel()
+                    {
+                        RoleId = item.Id,
+                        CanCreate = false,
+                        CanDelete = false,
+                        CanRead = false,
+                        CanUpdate = false,
+                        RoleName = item.Name
+                    });
+                }
+            }
+            else
+            {
+                foreach (var item in roles)
+                {
+                    if (!listPermission.Any(x => x.RoleId == item.Id))
+                    {
+                        permissions.Add(new PermissionViewModel()
+                        {
+                            RoleId = item.Id,
+                            CanCreate = false,
+                            CanDelete = false,
+                            CanRead = false,
+                            CanUpdate = false,
+                            RoleName = item.Name
+                        });
+                    }
+                }
+                var getDetailFunction = (from r in roles
+                                   join p in getPermission
+                                   on r.Id equals p.RoleId
+                                   select new PermissionViewModel
+                                   {
+                                       RoleId = r.Id,
+                                       CanCreate = p.CanCreate,
+                                       CanDelete = p.CanDelete,
+                                       CanRead = p.CanRead,
+                                       CanUpdate = p.CanUpdate,
+                                       RoleName = r.Name
+                                   }).ToList();
+                permissions.AddRange(getDetailFunction);
+            }
+            return permissions.ToList();
         }
 
-        // public void SavePermission(List<PermissionViewModel> permissionVms, Guid roleId)
-        // {
-        //     var permissions = _mapper.Map<List<PermissionViewModel>, List<Permission>>(permissionVms);
-        //     var oldPermission = _permissionRepository.FindAll().Where(x => x.RoleId == roleId).ToList();
-        //     if (oldPermission.Count > 0)
-        //     {
-        //         _permissionRepository.RemoveMultiple(oldPermission);
-        //     }
-        //     foreach (var permission in permissions)
-        //     {
-        //         _permissionRepository.Add(permission);
-        //     }
-        //     _unitOfWork.Commit();
-        // }
+        public void SavePermission(List<PermissionViewModel> permissionVms, Guid roleId)
+        {
+            var permissions = permissionVms.Select(x => new Permission
+            {
+                CanCreate = x.CanCreate,
+                CanDelete = x.CanDelete,
+                CanRead = x.CanRead,
+                CanUpdate = x.CanUpdate,
+                FunctionId = x.FunctionId
+            }).ToList();
+            var oldPermission = _permissionRepository.FindAll().Where(x => x.RoleId == roleId).ToList();
+            if (oldPermission.Count > 0)
+            {
+                _permissionRepository.RemoveMultiple(oldPermission);
+            }
+            foreach (var permission in permissions)
+            {
+                _permissionRepository.Add(permission);
+            }
+            _unitOfWork.Commit();
+        }
 
         public async Task UpdateAsync(AppRoleViewModel roleVm)
         {

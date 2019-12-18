@@ -8,7 +8,7 @@ namespace BPT_Service.Application.Interfaces
 {
     public interface IRoleService
     {
-        Task<bool> AddAsync(AnnouncementViewModel announcement, List<AnnouncementUserViewModel> announcementUsers, AppRoleViewModel userVm);
+        Task<bool> AddAsync(AppRoleViewModel userVm);
 
         Task DeleteAsync(Guid id);
 
@@ -21,6 +21,8 @@ namespace BPT_Service.Application.Interfaces
         Task UpdateAsync(AppRoleViewModel userVm);
 
         List<PermissionViewModel> GetListFunctionWithRole(Guid roleId);
+
+        List<PermissionViewModel> GetAllPermission(string functionId);
 
         void SavePermission(List<PermissionViewModel> permissions, Guid roleId);
 

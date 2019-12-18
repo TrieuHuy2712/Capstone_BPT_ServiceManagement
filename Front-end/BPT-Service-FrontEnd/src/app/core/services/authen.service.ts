@@ -1,59 +1,56 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
 import { LoggedInUser } from '../domain/loggedin.user';
 import { Observable } from 'rxjs';
 import { SystemConstants } from '../common/system,constants';
+import { UrlConstants } from '../common/url.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenService {
 
-  constructor(private _http:HttpClient) { }
-  login(username:string, password:string){
-    let body={
-      "userName":encodeURIComponent(username),
-      "password":password,
+  constructor(private _http: HttpClient) { }
+  login(username: string, password: string) {
+    let body = {
+      "userName": encodeURIComponent(username),
+      "password": password,
     }
-    let headers= new HttpHeaders().set('Authorization', 'Bearer ' + 
-    localStorage.getItem('access_token'));;
-    headers.append("Content-Type","application/x-www-form-urlencoded");
-    let options= {headers:headers}
-    
-    return this._http.post('http://localhost:5000/Authenticate/authenticate',body).pipe(map((response: any) => {
-        debugger
-        const user = response;
-        if(user && user.token){
-          localStorage.removeItem(SystemConstants.CURRENT_USER);
-          localStorage.setItem(SystemConstants.CURRENT_USER,JSON.stringify(user));
-          localStorage.setItem(SystemConstants.const_permission,user.userName);
-          
-        }
-        console.log(user);
-        return user;
-      }))
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' +
+      localStorage.getItem('access_token'));;
+    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    let options = { headers: headers }
+
+    return this._http.post(SystemConstants.BASE_API + '/Authenticate/authenticate', body).pipe(map((response: any) => {
+      const user = response;
+      if (user && user.token) {
+        localStorage.removeItem(SystemConstants.CURRENT_USER);
+        localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(user));
+        localStorage.setItem(SystemConstants.const_username, user.userName);
+      }
+      return user;
+    }))
   }
-  logout(){
-      localStorage.removeItem(SystemConstants.CURRENT_USER);
+  logout() {
+    localStorage.removeItem(SystemConstants.CURRENT_USER);
   }
-  isUserAuthenticated():boolean{
-    let user= localStorage.getItem(SystemConstants.CURRENT_USER);
-    if(user!=null){return true;}
-    else{
+  isUserAuthenticated(): boolean {
+    let user = localStorage.getItem(SystemConstants.CURRENT_USER);
+    if (user != null) { return true; }
+    else {
       return false;
     }
   }
-  getLoggedInUser():LoggedInUser{
-    let user:LoggedInUser;
-    debugger
-    if(this.isUserAuthenticated()){
-      var userData= JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))
-      user= new LoggedInUser(userData.token,userData.username,userData.fullName, userData.Email,userData.avatar,userData.roles, userData.permissions);
+  getLoggedInUser(): LoggedInUser {
+    let user: LoggedInUser;
+    if (this.isUserAuthenticated()) {
+      var userData = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER))
+      user = new LoggedInUser(userData.token, userData.username, userData.fullName, userData.Email, userData.avatar, userData.roles, userData.permissions);
       console.log(user);
     }
-    else{
-      user=null;
+    else {
+      user = null;
     }
     return user;
   }
@@ -73,7 +70,7 @@ export class AuthenService {
   hasPermission(functionId: string, action: string): boolean {
     var user = this.getLoggedInUser();
     var result: boolean = false;
-    var permission: any[] =  JSON.parse(user.permissions);
+    var permission: any[] = JSON.parse(user.permissions);
     var roles: any[] = JSON.parse(user.roles);
     switch (action) {
       case 'create':

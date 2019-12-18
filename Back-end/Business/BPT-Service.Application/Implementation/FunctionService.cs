@@ -10,20 +10,34 @@ using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace BPT_Service.Application.Implementation
 {
     public class FunctionService : IFunctionService
     {
         private IRepository<Function, string> _functionRepository;
+        private IRepository<Permission, int> _permissionRepository;
+        private RoleManager<AppRole> _roleManager;
+        private UserManager<AppUser> _userManager;
+
         private IUnitOfWork _unitOfWork;
 
         public FunctionService(
             IRepository<Function, string> functionRepository,
-            IUnitOfWork unitOfWork)
+            IRepository<Permission, int> permissionRepository,
+            RoleManager<AppRole> roleManager,
+            IUnitOfWork unitOfWork,
+            UserManager<AppUser> userManager)
         {
-            _functionRepository = functionRepository;
             _unitOfWork = unitOfWork;
+            _functionRepository = functionRepository;
+            _permissionRepository = permissionRepository;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public bool CheckExistedId(string id)
@@ -85,7 +99,6 @@ namespace BPT_Service.Application.Implementation
 
         public IEnumerable<FunctionViewModel> GetAllWithParentId(string parentId)
         {
-            //return _functionRepository.FindAll(x => x.ParentId == parentId).ProjectTo<FunctionViewModel>(_config);
             return _functionRepository.FindAll(x => x.ParentId == parentId).Select(x=>new FunctionViewModel{
                 IconCss = x.IconCss,
                 Id = x.Id,
@@ -153,6 +166,45 @@ namespace BPT_Service.Application.Implementation
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<List<FunctionViewModel>> GetListFunctionWithPermission(string userName)
+        {
+            var listPermission = _permissionRepository.FindAll();
+            var listRole = _roleManager.Roles.Where(x=>x.Name != "admin").ToList();
+            var listFunction = _functionRepository.FindAll();
+            var getUser = await _userManager.FindByNameAsync(userName);
+
+            List<AppRole> listRoleUser = new List<AppRole>();
+            foreach (var item in listRole)
+            {
+                if(await _userManager.IsInRoleAsync(getUser, item.Name))
+                {
+                    listRoleUser.Add(item);
+                }
+            }
+
+            List<FunctionViewModel> functions = new List<FunctionViewModel>();
+            foreach (var item in listRoleUser)
+            {
+                var getListFunction = await (from f in listFunction
+                                       join p in listPermission on f.Id equals p.FunctionId
+                                       join r in listRoleUser on p.RoleId equals r.Id
+                                       select new FunctionViewModel
+                                       {
+                                           Id = f.Id,
+                                           IconCss = f.IconCss,
+                                           Name = f.Name,
+                                           ParentId = f.ParentId,
+                                           SortOrder = f.SortOrder,
+                                           Status = f.Status,
+                                           URL = f.URL
+                                       }).ToListAsync();
+
+                 functions.AddRange(getListFunction);
+            }
+
+            return functions;
         }
     }
 }

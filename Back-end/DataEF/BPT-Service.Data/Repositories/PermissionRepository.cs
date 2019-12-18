@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.IRepositories;
+using System.Linq;
+using System;
 
 namespace BPT_Service.Data.Repositories
 {
@@ -8,5 +11,6 @@ namespace BPT_Service.Data.Repositories
         public PermissionRepository(AppDbContext context) : base(context)
         {
         }
+
     }
 }

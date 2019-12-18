@@ -54,9 +54,21 @@ namespace BPT_Service.WebAPI.Controllers
                 }).ToList();
                 return new ObjectResult(result);
             }else{
-                return new ObjectResult("abc");
+                var getListFunction = await _functionService.GetListFunctionWithPermission(nameUser);
+                foreach (var function in getListFunction)
+                {
+                    //add the parent category to the item list
+                    items.Add(function);
+                    //now get all its children (separate Category in case you need recursion)
+                    GetByParentId(model.ToList(), function, items);
+                }
+                var result = items.Where(x => x.ParentId != null).GroupBy(t => t.ParentId).Select(group => new
+                {
+                    ParentId = group.Key,
+                    ChildrenId = group.ToList()
+                }).ToList();
+                return new ObjectResult(result);
             }
-
         }
 
         [HttpGet("GetById/{id}")]

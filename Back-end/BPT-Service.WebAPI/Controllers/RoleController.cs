@@ -6,10 +6,6 @@ using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-using System.Security.Principal;
-using Microsoft.AspNet.Identity;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BPT_Service.WebAPI.Controllers
@@ -64,19 +60,7 @@ namespace BPT_Service.WebAPI.Controllers
             if (!roleVm.Id.HasValue)
             {
                 var notificationId = Guid.NewGuid().ToString();
-                var announcement = new AnnouncementViewModel()
-                {
-                    Title = "Role created",
-                    DateCreated = DateTime.Now,
-                    Content = $"Role {roleVm.Name} has been created",
-                    Id = notificationId,
-                    UserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier))
-                };
-                var announcementUsers = new List<AnnouncementUserViewModel>()
-                {
-                    new AnnouncementUserViewModel(){AnnouncementId = notificationId,HasRead = false,UserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier))}
-                };
-                await _roleService.AddAsync(announcement, announcementUsers, roleVm);
+                await _roleService.AddAsync(roleVm);
 
             }
             else
@@ -86,7 +70,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(roleVm);
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (!ModelState.IsValid)
@@ -103,6 +87,13 @@ namespace BPT_Service.WebAPI.Controllers
         {
             var functions = _roleService.GetListFunctionWithRole(roleId);
             return new OkObjectResult(functions);
+        }
+
+        [HttpGet("getAllPermission/{functionId}")]
+        public IActionResult GetAllPermission(string functionId)
+        {
+            var function = _roleService.GetAllPermission(functionId);
+            return new OkObjectResult(functionId);
         }
 
         [HttpPost("SavePermission/{roleId}")]

@@ -13,3 +13,4 @@ C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.AssemblyInfo.cs
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.dll
 C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.pdb
+C:\Users\shinc\Desktop\git\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.csprojAssemblyReference.cache

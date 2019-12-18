@@ -19,6 +19,7 @@ namespace BPT_Service.Application.ViewModels.System
 
         public bool CanDelete { set; get; }
 
+        public string RoleName { get; set; }
         public AppRoleViewModel AppRole { get; set; }
 
         public FunctionViewModel Function { get; set; }
