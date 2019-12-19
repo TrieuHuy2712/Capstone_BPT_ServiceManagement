@@ -24,24 +24,24 @@
               "src/assets"
             ],
             "styles": [
-              "../BPT-Service-FrontEnd/node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "../BPT-Service-FrontEnd/node_modules/font-awesome/css/font-awesome.css",
-              "../BPT-Service-FrontEnd/node_modules/animate.css/animate.css",
-              "../BPT-Service-FrontEnd/node_modules/alertifyjs/build/css/alertify.css",
-              "../BPT-Service-FrontEnd/node_modules/alertifyjs/build/css/themes/default.css",
-              "../BPT-Service-FrontEnd/src/assets/css/custom.css",
-              "../BPT-Service-FrontEnd/node_modules/angular-tree-component/dist/angular-tree-component.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/animate.css/animate.css",
+              "node_modules/alertifyjs/build/css/alertify.css",
+              "node_modules/alertifyjs/build/css/themes/default.css",
+              "node_modules/angular-tree-component/dist/angular-tree-component.css",
+              "src/assets/css/custom.css",
               "src/styles.css"
             ],
             "scripts": [
-              "../BPT-Service-FrontEnd/node_modules/jquery/dist/jquery.min.js",
-              "../BPT-Service-FrontEnd/node_modules/popper.js/dist/umd/popper.min.js",
-              "../BPT-Service-FrontEnd/node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "../BPT-Service-FrontEnd/node_modules/fastclick/lib/fastclick.js",
-              "../BPT-Service-FrontEnd/node_modules/alertifyjs/build/alertify.js",
-              "../BPT-Service-FrontEnd/node_modules/nprogress/nprogress.js",
-              "../BPT-Service-FrontEnd/node_modules/moment/moment.js",
-              "../BPT-Service-FrontEnd/node_modules/chart.js/dist/Chart.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/fastclick/lib/fastclick.js",
+              "node_modules/alertifyjs/build/alertify.js",
+              "node_modules/nprogress/nprogress.js",
+              "node_modules/moment/moment.js",
+              "node_modules/chart.js/dist/Chart.js"
             ]
           },
           "configurations": {

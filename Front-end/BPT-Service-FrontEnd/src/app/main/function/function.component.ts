@@ -33,13 +33,15 @@ export class FunctionComponent implements OnInit {
     this.search();
   }
   public showPermission(id: any) {
+    debugger
     this._dataService
-      .get("/api/appRole/getAllPermission?functionId=" + id)
+      .get("/AdminRole/getAllPermission/" + id)
       .subscribe(
-        (response: any[]) => {
+        (response: any) => {
+          console.log(response);
           this.functionId = id;
           this._permission = response;
-          console.log(response);
+
           this.permissionModal.show();
         },
         error => this._dataService.handleError(error)
@@ -69,11 +71,15 @@ export class FunctionComponent implements OnInit {
   //Load data
   public search() {
     this._dataService
-      .get("function/GetAllFillter?filter=" + this.filter)
+      .get("/function/GetAll/admin")
       .subscribe(
-        (response: any[]) => {
-          this._functions = response.filter(x => x.ParentId == null);
-          this._functionHierachy = this.utilityService.Unflatten(response);
+        (response: any) => {
+          console.log(response);
+          this._functions = response
+          // this._functions = this._functions.filter(x => x.parentId == null);
+          // this._functionHierachy = this.utilityService.Unflatten(response.result);
+          // //console.log(this._functions);
+          // console.log(this._functionHierachy);
         },
         error => this._dataService.handleError(error)
       );
