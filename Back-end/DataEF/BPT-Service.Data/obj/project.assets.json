@@ -1515,11 +1515,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
+      "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
       "projectName": "BPT-Service.Data",
-      "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
+      "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
       "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\obj\\",
+      "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1535,11 +1535,11 @@
       "frameworks": {
         "netstandard2.1": {
           "projectReferences": {
-            "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
-              "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
+            "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+              "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
             },
-            "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
-              "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
+            "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+              "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
             }
           }
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj": {}
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj",
         "projectName": "BPT-Service.WebAPI",
-        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\BPT-Service.WebAPI.csproj",
         "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\obj\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\BPT-Service.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -27,17 +27,17 @@
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj"
               },
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj"
               },
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
               },
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -124,14 +124,14 @@
         }
       }
     },
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
         "projectName": "BPT-Service.Application",
-        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
         "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\obj\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -147,11 +147,11 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
               },
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -205,14 +205,14 @@
         }
       }
     },
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
         "projectName": "BPT-Service.Data",
-        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\BPT-Service.Data.csproj",
         "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\obj\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -228,11 +228,11 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
               },
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -282,14 +282,14 @@
         }
       }
     },
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
         "projectName": "BPT-Service.Model",
-        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
         "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\obj\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -305,8 +305,8 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
-                "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
+              "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -348,14 +348,14 @@
         }
       }
     },
-    "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+    "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+        "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
         "projectName": "BPT-Service.Common",
-        "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+        "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
         "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
+        "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",

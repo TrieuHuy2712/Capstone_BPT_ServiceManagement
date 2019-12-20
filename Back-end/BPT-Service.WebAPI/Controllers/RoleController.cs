@@ -93,7 +93,7 @@ namespace BPT_Service.WebAPI.Controllers
         public IActionResult GetAllPermission(string functionId)
         {
             var function = _roleService.GetAllPermission(functionId);
-            return new OkObjectResult(functionId);
+            return new OkObjectResult(function);
         }
 
         [HttpPost("SavePermission/{roleId}")]

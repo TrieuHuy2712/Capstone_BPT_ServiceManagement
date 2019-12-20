@@ -29,7 +29,7 @@ namespace BPT_Service.WebAPI.Controllers
         public IActionResult GetAllFillter(string filter)
         {
             var model = _functionService.GetAll(filter);
-            return new ObjectResult(model);
+            return new OkObjectResult(model);
         }
 
         [HttpGet("GetAll/{nameUser}")]

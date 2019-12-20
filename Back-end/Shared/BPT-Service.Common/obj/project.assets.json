@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+      "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
       "projectName": "BPT-Service.Common",
-      "projectPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+      "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
       "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\shinc\\Desktop\\git\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
+      "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
