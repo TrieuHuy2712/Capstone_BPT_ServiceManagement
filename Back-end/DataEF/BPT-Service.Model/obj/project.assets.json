@@ -928,31 +928,33 @@
     ]
   },
   "packageFolders": {
-    "/home/acer/.nuget/packages/": {}
+    "C:\\Users\\shinc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj",
+      "projectUniqueName": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
       "projectName": "BPT-Service.Model",
-      "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj",
-      "packagesPath": "/home/acer/.nuget/packages/",
-      "outputPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/",
+      "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
+      "packagesPath": "C:\\Users\\shinc\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/acer/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\shinc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard2.1": {
           "projectReferences": {
-            "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {
-              "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj"
+            "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+              "projectPath": "C:\\Users\\shinc\\Desktop\\git2\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
             }
           }
         }
@@ -990,7 +992,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

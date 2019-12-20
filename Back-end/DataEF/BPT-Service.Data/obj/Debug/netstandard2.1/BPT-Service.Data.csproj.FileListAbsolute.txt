@@ -48,3 +48,16 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.csproj.CopyComplete
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.deps.json
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Model.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Model.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.csprojAssemblyReference.cache
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.AssemblyInfoInputs.cache
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.AssemblyInfo.cs
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.csproj.CopyComplete
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.pdb

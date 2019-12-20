@@ -39,3 +39,14 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.csproj.CopyComplete
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.deps.json
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.csprojAssemblyReference.cache
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.AssemblyInfoInputs.cache
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.AssemblyInfo.cs
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.csproj.CopyComplete
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.dll
+C:\Users\shinc\Desktop\git2\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.pdb
