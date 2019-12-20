@@ -39,3 +39,14 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.csproj.CopyComplete
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/Debug/netstandard2.1/BPT-Service.Model.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.deps.json
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Model.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.csprojAssemblyReference.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.AssemblyInfoInputs.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.AssemblyInfo.cs
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.csproj.CopyComplete
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Model\obj\Debug\netstandard2.1\BPT-Service.Model.pdb

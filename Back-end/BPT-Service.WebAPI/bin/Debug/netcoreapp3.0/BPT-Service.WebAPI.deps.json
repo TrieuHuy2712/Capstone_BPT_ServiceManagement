@@ -364,7 +364,7 @@
         "runtime": {
           "lib/net45/Microsoft.AspNet.Identity.Core.dll": {
             "assemblyVersion": "2.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.2.1.40403"
           }
         },
         "compile": {

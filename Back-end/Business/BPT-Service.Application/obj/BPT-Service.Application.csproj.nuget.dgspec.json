@@ -1,35 +1,37 @@
 {
   "format": 1,
   "restore": {
-    "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/BPT-Service.Application.csproj": {}
+    "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {}
   },
   "projects": {
-    "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/BPT-Service.Application.csproj": {
+    "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/BPT-Service.Application.csproj",
+        "projectUniqueName": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
         "projectName": "BPT-Service.Application",
-        "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/BPT-Service.Application.csproj",
-        "packagesPath": "/home/acer/.nuget/packages/",
-        "outputPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/obj/",
+        "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\BPT-Service.Application.csproj",
+        "packagesPath": "C:\\Users\\huytrieu\\.nuget\\packages\\",
+        "outputPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Business\\BPT-Service.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/acer/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\huytrieu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj": {
-                "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj"
+              "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
+                "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj"
               },
-              "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {
-                "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj"
+              "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -79,33 +81,35 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj": {
+    "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj",
+        "projectUniqueName": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
         "projectName": "BPT-Service.Model",
-        "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/BPT-Service.Model.csproj",
-        "packagesPath": "/home/acer/.nuget/packages/",
-        "outputPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Model/obj/",
+        "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\BPT-Service.Model.csproj",
+        "packagesPath": "C:\\Users\\huytrieu\\.nuget\\packages\\",
+        "outputPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\DataEF\\BPT-Service.Model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/acer/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\huytrieu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {
-                "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj"
+              "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
+                "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj"
               }
             }
           }
@@ -143,26 +147,28 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj": {
+    "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj",
+        "projectUniqueName": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
         "projectName": "BPT-Service.Common",
-        "projectPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/BPT-Service.Common.csproj",
-        "packagesPath": "/home/acer/.nuget/packages/",
-        "outputPath": "/home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/obj/",
+        "projectPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\BPT-Service.Common.csproj",
+        "packagesPath": "C:\\Users\\huytrieu\\.nuget\\packages\\",
+        "outputPath": "D:\\Capstone_Team01\\BRT_Service_Management_1\\Back-end\\Shared\\BPT-Service.Common\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/acer/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\huytrieu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -193,7 +199,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

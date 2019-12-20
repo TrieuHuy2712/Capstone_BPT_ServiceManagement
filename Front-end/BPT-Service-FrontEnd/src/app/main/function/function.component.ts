@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { TreeComponent } from "angular-tree-component";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { MessageConstants } from 'src/app/core/common/message.constants';
+
 import { DataService } from 'src/app/core/services/data.service';
+import { MessageConstants } from 'src/app/core/common/message.constants';
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { TreeComponent } from "angular-tree-component";
 import { UtilityService } from 'src/app/core/services/utility.service';
+
 @Component({
   selector: "app-function",
   templateUrl: "./function.component.html",
@@ -33,7 +35,6 @@ export class FunctionComponent implements OnInit {
     this.search();
   }
   public showPermission(id: any) {
-    debugger
     this._dataService
       .get("/AdminRole/getAllPermission/" + id)
       .subscribe(
@@ -41,7 +42,6 @@ export class FunctionComponent implements OnInit {
           console.log(response);
           this.functionId = id;
           this._permission = response;
-
           this.permissionModal.show();
         },
         error => this._dataService.handleError(error)
@@ -53,8 +53,9 @@ export class FunctionComponent implements OnInit {
         Permissions: this._permission,
         FunctionId: this.functionId
       };
-      this._dataService.post("/api/appRole/savePermission", data).subscribe(
+      this._dataService.post("/AdminRole/SavePermission", data).subscribe(
         (response: any) => {
+          console.log(response);
           this.notificationService.printSuccessMessage(response);
           this.permissionModal.hide();
         },
@@ -76,10 +77,6 @@ export class FunctionComponent implements OnInit {
         (response: any) => {
           console.log(response);
           this._functions = response
-          // this._functions = this._functions.filter(x => x.parentId == null);
-          // this._functionHierachy = this.utilityService.Unflatten(response.result);
-          // //console.log(this._functions);
-          // console.log(this._functionHierachy);
         },
         error => this._dataService.handleError(error)
       );
@@ -89,7 +86,7 @@ export class FunctionComponent implements OnInit {
   public saveChanges(valid: boolean) {
     if (valid) {
       if (this.editFlag == false) {
-        this._dataService.post("/api/function/add", this.entity).subscribe(
+        this._dataService.post("/function/addEntity", this.entity).subscribe(
           (response: any) => {
             this.search();
             this.addEditModal.hide();
@@ -100,7 +97,7 @@ export class FunctionComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.put("/api/function/update", this.entity).subscribe(
+        this._dataService.put("/function/updateEntity", this.entity).subscribe(
           (response: any) => {
             this.search();
             this.addEditModal.hide();
@@ -115,8 +112,9 @@ export class FunctionComponent implements OnInit {
   }
   //Show edit form
   public showEdit(id: string) {
-    this._dataService.get("/api/function/detail/" + id).subscribe(
+    this._dataService.get("/function/GetById/" + id).subscribe(
       (response: any) => {
+        console.log(response);
         this.entity = response;
         this.editFlag = true;
         this.addEditModal.show();

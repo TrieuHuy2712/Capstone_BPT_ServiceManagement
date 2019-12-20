@@ -37,3 +37,16 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/Business/BPT-Servic
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.csproj.CopyComplete
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Business/BPT-Service.Application/obj/Debug/netstandard2.1/BPT-Service.Application.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Application.deps.json
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Application.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Application.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Model.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\bin\Debug\netstandard2.1\BPT-Service.Model.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.csprojAssemblyReference.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.AssemblyInfoInputs.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.AssemblyInfo.cs
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.csproj.CopyComplete
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\obj\Debug\netstandard2.1\BPT-Service.Application.pdb

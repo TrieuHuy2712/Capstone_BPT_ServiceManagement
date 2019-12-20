@@ -48,3 +48,16 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.csproj.CopyComplete
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/DataEF/BPT-Service.Data/obj/Debug/netstandard2.1/BPT-Service.Data.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.deps.json
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Data.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Model.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Model.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.csprojAssemblyReference.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.AssemblyInfoInputs.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.AssemblyInfo.cs
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.csproj.CopyComplete
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\obj\Debug\netstandard2.1\BPT-Service.Data.pdb

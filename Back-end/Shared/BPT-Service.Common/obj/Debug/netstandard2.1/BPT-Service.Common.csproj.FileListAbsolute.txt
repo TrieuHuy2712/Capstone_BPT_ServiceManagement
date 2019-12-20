@@ -22,3 +22,11 @@ C:/Users/shinc/Desktop/git/BRT_Service_Management_1/Back-end/Shared/BPT-Service.
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.AssemblyInfo.cs
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.dll
 /home/acer/Desktop/BRT_Service_Management_1/Back-end/Shared/BPT-Service.Common/obj/Debug/netstandard2.1/BPT-Service.Common.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.deps.json
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\bin\Debug\netstandard2.1\BPT-Service.Common.pdb
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.csprojAssemblyReference.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.AssemblyInfoInputs.cache
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.AssemblyInfo.cs
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.dll
+D:\Capstone_Team01\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\obj\Debug\netstandard2.1\BPT-Service.Common.pdb

@@ -79,7 +79,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new ObjectResult(model);
         }
 
-        [HttpPost("SaveEntity")]
+        [HttpPost("addEntity")]
         public IActionResult SaveEntity([FromBody]FunctionViewModel functionVm)
         {
             if (!ModelState.IsValid)
@@ -89,14 +89,23 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(functionVm.Id))
-                {
-                    _functionService.Add(functionVm);
-                }
-                else
-                {
-                    _functionService.Update(functionVm);
-                }
+                _functionService.Add(functionVm);
+                _functionService.Save();
+                return new OkObjectResult(functionVm);
+            }
+        }
+        [HttpPut("updateEntity")]
+        public IActionResult updateEntity([FromBody]FunctionViewModel functionVm)
+        {
+            if (!ModelState.IsValid)
+            {
+                IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                return new BadRequestObjectResult(allErrors);
+            }
+            else
+            {
+                _functionService.Update(functionVm);
+                
                 _functionService.Save();
                 return new OkObjectResult(functionVm);
             }

@@ -96,11 +96,11 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(function);
         }
 
-        [HttpPost("SavePermission/{roleId}")]
-        public IActionResult SavePermission([FromBody]List<PermissionViewModel> listPermmission, Guid roleId)
+        [HttpPost("SavePermission")]
+        public IActionResult SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
         {
-            _roleService.SavePermission(listPermmission, roleId);
-            return new OkResult();
+            _roleService.SavePermission(rolePermissionViewModel);
+            return new OkObjectResult("Save successfully");
         }
     }
 }

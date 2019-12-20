@@ -188,17 +188,18 @@ namespace BPT_Service.Application.Implementation
             return permissions.ToList();
         }
 
-        public void SavePermission(List<PermissionViewModel> permissionVms, Guid roleId)
+        public void SavePermission(RolePermissionViewModel rolePermissionViewModel)
         {
-            var permissions = permissionVms.Select(x => new Permission
+            var permissions = rolePermissionViewModel.Permissions.Select(x => new Permission
             {
                 CanCreate = x.CanCreate,
                 CanDelete = x.CanDelete,
                 CanRead = x.CanRead,
                 CanUpdate = x.CanUpdate,
-                FunctionId = x.FunctionId
+                FunctionId = rolePermissionViewModel.FunctionId,
+                RoleId =x.RoleId
             }).ToList();
-            var oldPermission = _permissionRepository.FindAll().Where(x => x.RoleId == roleId).ToList();
+            var oldPermission = _permissionRepository.FindAll().Where(x => x.FunctionId == rolePermissionViewModel.FunctionId).ToList();
             if (oldPermission.Count > 0)
             {
                 _permissionRepository.RemoveMultiple(oldPermission);
