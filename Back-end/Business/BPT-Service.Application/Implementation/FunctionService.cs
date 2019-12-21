@@ -121,15 +121,14 @@ namespace BPT_Service.Application.Implementation
             //var function = _mapper.Map<Function>(functionVm);
             if (functionDb != null)
             {
-                Function function = new Function();
-                function.IconCss = functionVm.IconCss;
-                function.Id = functionVm.Id;
-                function.Name = functionVm.Name;
-                function.ParentId = functionVm.ParentId;
-                function.SortOrder = functionVm.SortOrder;
-                function.Status = functionVm.Status;
-                function.URL = functionVm.URL;
-                _functionRepository.Update(function);
+                functionDb.IconCss = functionVm.IconCss;
+                functionDb.Id = functionVm.Id;
+                functionDb.Name = functionVm.Name;
+                functionDb.ParentId = functionVm.ParentId;
+                functionDb.SortOrder = functionVm.SortOrder;
+                functionDb.Status = functionVm.Status;
+                functionDb.URL = functionVm.URL;
+                _functionRepository.Update(functionDb);
             }
 
         }

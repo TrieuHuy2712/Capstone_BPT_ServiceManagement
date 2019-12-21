@@ -24,7 +24,7 @@ namespace BPT_Service.Application.Interfaces
 
         List<PermissionViewModel> GetAllPermission(string functionId);
 
-        void SavePermission(List<PermissionViewModel> permissions, Guid roleId);
+        void SavePermission(RolePermissionViewModel rolePermissionViewModel);
 
         Task<bool> CheckPermission(string functionId, string action, string[] roles);
     }
