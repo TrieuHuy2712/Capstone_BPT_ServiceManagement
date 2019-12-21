@@ -65,9 +65,9 @@ $(document).ready(function() {
             $SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
         }
 
-        $BODY.toggleClass('nav-md nav-sm');
+        $BODY.toggleClass('nav-md');
 
-        setContentHeight();
+        
     });
 
     // check active menu

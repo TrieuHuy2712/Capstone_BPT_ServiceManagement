@@ -41,26 +41,27 @@
                   aria-hidden="true"></i></button>
             </ng-template>
           </tree-root> -->
-        <div>
+        <div class="row">
           <div class="menu_section">
-            <ul>
+            <ul >
               <li *ngFor="let item of _functions"><a><i class="fa {{item.IconCss}}"></i> {{item.parentId}}</a>
-                <ul class="">
+                <ul class="FunctionText">
                   <li *ngFor="let subItem of item.childrenId">
-                    <a>{{subItem.name}}    </a>
-                    <button class="btn btn-xs btn-success" (click)="showPermission(subItem.id)"> <i class="fa fa-lock"
+                    <a>{{subItem.name}}</a>
+                    <div class="buttonOption">
+                      <button class="btn btn-xs btn-success fbutton" (click)="showPermission(subItem.id)"> <i class="fa fa-lock"
                         aria-hidden="true"></i></button>
-                    <button class="btn btn-xs btn-primary" (click)="showEdit(subItem.id)"> <i
+                      <button class="btn btn-xs btn-primary fbutton" (click)="showEdit(subItem.id)"> <i
                         class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-xs btn-danger" (click)="delete(subItem.id)"><i class="fa fa-trash"
+                      <button class="btn btn-xs btn-danger fbutton" (click)="delete(subItem.id)"><i class="fa fa-trash"
                         aria-hidden="true"></i></button>
+                    </div>
                   </li>
                 </ul>
               </li>
-            </ul>
+            </ul >
           </div>
         </div>
-
       </div>
     </div>
   </div>

@@ -415,7 +415,7 @@ table.no-margin .progress {
 
 .row {
   margin-right: -10px;
-  margin-left: -10px; }
+  margin-left: 10px; }
 
 .grid_slider .col-md-6 {
   padding: 0 40px; }
@@ -432,7 +432,8 @@ a, a:visited, a:focus, a:active, :visited, :focus, :active, .btn:focus, .btn:act
   outline: 0; }
 
 a:hover, a:focus {
-  text-decoration: none; }
+  text-decoration: none; 
+  border: solid 1px whitesmoke;  }
 
 .navbar {
   margin-bottom: 0; }
@@ -665,11 +666,11 @@ footer {
   padding: 15px 20px;
   display: block; }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   footer {
     margin-left: 230px; } }
 .nav-sm footer {
-  margin-left: 70px; }
+  margin-left: 70px; } */
 
 .footer_fixed footer {
   position: fixed;
@@ -4302,3 +4303,19 @@ ul.notifications {
   border: 1px solid #e5e5e5; }
 
 /** /Dropzone.js **/
+
+/** footer **/
+.footer-main{
+  width: 100%;
+}
+/* Footer text */
+.footertext{
+  float: right;
+  margin-right: 40px;;
+}
+/* button Option */
+.buttonOption{
+  display: inline;
+  padding-left: 100px;
+}
+
