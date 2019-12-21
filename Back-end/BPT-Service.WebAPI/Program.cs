@@ -24,7 +24,7 @@ namespace BPT_Service.WebAPI
 
                 try
                 {
-                    var dbInitializer = services.GetService<Data.DbInitializer>();
+                    var dbInitializer = services.GetService<DbInitializer>();
                     dbInitializer.Seed().Wait();
                 }
                 catch (Exception ex)
