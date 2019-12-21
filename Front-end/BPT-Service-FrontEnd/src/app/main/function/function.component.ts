@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 
-import { DataService } from 'src/app/core/services/data.service';
-import { MessageConstants } from 'src/app/core/common/message.constants';
+import { DataService } from "src/app/core/services/data.service";
+import { MessageConstants } from "src/app/core/common/message.constants";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { NotificationService } from "src/app/core/services/notification.service";
 import { TreeComponent } from "angular-tree-component";
-import { UtilityService } from 'src/app/core/services/utility.service';
+import { UtilityService } from "src/app/core/services/utility.service";
 
 @Component({
   selector: "app-function",
@@ -13,9 +13,11 @@ import { UtilityService } from 'src/app/core/services/utility.service';
   styleUrls: ["./function.component.css"]
 })
 export class FunctionComponent implements OnInit {
-  @ViewChild("addEditModal",{static: false}) public addEditModal: ModalDirective;
-  @ViewChild("permissionModal",{static: false}) public permissionModal: ModalDirective;
-  @ViewChild(TreeComponent,{static: false})
+  @ViewChild("addEditModal", { static: false })
+  public addEditModal: ModalDirective;
+  @ViewChild("permissionModal", { static: false })
+  public permissionModal: ModalDirective;
+  @ViewChild(TreeComponent, { static: false })
   private treeFunction: TreeComponent;
 
   public _functionHierachy: any[];
@@ -35,17 +37,15 @@ export class FunctionComponent implements OnInit {
     this.search();
   }
   public showPermission(id: any) {
-    this._dataService
-      .get("/AdminRole/getAllPermission/" + id)
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          this.functionId = id;
-          this._permission = response;
-          this.permissionModal.show();
-        },
-        error => this._dataService.handleError(error)
-      );
+    this._dataService.get("/AdminRole/getAllPermission/" + id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.functionId = id;
+        this._permission = response;
+        this.permissionModal.show();
+      },
+      error => this._dataService.handleError(error)
+    );
   }
   public savePermission(valid: boolean, _permission: any[]) {
     if (valid) {
@@ -71,15 +71,32 @@ export class FunctionComponent implements OnInit {
   }
   //Load data
   public search() {
-    this._dataService
-      .get("/function/GetAll/admin")
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          this._functions = response
-        },
-        error => this._dataService.handleError(error)
-      );
+    this._dataService.get("/function/GetAll/admin").subscribe(
+      (response: any) => {
+        console.log(response);
+        this._functions = response;
+        this._functionHierachy = this._functions[0].childrenId;
+        this._functions = this._functions.filter(x => x.key != null);
+        if (this._functionHierachy.length != this._functions.length) {
+          for (let index = 0; index < this._functionHierachy.length; index++) {
+            let count = 0;
+            for (let index1 = 0; index1 < this._functions.length; index1++) {
+              if (
+                this._functionHierachy[index].id == this._functions[index1].key
+              ) {
+                console.log(this._functionHierachy[index].id);
+                count++;
+              }
+            }
+            if (count == 0) {
+              this._functions.push({ key: this._functionHierachy[index].id });
+            }
+          }
+        }
+        console.log(this._functions);
+      },
+      error => this._dataService.handleError(error)
+    );
   }
 
   //Save change for modal popup
@@ -124,19 +141,21 @@ export class FunctionComponent implements OnInit {
   }
 
   //Action delete
-  public deleteConfirm(id: string): void {
-    this._dataService.delete("/api/function/delete", "id", id).subscribe(
-      (response: any) => {
-        this.notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.search();
-      },
-      error => this._dataService.handleError(error)
+  public deleteConfirm(id: any) {
+    debugger;
+    this._dataService
+      .delete("/function/DeleteFunction", "id", id)
+      .subscribe((response: Response) => {});
+    
+    this.notificationService.printSuccessMessage(
+      MessageConstants.DELETED_OK_MSG
     );
+    setTimeout(() => {
+      this.search();
+    }, 500);
   }
   //Click button delete turn on confirm
-  public delete(id: string) {
+  public delete(id: any) {
     this.notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
       () => this.deleteConfirm(id)

@@ -47,9 +47,9 @@ namespace BPT_Service.WebAPI.Controllers
                     //now get all its children (separate Category in case you need recursion)
                     GetByParentId(model.ToList(), function, items);
                 }
-                var result = items.Where(x => x.ParentId != null).GroupBy(t => t.ParentId).Select(group => new
+                var result = items.GroupBy(t => t.ParentId).Select(group => new
                 {
-                    ParentId = group.Key,
+                    group.Key,
                     ChildrenId = group.ToList()
                 }).ToList();
                 return new ObjectResult(result);
@@ -155,8 +155,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
         }
 
-        [HttpPost("DeleteFunction/{id}")]
-        public IActionResult Delete(string id)
+        [HttpDelete("DeleteFunction")]
+        public async Task<IActionResult> Delete(string id)
         {
             if (!ModelState.IsValid)
             {

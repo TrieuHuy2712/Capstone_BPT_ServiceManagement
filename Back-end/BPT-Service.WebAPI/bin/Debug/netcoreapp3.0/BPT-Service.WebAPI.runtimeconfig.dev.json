@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\shinc\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\shinc\\.nuget\\packages"
+      "/home/acer/.dotnet/store/|arch|/|tfm|",
+      "/home/acer/.nuget/packages"
     ]
   }
 }

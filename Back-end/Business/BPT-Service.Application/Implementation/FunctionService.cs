@@ -61,6 +61,15 @@ namespace BPT_Service.Application.Implementation
 
         public void Delete(string id)
         {
+            var getChildItem = _functionRepository.FindAll().Where(x => x.ParentId == id && x.ParentId != null).ToList();
+            if (getChildItem.Count() > 0)
+            {
+                foreach (var item in getChildItem)
+                {
+                    item.ParentId = null;
+                    _functionRepository.Update(item);
+                }
+            }
             _functionRepository.Remove(id);
         }
 
@@ -99,7 +108,8 @@ namespace BPT_Service.Application.Implementation
 
         public IEnumerable<FunctionViewModel> GetAllWithParentId(string parentId)
         {
-            return _functionRepository.FindAll(x => x.ParentId == parentId).Select(x=>new FunctionViewModel{
+            return _functionRepository.FindAll(x => x.ParentId == parentId).Select(x => new FunctionViewModel
+            {
                 IconCss = x.IconCss,
                 Id = x.Id,
                 Name = x.Name,
@@ -118,7 +128,6 @@ namespace BPT_Service.Application.Implementation
         public void Update(FunctionViewModel functionVm)
         {
             var functionDb = _functionRepository.FindById(functionVm.Id);
-            //var function = _mapper.Map<Function>(functionVm);
             if (functionDb != null)
             {
                 functionDb.IconCss = functionVm.IconCss;
@@ -170,14 +179,14 @@ namespace BPT_Service.Application.Implementation
         public async Task<List<FunctionViewModel>> GetListFunctionWithPermission(string userName)
         {
             var listPermission = _permissionRepository.FindAll();
-            var listRole = _roleManager.Roles.Where(x=>x.Name != "admin").ToList();
+            var listRole = _roleManager.Roles.Where(x => x.Name != "admin").ToList();
             var listFunction = _functionRepository.FindAll();
             var getUser = await _userManager.FindByNameAsync(userName);
 
             List<AppRole> listRoleUser = new List<AppRole>();
             foreach (var item in listRole)
             {
-                if(await _userManager.IsInRoleAsync(getUser, item.Name))
+                if (await _userManager.IsInRoleAsync(getUser, item.Name))
                 {
                     listRoleUser.Add(item);
                 }
@@ -187,20 +196,20 @@ namespace BPT_Service.Application.Implementation
             foreach (var item in listRoleUser)
             {
                 var getListFunction = await (from f in listFunction
-                                       join p in listPermission on f.Id equals p.FunctionId
-                                       join r in listRoleUser on p.RoleId equals r.Id
-                                       select new FunctionViewModel
-                                       {
-                                           Id = f.Id,
-                                           IconCss = f.IconCss,
-                                           Name = f.Name,
-                                           ParentId = f.ParentId,
-                                           SortOrder = f.SortOrder,
-                                           Status = f.Status,
-                                           URL = f.URL
-                                       }).ToListAsync();
+                                             join p in listPermission on f.Id equals p.FunctionId
+                                             join r in listRoleUser on p.RoleId equals r.Id
+                                             select new FunctionViewModel
+                                             {
+                                                 Id = f.Id,
+                                                 IconCss = f.IconCss,
+                                                 Name = f.Name,
+                                                 ParentId = f.ParentId,
+                                                 SortOrder = f.SortOrder,
+                                                 Status = f.Status,
+                                                 URL = f.URL
+                                             }).ToListAsync();
 
-                 functions.AddRange(getListFunction);
+                functions.AddRange(getListFunction);
             }
 
             return functions;

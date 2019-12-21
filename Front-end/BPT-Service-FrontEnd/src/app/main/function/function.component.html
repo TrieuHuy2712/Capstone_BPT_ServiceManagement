@@ -28,26 +28,16 @@
         </ul>
         <div class="clearfix"></div>
       </div>
-      <!-- Chuan bi xoa quan que nay -->
       <div class="x_content">
-        <!-- <tree-root #treeFunction [nodes]="_functionHierachy">
-            <ng-template #treeNodeTemplate let-node let-index="index">
-              <span>{{ node.name }} </span>
-              <button class="btn btn-xs btn-success" (click)="showPermission(node.data.ID)"> <i class="fa fa-lock"
-                  aria-hidden="true"></i></button>
-              <button class="btn btn-xs btn-primary" (click)="showEdit(node.data.ID)"> <i class="fa fa-pencil-square-o"
-                  aria-hidden="true"></i></button>
-              <button class="btn btn-xs btn-danger" (click)="delete(node.data.ID)"><i class="fa fa-trash"
-                  aria-hidden="true"></i></button>
-            </ng-template>
-          </tree-root> -->
         <div>
           <div class="menu_section">
             <ul>
-              <li *ngFor="let item of _functions"><a><i class="fa {{item.IconCss}}"></i> {{item.parentId}}</a>
+              <li *ngFor="let item of _functions"><a><i class="fa {{item.iconCss}}"></i> {{item.key}}</a>
+                <button class="btn btn-xs btn-danger" (click)="delete(item.key)"><i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
                 <ul class="">
                   <li *ngFor="let subItem of item.childrenId">
-                    <a>{{subItem.name}}    </a>
+                    <a>{{subItem.name}} </a>
                     <button class="btn btn-xs btn-success" (click)="showPermission(subItem.id)"> <i class="fa fa-lock"
                         aria-hidden="true"></i></button>
                     <button class="btn btn-xs btn-primary" (click)="showEdit(subItem.id)"> <i
@@ -113,8 +103,8 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Thứ tự</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="number" #displayOrder="ngModel" [(ngModel)]="entity.sortOrder" required
-                name="displayOrder" class="form-control" />
+              <input type="number" #displayOrder="ngModel" [(ngModel)]="entity.sortOrder" required name="displayOrder"
+                class="form-control" />
               <small [hidden]="displayOrder.valid || (displayOrder.pristine && !addEditForm.submitted)"
                 class="text-danger">
                 Bạn phải nhập thứ tự
