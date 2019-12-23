@@ -16,7 +16,6 @@ using Microsoft.IdentityModel.Tokens;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.Implementation;
 using BPT_Service.Common.Helpers;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using BPT_Service.Model.Infrastructure.Interfaces;
 
 namespace BPT_Service.WebAPI
@@ -74,11 +73,15 @@ namespace BPT_Service.WebAPI
             //////// Services 
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+
             services.AddScoped<IRoleService, RoleService>();
             services.AddTransient<IRoleService, RoleService>();
 
             services.AddScoped<IFunctionService,FunctionService>();
             services.AddTransient<IFunctionService,FunctionService>();
+
+            services.AddScoped<IPermissionService,PermissionService>();
+            services.AddTransient<IPermissionService,PermissionService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // configure strongly typed settings objects

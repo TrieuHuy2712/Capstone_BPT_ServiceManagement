@@ -7,6 +7,7 @@ using BPT_Service.Application.ViewModels.System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -100,7 +101,7 @@ namespace BPT_Service.WebAPI.Controllers
         public IActionResult SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
         {
             _roleService.SavePermission(rolePermissionViewModel);
-            return new OkObjectResult("Save successfully");
+            return new OkObjectResult(rolePermissionViewModel);
         }
     }
 }

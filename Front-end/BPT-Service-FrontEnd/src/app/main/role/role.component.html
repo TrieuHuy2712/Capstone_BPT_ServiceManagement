@@ -21,7 +21,7 @@
         <div class="x_title">
           <ul class="nav navbar-right panel_toolbox">
             <li>
-              <button class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+              <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">Thêm mới</button>
             </li>
   
           </ul>
@@ -42,9 +42,9 @@
                 <td>{{role.name}}</td>
                 <td>{{role.description}}</td>
                 <td>
-                  <button *ngIf="role.name != 'Admin'" class="btn btn-primary" (click)="showEditModal(role.id)"><i
+                  <button *ngIf="role.name != 'Admin' && permission.canUpdate" class="btn btn-primary" (click)="showEditModal(role.id)"><i
                       class="fa fa-pencil-square-o"></i></button>
-                  <button *ngIf="role.name != 'Admin'" class="btn btn-danger" (click)="deleteItem(role.id)"><i class="fa fa-trash"></i></button>
+                  <button *ngIf="role.name != 'Admin' && permission.canDelete" class="btn btn-danger" (click)="deleteItem(role.id)"><i class="fa fa-trash"></i></button>
   
                 </td>
               </tr>

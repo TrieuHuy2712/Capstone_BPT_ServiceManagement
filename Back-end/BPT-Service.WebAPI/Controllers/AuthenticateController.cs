@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.WebAPI.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,12 @@ namespace BPT_Service.WebAPI.Controllers
         {
             var users =  _userService.GetAll();
             return Ok(users);
+        }
+
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword(string username, string oldPassword, string newPassword){
+            var user= await _userService.ResetPasswordAsync(username,oldPassword,newPassword);
+            return new OkObjectResult(user);
         }
     }
 }

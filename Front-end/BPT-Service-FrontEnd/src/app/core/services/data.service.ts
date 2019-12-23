@@ -24,7 +24,7 @@ export class DataService {
     return this._http.get(SystemConstants.BASE_API+uri,
       {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
-  post(uri:string,data?:any){
+  post(uri:string,data?:any): Observable<any>{
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
     return this._http.post(SystemConstants.BASE_API+uri,data,
@@ -45,7 +45,7 @@ export class DataService {
   delete(uri:string,key:string,id:string){
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);
-    return this._http.delete(SystemConstants.BASE_API+uri+"/?"+key+"="+id,
+    return this._http.delete(SystemConstants.BASE_API+uri+"?"+key+"="+id,
     {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
   deleteWithMultiParams(uri: string, params) {

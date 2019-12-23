@@ -10,6 +10,9 @@ namespace BPT_Service.Application.ViewModels.System
         [StringLength(128)]
         public string Name { set; get; }
 
+        [StringLength(128)]
+        public string NameVietNamese { set; get; }
+
         [Required]
         [StringLength(250)]
         public string URL { set; get; }

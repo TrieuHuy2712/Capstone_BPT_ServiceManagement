@@ -16,18 +16,21 @@ namespace BPT_Service.Application.Implementation
     public class RoleService : IRoleService
     {
         private RoleManager<AppRole> _roleManager;
+        private UserManager<AppUser> _userManager;
         private IRepository<Function, string> _functionRepository;
         private IRepository<Permission, int> _permissionRepository;
         private IUnitOfWork _unitOfWork;
         public RoleService(RoleManager<AppRole> roleManager,
             IUnitOfWork unitOfWork,
             IRepository<Function, string> functionRepository,
-            IRepository<Permission, int> permissionRepository)
+            IRepository<Permission, int> permissionRepository,
+            UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _roleManager = roleManager;
             _functionRepository = functionRepository;
             _permissionRepository = permissionRepository;
+            _userManager = userManager;
         }
 
         public async Task<bool> AddAsync(AppRoleViewModel roleVm)
@@ -66,9 +69,11 @@ namespace BPT_Service.Application.Implementation
 
         public async Task<List<AppRoleViewModel>> GetAllAsync()
         {
-            return await _roleManager.Roles.Select(x=>new AppRoleViewModel{
+            return await _roleManager.Roles.Select(x => new AppRoleViewModel
+            {
                 Id = x.Id,
-                Description =x.Description,
+                Description = x.Description,
+                NameVietNamese =x.NameVietNamese,
                 Name = x.Name
             }).ToListAsync();
         }
@@ -84,10 +89,12 @@ namespace BPT_Service.Application.Implementation
             query = query.Skip((page - 1) * pageSize)
                .Take(pageSize);
 
-            var data= query.Select(x=> new AppRoleViewModel{
+            var data = query.Select(x => new AppRoleViewModel
+            {
                 Name = x.Name,
-                Id= x.Id,
-                Description= x.Description
+                NameVietNamese =x.NameVietNamese,
+                Id = x.Id,
+                Description = x.Description
             }).ToList();
 
             var paginationSet = new PagedResult<AppRoleViewModel>()
@@ -172,17 +179,18 @@ namespace BPT_Service.Application.Implementation
                     }
                 }
                 var getDetailFunction = (from r in roles
-                                   join p in getPermission
-                                   on r.Id equals p.RoleId
-                                   select new PermissionViewModel
-                                   {
-                                       RoleId = r.Id,
-                                       CanCreate = p.CanCreate,
-                                       CanDelete = p.CanDelete,
-                                       CanRead = p.CanRead,
-                                       CanUpdate = p.CanUpdate,
-                                       RoleName = r.Name
-                                   }).ToList();
+                                         join p in getPermission
+                                         on r.Id equals p.RoleId
+                                         where p.FunctionId == functionId
+                                         select new PermissionViewModel
+                                         {
+                                             RoleId = r.Id,
+                                             CanCreate = p.CanCreate,
+                                             CanDelete = p.CanDelete,
+                                             CanRead = p.CanRead,
+                                             CanUpdate = p.CanUpdate,
+                                             RoleName = r.Name
+                                         }).ToList();
                 permissions.AddRange(getDetailFunction);
             }
             return permissions.ToList();
@@ -197,7 +205,7 @@ namespace BPT_Service.Application.Implementation
                 CanRead = x.CanRead,
                 CanUpdate = x.CanUpdate,
                 FunctionId = rolePermissionViewModel.FunctionId,
-                RoleId =x.RoleId
+                RoleId = x.RoleId
             }).ToList();
             var oldPermission = _permissionRepository.FindAll().Where(x => x.FunctionId == rolePermissionViewModel.FunctionId).ToList();
             if (oldPermission.Count > 0)

@@ -6,6 +6,7 @@ using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -120,6 +121,36 @@ namespace BPT_Service.Application.Implementation
             return userVm;
         }
 
+        public async Task<bool> CreateCustomerAsync(AppUserViewModel userVm, string password){
+
+            //Check exist username
+            var user = await _userManager.FindByNameAsync(userVm.UserName);
+            if(user != null){
+                return false;
+            }
+
+            //Check exist email
+            var email = await _userManager.FindByEmailAsync(userVm.Email);
+            if(email != null){
+                return false;
+            }
+
+            if(user ==null && email ==null){
+                await _userManager.CreateAsync(new AppUser()
+                {
+                    UserName = userVm.UserName,
+                    FullName = userVm.FullName,
+                    Email = userVm.Email,
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now,
+                    Status = Status.Active
+                }, password);
+                var newUser = await _userManager.FindByNameAsync(userVm.UserName);
+                await _userManager.AddToRoleAsync(user, "Customer");
+            }
+            return true;
+        }
+
         public async Task<bool> UpdateAsync(AppUserViewModel userVm)
         {
             var user = await _userManager.FindByIdAsync(userVm.Id.ToString());
@@ -145,5 +176,6 @@ namespace BPT_Service.Application.Implementation
             return false;
 
         }
+        
     }
 }

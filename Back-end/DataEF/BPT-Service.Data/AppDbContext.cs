@@ -1,4 +1,4 @@
- 
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
@@ -18,8 +18,6 @@ namespace BPT_Service.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<Announcement> Announcements { set; get; }
-        public DbSet<AnnouncementUser> AnnouncementUsers { set; get; }
         public DbSet<Function> Functions { get; set; }
 
         public DbSet<AppUser> AppUsers { get; set; }

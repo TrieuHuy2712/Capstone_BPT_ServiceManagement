@@ -20,5 +20,8 @@ namespace BPT_Service.Model.Entities
 
         [StringLength(250)]
         public string Description { get; set; }
+
+        [StringLength(125)]
+        public string NameVietNamese { get; set; }
     }
 }

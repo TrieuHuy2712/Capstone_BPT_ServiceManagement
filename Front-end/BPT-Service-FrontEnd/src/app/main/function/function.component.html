@@ -22,7 +22,7 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+            <button class="btn btn-success" *ngIf="_userPermission.canCreate" (click)="showAddModal()">Thêm mới</button>
           </li>
 
         </ul>
@@ -33,22 +33,21 @@
           <div class="menu_section">
             <ul>
               <li *ngFor="let item of _functions"><a><i class="fa {{item.iconCss}}"></i> {{item.key}}</a>
-                <button class="btn btn-xs btn-danger" (click)="delete(item.key)"><i class="fa fa-trash"
-                    aria-hidden="true"></i></button>
+                <button class="btn btn-xs btn-danger" *ngIf="_userPermission.canDelete" (click)="delete(item.key)"><i
+                    class="fa fa-trash" aria-hidden="true"></i></button>
                 <ul class="">
                   <li *ngFor="let subItem of item.childrenId">
                     <a>{{subItem.name}} </a>
-                    <button class="btn btn-xs btn-success" (click)="showPermission(subItem.id)"> <i class="fa fa-lock"
-                        aria-hidden="true"></i></button>
-                      <button class="btn btn-xs btn-primary fbutton" (click)="showEdit(subItem.id)"> <i
-                        class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                      <button class="btn btn-xs btn-danger fbutton" (click)="delete(subItem.id)"><i class="fa fa-trash"
-                        aria-hidden="true"></i></button>
-                    </div>
+                    <button class="btn btn-xs btn-success" *ngIf="_userPermission.canRead"
+                      (click)="showPermission(subItem.id)"> <i class="fa fa-lock" aria-hidden="true"></i></button>
+                    <button class="btn btn-xs btn-primary fbutton" *ngIf="_userPermission.canUpdate"
+                      (click)="showEdit(subItem.id)"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-xs btn-danger fbutton" (click)="delete(subItem.id)"
+                      *ngIf="_userPermission.canDelete"><i class="fa fa-trash" aria-hidden="true"></i></button>
                   </li>
                 </ul>
               </li>
-            </ul >
+            </ul>
           </div>
         </div>
       </div>

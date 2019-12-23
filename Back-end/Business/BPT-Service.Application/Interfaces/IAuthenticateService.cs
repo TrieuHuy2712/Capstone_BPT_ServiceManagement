@@ -10,5 +10,6 @@ namespace BPT_Service.Application.Interfaces
         Task<AppUser> Authenticate(string username, string password);
         Task<IEnumerable<AppUserViewModel>> GetAll();
         Task<AppUserViewModel> GetById(string id);
+        Task<bool> ResetPasswordAsync(string username, string oldPassword, string newPassword);
     }
 }

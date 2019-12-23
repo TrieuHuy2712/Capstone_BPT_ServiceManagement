@@ -56,6 +56,19 @@ namespace BPT_Service.Application.Implementation
                 return null;
             }
         }
+        public async Task<bool> ResetPasswordAsync(string username, string oldPassword, string newPassword){
+            var user = await _userManager.FindByNameAsync(username);
+            if(user !=null && await _userManager.CheckPasswordAsync(user,oldPassword)){
+                string resetToken= await _userManager.GeneratePasswordResetTokenAsync(user);
+                IdentityResult passwordChangeResult = await _userManager
+                        .ResetPasswordAsync(user, resetToken, newPassword);
+                if(passwordChangeResult.Succeeded){
+                    return true;
+                }
+
+            }
+            return false;
+        }
 
         public async Task<IEnumerable<AppUserViewModel>> GetAll()
         {

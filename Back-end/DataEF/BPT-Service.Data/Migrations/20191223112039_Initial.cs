@@ -30,7 +30,8 @@ namespace BPT_Service.Data.Migrations
                     Name = table.Column<string>(nullable: true),
                     NormalizedName = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(maxLength: 250, nullable: true)
+                    Description = table.Column<string>(maxLength: 250, nullable: true),
+                    NameVietNamese = table.Column<string>(maxLength: 125, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,6 +131,7 @@ namespace BPT_Service.Data.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
+                    NameVietNamese = table.Column<string>(maxLength: 128, nullable: false),
                     URL = table.Column<string>(maxLength: 250, nullable: false),
                     ParentId = table.Column<string>(maxLength: 128, nullable: true),
                     IconCss = table.Column<string>(nullable: true),
@@ -139,29 +141,6 @@ namespace BPT_Service.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Functions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Announcements",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Title = table.Column<string>(maxLength: 250, nullable: false),
-                    Content = table.Column<string>(maxLength: 250, nullable: true),
-                    UserId = table.Column<Guid>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Announcements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Announcements_AppUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AppUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,37 +173,6 @@ namespace BPT_Service.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AnnouncementUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AnnouncementId = table.Column<string>(maxLength: 128, nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    HasRead = table.Column<bool>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnnouncementUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AnnouncementUsers_Announcements_AnnouncementId",
-                        column: x => x.AnnouncementId,
-                        principalTable: "Announcements",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Announcements_UserId",
-                table: "Announcements",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnnouncementUsers_AnnouncementId",
-                table: "AnnouncementUsers",
-                column: "AnnouncementId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Permissions_FunctionId",
                 table: "Permissions",
@@ -239,9 +187,6 @@ namespace BPT_Service.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AnnouncementUsers");
-
-            migrationBuilder.DropTable(
                 name: "AppRoleClaims");
 
             migrationBuilder.DropTable(
@@ -254,22 +199,19 @@ namespace BPT_Service.Data.Migrations
                 name: "AppUserRoles");
 
             migrationBuilder.DropTable(
+                name: "AppUsers");
+
+            migrationBuilder.DropTable(
                 name: "AppUserTokens");
 
             migrationBuilder.DropTable(
                 name: "Permissions");
 
             migrationBuilder.DropTable(
-                name: "Announcements");
-
-            migrationBuilder.DropTable(
                 name: "Functions");
 
             migrationBuilder.DropTable(
                 name: "AppRoles");
-
-            migrationBuilder.DropTable(
-                name: "AppUsers");
         }
     }
 }

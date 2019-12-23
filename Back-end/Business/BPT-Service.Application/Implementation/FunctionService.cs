@@ -56,6 +56,7 @@ namespace BPT_Service.Application.Implementation
             function.SortOrder = functionVm.SortOrder;
             function.Status = functionVm.Status;
             function.URL = functionVm.URL;
+            function.NameVietNamese = functionVm.NameVietNamese;
             _functionRepository.Add(function);
         }
 
@@ -85,6 +86,7 @@ namespace BPT_Service.Application.Implementation
             functionViewModel.SortOrder = function.SortOrder;
             functionViewModel.Status = function.Status;
             functionViewModel.URL = function.URL;
+            function.NameVietNamese = function.NameVietNamese;
             return functionViewModel;
         }
 
@@ -101,6 +103,7 @@ namespace BPT_Service.Application.Implementation
                 ParentId = x.ParentId,
                 SortOrder = x.SortOrder,
                 Status = x.Status,
+                NameVietNamese = x.NameVietNamese,
                 URL = x.URL
             });
             return queryFunction.ToListAsync();
@@ -116,6 +119,7 @@ namespace BPT_Service.Application.Implementation
                 ParentId = x.ParentId,
                 SortOrder = x.SortOrder,
                 Status = x.Status,
+                NameVietNamese = x.NameVietNamese,
                 URL = x.URL
             });
         }
@@ -128,6 +132,7 @@ namespace BPT_Service.Application.Implementation
         public void Update(FunctionViewModel functionVm)
         {
             var functionDb = _functionRepository.FindById(functionVm.Id);
+
             if (functionDb != null)
             {
                 functionDb.IconCss = functionVm.IconCss;
@@ -137,6 +142,7 @@ namespace BPT_Service.Application.Implementation
                 functionDb.SortOrder = functionVm.SortOrder;
                 functionDb.Status = functionVm.Status;
                 functionDb.URL = functionVm.URL;
+                functionDb.NameVietNamese = functionVm.NameVietNamese;
                 _functionRepository.Update(functionDb);
             }
 
@@ -182,22 +188,31 @@ namespace BPT_Service.Application.Implementation
             var listRole = _roleManager.Roles.Where(x => x.Name != "admin").ToList();
             var listFunction = _functionRepository.FindAll();
             var getUser = await _userManager.FindByNameAsync(userName);
-
-            List<AppRole> listRoleUser = new List<AppRole>();
-            foreach (var item in listRole)
+            var role = await _userManager.GetRolesAsync(getUser);
+            List<AppRoleViewModel> listRoleUser = new List<AppRoleViewModel>();
+            if (role.Count > 0)
             {
-                if (await _userManager.IsInRoleAsync(getUser, item.Name))
+                foreach (var item in role)
                 {
-                    listRoleUser.Add(item);
+                    var roleId = await _roleManager.Roles.Select(x => new AppRoleViewModel
+                    {
+                        Id = x.Id,
+                        Description = x.Description,
+                        NameVietNamese = x.NameVietNamese,
+                        Name = x.Name
+                    }).Where(x => x.Name == item).FirstOrDefaultAsync();
+                    listRoleUser.Add(roleId);
                 }
             }
 
+
             List<FunctionViewModel> functions = new List<FunctionViewModel>();
+            List<FunctionViewModel> newFunctions = new List<FunctionViewModel>();
             foreach (var item in listRoleUser)
             {
                 var getListFunction = await (from f in listFunction
                                              join p in listPermission on f.Id equals p.FunctionId
-                                             join r in listRoleUser on p.RoleId equals r.Id
+                                             where p.RoleId == item.Id && p.CanRead == true
                                              select new FunctionViewModel
                                              {
                                                  Id = f.Id,
@@ -206,13 +221,24 @@ namespace BPT_Service.Application.Implementation
                                                  ParentId = f.ParentId,
                                                  SortOrder = f.SortOrder,
                                                  Status = f.Status,
-                                                 URL = f.URL
+                                                 URL = f.URL,
+                                                 NameVietNamese = f.NameVietNamese,
                                              }).ToListAsync();
 
                 functions.AddRange(getListFunction);
+
             }
 
-            return functions;
+            //functions = functions.GroupBy(x => x.Id).Select(t => t.First()).ToList();
+
+            foreach (var item in functions)
+            {
+                if(functions.Where(x=>x.Name==item.Name).Count()<=1){
+                    newFunctions.Add(item);
+                }
+            }
+            return newFunctions;
+
         }
     }
 }

@@ -16,63 +16,6 @@ namespace BPT_Service.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
-            modelBuilder.Entity("BPT_Service.Model.Entities.Announcement", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(250);
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Announcements");
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.AnnouncementUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AnnouncementId")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
-
-                    b.Property<bool?>("HasRead")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnnouncementId");
-
-                    b.ToTable("AnnouncementUsers");
-                });
-
             modelBuilder.Entity("BPT_Service.Model.Entities.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,6 +31,10 @@ namespace BPT_Service.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("NameVietNamese")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(125);
 
                     b.Property<string>("NormalizedName")
                         .HasColumnType("TEXT");
@@ -180,6 +127,11 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("NameVietNamese")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
@@ -330,24 +282,6 @@ namespace BPT_Service.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("AppUserTokens");
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.Announcement", b =>
-                {
-                    b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.AnnouncementUser", b =>
-                {
-                    b.HasOne("BPT_Service.Model.Entities.Announcement", "Announcement")
-                        .WithMany("AnnouncementUsers")
-                        .HasForeignKey("AnnouncementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.Permission", b =>

@@ -6,6 +6,7 @@ using BPT_Service.Application.ViewModels.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -64,7 +65,7 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 var result = items.Where(x => x.ParentId != null).GroupBy(t => t.ParentId).Select(group => new
                 {
-                    ParentId = group.Key,
+                     group.Key,
                     ChildrenId = group.ToList()
                 }).ToList();
                 return new ObjectResult(result);
@@ -166,7 +167,7 @@ namespace BPT_Service.WebAPI.Controllers
             {
                 _functionService.Delete(id);
                 _functionService.Save();
-                return new OkObjectResult(id);
+                return new OkObjectResult(id.FirstOrDefault());
             }
         }
 
