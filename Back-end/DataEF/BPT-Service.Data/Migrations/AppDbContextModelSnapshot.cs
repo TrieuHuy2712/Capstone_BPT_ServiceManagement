@@ -118,6 +118,29 @@ namespace BPT_Service.Data.Migrations
                     b.ToTable("AppUsers");
                 });
 
+            modelBuilder.Entity("BPT_Service.Model.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("NameVietnamese")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("BPT_Service.Model.Entities.Function", b =>
                 {
                     b.Property<string>("Id")

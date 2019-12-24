@@ -83,6 +83,9 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IPermissionService,PermissionService>();
             services.AddTransient<IPermissionService,PermissionService>();
 
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");

@@ -19,10 +19,11 @@ namespace BPT_Service.Data
         {
         }
         public DbSet<Function> Functions { get; set; }
-
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Category>  Categories{ get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

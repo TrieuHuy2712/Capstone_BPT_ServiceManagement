@@ -61,6 +61,26 @@ namespace BPT_Service.Data
                 var user = await _userManager.FindByNameAsync("admin");
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
+            if (_context.Categories.Count() == 0)
+            {
+                List<Category> categories = new List<Category>() {
+                    new Category()
+                    {
+                        CategoryName="Cleaner",
+                        Description="This is cleaner",
+                        NameVietnamese="Dich vu don nha"
+                    },
+                    new Category()
+                    {
+                        CategoryName="Cleaner 1",
+                        Description="This is cleaner 1",
+                        NameVietnamese="Dich vu don nha 1"
+                    }
+
+                };
+                await _context.Categories.AddRangeAsync(categories);
+                await _context.SaveChangesAsync();
+            }
             if (_context.Functions.Count() == 0)
             {
                 List<Function> functions = new List<Function>()
