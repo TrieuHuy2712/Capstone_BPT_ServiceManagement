@@ -1,18 +1,20 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { Router } from "@angular/router";
 import {
   IMultiSelectOption,
   IMultiSelectTexts
 } from "angular-2-dropdown-multiselect";
-import { SystemConstants } from 'src/app/core/common/system,constants';
-import { DataService } from 'src/app/core/services/data.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { UtilityService } from 'src/app/core/services/utility.service';
-import { UploadService } from 'src/app/core/services/upload.service';
+
 import { AuthenService } from 'src/app/core/services/authen.service';
+import { DataService } from 'src/app/core/services/data.service';
 import { MessageConstants } from 'src/app/core/common/message.constants';
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { NotificationService } from 'src/app/core/services/notification.service';
+import { Router } from "@angular/router";
+import { SystemConstants } from 'src/app/core/common/system,constants';
+import { UploadService } from 'src/app/core/services/upload.service';
 import { UrlConstants } from 'src/app/core/common/url.constants';
+import { UtilityService } from 'src/app/core/services/utility.service';
+
 declare var moment: any;
 
 @Component({
@@ -21,8 +23,8 @@ declare var moment: any;
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-  @ViewChild("modalAddEdit",{static: false}) public modalAddEdit: ModalDirective;
-  @ViewChild("avatar",{static: false}) avatar;
+  @ViewChild("modalAddEdit", { static: false }) public modalAddEdit: ModalDirective;
+  @ViewChild("avatar", { static: false }) avatar;
   public myRoles: string[] = [];
   public pageIndex: number = 1;
   public pageSize: number = 20;
@@ -66,14 +68,7 @@ export class UserComponent implements OnInit {
 
   loadData() {
     this._dataService
-      .get(
-        "/api/appUser/getlistpaging?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&filter=" +
-          this.filter
-      )
+      .get("/UserManagement/GetAllPaging?page=" + this.pageIndex +"&pageSize=" +this.pageSize +"&keyword=" +this.filter)
       .subscribe((response: any) => {
         this.users = response.Items;
         this.pageIndex = response.PageIndex;
@@ -82,7 +77,7 @@ export class UserComponent implements OnInit {
       });
   }
   loadRoles() {
-    this._dataService.get("/api/appRole/getlistall").subscribe(
+    this._dataService.get("/AdminRole/GetAll").subscribe(
       (response: any[]) => {
         this.allRoles = [];
         for (let role of response) {
@@ -94,16 +89,14 @@ export class UserComponent implements OnInit {
   }
   loadUserDetail(id: any) {
     this._dataService
-      .get("/api/appUser/detail/" + id)
+      .get("/AdminRole/GetById/" + id)
       .subscribe((response: any) => {
         this.entity = response;
         this.myRoles = [];
         for (let role of this.entity.Roles) {
           this.myRoles.push(role);
         }
-        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format(
-          "DD/MM/YYYY"
-        );
+        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format("DD/MM/YYYY");
         console.log(this.allRoles);
         console.log(this.myRoles);
         console.log(this.entity);
