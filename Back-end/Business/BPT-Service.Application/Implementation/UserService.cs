@@ -45,26 +45,28 @@ namespace BPT_Service.Application.Implementation
         public async Task<bool> DeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if(user !=null){
+            if (user != null)
+            {
                 await _userManager.DeleteAsync(user);
                 return true;
             }
             return false;
-            
+
         }
 
         public async Task<List<AppUserViewModel>> GetAllAsync()
         {
             //return await _userManager.Users.ProjectTo<AppUserViewModel>(_config).ToListAsync();
-            return await _userManager.Users.Select(x=> new AppUserViewModel(){
+            return await _userManager.Users.Select(x => new AppUserViewModel()
+            {
                 BirthDay = x.BirthDay.ToString(),
                 Avatar = x.Avatar,
                 DateCreated = x.DateCreated,
-                Email= x.Email,
+                Email = x.Email,
                 FullName = x.FullName,
                 PhoneNumber = x.PhoneNumber,
                 Token = x.Token,
-                UserName = x.UserName
+                UserName = x.UserName,
             }).ToListAsync();
         }
 
@@ -109,9 +111,10 @@ namespace BPT_Service.Application.Implementation
             var user = await _userManager.FindByIdAsync(id);
             var roles = await _userManager.GetRolesAsync(user);
             //var userVm = _mapper.Map<AppUser, AppUserViewModel>(user);
-            AppUserViewModel userVm= new AppUserViewModel();
+            AppUserViewModel userVm = new AppUserViewModel();
+            userVm.Id = user.Id;
             userVm.Avatar = user.Avatar;
-            userVm.BirthDay= user.BirthDay.ToString();
+            userVm.BirthDay = user.BirthDay.ToString();
             userVm.DateCreated = user.DateCreated;
             userVm.Email = user.Email;
             userVm.FullName = user.FullName;
@@ -121,21 +124,25 @@ namespace BPT_Service.Application.Implementation
             return userVm;
         }
 
-        public async Task<bool> CreateCustomerAsync(AppUserViewModel userVm, string password){
+        public async Task<bool> CreateCustomerAsync(AppUserViewModel userVm, string password)
+        {
 
             //Check exist username
             var user = await _userManager.FindByNameAsync(userVm.UserName);
-            if(user != null){
+            if (user != null)
+            {
                 return false;
             }
 
             //Check exist email
             var email = await _userManager.FindByEmailAsync(userVm.Email);
-            if(email != null){
+            if (email != null)
+            {
                 return false;
             }
 
-            if(user ==null && email ==null){
+            if (user == null && email == null)
+            {
                 await _userManager.CreateAsync(new AppUser()
                 {
                     UserName = userVm.UserName,
@@ -153,29 +160,32 @@ namespace BPT_Service.Application.Implementation
 
         public async Task<bool> UpdateAsync(AppUserViewModel userVm)
         {
-            var user = await _userManager.FindByIdAsync(userVm.Id.ToString());
-            //Remove current roles in db
-            var currentRoles = await _userManager.GetRolesAsync(user);
-
-            var result = await _userManager.AddToRolesAsync(user,
-                userVm.Roles.Except(currentRoles).ToArray());
-
-            if (result.Succeeded)
+            try
             {
-                string[] needRemoveRoles = currentRoles.Except(userVm.Roles).ToArray();
-                await _userManager.RemoveFromRolesAsync(user, needRemoveRoles);
-
-                //Update user detail
+                var user = await _userManager.FindByIdAsync(userVm.Id.ToString());
                 user.FullName = userVm.FullName;
                 user.Status = userVm.Status;
                 user.Email = userVm.Email;
                 user.PhoneNumber = userVm.PhoneNumber;
+                user.BirthDay = DateTime.ParseExact(userVm.BirthDay,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture);
+
                 await _userManager.UpdateAsync(user);
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var selectedRole = userVm.Roles.ToArray();
+
+                selectedRole = selectedRole ?? new string[] { };
+
+                await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles).ToArray());
+
                 return true;
             }
-            return false;
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
         }
-        
+
     }
 }

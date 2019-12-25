@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using BPT_Service.Common.Helpers;
-using BPT_Service.Model.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using System.Linq;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Application.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using BPT_Service.Model.Entities;
 
 namespace BPT_Service.Application.Implementation
 {

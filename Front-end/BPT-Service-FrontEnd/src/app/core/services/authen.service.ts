@@ -61,7 +61,7 @@ export class AuthenService {
     console.log(user.permissions);
     var roles: any[] = JSON.parse(user.roles);
     var hasPermission: number = permission.findIndex(x => x.FunctionId == functionId && x.CanRead == true);
-    if (hasPermission != -1 || roles.findIndex(x => x == "Admin") != -1) {
+    if (hasPermission != -1 || roles.findIndex(x => x == "admin") != -1) {
       return true;
     }
     else

@@ -4,16 +4,16 @@ import {
   IMultiSelectTexts
 } from "angular-2-dropdown-multiselect";
 
-import { AuthenService } from 'src/app/core/services/authen.service';
-import { DataService } from 'src/app/core/services/data.service';
-import { MessageConstants } from 'src/app/core/common/message.constants';
+import { AuthenService } from "src/app/core/services/authen.service";
+import { DataService } from "src/app/core/services/data.service";
+import { MessageConstants } from "src/app/core/common/message.constants";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { NotificationService } from "src/app/core/services/notification.service";
 import { Router } from "@angular/router";
-import { SystemConstants } from 'src/app/core/common/system,constants';
-import { UploadService } from 'src/app/core/services/upload.service';
-import { UrlConstants } from 'src/app/core/common/url.constants';
-import { UtilityService } from 'src/app/core/services/utility.service';
+import { SystemConstants } from "src/app/core/common/system,constants";
+import { UploadService } from "src/app/core/services/upload.service";
+import { UrlConstants } from "src/app/core/common/url.constants";
+import { UtilityService } from "src/app/core/services/utility.service";
 
 declare var moment: any;
 
@@ -23,7 +23,8 @@ declare var moment: any;
   styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-  @ViewChild("modalAddEdit", { static: false }) public modalAddEdit: ModalDirective;
+  @ViewChild("modalAddEdit", { static: false })
+  public modalAddEdit: ModalDirective;
   @ViewChild("avatar", { static: false }) avatar;
   public myRoles: string[] = [];
   public pageIndex: number = 1;
@@ -35,9 +36,11 @@ export class UserComponent implements OnInit {
   public entity: any;
   public baseFolder: string = SystemConstants.BASE_API;
   public allRoles: IMultiSelectOption[] = [];
+  public permission: any;
   public roles: any[];
   public currentUser: string;
   public currentPOS: number;
+  public functionId: string = "USER";
   public dateOptions: any = {
     locale: { format: "DD/MM/YYYY" },
     alwaysShowCalendars: false,
@@ -52,54 +55,96 @@ export class UserComponent implements OnInit {
     public _authenService: AuthenService,
     private router: Router
   ) {
-    if (_authenService.checkAccess("USER") == false) {
-      this._notificationService.printErrorMessage(
-        MessageConstants.PERMISSION_OK_MSG
-      );
-      this.router.navigate([UrlConstants.HOME]);
-    }
+    // if (_authenService.checkAccess("USER") == false) {
+    //   this._notificationService.printErrorMessage(
+    //     MessageConstants.PERMISSION_OK_MSG
+    //   );
+    //   this.router.navigate([UrlConstants.HOME]);
+    // }
   }
 
   ngOnInit() {
     this.currentUser = SystemConstants.CURRENT_USER;
+    this.permission =
+      {
+        canCreate: true,
+        canDelete: true,
+        canUpdate: true,
+        canRead: true
+      };
     this.loadRoles();
     this.loadData();
   }
 
   loadData() {
     this._dataService
-      .get("/UserManagement/GetAllPaging?page=" + this.pageIndex +"&pageSize=" +this.pageSize +"&keyword=" +this.filter)
+      .get(
+        "/UserManagement/GetAllPaging?page=" +
+          this.pageIndex +
+          "&pageSize=" +
+          this.pageSize +
+          "&keyword=" +
+          this.filter
+      )
       .subscribe((response: any) => {
-        this.users = response.Items;
+        this.users = response.results;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
+        console.log(response);
+        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
+          this.loadPermission();
+        } else {
+          let adminPermission: any = {
+            canCreate: true,
+            canDelete: true,
+            canUpdate: true,
+            canRead: true
+          };
+          this.permission = adminPermission;
+        }
       });
   }
+  loadPermission() {
+    this._dataService
+      .get(
+        "/PermissionManager/GetAllPermission/" +
+          localStorage.getItem(SystemConstants.const_username) +
+          "/" +
+          this.functionId
+      )
+      .subscribe((response: any) => {
+        console.log(response);
+        this.permission = response.result;
+        console.log(this.permission);
+      });
+  }
+
   loadRoles() {
     this._dataService.get("/AdminRole/GetAll").subscribe(
       (response: any[]) => {
         this.allRoles = [];
         for (let role of response) {
-          this.allRoles.push({ id: role.Name, name: role.Description });
+          this.allRoles.push({ id: role.name, name: role.description });
         }
+        console.log(response);
       },
       error => this._dataService.handleError(error)
     );
   }
   loadUserDetail(id: any) {
     this._dataService
-      .get("/AdminRole/GetById/" + id)
+      .get("/UserManagement/GetById/" + id)
       .subscribe((response: any) => {
+        console.log(response);
         this.entity = response;
         this.myRoles = [];
-        for (let role of this.entity.Roles) {
+        for (let role of this.entity.roles) {
           this.myRoles.push(role);
         }
-        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format("DD/MM/YYYY");
-        console.log(this.allRoles);
-        console.log(this.myRoles);
-        console.log(this.entity);
+        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format(
+          "DD/MM/YYYY"
+        );
       });
   }
   pageChanged(event: any): void {
@@ -132,13 +177,9 @@ export class UserComponent implements OnInit {
       }
     }
   }
-  private saveData() {
-    if (this.entity.Id == undefined) {
-      if (this.currentPOS != 0) {
-        this.entity.POS = this.currentPOS;
-      }
-      this.entity.BonusPoint = 0;
-      this._dataService.post("/api/appUser/add", this.entity).subscribe(
+  public saveData() {
+    if (this.entity.id == undefined) {
+      this._dataService.post("/UserManagement/AddNewUser", this.entity).subscribe(
         (response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -149,7 +190,7 @@ export class UserComponent implements OnInit {
         error => this._dataService.handleError(error)
       );
     } else {
-      this._dataService.put("/api/appUser/update", this.entity).subscribe(
+      this._dataService.put("/UserManagement/UpdateUser", this.entity).subscribe(
         (response: any) => {
           this.loadData();
           this.modalAddEdit.hide();
@@ -169,7 +210,7 @@ export class UserComponent implements OnInit {
   }
   deleteItemConfirm(id: any) {
     this._dataService
-      .delete("/api/appUser/delete", "id", id)
+      .delete("/UserManagement/DeleteUser", "id", id)
       .subscribe((response: Response) => {
         this._notificationService.printSuccessMessage(
           MessageConstants.DELETED_OK_MSG
