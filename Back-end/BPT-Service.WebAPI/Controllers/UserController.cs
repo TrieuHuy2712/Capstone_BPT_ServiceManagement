@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
-    [Route("UserManager")]
+    [Route("UserManagement")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

@@ -28,4 +28,8 @@ namespace BPT_Service.Application.ViewModels.System
 
         public List<string> Roles { get; set; }
     }
+    public class UserRoleViewModel
+    {
+        public Guid MyProperty { get; set; }
+    }
 }
