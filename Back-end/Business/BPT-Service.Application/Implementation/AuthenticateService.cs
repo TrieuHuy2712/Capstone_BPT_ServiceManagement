@@ -53,6 +53,7 @@ namespace BPT_Service.Application.Implementation
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 user.Token = tokenHandler.WriteToken(token);
                 return user;
+                
             }
             else
             {
