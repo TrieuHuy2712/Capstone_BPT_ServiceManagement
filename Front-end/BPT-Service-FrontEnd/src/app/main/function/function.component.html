@@ -125,7 +125,7 @@
             <div class="col-md-9 col-sm-9 col-xs-12">
               <select class="form-control" name="parentId" [(ngModel)]="entity.parentId">
                 <option value="">--Chọn chức năng cha--</option>
-                <option *ngFor="let x of _functions" [value]="x.parentId">{{x.parentId}}</option>
+                <option *ngFor="let x of _functions" [value]="x.key">{{x.key}}</option>
               </select>
               <input type="hidden" [(ngModel)]="entity.parentId" name="parentId" class="form-control" />
             </div>
