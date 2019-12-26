@@ -15,9 +15,13 @@ namespace BPT_Service.Application.Implementation
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        public UserService(UserManager<AppUser> userManager)
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<IdentityUser> _identityManager;
+        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, UserManager<IdentityUser> identityManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
+            _identityManager = identityManager;
         }
 
         public async Task<bool> AddAsync(AppUserViewModel userVm)
@@ -169,15 +173,23 @@ namespace BPT_Service.Application.Implementation
                 user.PhoneNumber = userVm.PhoneNumber;
                 user.BirthDay = DateTime.ParseExact(userVm.BirthDay,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture);
 
-                await _userManager.UpdateAsync(user);
+                var userRoles = _userManager.GetRolesAsync(user);
 
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var selectedRole = userVm.Roles.ToArray();
-
+                var selectedRole = userVm.NewRoles.ToArray();
                 selectedRole = selectedRole ?? new string[] { };
 
-                await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles).ToArray());
+                var re = await _userManager.RemoveFromRolesAsync(user,await _userManager.GetRolesAsync(user));
+                if (re.Succeeded)
+                {
+                    await _userManager.AddToRolesAsync(user, selectedRole.ToArray());
+                }
+                else
+                {
+                    var error = re.Errors;
+                }
 
+                var userRoles1 = await _userManager.GetRolesAsync(user);
+                await _userManager.UpdateAsync(user);
                 return true;
             }
             catch (Exception ex)

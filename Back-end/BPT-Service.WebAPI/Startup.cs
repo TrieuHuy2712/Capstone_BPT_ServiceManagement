@@ -17,6 +17,7 @@ using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.Implementation;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BPT_Service.WebAPI
 {
@@ -40,9 +41,12 @@ namespace BPT_Service.WebAPI
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             services.AddMvc()
+           .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
             services.AddAutoMapper(typeof(RoleService).Assembly);
+
             services.AddTransient<DbInitializer>();
             // Configure Identity
             services.Configure<IdentityOptions>(options =>
