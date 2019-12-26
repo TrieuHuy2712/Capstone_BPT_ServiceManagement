@@ -55,8 +55,9 @@ namespace BPT_Service.WebAPI
                 options.Password.RequireLowercase = false;
 
                 // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
@@ -77,14 +78,17 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRoleService, RoleService>();
             services.AddTransient<IRoleService, RoleService>();
 
-            services.AddScoped<IFunctionService,FunctionService>();
-            services.AddTransient<IFunctionService,FunctionService>();
+            services.AddScoped<IFunctionService, FunctionService>();
+            services.AddTransient<IFunctionService, FunctionService>();
 
-            services.AddScoped<IPermissionService,PermissionService>();
-            services.AddTransient<IPermissionService,PermissionService>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddTransient<IPermissionService, PermissionService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddTransient<ICategoryService, CategoryService>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // configure strongly typed settings objects

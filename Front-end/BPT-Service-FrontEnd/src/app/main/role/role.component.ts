@@ -18,7 +18,7 @@ export class RoleComponent implements OnInit {
   public totalRow: number;
   public filter: string = "";
   public roles: any[];
-  public permission: any[];
+  public permission: any;
   public entity: any;
   public functionId: string = "ROLE";
   constructor(
@@ -27,6 +27,12 @@ export class RoleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.permission = {
+      canCreate: true,
+      canDelete: true,
+      canUpdate: true,
+      canRead: true
+    };
     this.loadData();
   }
 
@@ -47,15 +53,7 @@ export class RoleComponent implements OnInit {
         this.totalRow = response.rowCount;
         if (localStorage.getItem(SystemConstants.const_username) != "admin") {
           this.loadPermission();
-        } else {
-          let adminPermission: any = {
-            canCreate: true,
-            canDelete: true,
-            canUpdate: true,
-            canRead: true
-          };
-          this.permission = adminPermission;
-        }
+        } 
       });
   }
   loadPermission() {

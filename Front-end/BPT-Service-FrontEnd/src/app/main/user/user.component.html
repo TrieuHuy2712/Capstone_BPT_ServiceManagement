@@ -21,7 +21,7 @@
         <div class="x_title">
           <ul class="nav navbar-right panel_toolbox">
             <li>
-              <button *ngIf="_authenService.hasPermission('USER','create')" class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+              <button *ngIf="permission.canCreate" class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
             </li>
   
           </ul>
@@ -37,24 +37,22 @@
                 <th>Email</th>
                 <th>Ngày sinh</th>
                 <th>Số điện thoại</th>
-                <th>Điểm thưởng </th>
                 <th>Avatar</th>
                 
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="permission.canRead">
               <tr *ngFor="let user of users">
-                <td>{{user.UserName}}</td>
-                <td>{{user.FullName}}</td>
-                <td>{{user.Email}}</td>
-                <td>{{user.BirthDay | date:'dd/MM/yyyy'}}</td>
-                <td>{{user.PhoneNumber}}</td>
-                <td>{{user.BonusPoint}}</td>
+                <td>{{user.userName}}</td>
+                <td>{{user.fullName}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.birthDay | date:'dd/MM/yyyy'}}</td>
+                <td>{{user.phoneNumber}}</td>
                 <td><img [src]="baseFolder + user.Avatar" class="img-responsive" width="128" /></td>
                 <td>
-                  <button class="btn btn-primary"  *ngIf="_authenService.hasPermission('USER','update') && user.UserName != 'admin'" (click)="showEditModal(user.Id)"><i class="fa fa-pencil-square-o"></i></button>
-                  <button class="btn btn-danger"  *ngIf="_authenService.hasPermission('USER','delete') && user.UserName != 'admin'" (click)="deleteItem(user.Id)"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-primary"  *ngIf="permission.canUpdate && userName !='admin'" (click)="showEditModal(user.id)"><i class="fa fa-pencil-square-o"></i></button>
+                  <button class="btn btn-danger"  *ngIf="permission.canDelete && userName !='admin' " (click)="deleteItem(user.id)"><i class="fa fa-trash"></i></button>
   
                 </td>
               </tr>
@@ -87,7 +85,7 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Họ tên</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #name="ngModel" [(ngModel)]="entity.FullName" required minlength="3" name="name" class="form-control">
+                <input type="text" #name="ngModel" [(ngModel)]="entity.fullName" required minlength="3" name="name" class="form-control">
                 <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
                   Bạn phải nhập tên ít nhất 3 ký tự
                 </small>
@@ -97,13 +95,13 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Tài khoản</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #username="ngModel" [(ngModel)]="entity.UserName" required name="username" class="form-control">
+                <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required name="username" class="form-control">
                 <small [hidden]="username.valid || (username.pristine && !addEditForm.submitted)" class="text-danger">
                   Bạn phải nhập tài khoản
                 </small>
               </div>
             </div>
-            <div class="form-group" *ngIf="!entity.Id">
+            <div class="form-group" *ngIf="!entity.id">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Mật khẩu</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <input type="password" #password="ngModel" [(ngModel)]="entity.Password" required minlength="6" name="password" class="form-control">
@@ -112,7 +110,7 @@
                 </small>
               </div>
             </div>
-            <div class="form-group" *ngIf="!entity.Id">
+            <div class="form-group" *ngIf="!entity.id">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Xác nhận mật khẩu</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <input type="password" #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required validateEqual="password"
@@ -125,33 +123,17 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.Email" required
+                <input type="text" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="entity.email" required
                   name="email" class="form-control">
                 <small [hidden]="email.valid || (email.pristine && !addEditForm.submitted)" class="text-danger">
                   Bạn phải nhập email
                 </small>
               </div>
             </div>
-            <div class="form-group" *ngIf="currentPOS==0">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">POS</label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="number" #pos="ngModel"  [(ngModel)]="entity.POS" required
-                  name="POS" class="form-control">
-              </div>
-            </div>
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Địa chỉ</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #address="ngModel" [(ngModel)]="entity.Address" name="address" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Điện thoại</label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #phonenumber="ngModel" [(ngModel)]="entity.PhoneNumber" required name="phonenumber" class="form-control">
-                <small [hidden]="phonenumber.valid || (phonenumber.pristine && !addEditForm.submitted)" class="text-danger">
-                  Bạn phải nhập số điện thoại
-                </small>
+                <input type="text" #address="ngModel" [(ngModel)]="entity.address" name="address" class="form-control">
               </div>
             </div>
             <div class="form-group">
@@ -169,18 +151,8 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Ngày sinh</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.BirthDay" name="birthday"
+                <input type="text" #birthday="ngModel" daterangepicker (selected)="selectedDate($event)" [options]="dateOptions" [(ngModel)]="entity.birthDay" name="birthday"
                   class="form-control">
-              </div>
-            </div>
-             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Giới tính</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-  
-                <input type="radio" (change)="selectGender($event)" #gender="ngModel" [checked]="entity.Gender=='True'" name="gender" [ngModel]="entity.Gender" value="True" required />              Nam
-  
-                <input type="radio" (change)="selectGender($event)"  #gender="ngModel" [checked]="entity.Gender=='False'" name="gender" [ngModel]="entity.Gender" value="False" />              Nữ
-  
               </div>
             </div>
             <div class="form-group">

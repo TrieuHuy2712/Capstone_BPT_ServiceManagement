@@ -12,7 +12,7 @@ namespace BPT_Service.Application.ViewModels.System
 
         public string Description { set; get; }
 
-        public PermissionSingleViewModel permissionSingleViewModel{set;get;}
+        public PermissionSingleViewModel permissionSingleViewModel { set; get; }
 
-}
+    }
 }
