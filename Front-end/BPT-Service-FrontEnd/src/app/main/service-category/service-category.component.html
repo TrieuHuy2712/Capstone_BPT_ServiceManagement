@@ -81,8 +81,8 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên danh mục</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="hidden" [(ngModel)]="entity.categoryName" name="categoryName" />
-                            <input type="text" #name="ngModel" [(ngModel)]="entity.categoryName" required minlength="3"
+                            <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                            <input type="text" #categoryName="ngModel" [(ngModel)]="entity.categoryName" required minlength="3"
                                 name="categoryName" class="form-control">
                             <small [hidden]="categoryName.valid || (categoryName.pristine && !addEditForm.submitted)"
                                 class="text-danger">
@@ -94,7 +94,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tiếng việt</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="hidden" [(ngModel)]="entity.nameVietnamese" name="nameVietnamese" />
-                            <input type="text" #name="ngModel" [(ngModel)]="entity.nameVietnamese" required minlength="3"
+                            <input type="text" #nameVietnamese="ngModel" [(ngModel)]="entity.nameVietnamese" required minlength="3"
                                 name="nameVietnamese" class="form-control">
                             <small [hidden]="nameVietnamese.valid || (nameVietnamese.pristine && !addEditForm.submitted)"
                                 class="text-danger">

@@ -31,7 +31,7 @@ namespace BPT_Service.Application.Implementation
             category.NameVietnamese = userVm.NameVietnamese;
             category.Description = userVm.Description;
             _categoryRepository.Add(category);
-            return  true;
+            return true;
         }
 
         #endregion
@@ -49,16 +49,16 @@ namespace BPT_Service.Application.Implementation
             {
                 return false;
             }
-            
+
         }
-            
+
 
         #endregion
 
         #region Get
         public async Task<List<CategoryViewModel>> GetAllAsync()
         {
-            var listCategory =  _categoryRepository.FindAll();
+            var listCategory = _categoryRepository.FindAll();
             var categoryViewModels = await listCategory.Select(x => new CategoryViewModel
             {
                 Id = x.Id,
@@ -105,8 +105,8 @@ namespace BPT_Service.Application.Implementation
             CategoryViewModel categoryViewModels = new CategoryViewModel();
             categoryViewModels.Id = CategoryItem.Id;
             categoryViewModels.CategoryName = CategoryItem.CategoryName;
-            categoryViewModels.NameVietnamese = CategoryItem.CategoryName;
-            categoryViewModels.Description = CategoryItem.CategoryName;
+            categoryViewModels.NameVietnamese = CategoryItem.NameVietnamese;
+            categoryViewModels.Description = CategoryItem.Description;
             return categoryViewModels;
         }
         #endregion
@@ -114,21 +114,28 @@ namespace BPT_Service.Application.Implementation
         #region Update
         public async Task<bool> Update(CategoryViewModel userVm)
         {
-            var CategoryUpdate = _categoryRepository.FindById(userVm.Id);
-            if (CategoryUpdate != null)
+            try
             {
-                Category category = new Category();
-                category.Id = userVm.Id;
-                category.CategoryName = userVm.CategoryName;
-                category.NameVietnamese = userVm.NameVietnamese;
-                category.Description = userVm.Description;
-                _categoryRepository.Update(category);
-                return true;
+                var CategoryUpdate = _categoryRepository.FindById(userVm.Id);
+                if (CategoryUpdate != null)
+                {
+                    CategoryUpdate.CategoryName = userVm.CategoryName;
+                    CategoryUpdate.NameVietnamese = userVm.NameVietnamese;
+                    CategoryUpdate.Description = userVm.Description;
+                    _categoryRepository.Update(CategoryUpdate);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (System.Exception ex)
             {
+
                 return false;
             }
+
         }
 
         #endregion

@@ -85,8 +85,8 @@ export class ServiceCategoryComponent implements OnInit {
     this._dataService
       .get("/CategoryManagement/GetCatagoryById?id=" + id)
       .subscribe((response: any) => {
-        this.entity = response;
-        console.log(this.entity);
+        this.entity = response.result;
+        console.log(response);
       });
   }
   showEditModal(id: any) {
