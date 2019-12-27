@@ -27,6 +27,7 @@ export class UserComponent implements OnInit {
   public modalAddEdit: ModalDirective;
   @ViewChild("avatar", { static: false }) avatar;
   public myRoles: string[] = [];
+  public currentRole:string[]=[];
   public pageIndex: number = 1;
   public pageSize: number = 20;
   public pageDisplay: number = 10;
@@ -55,23 +56,17 @@ export class UserComponent implements OnInit {
     public _authenService: AuthenService,
     private router: Router
   ) {
-    // if (_authenService.checkAccess("USER") == false) {
-    //   this._notificationService.printErrorMessage(
-    //     MessageConstants.PERMISSION_OK_MSG
-    //   );
-    //   this.router.navigate([UrlConstants.HOME]);
-    // }
   }
 
   ngOnInit() {
     this.currentUser = SystemConstants.CURRENT_USER;
     this.permission =
-      {
-        canCreate: true,
-        canDelete: true,
-        canUpdate: true,
-        canRead: true
-      };
+    {
+      canCreate: true,
+      canDelete: true,
+      canUpdate: true,
+      canRead: true
+    };
     this.loadRoles();
     this.loadData();
   }
@@ -80,11 +75,11 @@ export class UserComponent implements OnInit {
     this._dataService
       .get(
         "/UserManagement/GetAllPaging?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&keyword=" +
-          this.filter
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&keyword=" +
+        this.filter
       )
       .subscribe((response: any) => {
         this.users = response.results;
@@ -109,9 +104,9 @@ export class UserComponent implements OnInit {
     this._dataService
       .get(
         "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        localStorage.getItem(SystemConstants.const_username) +
+        "/" +
+        this.functionId
       )
       .subscribe((response: any) => {
         console.log(response);
@@ -141,8 +136,9 @@ export class UserComponent implements OnInit {
         this.myRoles = [];
         for (let role of this.entity.roles) {
           this.myRoles.push(role);
+          this.currentRole.push(role);
         }
-        this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format(
+        this.entity.birthDay = moment(new Date(this.entity.birthDay)).format(
           "DD/MM/YYYY"
         );
       });
@@ -161,7 +157,8 @@ export class UserComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
-      this.entity.Roles = this.myRoles;
+      this.entity.NewRoles = this.myRoles;
+      console.log(this.myRoles);
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService
@@ -192,11 +189,11 @@ export class UserComponent implements OnInit {
     } else {
       this._dataService.put("/UserManagement/UpdateUser", this.entity).subscribe(
         (response: any) => {
-          this.loadData();
           this.modalAddEdit.hide();
           this._notificationService.printSuccessMessage(
             MessageConstants.UPDATED_OK_MSG
           );
+          this.loadData();
         },
         error => this._dataService.handleError(error)
       );

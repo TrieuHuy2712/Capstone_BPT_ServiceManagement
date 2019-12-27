@@ -60,6 +60,18 @@ namespace BPT_Service.Data
                 }, "123654$");
                 var user = await _userManager.FindByNameAsync("admin");
                 await _userManager.AddToRoleAsync(user, "Admin");
+
+                await _userManager.CreateAsync(new AppUser()
+                {
+                    UserName = "huytrieu",
+                    FullName = "Trieu Duc Huy",
+                    Email = "huytrieu2712@gmail.com",
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now,
+                    Status = Status.Active
+                }, "123654$");
+                var user1 = await _userManager.FindByNameAsync("huytrieu");
+                await _userManager.AddToRoleAsync(user1, "Staff");
             }
             if (_context.Categories.Count() == 0)
             {

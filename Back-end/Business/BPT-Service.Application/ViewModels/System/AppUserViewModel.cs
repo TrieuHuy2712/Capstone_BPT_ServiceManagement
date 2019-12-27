@@ -27,5 +27,11 @@ namespace BPT_Service.Application.ViewModels.System
         public DateTime DateCreated { get; set; }
 
         public List<string> Roles { get; set; }
+
+        public List<string> NewRoles { get; set; }
+    }
+    public class UserRoleViewModel
+    {
+        public Guid MyProperty { get; set; }
     }
 }
