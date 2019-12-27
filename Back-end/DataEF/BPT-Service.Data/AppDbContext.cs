@@ -23,6 +23,7 @@ namespace BPT_Service.Data
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Category>  Categories{ get; set; }
+        public DbSet<Tag>  Tags{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

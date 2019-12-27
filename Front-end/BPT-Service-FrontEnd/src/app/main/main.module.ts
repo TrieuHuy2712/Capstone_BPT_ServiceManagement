@@ -13,6 +13,8 @@ import { RoleComponent } from './role/role.component';
 import { HomeModule } from './home/home.module';
 import { UserComponent } from './user/user.component';
 import { UserModule } from './user/user.module';
+import { ServiceCategoryComponent } from './service-category/service-category.component';
+import { ServiceTagComponent } from './service-tag/service-tag.component';
 
 
 @NgModule({

@@ -94,9 +94,10 @@ namespace BPT_Service.Data
                     new Function() {Id = "SETTING", Name = "Configuration",ParentId = "SYSTEM",SortOrder = 6,Status = Status.Active,URL = "/main/setting/index",IconCss = "fa-home",NameVietNamese="Cài đặt"  },
 
                     new Function() {Id = "PRODUCT",Name = "Product Management",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down",NameVietNamese="Sản phẩm"  },
-                    new Function() {Id = "PRODUCT_CATEGORY",Name = "Category",ParentId = "PRODUCT",SortOrder =1,Status = Status.Active,URL = "/main/productcategory/index",IconCss = "fa-chevron-down",NameVietNamese="Loại sản phẩm"  },
+                    new Function() {Id = "PRODUCT_CATEGORY",Name = "Category",ParentId = "PRODUCT",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down",NameVietNamese="Loại sản phẩm"  },
                     new Function() {Id = "PRODUCT_LIST",Name = "Product",ParentId = "PRODUCT",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down",NameVietNamese="Thông tin sản phẩm"  },
                     new Function() {Id = "BILL",Name = "Bill",ParentId = "PRODUCT",SortOrder = 3,Status = Status.Active,URL = "/main/bill/index",IconCss = "fa-chevron-down",NameVietNamese="Hóa đơn"  },
+                    new Function() {Id = "PRODUCT_TAG",Name = "Tag",ParentId = "PRODUCT",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down",NameVietNamese="Đuôi"  },
 
                     new Function() {Id = "CONTENT",Name = "Content",ParentId = null,SortOrder = 3,Status = Status.Active,URL = "/",IconCss = "fa-table",NameVietNamese="Nội dung"  },
                     new Function() {Id = "BLOG",Name = "Blog",ParentId = "CONTENT",SortOrder = 1,Status = Status.Active,URL = "/main/blog/index",IconCss = "fa-table",NameVietNamese="Blog"  },
