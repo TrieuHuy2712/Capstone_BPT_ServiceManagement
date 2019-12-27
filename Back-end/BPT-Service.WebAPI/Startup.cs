@@ -68,6 +68,7 @@ namespace BPT_Service.WebAPI
             });
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
+            services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
 
             // Auto Mapper Configurations
             //Authenticate service

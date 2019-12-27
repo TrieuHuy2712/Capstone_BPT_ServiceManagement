@@ -15,13 +15,13 @@ namespace BPT_Service.Application.Implementation
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
+
+        
         private readonly RoleManager<AppRole> _roleManager;
-        private readonly UserManager<IdentityUser> _identityManager;
-        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, UserManager<IdentityUser> identityManager)
+        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _identityManager = identityManager;
         }
 
         public async Task<bool> AddAsync(AppUserViewModel userVm)
