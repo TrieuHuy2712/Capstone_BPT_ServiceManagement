@@ -12,7 +12,6 @@ import {
 import { SocialLoginModule, AuthServiceConfig } from "angular-6-social-login";
 import { Routes, RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
-import { UtilityService } from '../core/services/utility.service';
 export const routes: Routes = [
   {
     path: "",
@@ -35,10 +34,9 @@ export function socialConfigs() {
 @NgModule({
   imports: [CommonModule, FormsModule, RouterModule.forChild(routes)],
   providers: [
-    UtilityService,
-    NotificationService,
     AuthenService,
     AuthService, 
+    NotificationService,
     {
       provide: AuthServiceConfig,
       useFactory: socialConfigs

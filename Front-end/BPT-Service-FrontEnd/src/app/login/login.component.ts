@@ -19,6 +19,7 @@ import { LoggedInUser } from "../core/domain/loggedin.user";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
+  blocked = false;
   loading = false;
   model: any = {};
   returnUrl: string;
@@ -88,10 +89,10 @@ export class LoginComponent implements OnInit {
           if(data == null)
             this.notificationService.printErrorMessage("Username or password is incorrect");
           if(data.token=="BPT-Service-Lockedout"){
-            let blocked = true;
+            this.blocked = true;
             setTimeout(function() {
-              blocked = false;
-              console.log(blocked);
+              this.blocked = false;
+              console.log(this.blocked);
           }.bind(this), 300000);
             this.notificationService.printErrorMessage("You was blocked out in 5 minutes");
           }
