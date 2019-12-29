@@ -16,7 +16,7 @@ namespace BPT_Service.Application.Implementation
     {
         private readonly UserManager<AppUser> _userManager;
 
-        
+
         private readonly RoleManager<AppRole> _roleManager;
         public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
@@ -46,6 +46,33 @@ namespace BPT_Service.Application.Implementation
             return true;
         }
 
+        public async Task<bool> AddExternalAsync(SocialUserViewModel socialUserViewModel)
+        {
+
+            var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.email).FirstOrDefaultAsync();
+            if (getExistEmail != null)
+            {
+                var user = new AppUser
+                {
+                    Email = socialUserViewModel.email,
+                    Avatar = socialUserViewModel.image,
+                    UserName = socialUserViewModel.name,
+                    DateCreated = DateTime.Now
+                };
+                var newPassword= RandomString(12);
+                var result = await _userManager.CreateAsync(user, newPassword);
+                if (result.Succeeded)
+                {
+                    var appUser = await _userManager.FindByNameAsync(user.UserName);
+                    if (appUser != null)
+                        await _userManager.AddToRoleAsync(appUser, "Customer");
+
+                }
+                return true;
+            }
+            return true;
+
+        }
         public async Task<bool> DeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -63,7 +90,6 @@ namespace BPT_Service.Application.Implementation
             //return await _userManager.Users.ProjectTo<AppUserViewModel>(_config).ToListAsync();
             return await _userManager.Users.Select(x => new AppUserViewModel()
             {
-                BirthDay = x.BirthDay.ToString(),
                 Avatar = x.Avatar,
                 DateCreated = x.DateCreated,
                 Email = x.Email,
@@ -90,7 +116,6 @@ namespace BPT_Service.Application.Implementation
             {
                 UserName = x.UserName,
                 Avatar = x.Avatar,
-                BirthDay = x.BirthDay.ToString(),
                 Email = x.Email,
                 FullName = x.FullName,
                 Id = x.Id,
@@ -118,7 +143,6 @@ namespace BPT_Service.Application.Implementation
             AppUserViewModel userVm = new AppUserViewModel();
             userVm.Id = user.Id;
             userVm.Avatar = user.Avatar;
-            userVm.BirthDay = user.BirthDay.ToString();
             userVm.DateCreated = user.DateCreated;
             userVm.Email = user.Email;
             userVm.FullName = user.FullName;
@@ -171,13 +195,18 @@ namespace BPT_Service.Application.Implementation
                 user.Status = userVm.Status;
                 user.Email = userVm.Email;
                 user.PhoneNumber = userVm.PhoneNumber;
+<<<<<<< HEAD
                 user.BirthDay = DateTime.ParseExact(userVm.BirthDay,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture);
 
                 var userRoles = await _userManager.GetRolesAsync(user);
+=======
+                var userRoles = _userManager.GetRolesAsync(user);
+>>>>>>> ea9a05cc8e310ca88f259a7bba204370df0b5aa4
 
                 var selectedRole = userVm.NewRoles.ToArray();
                 selectedRole = selectedRole ?? new string[] { };
 
+<<<<<<< HEAD
                 var re = await _userManager.RemoveFromRolesAsync(user,await _userManager.GetRolesAsync(user));
                  await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles).ToArray());
                 // if (re.Succeeded)
@@ -189,6 +218,9 @@ namespace BPT_Service.Application.Implementation
                 //     var error = re.Errors;
                 // }
 
+=======
+                await _userManager.AddToRolesAsync(user, selectedRole.ToArray());
+>>>>>>> ea9a05cc8e310ca88f259a7bba204370df0b5aa4
                 var userRoles1 = await _userManager.GetRolesAsync(user);
                 await _userManager.UpdateAsync(user);
                 return true;
@@ -198,6 +230,13 @@ namespace BPT_Service.Application.Implementation
                 Console.WriteLine(ex);
                 return false;
             }
+        }
+        private static Random random = new Random();
+        private static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
     }

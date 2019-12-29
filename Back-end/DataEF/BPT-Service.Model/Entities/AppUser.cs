@@ -23,8 +23,6 @@ namespace BPT_Service.Model.Entities
         }
         public string FullName { get; set; }
 
-        public DateTime? BirthDay { set; get; }
-
         public string Token { get; set; }
 
         public string Avatar { get; set; }
