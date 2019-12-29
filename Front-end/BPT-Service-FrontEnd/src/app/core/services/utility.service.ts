@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { UrlConstants } from '../common/url.constants';
 import { AuthenService } from './authen.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UtilityService {
   private _router: Router;
 

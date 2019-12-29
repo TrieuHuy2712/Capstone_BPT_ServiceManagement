@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
   loading = false;
   model: any = {};
   returnUrl: string;
-  response;
   socialusers = new Socialusers();
 
   constructor(
@@ -42,12 +41,11 @@ export class LoginComponent implements OnInit {
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
     }
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
-      console.log(socialProvider, socialusers);
-      console.log(socialusers);
+      this.loginExternal();
     });
   }
 
-  loginExternal() {
+  private loginExternal() {
     debugger;
     this._dataService
       .post("/UserManagement/LoginExternal/", this.socialusers)
@@ -90,10 +88,10 @@ export class LoginComponent implements OnInit {
           if(data == null)
             this.notificationService.printErrorMessage("Username or password is incorrect");
           if(data.token=="BPT-Service-Lockedout"){
-            this.blocked = true;
+            let blocked = true;
             setTimeout(function() {
-              this.blocked = false;
-              console.log(this.blocked);
+              blocked = false;
+              console.log(blocked);
           }.bind(this), 300000);
             this.notificationService.printErrorMessage("You was blocked out in 5 minutes");
           }

@@ -59,7 +59,7 @@ namespace BPT_Service.Application.Implementation
                     UserName = socialUserViewModel.name,
                     DateCreated = DateTime.Now
                 };
-                var newPassword= RandomString(12);
+                var newPassword = RandomString(12);
                 var result = await _userManager.CreateAsync(user, newPassword);
                 if (result.Succeeded)
                 {
@@ -195,32 +195,12 @@ namespace BPT_Service.Application.Implementation
                 user.Status = userVm.Status;
                 user.Email = userVm.Email;
                 user.PhoneNumber = userVm.PhoneNumber;
-<<<<<<< HEAD
-                user.BirthDay = DateTime.ParseExact(userVm.BirthDay,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture);
-
-                var userRoles = await _userManager.GetRolesAsync(user);
-=======
                 var userRoles = _userManager.GetRolesAsync(user);
->>>>>>> ea9a05cc8e310ca88f259a7bba204370df0b5aa4
 
                 var selectedRole = userVm.NewRoles.ToArray();
                 selectedRole = selectedRole ?? new string[] { };
 
-<<<<<<< HEAD
-                var re = await _userManager.RemoveFromRolesAsync(user,await _userManager.GetRolesAsync(user));
-                 await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles).ToArray());
-                // if (re.Succeeded)
-                // {
-                   
-                // }
-                // else
-                // {
-                //     var error = re.Errors;
-                // }
-
-=======
                 await _userManager.AddToRolesAsync(user, selectedRole.ToArray());
->>>>>>> ea9a05cc8e310ca88f259a7bba204370df0b5aa4
                 var userRoles1 = await _userManager.GetRolesAsync(user);
                 await _userManager.UpdateAsync(user);
                 return true;
