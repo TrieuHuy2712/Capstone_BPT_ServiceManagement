@@ -173,20 +173,21 @@ namespace BPT_Service.Application.Implementation
                 user.PhoneNumber = userVm.PhoneNumber;
                 user.BirthDay = DateTime.ParseExact(userVm.BirthDay,"dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture);
 
-                var userRoles = _userManager.GetRolesAsync(user);
+                var userRoles = await _userManager.GetRolesAsync(user);
 
                 var selectedRole = userVm.NewRoles.ToArray();
                 selectedRole = selectedRole ?? new string[] { };
 
                 var re = await _userManager.RemoveFromRolesAsync(user,await _userManager.GetRolesAsync(user));
-                if (re.Succeeded)
-                {
-                    await _userManager.AddToRolesAsync(user, selectedRole.ToArray());
-                }
-                else
-                {
-                    var error = re.Errors;
-                }
+                 await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles).ToArray());
+                // if (re.Succeeded)
+                // {
+                   
+                // }
+                // else
+                // {
+                //     var error = re.Errors;
+                // }
 
                 var userRoles1 = await _userManager.GetRolesAsync(user);
                 await _userManager.UpdateAsync(user);

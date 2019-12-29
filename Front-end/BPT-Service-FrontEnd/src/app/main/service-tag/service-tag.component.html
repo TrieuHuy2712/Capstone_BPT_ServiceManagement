@@ -1,116 +1,114 @@
 <div class="page-title">
     <div class="title_left">
-        <h3>Danh sách các Tag</h3>
+      <h3>Danh sách </h3>
     </div>
-    <!-- Tìm kiếm danh mục -->
+  
     <div class="title_right">
-        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-            <div class="input-group">
-                <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
-                    placeholder="Gõ tên tag...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
-                </span>
-            </div>
+      <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+        <div class="input-group">
+          <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
+            placeholder="Gõ tên ...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
+          </span>
         </div>
+      </div>
     </div>
-</div>
-<div class="clearfix"></div>
-<!-- Xuat cac tag -->
-<div class="row">
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
-                <ul class="nav navbar-right panel_toolbox">
-                    <li>
-                        <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">Thêm
-                            mới</button>
-                    </li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Mã</th>
-                            <th>Tên</th>
-                            <th>Description</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="permission.canRead">
-                        <tr *ngFor="let tag of tags">
-                            <td>{{tag.id}}</td>
-                            <td>{{tag.tagName}}</td>
-                            <td>{{tag.description}}</td>
-                            <td>
-                                <button *ngIf="tag.name != 'Admin' && permission.canUpdate" class="btn btn-primary"
-                                    (click)="showEditModal(tag.id)"><i class="fa fa-pencil-square-o"></i></button>
-                                <button *ngIf="tag.name != 'Admin' && permission.canDelete" class="btn btn-danger"
-                                    (click)="deleteItem(tag.id)"><i class="fa fa-trash"></i></button>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="col-md-12">
-                    <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
-                        [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
-                        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
-                </div>
-            </div>
+      <div class="x_panel">
+        <div class="x_title">
+          <ul class="nav navbar-right panel_toolbox">
+            <li>
+              <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">Thêm mới</button>
+            </li>
+  
+          </ul>
+          <div class="clearfix"></div>
         </div>
+        <div class="x_content">
+  
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Mô tả</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody *ngIf="permission.canRead">
+              <tr *ngFor="let tag of tags">
+                <td>{{tag.id}}</td>
+                <td>{{tag.tagName}}</td>
+                <td>{{tag.description}}</td>
+                <td>
+                  <button *ngIf="tag.name != 'Admin' && permission.canUpdate" class="btn btn-primary"
+                    (click)="showEditModal(tag.id)"><i class="fa fa-pencil-square-o"></i></button>
+                  <button *ngIf="tag.name != 'Admin' && permission.canDelete" class="btn btn-danger"
+                    (click)="deleteItem(tag.id)"><i class="fa fa-trash"></i></button>
+  
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-md-12">
+            <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+              [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
+              nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<!-- Them tag moi -->
-<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  </div>
+  
+  <!--Modal add and edit-->
+  <div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title pull-left">Thêm/Sửa quyền</h4>
-                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
-                    (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên danh mục</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="hidden" [(ngModel)]="entity.id" name="id" />
-                            <input type="text" #tagName="ngModel" [(ngModel)]="entity.tagName" required minlength="3"
-                                name="tagName" class="form-control">
-                            <small [hidden]="tagName.valid || (tagName.pristine && !addEditForm.submitted)"
-                                class="text-danger">
-                                Bạn phải nhập tên ít nhất 3 ký tự
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả </label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea class="form-control" #description="ngModel" required
-                                [(ngModel)]="entity.description" name="description" rows="3"></textarea>
-                            <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
-                                class="text-danger">
-                                Bạn phải nhập mô tả
-                            </small>
-                        </div>
-                    </div>
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập
-                                nhật</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Thêm/Sửa quyền</h4>
+          <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+            (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên nhóm</label>
+              <div class="col-md-9 col-sm-9 col-xs-12">
+                <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3" name="name"
+                  class="form-control">
+                <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
+                  Bạn phải nhập tên ít nhất 3 ký tự
+                </small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả </label>
+              <div class="col-md-9 col-sm-9 col-xs-12">
+                <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.description"
+                  name="description" rows="3"></textarea>
+                <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
+                  class="text-danger">
+                  Bạn phải nhập mô tả
+                </small>
+              </div>
+            </div>
+            <div class="ln_solid"></div>
+            <div class="form-group">
+              <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
+                <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
+  </div>

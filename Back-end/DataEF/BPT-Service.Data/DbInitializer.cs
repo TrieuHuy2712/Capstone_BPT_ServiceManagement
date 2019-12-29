@@ -72,6 +72,7 @@ namespace BPT_Service.Data
                 }, "123654$");
                 var user1 = await _userManager.FindByNameAsync("huytrieu");
                 await _userManager.AddToRoleAsync(user1, "Staff");
+                await _userManager.AddToRoleAsync(user1, "Customer");
             }
             if (_context.Categories.Count() == 0)
             {

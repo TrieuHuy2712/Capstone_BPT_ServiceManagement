@@ -4318,4 +4318,11 @@ ul.notifications {
   display: inline;
   padding-left: 100px;
 }
+.Main_content{
+  min-height: 100%;
+}
+html.login_wrapper{
+  background-color: wheat;
+}
+
 

@@ -98,7 +98,7 @@ export class ServiceTagComponent implements OnInit {
     if (valid) {
       if (this.entity.id == undefined) {
         console.log("vo day duoc");
-        this._dataService.post("/TagManagement/addNewTag", this.entity).subscribe(
+        this._dataService.post("/TagManagement/AddNewTag", this.entity).subscribe(
           (response: any) => {
             this.loadData();
             this.modalAddEdit.hide();
