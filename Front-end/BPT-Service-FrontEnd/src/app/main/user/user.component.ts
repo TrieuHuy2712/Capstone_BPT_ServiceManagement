@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
   public modalAddEdit: ModalDirective;
   @ViewChild("avatar", { static: false }) avatar;
   public myRoles: string[] = [];
-  public currentRole:string[]=[];
+  public currentRole: string[] = [];
   public pageIndex: number = 1;
   public pageSize: number = 20;
   public pageDisplay: number = 10;
@@ -55,13 +55,11 @@ export class UserComponent implements OnInit {
     private _uploadService: UploadService,
     public _authenService: AuthenService,
     private router: Router
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.currentUser = SystemConstants.CURRENT_USER;
-    this.permission =
-    {
+    this.permission = {
       canCreate: true,
       canDelete: true,
       canUpdate: true,
@@ -75,11 +73,11 @@ export class UserComponent implements OnInit {
     this._dataService
       .get(
         "/UserManagement/GetAllPaging?page=" +
-        this.pageIndex +
-        "&pageSize=" +
-        this.pageSize +
-        "&keyword=" +
-        this.filter
+          this.pageIndex +
+          "&pageSize=" +
+          this.pageSize +
+          "&keyword=" +
+          this.filter
       )
       .subscribe((response: any) => {
         this.users = response.results;
@@ -104,9 +102,9 @@ export class UserComponent implements OnInit {
     this._dataService
       .get(
         "/PermissionManager/GetAllPermission/" +
-        localStorage.getItem(SystemConstants.const_username) +
-        "/" +
-        this.functionId
+          localStorage.getItem(SystemConstants.const_username) +
+          "/" +
+          this.functionId
       )
       .subscribe((response: any) => {
         console.log(response);
@@ -138,9 +136,6 @@ export class UserComponent implements OnInit {
           this.myRoles.push(role);
           this.currentRole.push(role);
         }
-        this.entity.birthDay = moment(new Date(this.entity.birthDay)).format(
-          "DD/MM/YYYY"
-        );
       });
   }
   pageChanged(event: any): void {
@@ -176,27 +171,31 @@ export class UserComponent implements OnInit {
   }
   public saveData() {
     if (this.entity.id == undefined) {
-      this._dataService.post("/UserManagement/AddNewUser", this.entity).subscribe(
-        (response: any) => {
-          this.loadData();
-          this.modalAddEdit.hide();
-          this._notificationService.printSuccessMessage(
-            MessageConstants.CREATED_OK_MSG
-          );
-        },
-        error => this._dataService.handleError(error)
-      );
+      this._dataService
+        .post("/UserManagement/AddNewUser", this.entity)
+        .subscribe(
+          (response: any) => {
+            this.loadData();
+            this.modalAddEdit.hide();
+            this._notificationService.printSuccessMessage(
+              MessageConstants.CREATED_OK_MSG
+            );
+          },
+          error => this._dataService.handleError(error)
+        );
     } else {
-      this._dataService.put("/UserManagement/UpdateUser", this.entity).subscribe(
-        (response: any) => {
-          this.modalAddEdit.hide();
-          this._notificationService.printSuccessMessage(
-            MessageConstants.UPDATED_OK_MSG
-          );
-          this.loadData();
-        },
-        error => this._dataService.handleError(error)
-      );
+      this._dataService
+        .put("/UserManagement/UpdateUser", this.entity)
+        .subscribe(
+          (response: any) => {
+            this.modalAddEdit.hide();
+            this._notificationService.printSuccessMessage(
+              MessageConstants.UPDATED_OK_MSG
+            );
+            this.loadData();
+          },
+          error => this._dataService.handleError(error)
+        );
     }
   }
   deleteItem(id: any) {
@@ -217,9 +216,5 @@ export class UserComponent implements OnInit {
   }
   public selectGender(event) {
     this.entity.Gender = event.target.value;
-  }
-
-  public selectedDate(value: any) {
-    this.entity.BirthDay = moment(value.end._d).format("DD/MM/YYYY");
   }
 }

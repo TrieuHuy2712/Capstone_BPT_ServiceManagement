@@ -18,7 +18,9 @@ namespace BPT_Service.Application.Interfaces
         Task<AppUserViewModel> GetById(string id);
 
         Task<bool> CreateCustomerAsync(AppUserViewModel userVm, string password);
-        
+
         Task<bool> UpdateAsync(AppUserViewModel userVm);
+
+        Task<bool> AddExternalAsync(SocialUserViewModel socialUserViewModel);
     }
 }

@@ -65,5 +65,12 @@ namespace BPT_Service.WebAPI.Controllers
             var model= _userService.CreateCustomerAsync(userVm,password);
             return new ObjectResult(model);
         }
+
+        [HttpPost("LoginExternal")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginExternal([FromBody]SocialUserViewModel userViewModel){
+            var model = _userService.AddExternalAsync(userViewModel);
+            return new ObjectResult(userViewModel);
+        }
     }
 }
