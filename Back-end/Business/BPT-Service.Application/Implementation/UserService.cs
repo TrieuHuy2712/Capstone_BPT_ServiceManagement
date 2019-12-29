@@ -9,6 +9,8 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace BPT_Service.Application.Implementation
 {
@@ -46,17 +48,18 @@ namespace BPT_Service.Application.Implementation
             return true;
         }
 
-        public async Task<bool> AddExternalAsync(SocialUserViewModel socialUserViewModel)
+        public async Task<bool> AddExternalAsync(AppUserViewModel socialUserViewModel)
         {
 
-            var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.email).FirstOrDefaultAsync();
-            if (getExistEmail != null)
+            var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
+            if (getExistEmail == null)
             {
                 var user = new AppUser
                 {
-                    Email = socialUserViewModel.email,
-                    Avatar = socialUserViewModel.image,
-                    UserName = socialUserViewModel.name,
+                    Email = socialUserViewModel.Email,
+                    Avatar = socialUserViewModel.Avatar,
+                    UserName = RemoveUnicode(socialUserViewModel.UserName).Replace(" ", "_"),
+                    FullName = socialUserViewModel.UserName,
                     DateCreated = DateTime.Now
                 };
                 var newPassword = RandomString(12);
@@ -67,6 +70,9 @@ namespace BPT_Service.Application.Implementation
                     if (appUser != null)
                         await _userManager.AddToRoleAsync(appUser, "Customer");
 
+                    ContentEmail(
+                        "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",
+                        "You had sign in BPT Service", "Your password is " + newPassword, socialUserViewModel.Email).Wait();
                 }
                 return true;
             }
@@ -219,5 +225,40 @@ namespace BPT_Service.Application.Implementation
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        private async Task ContentEmail(string apiKey, string subject1, string message, string email)
+        {
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("huytrieu2712@gmail.com", "Trieu Duc Huy");
+            var subject = subject1;
+            var to = new EmailAddress(email);
+            var plainTextContent = message;
+            var htmlContent="<strong>"+message+"</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
+        }
+        public string RemoveUnicode(string text)
+        {
+            string[] arr1 = new string[] { "á", "à", "ả", "ã", "ạ", "â", "ấ", "ầ", "ẩ", "ẫ", "ậ", "ă", "ắ", "ằ", "ẳ", "ẵ", "ặ",
+    "đ",
+    "é","è","ẻ","ẽ","ẹ","ê","ế","ề","ể","ễ","ệ",
+    "í","ì","ỉ","ĩ","ị",
+    "ó","ò","ỏ","õ","ọ","ô","ố","ồ","ổ","ỗ","ộ","ơ","ớ","ờ","ở","ỡ","ợ",
+    "ú","ù","ủ","ũ","ụ","ư","ứ","ừ","ử","ữ","ự",
+    "ý","ỳ","ỷ","ỹ","ỵ",};
+            string[] arr2 = new string[] { "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
+    "d",
+    "e","e","e","e","e","e","e","e","e","e","e",
+    "i","i","i","i","i",
+    "o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o",
+    "u","u","u","u","u","u","u","u","u","u","u",
+    "y","y","y","y","y",};
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                text = text.Replace(arr1[i], arr2[i]);
+                text = text.Replace(arr1[i].ToUpper(), arr2[i].ToUpper());
+            }
+            return text;
+        }
     }
+
 }

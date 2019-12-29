@@ -13,6 +13,8 @@ import { Socialusers } from "../core/domain/social.user";
 import { DataService } from "../core/services/data.service";
 import { SystemConstants } from "../core/common/system,constants";
 import { LoggedInUser } from "../core/domain/loggedin.user";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
@@ -30,10 +32,12 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private authService: AuthService,
-    private _dataService: DataService
+    private _dataService: DataService,
+    private _http: HttpClient
   ) {}
 
   ngOnInit() {}
+
   public socialSignIn(socialProvider: string) {
     let socialPlatformProvider;
     if (socialProvider === "facebook") {
@@ -42,41 +46,25 @@ export class LoginComponent implements OnInit {
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
     }
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
-      this.loginExternal();
-    });
-  }
-
-  private loginExternal() {
-    debugger;
-    this._dataService
-      .post("/UserManagement/LoginExternal/", this.socialusers)
-      .subscribe(
-        (response: any) => {
-          this.socialusers = response;
-          if (this.socialusers && this.socialusers.token) {
-            let loggedUsers = new LoggedInUser(
-              this.socialusers.token,
-              this.socialusers.name,
-              this.socialusers.name,
-              this.socialusers.email,
-              this.socialusers.email,
-              "Customer",
-              null
-            );
-            localStorage.removeItem(SystemConstants.CURRENT_USER);
-            localStorage.setItem(
-              SystemConstants.CURRENT_USER,
-              JSON.stringify(loggedUsers)
-            );
-            localStorage.setItem(
-              SystemConstants.const_username,
-              this.socialusers.name
-            );
-          }
+      this.socialusers = socialusers;
+      let loggedUsers = {
+        Token :this.socialusers.token,
+        FullName : this.socialusers.name,
+        UserName : this.socialusers.name,
+        Email : this.socialusers.email,
+        Avatar : this.socialusers.image
+      };
+      console.log(loggedUsers);
+      this.authenService.loginExternal(loggedUsers).subscribe(
+        data => {
           this.router.navigate([UrlConstants.HOME]);
         },
-        error => this._dataService.handleError(error)
+        error => {
+          this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
+          this.loading = false;
+        }
       );
+    });
   }
 
   login() {
@@ -85,18 +73,24 @@ export class LoginComponent implements OnInit {
       .login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          console.log(data)
-          if(data == null)
-            this.notificationService.printErrorMessage("Username or password is incorrect");
-          if(data.token=="BPT-Service-Lockedout"){
+          console.log(data);
+          if (data == null)
+            this.notificationService.printErrorMessage(
+              "Username or password is incorrect"
+            );
+          if (data.token == "BPT-Service-Lockedout") {
             this.blocked = true;
-            setTimeout(function() {
-              this.blocked = false;
-              console.log(this.blocked);
-          }.bind(this), 300000);
-            this.notificationService.printErrorMessage("You was blocked out in 5 minutes");
-          }
-          else{
+            setTimeout(
+              function() {
+                this.blocked = false;
+                console.log(this.blocked);
+              }.bind(this),
+              300000
+            );
+            this.notificationService.printErrorMessage(
+              "You was blocked out in 5 minutes"
+            );
+          } else {
             this.router.navigate([UrlConstants.HOME]);
           }
           // if(data == null)

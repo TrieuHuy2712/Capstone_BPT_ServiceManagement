@@ -21,6 +21,6 @@ namespace BPT_Service.Application.Interfaces
 
         Task<bool> UpdateAsync(AppUserViewModel userVm);
 
-        Task<bool> AddExternalAsync(SocialUserViewModel socialUserViewModel);
+        Task<bool> AddExternalAsync(AppUserViewModel socialUserViewModel);
     }
 }
