@@ -29,12 +29,14 @@ namespace BPT_Service.Application.Implementation
         }
         public async Task<AppUser> Authenticate(string username, string password)
         {
+            
             var user = await _userManager.FindByNameAsync(username);
 
             // return null if user not found
-            if (user == null)
+            if (user == null){
+                
                 return null;
-
+            }
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, true);
             if (user != null && result.Succeeded)
             {
@@ -54,6 +56,10 @@ namespace BPT_Service.Application.Implementation
                 user.Token = tokenHandler.WriteToken(token);
                 return user;
                 
+            }
+            else if(result.IsLockedOut){
+                user.Token = "BPT-Service-Lockedout";
+                return user;
             }
             else
             {

@@ -43,7 +43,22 @@ export class LoginComponent implements OnInit {
       .login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          this.router.navigate([UrlConstants.HOME]);
+          console.log(data)
+          if(data == null)
+            this.notificationService.printErrorMessage("Username or password is incorrect");
+          if(data.token=="BPT-Service-Lockedout"){
+            this.blocked = true;
+            setTimeout(function() {
+              this.blocked = false;
+              console.log(this.blocked);
+          }.bind(this), 300000);
+            this.notificationService.printErrorMessage("You was blocked out in 5 minutes");
+          }
+          else{
+            this.router.navigate([UrlConstants.HOME]);
+          }
+          // if(data == null)
+          //   this.notificationService.printErrorMessage("Username or password is incorrect");
         },
         error => {
           this.notificationService.printErrorMessage("Có lỗi rồi nhóc");

@@ -19,6 +19,10 @@
               required />
             <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
           </div>
+          <div *ngIf="blocked">
+            <p>You was blocked out in 5 minutes</p>
+            
+          </div>
           <div>
             <button class="btn btn-default">Đăng nhập</button>
             <img *ngIf="loading"
