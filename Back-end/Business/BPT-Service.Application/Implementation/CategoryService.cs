@@ -7,15 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.Implementation
 {
     public class CategoryService : ICategoryService
     {
-        private IRepository<Category, int> _categoryRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IRepository<Category, int> _categoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
         public CategoryService(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
         {
             _categoryRepository = categoryRepository;
@@ -102,11 +101,13 @@ namespace BPT_Service.Application.Implementation
         public async Task<CategoryViewModel> GetByID(int id)
         {
             var CategoryItem = _categoryRepository.FindById(id);
-            CategoryViewModel categoryViewModels = new CategoryViewModel();
-            categoryViewModels.Id = CategoryItem.Id;
-            categoryViewModels.CategoryName = CategoryItem.CategoryName;
-            categoryViewModels.NameVietnamese = CategoryItem.NameVietnamese;
-            categoryViewModels.Description = CategoryItem.Description;
+            CategoryViewModel categoryViewModels = new CategoryViewModel
+            {
+                Id = CategoryItem.Id,
+                CategoryName = CategoryItem.CategoryName,
+                NameVietnamese = CategoryItem.NameVietnamese,
+                Description = CategoryItem.Description
+            };
             return categoryViewModels;
         }
         #endregion
@@ -130,12 +131,10 @@ namespace BPT_Service.Application.Implementation
                     return false;
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception)
             {
-
                 return false;
             }
-
         }
 
         #endregion
@@ -144,6 +143,5 @@ namespace BPT_Service.Application.Implementation
         {
             _unitOfWork.Commit();
         }
-
     }
 }

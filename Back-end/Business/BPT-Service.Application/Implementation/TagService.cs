@@ -4,18 +4,16 @@ using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.Implementation
 {
     public class TagService : ITagService
     {
-        private IRepository<Tag, int> _tagRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IRepository<Tag, int> _tagRepository;
+        private readonly IUnitOfWork _unitOfWork;
         public TagService(IRepository<Tag, int> tagRepository, IUnitOfWork unitOfWork)
         {
             _tagRepository = tagRepository;
@@ -32,7 +30,6 @@ namespace BPT_Service.Application.Implementation
             _tagRepository.Add(tag);
             return  true;
         }
-
         #endregion
 
         #region Delete
@@ -48,10 +45,7 @@ namespace BPT_Service.Application.Implementation
             {
                 return false;
             }
-            
-        }
-            
-
+        }          
         #endregion
 
         #region Get
@@ -132,6 +126,5 @@ namespace BPT_Service.Application.Implementation
         {
             _unitOfWork.Commit();
         }
-
     }
 }

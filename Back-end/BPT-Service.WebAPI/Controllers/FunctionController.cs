@@ -17,7 +17,7 @@ namespace BPT_Service.WebAPI.Controllers
     {
         #region Initialize
 
-        private IFunctionService _functionService;
+        private readonly IFunctionService _functionService;
 
         public FunctionController(IFunctionService functionService)
         {
@@ -26,6 +26,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #endregion Initialize
 
+        #region  GET API
         [HttpGet("GetAllFillter")]
         public IActionResult GetAllFillter(string filter)
         {
@@ -54,7 +55,9 @@ namespace BPT_Service.WebAPI.Controllers
                     ChildrenId = group.ToList()
                 }).ToList();
                 return new ObjectResult(result);
-            }else{
+            }
+            else
+            {
                 var getListFunction = await _functionService.GetListFunctionWithPermission(nameUser);
                 foreach (var function in getListFunction)
                 {
@@ -65,7 +68,7 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 var result = items.Where(x => x.ParentId != null).GroupBy(t => t.ParentId).Select(group => new
                 {
-                     group.Key,
+                    group.Key,
                     ChildrenId = group.ToList()
                 }).ToList();
                 return new ObjectResult(result);
@@ -79,7 +82,9 @@ namespace BPT_Service.WebAPI.Controllers
 
             return new ObjectResult(model);
         }
+        #endregion
 
+        #region POST API
         [HttpPost("addEntity")]
         public IActionResult SaveEntity([FromBody]FunctionViewModel functionVm)
         {
@@ -91,22 +96,6 @@ namespace BPT_Service.WebAPI.Controllers
             else
             {
                 _functionService.Add(functionVm);
-                _functionService.Save();
-                return new OkObjectResult(functionVm);
-            }
-        }
-        [HttpPut("updateEntity")]
-        public IActionResult updateEntity([FromBody]FunctionViewModel functionVm)
-        {
-            if (!ModelState.IsValid)
-            {
-                IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
-                return new BadRequestObjectResult(allErrors);
-            }
-            else
-            {
-                _functionService.Update(functionVm);
-                
                 _functionService.Save();
                 return new OkObjectResult(functionVm);
             }
@@ -155,7 +144,28 @@ namespace BPT_Service.WebAPI.Controllers
                 }
             }
         }
+        #endregion
 
+        #region PUT API
+        [HttpPut("updateEntity")]
+        public IActionResult updateEntity([FromBody]FunctionViewModel functionVm)
+        {
+            if (!ModelState.IsValid)
+            {
+                IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
+                return new BadRequestObjectResult(allErrors);
+            }
+            else
+            {
+                _functionService.Update(functionVm);
+
+                _functionService.Save();
+                return new OkObjectResult(functionVm);
+            }
+        }
+        #endregion
+
+        #region DELETE API
         [HttpDelete("DeleteFunction")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -170,6 +180,7 @@ namespace BPT_Service.WebAPI.Controllers
                 return new OkObjectResult(id.FirstOrDefault());
             }
         }
+        #endregion
 
         #region Private Functions
         private void GetByParentId(IEnumerable<FunctionViewModel> allFunctions,

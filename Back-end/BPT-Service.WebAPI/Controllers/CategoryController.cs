@@ -19,7 +19,7 @@ namespace BPT_Service.WebAPI.Controllers
         {
             _categoryService = categoryService;
         }
-        #region Get
+        #region GET API
         [HttpGet("GetAllCategory")]
         public IActionResult GetAllCategory()
         {
@@ -42,7 +42,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
         #endregion
 
-        #region POST
+        #region POST API
         [HttpPost("addNewCategory")]
         public IActionResult AddNewCategory([FromBody]CategoryViewModel categoryVm)
         {
@@ -60,7 +60,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
         #endregion
 
-        #region PUT
+        #region PUT API
         [HttpPut("updateCategory")]
         public IActionResult UpdateCategory([FromBody]CategoryViewModel categoryVm)
         {
@@ -79,7 +79,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
         #endregion
 
-        #region Delete
+        #region DELETE API
         [HttpDelete("DeleteCategory")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -8,40 +8,38 @@ using System.Linq;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using BPT_Service.Model.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BPT_Service.Application.Implementation
 {
     public class AuthenticateService : IAuthenticateService
     {
-        private readonly AppSettings _appSettings;
-        private UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AuthenticateService(IOptions<AppSettings> appSettings, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AuthenticateService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            _appSettings = appSettings.Value;
             _userManager = userManager;
             _signInManager = signInManager;
         }
         public async Task<AppUser> Authenticate(string username, string password)
         {
-            
             var user = await _userManager.FindByNameAsync(username);
 
             // return null if user not found
-            if (user == null){
-                
+            if (user == null)
+            {
                 return null;
             }
+
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, true);
             if (user != null && result.Succeeded)
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv");
+                var key = Encoding.ASCII.GetBytes(KeySetting.JWTSetting);
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -55,10 +53,10 @@ namespace BPT_Service.Application.Implementation
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 user.Token = tokenHandler.WriteToken(token);
                 return user;
-                
             }
-            else if(result.IsLockedOut){
-                user.Token = "BPT-Service-Lockedout";
+            else if (result.IsLockedOut)
+            {
+                user.Token = KeySetting.TOKENLOCKEDOUT;
                 return user;
             }
             else
@@ -66,26 +64,25 @@ namespace BPT_Service.Application.Implementation
                 return null;
             }
         }
+
         public async Task<bool> ResetPasswordAsync(string username, string oldPassword, string newPassword)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user != null && await _userManager.CheckPasswordAsync(user, oldPassword))
             {
                 string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                IdentityResult passwordChangeResult = await _userManager
-                        .ResetPasswordAsync(user, resetToken, newPassword);
+                IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
                 if (passwordChangeResult.Succeeded)
                 {
                     return true;
                 }
-
             }
             return false;
         }
 
         public async Task<IEnumerable<AppUserViewModel>> GetAll()
         {
-            var model = _userManager.Users.ToList();
+            var model = await _userManager.Users.ToListAsync();
             IEnumerable<AppUserViewModel> modelVm = model.Select(x => new AppUserViewModel
             {
                 Id = x.Id,
@@ -93,7 +90,6 @@ namespace BPT_Service.Application.Implementation
                 Avatar = x.Avatar,
             });
             return modelVm;
-
         }
 
         public async Task<AppUserViewModel> GetById(string id)

@@ -7,7 +7,6 @@ using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
-using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +14,12 @@ namespace BPT_Service.Application.Implementation
 {
     public class RoleService : IRoleService
     {
-        private RoleManager<AppRole> _roleManager;
-        private UserManager<AppUser> _userManager;
-        private IRepository<Function, string> _functionRepository;
-        private IRepository<Permission, int> _permissionRepository;
-        private IUnitOfWork _unitOfWork;
+        #region  Constuctor
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository<Function, string> _functionRepository;
+        private readonly IRepository<Permission, int> _permissionRepository;
+        private  readonly IUnitOfWork _unitOfWork;
         public RoleService(RoleManager<AppRole> roleManager,
             IUnitOfWork unitOfWork,
             IRepository<Function, string> functionRepository,
@@ -32,6 +32,7 @@ namespace BPT_Service.Application.Implementation
             _permissionRepository = permissionRepository;
             _userManager = userManager;
         }
+        #endregion
 
         public async Task<bool> AddAsync(AppRoleViewModel roleVm)
         {

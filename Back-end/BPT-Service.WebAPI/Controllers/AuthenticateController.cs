@@ -11,13 +11,14 @@ namespace BPT_Service.WebAPI.Controllers
     [Route("[controller]")]
     public class AuthenticateController : ControllerBase
     {
-        private IAuthenticateService _userService;
+        private  readonly IAuthenticateService _userService;
 
         public AuthenticateController(IAuthenticateService userService)
         {
             _userService = userService;
         }
 
+        #region  Post API
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]LoginViewModel model)
@@ -27,21 +28,25 @@ namespace BPT_Service.WebAPI.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
             return Ok(user.Result);
-            
-        }
 
-        // [Authorize(Roles = Role.Admin)]
-        [HttpGet("getAll")]
-        public IActionResult GetAll()
-        {
-            var users =  _userService.GetAll();
-            return Ok(users);
         }
 
         [HttpPost("changePassword")]
-        public async Task<IActionResult> ChangePassword(string username, string oldPassword, string newPassword){
-            var user= await _userService.ResetPasswordAsync(username,oldPassword,newPassword);
+        public async Task<IActionResult> ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            var user = await _userService.ResetPasswordAsync(username, oldPassword, newPassword);
             return new OkObjectResult(user);
         }
+        #endregion
+
+        #region  GET API
+        [HttpGet("getAll")]
+        public IActionResult GetAll()
+        {
+            var users = _userService.GetAll();
+            return Ok(users);
+        }
+        #endregion
+
     }
 }

@@ -13,23 +13,19 @@ namespace BPT_Service.Application.Implementation
 {
     public class PermissionService : IPermissionService
     {
-        private RoleManager<AppRole> _roleManager;
-        private UserManager<AppUser> _userManager;
-        private IRepository<Function, string> _functionRepository;
-        private IRepository<Permission, int> _permissionRepository;
-        private IUnitOfWork _unitOfWork;
+        #region Constructor
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository<Permission, int> _permissionRepository;
         public PermissionService(RoleManager<AppRole> roleManager,
-            IUnitOfWork unitOfWork,
-            IRepository<Function, string> functionRepository,
             IRepository<Permission, int> permissionRepository,
             UserManager<AppUser> userManager)
         {
-            _unitOfWork = unitOfWork;
             _roleManager = roleManager;
-            _functionRepository = functionRepository;
             _permissionRepository = permissionRepository;
             _userManager = userManager;
         }
+        #endregion
         public async Task<PermissionSingleViewModel> GetPermissionRole(string userName, string functionId)
         {
             List<Guid> listIdRole = new List<Guid>();
@@ -86,7 +82,7 @@ namespace BPT_Service.Application.Implementation
         {
             PermissionSingleViewModel permission = new PermissionSingleViewModel();
             var getlistPerFunction = permissionSingles.ToList();
-            if (getlistPerFunction.Count() >1)
+            if (getlistPerFunction.Count() > 1)
             {
                 for (int i = 0; i < getlistPerFunction.Count - 1; i++)
                 {
@@ -154,7 +150,9 @@ namespace BPT_Service.Application.Implementation
                         permission.CanDelete = false;
                     }
                 }
-            }else{
+            }
+            else
+            {
                 return permissionSingles.FirstOrDefault();
             }
             return permission;

@@ -18,20 +18,7 @@ namespace BPT_Service.WebAPI.Controllers
             _userService = userService;
         }
 
-        [HttpPost("AddNewUser")]
-        public async Task<IActionResult> AddNewUser([FromBody]AppUserViewModel userVm)
-        {
-            var model = await _userService.AddAsync(userVm);
-            return new ObjectResult(model);
-        }
-
-        [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> DeleteUser(string id)
-        {
-            var model = _userService.DeleteAsync(id);
-            return new ObjectResult(model);
-        }
-
+        #region GET API
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {
@@ -52,14 +39,18 @@ namespace BPT_Service.WebAPI.Controllers
             var model = await _userService.GetById(id);
             return new ObjectResult(model);
         }
+        #endregion
 
+        #region PUT API
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody]AppUserViewModel userVm)
         {
             var model = _userService.UpdateAsync(userVm);
             return new ObjectResult(model);
         }
+        #endregion
 
+        #region POST API
         [HttpPost("CreateNewuser")]
         public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModel userVm, string password)
         {
@@ -74,5 +65,22 @@ namespace BPT_Service.WebAPI.Controllers
             var model = _userService.AddExternalAsync(userViewModel);
             return new ObjectResult(userViewModel);
         }
+
+        [HttpPost("AddNewUser")]
+        public async Task<IActionResult> AddNewUser([FromBody]AppUserViewModel userVm)
+        {
+            var model = await _userService.AddAsync(userVm);
+            return new ObjectResult(model);
+        }
+        #endregion
+
+        #region DELETE API
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var model = _userService.DeleteAsync(id);
+            return new ObjectResult(model);
+        }
+        #endregion
     }
 }

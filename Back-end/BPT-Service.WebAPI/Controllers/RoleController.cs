@@ -21,12 +21,11 @@ namespace BPT_Service.WebAPI.Controllers
 
         public RoleController(IRoleService roleService)
         {
-           
             _roleService = roleService;
         }
         #endregion
 
-
+        #region GET API
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -50,6 +49,15 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [HttpGet("getAllPermission/{functionId}")]
+        public IActionResult GetAllPermission(string functionId)
+        {
+            var function = _roleService.GetAllPermission(functionId);
+            return new OkObjectResult(function);
+        }
+        #endregion
+
+        #region POST API
         [HttpPost("SaveEntity")]
         public async Task<IActionResult> SaveEntity([FromBody]AppRoleViewModel roleVm)
         {
@@ -62,7 +70,6 @@ namespace BPT_Service.WebAPI.Controllers
             {
                 var notificationId = Guid.NewGuid().ToString();
                 await _roleService.AddAsync(roleVm);
-
             }
             else
             {
@@ -71,6 +78,22 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(roleVm);
         }
 
+        [HttpPost("ListAllFunction/{roleId}")]
+        public IActionResult ListAllFunction([FromBody]Guid roleId)
+        {
+            var functions = _roleService.GetListFunctionWithRole(roleId);
+            return new OkObjectResult(functions);
+        }
+
+        [HttpPost("SavePermission")]
+        public IActionResult SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
+        {
+            _roleService.SavePermission(rolePermissionViewModel);
+            return new OkObjectResult(rolePermissionViewModel);
+        }
+        #endregion
+
+        #region DELETE API
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -81,27 +104,6 @@ namespace BPT_Service.WebAPI.Controllers
             await _roleService.DeleteAsync(id);
             return new OkObjectResult(id);
         }
-
-
-        [HttpPost("ListAllFunction/{roleId}")]
-        public IActionResult ListAllFunction([FromBody]Guid roleId)
-        {
-            var functions = _roleService.GetListFunctionWithRole(roleId);
-            return new OkObjectResult(functions);
-        }
-
-        [HttpGet("getAllPermission/{functionId}")]
-        public IActionResult GetAllPermission(string functionId)
-        {
-            var function = _roleService.GetAllPermission(functionId);
-            return new OkObjectResult(function);
-        }
-
-        [HttpPost("SavePermission")]
-        public IActionResult SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
-        {
-            _roleService.SavePermission(rolePermissionViewModel);
-            return new OkObjectResult(rolePermissionViewModel);
-        }
+        #endregion
     }
 }

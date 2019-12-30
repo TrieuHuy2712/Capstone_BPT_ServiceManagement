@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Common.Dtos;
+using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -17,13 +19,14 @@ namespace BPT_Service.Application.Implementation
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RandomSupport _randomSupport;
+        private readonly RemoveSupport _removeSupport;
 
-
-        private readonly RoleManager<AppRole> _roleManager;
-        public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public UserService(UserManager<AppUser> userManager, RandomSupport randomSupport, RemoveSupport removeSupport)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
+            _randomSupport = randomSupport;
+            _removeSupport = removeSupport;
         }
 
         public async Task<bool> AddAsync(AppUserViewModel userVm)
@@ -58,11 +61,11 @@ namespace BPT_Service.Application.Implementation
                 {
                     Email = socialUserViewModel.Email,
                     Avatar = socialUserViewModel.Avatar,
-                    UserName = RemoveUnicode(socialUserViewModel.UserName).Replace(" ", "_"),
+                    UserName = _removeSupport.RemoveUnicode(socialUserViewModel.UserName).Replace(" ", "_"),
                     FullName = socialUserViewModel.UserName,
                     DateCreated = DateTime.Now
                 };
-                var newPassword = RandomString(12);
+                var newPassword = _randomSupport.RandomString(12);
                 var result = await _userManager.CreateAsync(user, newPassword);
                 if (result.Succeeded)
                 {
@@ -70,15 +73,14 @@ namespace BPT_Service.Application.Implementation
                     if (appUser != null)
                         await _userManager.AddToRoleAsync(appUser, "Customer");
 
-                    ContentEmail(
-                        "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",
-                        "You had sign in BPT Service", "Your password is " + newPassword, socialUserViewModel.Email).Wait();
+                    ContentEmail(KeySetting.SENDGRIDKEY, ExternalLoginEmailSetting.Subject,
+                                ExternalLoginEmailSetting.Content + newPassword, socialUserViewModel.Email).Wait();
                 }
                 return true;
             }
             return true;
-
         }
+
         public async Task<bool> DeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -88,12 +90,10 @@ namespace BPT_Service.Application.Implementation
                 return true;
             }
             return false;
-
         }
 
         public async Task<List<AppUserViewModel>> GetAllAsync()
         {
-            //return await _userManager.Users.ProjectTo<AppUserViewModel>(_config).ToListAsync();
             return await _userManager.Users.Select(x => new AppUserViewModel()
             {
                 Avatar = x.Avatar,
@@ -217,48 +217,19 @@ namespace BPT_Service.Application.Implementation
                 return false;
             }
         }
-        private static Random random = new Random();
-        private static string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
 
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("huytrieu2712@gmail.com", "Trieu Duc Huy");
+            var from = new EmailAddress(ExternalLoginEmailSetting.FromUserEmail, ExternalLoginEmailSetting.FullNameUser);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;
-            var htmlContent="<strong>"+message+"</strong>";
+            var htmlContent = "<strong>" + message + "</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }
-        public string RemoveUnicode(string text)
-        {
-            string[] arr1 = new string[] { "á", "à", "ả", "ã", "ạ", "â", "ấ", "ầ", "ẩ", "ẫ", "ậ", "ă", "ắ", "ằ", "ẳ", "ẵ", "ặ",
-    "đ",
-    "é","è","ẻ","ẽ","ẹ","ê","ế","ề","ể","ễ","ệ",
-    "í","ì","ỉ","ĩ","ị",
-    "ó","ò","ỏ","õ","ọ","ô","ố","ồ","ổ","ỗ","ộ","ơ","ớ","ờ","ở","ỡ","ợ",
-    "ú","ù","ủ","ũ","ụ","ư","ứ","ừ","ử","ữ","ự",
-    "ý","ỳ","ỷ","ỹ","ỵ",};
-            string[] arr2 = new string[] { "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a",
-    "d",
-    "e","e","e","e","e","e","e","e","e","e","e",
-    "i","i","i","i","i",
-    "o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o",
-    "u","u","u","u","u","u","u","u","u","u","u",
-    "y","y","y","y","y",};
-            for (int i = 0; i < arr1.Length; i++)
-            {
-                text = text.Replace(arr1[i], arr2[i]);
-                text = text.Replace(arr1[i].ToUpper(), arr2[i].ToUpper());
-            }
-            return text;
-        }
+
     }
 
 }

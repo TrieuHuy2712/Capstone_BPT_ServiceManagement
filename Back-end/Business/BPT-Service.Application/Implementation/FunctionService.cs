@@ -3,28 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
-using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 
 namespace BPT_Service.Application.Implementation
 {
     public class FunctionService : IFunctionService
     {
-        private IRepository<Function, string> _functionRepository;
-        private IRepository<Permission, int> _permissionRepository;
-        private RoleManager<AppRole> _roleManager;
-        private UserManager<AppUser> _userManager;
-
-        private IUnitOfWork _unitOfWork;
+        #region  Constructor
+        private readonly IRepository<Function, string> _functionRepository;
+        private readonly IRepository<Permission, int> _permissionRepository;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
 
         public FunctionService(
             IRepository<Function, string> functionRepository,
@@ -39,6 +34,7 @@ namespace BPT_Service.Application.Implementation
             _roleManager = roleManager;
             _userManager = userManager;
         }
+        #endregion
 
         public bool CheckExistedId(string id)
         {
@@ -63,7 +59,7 @@ namespace BPT_Service.Application.Implementation
         public void Delete(string id)
         {
             var getChildItem = _functionRepository.FindAll().Where(x => x.ParentId == id && x.ParentId != null).ToList();
-            if (getChildItem.Count() > 0)
+            if (getChildItem.Count > 0)
             {
                 foreach (var item in getChildItem)
                 {
@@ -77,15 +73,17 @@ namespace BPT_Service.Application.Implementation
         public FunctionViewModel GetById(string id)
         {
             var function = _functionRepository.FindSingle(x => x.Id == id);
-            //return _mapper.Map<Function, FunctionViewModel>(function);
-            FunctionViewModel functionViewModel = new FunctionViewModel();
-            functionViewModel.IconCss = function.IconCss;
-            functionViewModel.Id = function.Id;
-            functionViewModel.Name = function.Name;
-            functionViewModel.ParentId = function.ParentId;
-            functionViewModel.SortOrder = function.SortOrder;
-            functionViewModel.Status = function.Status;
-            functionViewModel.URL = function.URL;
+
+            FunctionViewModel functionViewModel = new FunctionViewModel
+            {
+                IconCss = function.IconCss,
+                Id = function.Id,
+                Name = function.Name,
+                ParentId = function.ParentId,
+                SortOrder = function.SortOrder,
+                Status = function.Status,
+                URL = function.URL
+            };
             function.NameVietNamese = function.NameVietNamese;
             return functionViewModel;
         }
@@ -233,7 +231,8 @@ namespace BPT_Service.Application.Implementation
 
             foreach (var item in functions)
             {
-                if(functions.Where(x=>x.Name==item.Name).Count()<=1){
+                if (functions.Where(x => x.Name == item.Name).Count() <= 1)
+                {
                     newFunctions.Add(item);
                 }
             }

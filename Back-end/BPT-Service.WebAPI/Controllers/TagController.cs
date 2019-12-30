@@ -12,14 +12,17 @@ namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
     [Route("TagManagement")]
-    public class TagController: ControllerBase
+    public class TagController : ControllerBase
     {
+        #region Constructor
         private readonly ITagService _tagService;
         public TagController(ITagService tagService)
         {
             _tagService = tagService;
         }
-        #region Get
+        #endregion
+
+        #region GET API
         [HttpGet("GetAllTag")]
         public IActionResult GetAllTag()
         {
@@ -60,7 +63,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
         #endregion
 
-        #region PUT
+        #region PUT API
         [HttpPut("updateTag")]
         public IActionResult UpdateTag([FromBody]TagViewModel tagVM)
         {
@@ -79,13 +82,13 @@ namespace BPT_Service.WebAPI.Controllers
         }
         #endregion
 
-        #region Delete
+        #region DELETE API
         [HttpDelete("DeleteTag")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
             {
-                return new BadRequestResult(); 
+                return new BadRequestResult();
             }
             else
             {
