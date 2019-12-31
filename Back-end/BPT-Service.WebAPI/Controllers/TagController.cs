@@ -31,7 +31,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetTagById")]
-        public IActionResult GetAllFillter(int id)
+        public IActionResult GetAllFillter(Guid id)
         {
             var model = _tagService.GetByID(id);
             return new OkObjectResult(model);
@@ -84,7 +84,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region DELETE API
         [HttpDelete("DeleteTag")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (!ModelState.IsValid)
             {

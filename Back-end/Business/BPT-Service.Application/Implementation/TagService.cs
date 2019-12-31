@@ -4,6 +4,7 @@ using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,9 +13,9 @@ namespace BPT_Service.Application.Implementation
 {
     public class TagService : ITagService
     {
-        private readonly IRepository<Tag, int> _tagRepository;
+        private readonly IRepository<Tag, Guid> _tagRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public TagService(IRepository<Tag, int> tagRepository, IUnitOfWork unitOfWork)
+        public TagService(IRepository<Tag, Guid> tagRepository, IUnitOfWork unitOfWork)
         {
             _tagRepository = tagRepository;
             _unitOfWork = unitOfWork;
@@ -24,7 +25,7 @@ namespace BPT_Service.Application.Implementation
         public async Task<bool> AddAsync(TagViewModel userVm)
         {
             Tag tag = new Tag();
-            tag.Id = userVm.Id;
+            tag.Id = Guid.Parse(userVm.Id);
             tag.TagName = userVm.TagName;
             tag.Description = userVm.Description;
             _tagRepository.Add(tag);
@@ -33,7 +34,7 @@ namespace BPT_Service.Application.Implementation
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var TagDel = _tagRepository.FindById(id);
             if (TagDel != null)
@@ -54,7 +55,7 @@ namespace BPT_Service.Application.Implementation
             var listTag = _tagRepository.FindAll();
             var tagViewModel = await listTag.Select(x => new TagViewModel
             {
-                Id = x.Id,
+                Id = x.Id.ToString(),
                 TagName = x.TagName,
                 Description = x.Description,
             }).ToListAsync();
@@ -74,7 +75,7 @@ namespace BPT_Service.Application.Implementation
 
             var data = query.Select(x => new TagViewModel
             {
-                Id = x.Id,
+                Id = x.Id.ToString(),
                 TagName = x.TagName,
                 Description = x.Description
             }).ToList();
@@ -90,11 +91,11 @@ namespace BPT_Service.Application.Implementation
             return paginationSet;
         }
 
-        public async Task<TagViewModel> GetByID(int id)
+        public async Task<TagViewModel> GetByID(Guid id)
         {
             var TagItem = _tagRepository.FindById(id);
             TagViewModel tagViewModels = new TagViewModel();
-            tagViewModels.Id = TagItem.Id;
+            tagViewModels.Id = TagItem.Id.ToString();
             tagViewModels.TagName = TagItem.TagName;
             tagViewModels.Description = TagItem.Description;
             return tagViewModels;
@@ -104,11 +105,11 @@ namespace BPT_Service.Application.Implementation
         #region Update
         public async Task<bool> Update(TagViewModel userVm)
         {
-            var TagUpdate = _tagRepository.FindById(userVm.Id);
+            var TagUpdate = _tagRepository.FindById(Guid.Parse(userVm.Id));
             if (TagUpdate != null)
             {
                 Tag tag = new Tag();
-                tag.Id = userVm.Id;
+                tag.Id = Guid.Parse(userVm.Id);
                 tag.TagName = userVm.TagName;
                 tag.Description = userVm.Description;
                 _tagRepository.Update(tag);

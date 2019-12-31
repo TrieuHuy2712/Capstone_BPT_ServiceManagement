@@ -6,7 +6,7 @@ namespace BPT_Service.Application.ViewModels.System
 {
     public class TagViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string TagName { get; set; }
 

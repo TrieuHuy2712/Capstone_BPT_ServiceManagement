@@ -10,6 +10,9 @@ using BPT_Service.Model.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Design;
+using BPT_Service.Model.Entities.ServiceModel;
+using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
+using BPT_Service.Model.Entities.ServiceModel.UserServiceModel;
 
 namespace BPT_Service.Data
 {
@@ -22,9 +25,18 @@ namespace BPT_Service.Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Category>  Categories{ get; set; }
-        public DbSet<Tag>  Tags{ get; set; }
-
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<ProviderNew> ProviderNews { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<ServiceFollowing> ServiceFollowings { get; set; }
+        public DbSet<ServiceImage> ServiceImages { get; set; }
+        public DbSet<ServiceComment> ServiceComments { get; set; }
+        public DbSet<ServiceRating> ServiceRatings {get; set; }
+        public DbSet<UserService> UserServices {get; set;}
+        public DbSet<ProviderService> ProviderServices {get; set;}
+        public DbSet<TagService> TagServices{get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

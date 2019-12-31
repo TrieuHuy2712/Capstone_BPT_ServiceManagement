@@ -14,7 +14,7 @@ namespace BPT_Service.Application.Interfaces
 
         PagedResult<TagViewModel> GetAllPagingAsync(string keyword, int page, int pageSize);
 
-        Task<TagViewModel> GetByID(int id);
+        Task<TagViewModel> GetByID(Guid id);
         #endregion
 
         #region Add
@@ -26,7 +26,7 @@ namespace BPT_Service.Application.Interfaces
         #endregion
 
         #region Delete
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(Guid id);
         #endregion
 
         void Save();
