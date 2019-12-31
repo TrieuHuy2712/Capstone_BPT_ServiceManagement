@@ -36,9 +36,8 @@
               <th>Tài khoản</th>
               <th>Họ tên</th>
               <th>Email</th>
-              <th>Ngày sinh</th>
-              <th>Số điện thoại</th>
               <th>Avatar</th>
+              <th>Tác vụ</th>
 
               <th></th>
             </tr>
@@ -48,8 +47,7 @@
               <td>{{user.userName}}</td>
               <td>{{user.fullName}}</td>
               <td>{{user.email}}</td>
-              <td>{{user.phoneNumber}}</td>
-              <td><img [src]="baseFolder + user.Avatar" class="img-responsive" width="128" /></td>
+              <td><img [src]="user.avatar" class="img-responsive" width="128" /></td>
               <td>
                 <button class="btn btn-primary" *ngIf="permission.canUpdate && userName !='admin'"
                   (click)="showEditModal(user.id)"><i class="fa fa-pencil-square-o"></i></button>

@@ -1,20 +1,22 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthenService } from "src/app/core/services/authen.service";
-import { NotificationService } from "src/app/core/services/notification.service";
 import {
-  GoogleLoginProvider,
+  AuthService,
   FacebookLoginProvider,
-  AuthService
+  GoogleLoginProvider
 } from "angular-6-social-login";
+import { Component, OnInit } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+
+import { AuthenService } from "src/app/core/services/authen.service";
+import { DataService } from "../core/services/data.service";
+import { LoggedInUser } from "../core/domain/loggedin.user";
+import { NotificationService } from "src/app/core/services/notification.service";
 import { Router } from "@angular/router";
+import { Socialusers } from "../core/domain/social.user";
+import { SystemConstants } from "../core/common/system,constants";
 import { UrlConstants } from "src/app/core/common/url.constants";
 import { from } from "rxjs";
-import { Socialusers } from "../core/domain/social.user";
-import { DataService } from "../core/services/data.service";
-import { SystemConstants } from "../core/common/system,constants";
-import { LoggedInUser } from "../core/domain/loggedin.user";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
+
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
@@ -47,8 +49,9 @@ export class LoginComponent implements OnInit {
     }
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
       this.socialusers = socialusers;
+      console.log(this.socialusers);
       let loggedUsers = {
-        Token :this.socialusers.token,
+        Token :this.socialusers.idToken,
         FullName : this.socialusers.name,
         UserName : this.socialusers.name,
         Email : this.socialusers.email,

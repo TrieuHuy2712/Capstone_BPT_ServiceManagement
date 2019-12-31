@@ -228,13 +228,12 @@ namespace BPT_Service.Application.Implementation
             }
 
             //functions = functions.GroupBy(x => x.Id).Select(t => t.First()).ToList();
+            var query = functions.GroupBy(x => new { x.Id, x.Name, x.NameVietNamese, x.ParentId, x.SortOrder, x.Status }).Where(x => x.Skip(1).Any()).ToArray();
 
-            foreach (var item in functions)
+            foreach (var item in query)
             {
-                if (functions.Where(x => x.Name == item.Name).Count() <= 1)
-                {
-                    newFunctions.Add(item);
-                }
+                var findItem = functions.Where(x => x.Name == item.Key.Name && x.Id == item.Key.Id).FirstOrDefault();
+                newFunctions.Add(findItem);
             }
             return newFunctions;
 

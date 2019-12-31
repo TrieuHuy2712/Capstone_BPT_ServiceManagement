@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using BPT_Service.Application.Interfaces;
 using BPT_Service.Application.ViewModels.System;
@@ -11,6 +14,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -51,7 +55,7 @@ namespace BPT_Service.Application.Implementation
             return true;
         }
 
-        public async Task<bool> AddExternalAsync(AppUserViewModel socialUserViewModel)
+        public async Task<AppUserViewModel> AddExternalAsync(AppUserViewModel socialUserViewModel)
         {
 
             var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
@@ -76,9 +80,26 @@ namespace BPT_Service.Application.Implementation
                     ContentEmail(KeySetting.SENDGRIDKEY, ExternalLoginEmailSetting.Subject,
                                 ExternalLoginEmailSetting.Content + newPassword, socialUserViewModel.Email).Wait();
                 }
-                return true;
+                var getNewEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
+                var getToken = SetToken(getNewEmail);
+                return new AppUserViewModel
+                {
+                    Email = getNewEmail.Email,
+                    Avatar = getNewEmail.Avatar,
+                    UserName = getNewEmail.UserName,
+                    FullName = getNewEmail.FullName,
+                    Token = getToken.Token
+                };
             }
-            return true;
+            var getExistToken = SetToken(getExistEmail);
+            return new AppUserViewModel
+            {
+                Email = getExistEmail.Email,
+                Avatar = getExistEmail.Avatar,
+                UserName = getExistEmail.UserName,
+                FullName = getExistEmail.FullName,
+                Token = getExistToken.Token
+            };
         }
 
         public async Task<bool> DeleteAsync(string id)
@@ -206,7 +227,7 @@ namespace BPT_Service.Application.Implementation
                 var selectedRole = userVm.NewRoles.ToArray();
                 selectedRole = selectedRole ?? new string[] { };
 
-                await _userManager.AddToRolesAsync(user, selectedRole.ToArray());
+                await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
                 var userRoles1 = await _userManager.GetRolesAsync(user);
                 await _userManager.UpdateAsync(user);
                 return true;
@@ -230,6 +251,26 @@ namespace BPT_Service.Application.Implementation
             var response = await client.SendEmailAsync(msg);
         }
 
+        #region SetToken
+        private AppUser SetToken(AppUser appUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(KeySetting.JWTSetting);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+            {
+                    new Claim(ClaimTypes.Name, appUser.Id.ToString()),
+            }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            appUser.Token = tokenHandler.WriteToken(token);
+            return appUser;
+        }
+        #endregion
     }
 
 }

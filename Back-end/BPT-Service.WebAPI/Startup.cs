@@ -18,6 +18,7 @@ using BPT_Service.Application.Implementation;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using BPT_Service.Common.Support;
 
 namespace BPT_Service.WebAPI
 {
@@ -96,6 +97,9 @@ namespace BPT_Service.WebAPI
             services.AddTransient<IUserService, UserService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped<RandomSupport, RandomSupport>();
+            services.AddScoped<RemoveSupport, RemoveSupport>();
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);

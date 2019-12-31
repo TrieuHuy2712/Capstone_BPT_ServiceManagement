@@ -63,7 +63,7 @@ namespace BPT_Service.WebAPI.Controllers
         public async Task<IActionResult> LoginExternal([FromBody]AppUserViewModel userViewModel)
         {
             var model = _userService.AddExternalAsync(userViewModel);
-            return new ObjectResult(userViewModel);
+            return new ObjectResult(model.Result);
         }
 
         [HttpPost("AddNewUser")]

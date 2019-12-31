@@ -4,9 +4,9 @@ import { DataService } from "src/app/core/services/data.service";
 import { MessageConstants } from "src/app/core/common/message.constants";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { NotificationService } from "src/app/core/services/notification.service";
+import { SystemConstants } from 'src/app/core/common/system,constants';
 import { TreeComponent } from "angular-tree-component";
 import { UtilityService } from "src/app/core/services/utility.service";
-import { SystemConstants } from 'src/app/core/common/system,constants';
 
 @Component({
   selector: "app-function",
@@ -107,7 +107,6 @@ export class FunctionComponent implements OnInit {
         if (this._currentUser != "admin") {
           this.loadPermission();
         }
-        
       },
       error => this._dataService.handleError(error)
     );
@@ -115,7 +114,7 @@ export class FunctionComponent implements OnInit {
   loadPermission() {
     this._dataService.get("/PermissionManager/GetAllPermission/" +this._currentUser+"/"+this._functionId
       ).subscribe((response: any) => {
-        this._userPermission = response;
+        this._userPermission = response.result;
         console.log(response);
       });
   }

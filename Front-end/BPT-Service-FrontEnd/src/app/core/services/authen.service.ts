@@ -1,11 +1,12 @@
-import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { map, filter, catchError, mergeMap } from "rxjs/operators";
+import { catchError, filter, map, mergeMap } from "rxjs/operators";
+
+import { Injectable } from "@angular/core";
 import { LoggedInUser } from "../domain/loggedin.user";
 import { Observable } from "rxjs";
+import { Socialusers } from "../domain/social.user";
 import { SystemConstants } from "../common/system,constants";
 import { UrlConstants } from "../common/url.constants";
-import { Socialusers } from "../domain/social.user";
 
 @Injectable({
   providedIn: "root"
@@ -53,6 +54,7 @@ export class AuthenService {
     }
   }
   loginExternal(socialusers: any) {
+    debugger
     return this._http
       .post(
         SystemConstants.BASE_API + "/UserManagement/LoginExternal/",
@@ -65,8 +67,8 @@ export class AuthenService {
             socialusers = response;
             if (socialusers && socialusers.token) {
               localStorage.removeItem(SystemConstants.CURRENT_USER);
-              localStorage.setItem(SystemConstants.CURRENT_USER,JSON.stringify(socialusers));
-              localStorage.setItem(SystemConstants.const_username,socialusers.username);
+              localStorage.setItem(SystemConstants.CURRENT_USER , JSON.stringify(socialusers));
+              localStorage.setItem(SystemConstants.const_username,socialusers.userName);
             }
             return socialusers;
             //this.router.navigate([UrlConstants.HOME]);

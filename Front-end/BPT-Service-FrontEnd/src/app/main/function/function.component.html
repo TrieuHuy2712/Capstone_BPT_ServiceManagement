@@ -32,7 +32,7 @@
         <div>
           <div class="menu_section">
             <ul>
-              <li *ngFor="let item of _functions"><a><i class="fa {{item.iconCss}}"></i> {{item.key}}</a>
+              <li *ngFor="let item of _functions"><a><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</a>
                 <button class="btn btn-xs btn-danger" *ngIf="_userPermission.canDelete" (click)="delete(item.key)"><i
                     class="fa fa-trash" aria-hidden="true"></i></button>
                 <ul class="">
