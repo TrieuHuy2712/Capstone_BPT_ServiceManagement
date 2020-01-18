@@ -28,7 +28,7 @@ namespace BPT_Service.Application.Implementation
             tag.TagName = userVm.TagName;
             tag.Description = userVm.Description;
             _tagRepository.Add(tag);
-            return  true;
+            return true;
         }
         #endregion
 
@@ -45,13 +45,13 @@ namespace BPT_Service.Application.Implementation
             {
                 return false;
             }
-        }          
+        }
         #endregion
 
         #region Get
         public async Task<List<TagViewModel>> GetAllAsync()
         {
-            var listTag =  _tagRepository.FindAll();
+            var listTag = _tagRepository.FindAll();
             var tagViewModel = await listTag.Select(x => new TagViewModel
             {
                 Id = x.Id,
