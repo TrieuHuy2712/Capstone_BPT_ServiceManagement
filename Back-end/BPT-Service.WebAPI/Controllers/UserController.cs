@@ -1,8 +1,14 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using BPT_Service.Application.Interfaces;
-using BPT_Service.Application.ViewModels.System;
-using BPT_Service.Common.Dtos;
+using BPT_Service.Application.AuthenticateService.ViewModel;
+using BPT_Service.Application.UserService.Command.AddCustomerAsync;
+using BPT_Service.Application.UserService.Command.AddExternalAsync;
+using BPT_Service.Application.UserService.Command.AddUserAsync;
+using BPT_Service.Application.UserService.Command.DeleteUserAsync;
+using BPT_Service.Application.UserService.Command.UpdateUserAsync;
+using BPT_Service.Application.UserService.Query.GetAllAsync;
+using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
+using BPT_Service.Application.UserService.Query.GetByIdAsync;
+using BPT_Service.Application.UserService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,64 +18,85 @@ namespace BPT_Service.WebAPI.Controllers
     [Route("UserManagement")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IAddCustomerAsyncCommand _addCustomerService;
+        private readonly IAddExternalAsyncCommand _addExternalService;
+        private readonly IAddUserAsyncCommand _addUserService;
+        private readonly IDeleteUserAsyncCommand _deleteUserService;
+        private readonly IUpdateUserAsyncCommand _updateUserService;
+        private readonly IGetAllPagingUserAsyncQuery _getPagingUserService;
+        private readonly IGetAllUserAsyncQuery _getAllUserService;
+        private readonly IGetByIdUserAsyncQuery _getByIdUserService;
+        public UserController(IAddCustomerAsyncCommand addCustomerService,
+        IAddExternalAsyncCommand addExternalService,
+        IAddUserAsyncCommand addUserService,
+        IDeleteUserAsyncCommand deleteUserService,
+        IUpdateUserAsyncCommand updateUserService,
+        IGetAllPagingUserAsyncQuery getPagingUserService,
+        IGetAllUserAsyncQuery getAllUserService,
+        IGetByIdUserAsyncQuery getByIdUserService)
         {
-            _userService = userService;
+            _addCustomerService = addCustomerService;
+            _addExternalService = addExternalService;
+            _addUserService = addUserService;
+            _deleteUserService = deleteUserService;
+            _updateUserService = updateUserService;
+            _getPagingUserService = getPagingUserService;
+            _getAllUserService = getAllUserService;
+            _getByIdUserService = getByIdUserService;
         }
 
         #region GET API
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {
-            var model = await _userService.GetAllAsync();
+            var model = await _getAllUserService.ExecuteAsync();
             return new ObjectResult(model);
         }
 
         [HttpGet("GetAllPaging")]
         public async Task<IActionResult> GetAllPagingUser(string keyword, int page, int pageSize)
         {
-            var model = _userService.GetAllPagingAsync(keyword, page, pageSize);
+            var model = _getPagingUserService.ExecuteAsync(keyword, page, pageSize);
             return new ObjectResult(model);
         }
 
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var model = await _userService.GetById(id);
+            var model = await _getByIdUserService.ExcecuteAsync(id);
             return new ObjectResult(model);
         }
         #endregion
 
         #region PUT API
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromBody]AppUserViewModel userVm)
+        public async Task<IActionResult> UpdateUser([FromBody]AppUserViewModelinUserService userVm)
         {
-            var model = _userService.UpdateAsync(userVm);
+            var model = await _updateUserService.ExecuteAsync(userVm);
             return new ObjectResult(model);
         }
         #endregion
 
         #region POST API
         [HttpPost("CreateNewuser")]
-        public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModel userVm, string password)
+        public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModelinUserService userVm, string password)
         {
-            var model = _userService.CreateCustomerAsync(userVm, password);
+            var model = _addCustomerService.ExecuteAsync(userVm, password);
             return new ObjectResult(model);
         }
 
         [AllowAnonymous]
         [HttpPost("LoginExternal")]
-        public async Task<IActionResult> LoginExternal([FromBody]AppUserViewModel userViewModel)
+        public async Task<IActionResult> LoginExternal([FromBody]AppUserViewModelinUserService userViewModel)
         {
-            var model = _userService.AddExternalAsync(userViewModel);
+            var model =_addExternalService.ExecuteAsync(userViewModel);
             return new ObjectResult(model.Result);
         }
 
         [HttpPost("AddNewUser")]
-        public async Task<IActionResult> AddNewUser([FromBody]AppUserViewModel userVm)
+        public async Task<IActionResult> AddNewUser([FromBody]AppUserViewModelinUserService userVm)
         {
-            var model = await _userService.AddAsync(userVm);
+            var model = await _addUserService.ExecuteAsync(userVm);
             return new ObjectResult(model);
         }
         #endregion
@@ -78,7 +105,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var model = _userService.DeleteAsync(id);
+            var model = _deleteUserService.ExecuteAsync(id);
             return new ObjectResult(model);
         }
         #endregion

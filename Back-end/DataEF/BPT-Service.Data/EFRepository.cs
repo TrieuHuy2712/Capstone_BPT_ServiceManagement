@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using BPT_Service.Data.Infrastructure.SharedKernel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,46 +24,29 @@ namespace BPT_Service.Data
 
         public void Dispose()
         {
-          if(_context != null)
+            if (_context != null)
             {
                 _context.Dispose();
             }
         }
 
-        public IQueryable<T> FindAll(params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> FindAllAsync(params Expression<Func<T, object>>[] includeProperties)
         {
-            IQueryable<T> items = _context.Set<T>();
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties)
-                {
-                    items = items.Include(includeProperty);
-                }
-            }
-            return items;
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).ToListAsync();
+        }
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).ToListAsync();
         }
 
-        public IQueryable<T> FindAll(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> FindByIdAsync(K id, params Expression<Func<T, object>>[] includeProperties)
         {
-            IQueryable<T> items = _context.Set<T>();
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties)
-                {
-                    items = items.Include(includeProperty);
-                }
-            }
-            return items.Where(predicate);
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public T FindById(K id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(x => x.Id.Equals(id));
-        }
-
-        public T FindSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
-        {
-            return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(predicate);
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefaultAsync(predicate);
         }
 
 
@@ -86,5 +70,47 @@ namespace BPT_Service.Data
         {
             _context.Set<T>().Update(entity);
         }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        #region 
+        private IQueryable<T> FindAll(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> items = _context.Set<T>();
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    items = items.Include(includeProperty);
+                }
+            }
+            return items;
+        }
+
+        private IQueryable<T> FindAll(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> items = _context.Set<T>();
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    items = items.Include(includeProperty);
+                }
+            }
+            return items.Where(predicate);
+        }
+        private T FindById(K id, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(x => x.Id.Equals(id));
+        }
+
+        private T FindSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(predicate);
+        }
+        #endregion
     }
 }

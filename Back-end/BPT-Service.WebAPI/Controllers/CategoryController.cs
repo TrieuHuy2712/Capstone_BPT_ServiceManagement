@@ -1,50 +1,71 @@
-﻿using BPT_Service.Application.Interfaces;
-using BPT_Service.Application.ViewModels.System;
+﻿using BPT_Service.Application.CategoryService.Command.AddCategoryService;
+using BPT_Service.Application.CategoryService.Command.DeleteCategoryService;
+using BPT_Service.Application.CategoryService.Command.UpdateCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using BPT_Service.Application.CategoryService.ViewModel;
 
 namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
     [Route("CategoryManagement")]
-    public class CategoryController: ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IAddCategoryServiceCommand _addCategoryService;
+        private readonly IDeleteCategoryServiceCommand _deleteCategoryService;
+        private readonly IGetAllAsyncCategoryServiceQuery _getAllCategoryService;
+        private readonly IGetAllPagingAsyncCategoryServiceQuery _getAllPagingCategoryService;
+        private readonly IGetByIDCategoryServiceQuery _getByIdCategoryService;
+        private readonly IUpdateCategoryServiceCommand _updateCategoryService;
+
+        public CategoryController(IAddCategoryServiceCommand addCategoryService,
+        IDeleteCategoryServiceCommand deleteCategoryService,
+        IGetAllAsyncCategoryServiceQuery getAllCategoryService,
+        IGetAllPagingAsyncCategoryServiceQuery getAllPagingCategoryService,
+        IGetByIDCategoryServiceQuery getByIdCategoryService,
+        IUpdateCategoryServiceCommand updateCategoryService)
         {
-            _categoryService = categoryService;
+            _addCategoryService = addCategoryService;
+            _deleteCategoryService = deleteCategoryService;
+            _getAllCategoryService = getAllCategoryService;
+            _getAllPagingCategoryService = getAllPagingCategoryService;
+            _getByIdCategoryService = getByIdCategoryService;
+            _updateCategoryService = updateCategoryService;
         }
         #region GET API
         [HttpGet("GetAllCategory")]
-        public IActionResult GetAllCategory()
+        public async Task<IActionResult> GetAllCategory()
         {
-            var model = _categoryService.GetAllAsync();
+            var model = await _getAllCategoryService.ExecuteAsync();
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetCatagoryById")]
-        public IActionResult GetAllFillter(int id)
+        public async Task<IActionResult> GetAllFillter(int id)
         {
-            var model = _categoryService.GetByID(id);
+            var model = await _getByIdCategoryService.ExecuteAsync(id);
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetAllPaging")]
-        public IActionResult GetAllPaging(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize)
         {
-            var model = _categoryService.GetAllPagingAsync(keyword, page, pageSize);
+            var model = await _getAllPagingCategoryService.ExecuteAsync(keyword, page, pageSize);
             return new OkObjectResult(model);
         }
         #endregion
 
         #region POST API
         [HttpPost("addNewCategory")]
-        public IActionResult AddNewCategory([FromBody]CategoryViewModel categoryVm)
+        public async Task<IActionResult> AddNewCategory([FromBody]CategoryServiceViewModel categoryVm)
         {
             if (!ModelState.IsValid)
             {
@@ -53,8 +74,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _categoryService.AddAsync(categoryVm);
-                _categoryService.Save();
+                await _addCategoryService.ExecuteAsync(categoryVm);
                 return new OkObjectResult(categoryVm);
             }
         }
@@ -62,7 +82,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region PUT API
         [HttpPut("updateCategory")]
-        public IActionResult UpdateCategory([FromBody]CategoryViewModel categoryVm)
+        public async Task<IActionResult> UpdateCategory([FromBody]CategoryServiceViewModel categoryVm)
         {
             if (!ModelState.IsValid)
             {
@@ -71,9 +91,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _categoryService.Update(categoryVm);
-
-                _categoryService.Save();
+                await _updateCategoryService.ExecuteAsync(categoryVm);
                 return new OkObjectResult(categoryVm);
             }
         }
@@ -89,8 +107,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _categoryService.DeleteAsync(id);
-                _categoryService.Save();
+                await _deleteCategoryService.ExecuteAsync(id);
                 return new OkObjectResult(id);
             }
         }

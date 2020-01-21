@@ -1,24 +1,67 @@
-using System;
-using System.Text;
-using AutoMapper;
+using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
+using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
+using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
+using BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateService;
+using BPT_Service.Application.CategoryService.Command.AddCategoryService;
+using BPT_Service.Application.CategoryService.Command.DeleteCategoryService;
+using BPT_Service.Application.CategoryService.Command.UpdateCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategoryService;
+using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
+using BPT_Service.Application.FunctionService.Command.AddFunctionService;
+using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
+using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
+using BPT_Service.Application.FunctionService.Command.UpdateParentId;
+using BPT_Service.Application.FunctionService.Query.CheckExistedIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetAllFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetAllWithParentIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetByIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermission;
+using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
+using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
+using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
+using BPT_Service.Application.RoleService.Command.AddRoleAsync;
+using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
+using BPT_Service.Application.RoleService.Command.SavePermissionRole;
+using BPT_Service.Application.RoleService.Command.UpdateRoleAsync;
+using BPT_Service.Application.RoleService.Query.GetAllAsync;
+using BPT_Service.Application.RoleService.Query.GetAllPagingAsync;
+using BPT_Service.Application.RoleService.Query.GetAllPermission;
+using BPT_Service.Application.RoleService.Query.GetByIdAsync;
+using BPT_Service.Application.RoleService.Query.GetListFunctionWithRole;
+using BPT_Service.Application.TagService.Command.AddServiceAsync;
+using BPT_Service.Application.TagService.Command.DeleteServiceAsync;
+using BPT_Service.Application.TagService.Command.UpdateTagServiceAsync;
+using BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync;
+using BPT_Service.Application.TagService.Query.GetAllServiceAsync;
+using BPT_Service.Application.TagService.Query.GetByIDTagServiceAsync;
+using BPT_Service.Application.UserService.Command.AddCustomerAsync;
+using BPT_Service.Application.UserService.Command.AddExternalAsync;
+using BPT_Service.Application.UserService.Command.AddUserAsync;
+using BPT_Service.Application.UserService.Command.DeleteUserAsync;
+using BPT_Service.Application.UserService.Command.UpdateUserAsync;
+using BPT_Service.Application.UserService.Query.GetAllAsync;
+using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
+using BPT_Service.Application.UserService.Query.GetByIdAsync;
+using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Support;
 using BPT_Service.Data;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using BPT_Service.Application.Interfaces;
-using BPT_Service.Application.Implementation;
-using BPT_Service.Common.Helpers;
-using BPT_Service.Model.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using BPT_Service.Common.Support;
+using System.Text;
+using System;
+using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync;
 
 namespace BPT_Service.WebAPI
 {
@@ -46,7 +89,6 @@ namespace BPT_Service.WebAPI
             services.AddMvc()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
-            services.AddAutoMapper(typeof(RoleService).Assembly);
 
             services.AddTransient<DbInitializer>();
             // Configure Identity
@@ -67,37 +109,75 @@ namespace BPT_Service.WebAPI
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
+
+            // Services 
+            services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
+            services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
 
-            // Auto Mapper Configurations
-            //Authenticate service
-            services.AddScoped<IAuthenticateService, AuthenticateService>();
-            services.AddSingleton<IAuthenticateService, AuthenticateService>();
-
-            services.AddTransient<IAuthenticateService, AuthenticateService>();
-            //////// Services 
-            services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
-            services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
-
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddTransient<IRoleService, RoleService>();
-
-            services.AddScoped<IFunctionService, FunctionService>();
-            services.AddTransient<IFunctionService, FunctionService>();
-
-            services.AddScoped<IPermissionService, PermissionService>();
-            services.AddTransient<IPermissionService, PermissionService>();
-
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddTransient<ICategoryService, CategoryService>();
-
-            services.AddScoped<IUserService, UserService>();
-            services.AddTransient<IUserService, UserService>();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            //Authenticate service
+            services.AddScoped<IResetPasswordAsyncCommand, ResetPasswordAsyncCommand>();
+            services.AddScoped<IAuthenticateServiceQuery, AuthenticateServiceQuery>();
+            services.AddScoped<IGetAllAuthenticateServiceQuery, GetAllAuthenticateServiceQuery>();
+            services.AddScoped<IGetByIdAuthenticateService, GetByIdAuthenticateServiceQuery>();
+
+            //Category service
+            services.AddScoped<IAddCategoryServiceCommand, AddCategoryServiceCommand>();
+            services.AddScoped<IDeleteCategoryServiceCommand, DeleteCategoryServiceCommand>();
+            services.AddScoped<IGetAllAsyncCategoryServiceQuery, GetAllAsyncCategoryServiceQuery>();
+            services.AddScoped<IGetAllPagingAsyncCategoryServiceQuery, GetAllPagingAsyncCategoryServiceQuery>();
+            services.AddScoped<IGetByIDCategoryServiceQuery, GetByIDCategoryServiceQuery>();
+            services.AddScoped<IUpdateCategoryServiceCommand, UpdateCategoryServiceCommand>();
+
+            //Function Service
+            services.AddScoped<IAddFunctionServiceCommand, AddFunctionServiceCommand>();
+            services.AddScoped<ICheckExistedFunctionServiceQuery, CheckExistedIdFunctionServiceQuery>();
+            services.AddScoped<IDeleteFunctionServiceCommand, DeleteFunctionServiceCommand>();
+            services.AddScoped<IGetAllFunctionServiceQuery, GetAllFunctionServiceQuery>();
+            services.AddScoped<IGetAllWithParentIdFunctionServiceQuery, GetAllWithParentIdFunctionServiceQuery>();
+            services.AddScoped<IGetByIdFunctionServiceQuery, GetByIdFunctionServiceQuery>();
+            services.AddScoped<IGetListFunctionWithPermissionQuery, GetListFunctionWithPermissionServiceQuery>();
+            services.AddScoped<IReOrderFunctionServiceQuery, ReOrderFunctionServiceQuery>();
+            services.AddScoped<IUpdateFunctionServiceCommand, UpdateFunctionServiceCommand>();
+            services.AddScoped<IUpdateParentIdServiceCommand, UpdateParentIdServiceCommand>();
+            //Permission service
+            services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
+
+            //Role service
+            services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
+            services.AddScoped<IDeleteRoleAsyncCommand, DeleteRoleAsyncCommand>();
+            services.AddScoped<ISavePermissionCommand, SavePermissionCommand>();
+            services.AddScoped<IUpdateRoleAsyncCommand, UpdateRoleAsyncCommand>();
+            services.AddScoped<IGetAllPermissionQuery, GetAllPermissionQuery>();
+            services.AddScoped<IGetAllRoleAsyncQuery, GetAllRoleAsyncQuery>();
+            services.AddScoped<IGetAllRolePagingAsyncQuery, GetAllRolePagingAsyncQuery>();
+            services.AddScoped<IGetListFunctionWithRoleQuery, GetListFunctionWithRoleQuery>();
+            services.AddScoped<IGetRoleByIdAsyncQuery, GetRoleByIdAsyncQuery>();
+
+            //Tag service
+            services.AddScoped<IAddTagServiceAsyncCommand, AddTagServiceAsyncCommand>();
+            services.AddScoped<IDeleteTagServiceAsyncCommand, DeleteTagServiceAsyncCommand>();
+            services.AddScoped<IUpdateTagServiceAsyncCommand, UpdateTagServiceAsyncCommand>();
+            services.AddScoped<IGetAllPagingTagServiceAsyncQuery, GetAllPagingTagServiceAsyncQuery>();
+            services.AddScoped<IGetAllTagServiceAsyncQuery, GetAllTagServiceAsyncQuery>();
+            services.AddScoped<IGetByIDTagServiceAsyncQuery, GetByIDTagServiceAsyncQuery>();
+
+            //User service
+            services.AddScoped<IAddCustomerAsyncCommand, AddCustomerAsyncCommand>();
+            services.AddScoped<IAddExternalAsyncCommand, AddExternalAsyncCommand>();
+            services.AddScoped<IAddUserAsyncCommand, AddUserAsyncCommand>();
+            services.AddScoped<IDeleteUserAsyncCommand, DeleteUserAsyncCommand>();
+            services.AddScoped<IUpdateUserAsyncCommand, UpdateUserAsyncCommand>();
+            services.AddScoped<IGetAllPagingUserAsyncQuery, GetAllPagingUserAsyncQuery>();
+            services.AddScoped<IGetAllUserAsyncQuery, GetAllUserAsyncQuery>();
+            services.AddScoped<IGetByIdUserAsyncQuery, GetByIdUserAsyncQuery>();
+
+            //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
             // configure strongly typed settings objects

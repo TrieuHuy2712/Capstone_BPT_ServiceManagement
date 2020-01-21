@@ -1,12 +1,17 @@
-using BPT_Service.Application.Interfaces;
-using BPT_Service.Application.ViewModels.System;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using BPT_Service.Application.TagService.Command.AddServiceAsync;
+using BPT_Service.Application.TagService.Command.DeleteServiceAsync;
+using BPT_Service.Application.TagService.Command.UpdateTagServiceAsync;
+using BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync;
+using BPT_Service.Application.TagService.Query.GetAllServiceAsync;
+using BPT_Service.Application.TagService.Query.GetByIDTagServiceAsync;
+using BPT_Service.Application.TagService.ViewModel;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -15,39 +20,54 @@ namespace BPT_Service.WebAPI.Controllers
     public class TagController : ControllerBase
     {
         #region Constructor
-        private readonly ITagService _tagService;
-        public TagController(ITagService tagService)
+        private readonly IAddTagServiceAsyncCommand _addTagService;
+        private readonly IDeleteTagServiceAsyncCommand _deleteTagService;
+        private readonly IUpdateTagServiceAsyncCommand _updateTagService;
+        private readonly IGetAllPagingTagServiceAsyncQuery _getAllPagingTagService;
+        private readonly IGetAllTagServiceAsyncQuery _getAllTagService;
+        private readonly IGetByIDTagServiceAsyncQuery _getByIdTagService;
+        public TagController(IAddTagServiceAsyncCommand addTagService,
+        IUpdateTagServiceAsyncCommand updateTagService,
+        IDeleteTagServiceAsyncCommand deleteTagService,
+        IGetAllPagingTagServiceAsyncQuery getAllPagingTagService,
+        IGetAllTagServiceAsyncQuery getAllTagService,
+        IGetByIDTagServiceAsyncQuery getByIdTagService)
         {
-            _tagService = tagService;
+            _addTagService = addTagService;
+            _deleteTagService = deleteTagService;
+            _updateTagService = updateTagService;
+            _getAllPagingTagService = getAllPagingTagService;
+            _getAllTagService = getAllTagService;
+            _getByIdTagService = getByIdTagService;
         }
         #endregion
 
         #region GET API
         [HttpGet("GetAllTag")]
-        public IActionResult GetAllTag()
+        public async Task<IActionResult> GetAllTag()
         {
-            var model = _tagService.GetAllAsync();
+            var model = _getAllTagService.ExecuteAsync();
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetTagById")]
-        public IActionResult GetAllFillter(Guid id)
+        public async Task<IActionResult> GetAllFillter(Guid id)
         {
-            var model = _tagService.GetByID(id);
+            var model = _getByIdTagService.ExecuteAsync(id);
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetAllPaging")]
-        public IActionResult GetAllPaging(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize)
         {
-            var model = _tagService.GetAllPagingAsync(keyword, page, pageSize);
+            var model = await _getAllPagingTagService.ExecuteAsync(keyword, page, pageSize);
             return new OkObjectResult(model);
         }
         #endregion
 
         #region POST
         [HttpPost("addNewTag")]
-        public IActionResult AddNewTag([FromBody]TagViewModel tagVm)
+        public async Task<IActionResult> AddNewTag([FromBody]TagViewModel tagVm)
         {
             if (!ModelState.IsValid)
             {
@@ -56,8 +76,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _tagService.AddAsync(tagVm);
-                _tagService.Save();
+                await _addTagService.ExecuteAsync(tagVm);
                 return new OkObjectResult(tagVm);
             }
         }
@@ -65,7 +84,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region PUT API
         [HttpPut("updateTag")]
-        public IActionResult UpdateTag([FromBody]TagViewModel tagVM)
+        public async Task<IActionResult> UpdateTag([FromBody]TagViewModel tagVM)
         {
             if (!ModelState.IsValid)
             {
@@ -74,9 +93,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _tagService.Update(tagVM);
-
-                _tagService.Save();
+                await _updateTagService.ExecuteAsync(tagVM);
                 return new OkObjectResult(tagVM);
             }
         }
@@ -92,8 +109,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _tagService.DeleteAsync(id);
-                _tagService.Save();
+                await _deleteTagService.ExecuteAsync(id);
                 return new OkObjectResult(id);
             }
         }

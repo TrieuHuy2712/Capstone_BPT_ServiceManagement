@@ -12,7 +12,8 @@ namespace BPT_Service.WebAPI.Controllers
     [Route("UploadImage")]
     public class UploadController : ControllerBase
     {
-        private const string BaseUrl = '$"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}"';
+        //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
+        private const string BaseUrl= "http://localhost:5000";
         #region  Constructor
         public UploadController()
         {
@@ -27,15 +28,13 @@ namespace BPT_Service.WebAPI.Controllers
             {
                 if (postedFile != null && postedFile.Length > 0)
                 {
-
-                    int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
+                    int MaxContentLength = 1024 * 1024 * 5; //Size = 5 MB
 
                     IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
                     var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                     var extension = ext.ToLower();
                     if (!AllowedFileExtensions.Contains(extension))
                     {
-
                         var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
 
                         return new ObjectResult(message);
@@ -87,13 +86,11 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);
-
             }
             catch (Exception ex)
             {
                 var message1 = string.Format("Image Updated UnSuccessfully.");
                 return new OkObjectResult(message1);
-
             }
         }
     }

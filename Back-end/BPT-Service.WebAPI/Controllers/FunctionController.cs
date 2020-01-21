@@ -1,8 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BPT_Service.Application.Interfaces;
-using BPT_Service.Application.ViewModels.System;
+using BPT_Service.Application.FunctionService.Command.AddFunctionService;
+using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
+using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
+using BPT_Service.Application.FunctionService.Command.UpdateParentId;
+using BPT_Service.Application.FunctionService.Query.CheckExistedIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetAllFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetAllWithParentIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetByIdFunctionService;
+using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermission;
+using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
+using BPT_Service.Application.FunctionService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -17,11 +26,38 @@ namespace BPT_Service.WebAPI.Controllers
     {
         #region Initialize
 
-        private readonly IFunctionService _functionService;
+        private readonly IAddFunctionServiceCommand _adddFunctionService;
+        private readonly ICheckExistedFunctionServiceQuery _checkExistedFunctionService;
+        private readonly IDeleteFunctionServiceCommand _deleteFunctionService;
+        private readonly IGetAllFunctionServiceQuery _getallFunctionService;
+        private readonly IGetAllWithParentIdFunctionServiceQuery _getallwithParentFunctionService;
+        private readonly IGetByIdFunctionServiceQuery _getByIDFunctionService;
+        private readonly IGetListFunctionWithPermissionQuery _listwithPermissionFunctionService;
+        private readonly IReOrderFunctionServiceQuery _reOrderFunctionService;
+        private readonly IUpdateFunctionServiceCommand _updateFunctionService;
+        private readonly IUpdateParentIdServiceCommand _updateParentFunctionService;
 
-        public FunctionController(IFunctionService functionService)
+        public FunctionController(IAddFunctionServiceCommand adddFunctionService,
+        ICheckExistedFunctionServiceQuery checkExistedFunctionService,
+        IDeleteFunctionServiceCommand deleteFunctionService,
+        IGetAllFunctionServiceQuery getallFunctionService,
+        IGetAllWithParentIdFunctionServiceQuery getallwithParentFunctionService,
+        IGetByIdFunctionServiceQuery getByIDFunctionService,
+        IGetListFunctionWithPermissionQuery listwithPermissionFunctionService,
+        IReOrderFunctionServiceQuery reOrderFunctionService,
+        IUpdateFunctionServiceCommand updateFunctionService,
+        IUpdateParentIdServiceCommand updateParentFunctionService)
         {
-            this._functionService = functionService;
+            _adddFunctionService = adddFunctionService;
+            _checkExistedFunctionService = checkExistedFunctionService;
+            _deleteFunctionService = deleteFunctionService;
+            _getallFunctionService = getallFunctionService;
+            _getallwithParentFunctionService = getallwithParentFunctionService;
+            _getByIDFunctionService = getByIDFunctionService;
+            _listwithPermissionFunctionService = listwithPermissionFunctionService;
+            _reOrderFunctionService = reOrderFunctionService;
+            _updateFunctionService = updateFunctionService;
+            _updateParentFunctionService = updateParentFunctionService;
         }
 
         #endregion Initialize
@@ -30,16 +66,16 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpGet("GetAllFillter")]
         public IActionResult GetAllFillter(string filter)
         {
-            var model = _functionService.GetAll(filter);
+            var model = _getallFunctionService.ExecuteAsync(filter);
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetAll/{nameUser}")]
         public async Task<IActionResult> GetAll(string nameUser)
         {
-            var model = await _functionService.GetAll(string.Empty);
+            var model = await _getallFunctionService.ExecuteAsync(string.Empty);
             var rootFunctions = model.Where(c => c.ParentId == null);
-            var items = new List<FunctionViewModel>();
+            var items = new List<FunctionViewModelinFunctionService>();
             if (nameUser == "admin")
             {
                 foreach (var function in rootFunctions)
@@ -58,7 +94,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                var getListFunction = await _functionService.GetListFunctionWithPermission(nameUser);
+                var getListFunction = await _listwithPermissionFunctionService.ExecuteAsync(nameUser);
                 foreach (var function in getListFunction)
                 {
                     //add the parent category to the item list
@@ -76,9 +112,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public IActionResult GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var model = _functionService.GetById(id);
+            var model = await _getByIDFunctionService.ExecuteAsync(id);
 
             return new ObjectResult(model);
         }
@@ -86,7 +122,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region POST API
         [HttpPost("addEntity")]
-        public IActionResult SaveEntity([FromBody]FunctionViewModel functionVm)
+        public async Task<IActionResult> SaveEntity([FromBody]FunctionViewModelinFunctionService functionVm)
         {
             if (!ModelState.IsValid)
             {
@@ -95,14 +131,13 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _functionService.Add(functionVm);
-                _functionService.Save();
+                await _adddFunctionService.ExecuteAsync(functionVm);
                 return new OkObjectResult(functionVm);
             }
         }
 
         [HttpPost("UpdateParentId/{sourceId}/{targetId}")]
-        public IActionResult UpdateParentId(string sourceId, string targetId, [FromBody]Dictionary<string, int> items)
+        public async Task<ActionResult> UpdateParentId(string sourceId, string targetId, [FromBody]Dictionary<string, int> items)
         {
             if (!ModelState.IsValid)
             {
@@ -116,15 +151,14 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 else
                 {
-                    _functionService.UpdateParentId(sourceId, targetId, items);
-                    _functionService.Save();
+                    await _updateParentFunctionService.ExecuteAsync(sourceId, targetId, items);
                     return new OkResult();
                 }
             }
         }
 
         [HttpPost("ReOrder/{sourceId}/{targetId}")]
-        public IActionResult ReOrder(string sourceId, string targetId)
+        public async Task<IActionResult> ReOrder(string sourceId, string targetId)
         {
             if (!ModelState.IsValid)
             {
@@ -138,8 +172,7 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 else
                 {
-                    _functionService.ReOrder(sourceId, targetId);
-                    _functionService.Save();
+                    await _reOrderFunctionService.ExecuteAsync(sourceId, targetId);
                     return new OkObjectResult(sourceId);
                 }
             }
@@ -148,7 +181,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region PUT API
         [HttpPut("updateEntity")]
-        public IActionResult updateEntity([FromBody]FunctionViewModel functionVm)
+        public async Task<IActionResult> updateEntity([FromBody]FunctionViewModelinFunctionService functionVm)
         {
             if (!ModelState.IsValid)
             {
@@ -157,9 +190,7 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _functionService.Update(functionVm);
-
-                _functionService.Save();
+                await _updateFunctionService.ExecuteAsync(functionVm);
                 return new OkObjectResult(functionVm);
             }
         }
@@ -175,25 +206,24 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                _functionService.Delete(id);
-                _functionService.Save();
+                await _deleteFunctionService.ExecuteAsync(id);
                 return new OkObjectResult(id.FirstOrDefault());
             }
         }
         #endregion
 
         #region Private Functions
-        private void GetByParentId(IEnumerable<FunctionViewModel> allFunctions,
-            FunctionViewModel parent, IList<FunctionViewModel> items)
+        private void GetByParentId(List<FunctionViewModelinFunctionService> allFunctions,
+            FunctionViewModelinFunctionService parent, IList<FunctionViewModelinFunctionService> items)
         {
-            var functionsEntities = allFunctions as FunctionViewModel[] ?? allFunctions.ToArray();
-            var subFunctions = functionsEntities.Where(c => c.ParentId == parent.Id);
+            //var functionsEntities = allFunctions as FunctionViewModelinFunctionService[] ?? allFunctions.ToArray();
+            var subFunctions = allFunctions.Where(c => c.ParentId == parent.Id);
             foreach (var cat in subFunctions)
             {
                 //add this category
                 items.Add(cat);
                 //recursive call in case your have a hierarchy more than 1 level deep
-                GetByParentId(functionsEntities, cat, items);
+                GetByParentId(allFunctions, cat, items);
             }
         }
         #endregion
