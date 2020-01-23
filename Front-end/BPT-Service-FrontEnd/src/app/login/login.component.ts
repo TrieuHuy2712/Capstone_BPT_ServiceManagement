@@ -20,7 +20,8 @@ import { map } from "rxjs/operators";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  styleUrls: ["./login.component.css"],
+  providers: [AuthService]
 })
 export class LoginComponent implements OnInit {
   blocked = false;
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
   model: any = {};
   returnUrl: string;
   socialusers = new Socialusers();
-
+  
   constructor(
     private authenService: AuthenService,
     private notificationService: NotificationService,
@@ -37,8 +38,10 @@ export class LoginComponent implements OnInit {
     private _dataService: DataService,
     private _http: HttpClient
   ) {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('login component');
+    
+  }
 
   public socialSignIn(socialProvider: string) {
     let socialPlatformProvider;
@@ -95,6 +98,7 @@ export class LoginComponent implements OnInit {
             );
           } else {
             this.router.navigate([UrlConstants.HOME]);
+            
           }
           // if(data == null)
           //   this.notificationService.printErrorMessage("Username or password is incorrect");

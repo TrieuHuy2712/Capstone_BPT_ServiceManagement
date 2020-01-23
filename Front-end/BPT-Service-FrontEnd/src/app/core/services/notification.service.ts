@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-declare var alertify: any;
+// declare var alertify: any;
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private _notifier: any = alertify;
+  private _notifier: any;
+  public alertify: any = {};
   constructor() {
-    alertify.defaults = {
+    this.alertify.defaults = {
       // dialogs defaults
       autoReset: true,
       basic: false,
@@ -58,6 +59,7 @@ export class NotificationService {
       }
     };
 
+    this._notifier = this.alertify;
   }
 
 

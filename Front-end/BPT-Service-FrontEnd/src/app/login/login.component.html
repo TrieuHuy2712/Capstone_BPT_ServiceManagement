@@ -1,64 +1,59 @@
-<div>
-  <a class="hiddenanchor" id="signup"></a>
-  <a class="hiddenanchor" id="signin"></a>
-
-  <div class="login_wrapper">
-    <div class="animate form login_form">
-      <section class="login_content">
-        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-          <img src="http://isc.vanlanguni.edu.vn/sig/logo-vlu-sig.png" width="200px">
-          <!-- <img src="data:image/png;base64,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"> -->
-          <h1>Đăng nhập</h1>
-          <div [ngClass]="{ 'has-error' : f.submitted && !username.valid }">
-            <input placeholder="Username" type="text" class="form-control input-group-addon" name="username" [(ngModel)]="model.username" #username="ngModel"
-              required />
-            <div *ngIf="f.submitted && !username.valid" class="help-block">Tên đăng nhập yêu cầu</div>
-          </div>
-          <div [ngClass]="{ 'has-error' : f.submitted && !password.valid }">
-            <input placeholder="Password" type="password" class="form-control input-group-addon" name="password" [(ngModel)]="model.password" #password="ngModel"
-              required />
-            <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
-          </div>
-          <div *ngIf="blocked">
-            <p>You was blocked out in 5 minutes</p>
+<div class="full-page login-page ">
+  <div class=" content">
+    <div class=" container">
+      <div class=" col-lg-4 col-md-6 ml-auto mr-auto">
+        <form class=" form">
+          <div class=" card card-login card-white">
+            <div class=" card-header">
+              <img alt="" src="assets/img/card-primary.png">
+              <h1 class=" card-title px-3">Log in</h1>
+            </div>
+            <div class=" card-body">
+              <!-- body -->
+              <section class="login_content">
+                <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                  <div [ngClass]="{ 'has-error' : f.submitted && !username.valid }">
+                    <input autofocus autocomplete="off" placeholder="Username" type="text" class="form-control input-group-addon" name="username"
+                      [(ngModel)]="model.username" #username="ngModel" required />
+                    <div *ngIf="f.submitted && !username.valid" class="help-block">Tên đăng nhập yêu cầu</div>
+                  </div>
+                  <div [ngClass]="{ 'has-error' : f.submitted && !password.valid }" style="margin-top: 10px;">
+                    <input placeholder="Password" type="password" class="form-control input-group-addon" name="password"
+                      [(ngModel)]="model.password" #password="ngModel" required />
+                    <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
+                  </div>
+                  <div *ngIf="blocked">
+                    <p>You was blocked out in 5 minutes</p>
+        
+                  </div>
+                  <div class="text-center mb-2">
+                    <button class="btn btn-default mx-auto" style="display: block; margin-top: 20px;">Đăng nhập</button>
+                    <a class="reset_pass" href="#">Quên mật khẩu</a>
+                  </div>
+                  <!-- <div class="row mb-2">
+                    <div class="col-md-12 text-center">ĐĂNG NHẬP BẰNG</div>
+                  </div> -->
+                  <div class="row justify-content-end px-3">
+                      <button (click)="socialSignIn('facebook')" class="loginBtn loginBtn--facebook mr-2">
+                        <i class="fab fa-facebook-square"></i>
+                      </button>
+                      <button (click)="socialSignIn('google')" class="loginBtn loginBtn--google">
+                        <i class="fab fa-google"></i>
+                      </button>
+                  </div>
+                </form>
+              </section>
+            </div>
             
-          </div>
-          <div>
-            <button class="btn btn-default">Đăng nhập</button>
-            <img *ngIf="loading"
-              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-            <a class="reset_pass" href="#">Quên mật khẩu</a>
-          </div>
-          <hr style="border-top: 1px solid #eee;">
-          <div class="row">
-            <div class="col-md-12">ĐĂNG NHẬP BẰNG</div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <button (click)="socialSignIn('facebook')" class="loginBtn loginBtn--facebook">
-                <i class="fab fa-facebook-square"></i>
-              </button>
-
-            </div>
-            <div class="col-md-6">
-              <button (click)="socialSignIn('google')" class="loginBtn loginBtn--google">
-                Google
-              </button>
-            </div>
-          </div>
-          <div class="clearfix"></div>
-
-          <div class="separator">
-            <div class="clearfix"></div>
-            <br />
-
-            <div>
-              <h1><i class="fa fa-paw"></i> VLU POS SYSTEM</h1>
-              <p>©2019 All Rights Reserved. By Trieu Duc Huy</p>
-            </div>
+              <div class="px-3 pull-left">
+                <h6><a class=" link footer-link" href="javascript:void(0)"> Create Account </a></h6>
+              </div>
+              <div class="px-3 pull-right">
+                <h6><a class=" link footer-link" href="javascript:void(0)"> Need Help? </a></h6>
+              </div>
           </div>
         </form>
-      </section>
+      </div>
     </div>
   </div>
 </div>

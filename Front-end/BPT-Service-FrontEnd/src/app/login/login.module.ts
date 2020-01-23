@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { LoginComponent } from "./login.component";
 import { AuthenService } from "src/app/core/services/authen.service";
 import { NotificationService } from "src/app/core/services/notification.service";
-
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,

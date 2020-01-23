@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "BPT-Service-FrontEnd": {
+    "BPT-ServiceManagement": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/BPT-Service-FrontEnd",
+            "outputPath": "dist/BPT-ServiceManagement",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -24,25 +24,9 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/animate.css/animate.css",
-              "node_modules/alertifyjs/build/css/alertify.css",
-              "node_modules/alertifyjs/build/css/themes/default.css",
-              "node_modules/angular-tree-component/dist/angular-tree-component.css",
-              "src/assets/css/custom.css",
               "src/styles.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "node_modules/fastclick/lib/fastclick.js",
-              "node_modules/alertifyjs/build/alertify.js",
-              "node_modules/nprogress/nprogress.js",
-              "node_modules/moment/moment.js",
-              "node_modules/chart.js/dist/Chart.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -79,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "BPT-Service-FrontEnd:build"
+            "browserTarget": "BPT-ServiceManagement:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "BPT-Service-FrontEnd:build:production"
+              "browserTarget": "BPT-ServiceManagement:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "BPT-Service-FrontEnd:build"
+            "browserTarget": "BPT-ServiceManagement:build"
           }
         },
         "test": {
@@ -127,15 +111,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "BPT-Service-FrontEnd:serve"
+            "devServerTarget": "BPT-ServiceManagement:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "BPT-Service-FrontEnd:serve:production"
+              "devServerTarget": "BPT-ServiceManagement:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "BPT-Service-FrontEnd"
+  "defaultProject": "BPT-ServiceManagement"
 }

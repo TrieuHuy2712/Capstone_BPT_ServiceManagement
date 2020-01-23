@@ -1,1 +1,117 @@
-<router-outlet></router-outlet>
+
+<div class="container-fluid pl-0">
+  <div class="main">
+    <!-- left -->
+    <div *ngIf="!isLoginPage" class="sidebar mr-3">
+      <div class="sidebar-wrapper ps">
+        <div class="logo"><a class="simple-text logo-mini" href="#">
+            <div class="logo-img">
+            </div>
+          </a><a class="simple-text logo-normal" href="#"> SERVICE MANAGEMENT
+          </a></div>
+        <ul class="nav">
+          <li id="item-container-main" class="active item-container" (click)="toggleMenuItem('main')">
+            <a [routerLink]="['/main']"><i class="fas fa-home"></i>
+              <p>Trang chu</p>
+            </a>
+          </li>
+          <li class="item-container" *ngFor="let item of _functions; let i = index" [id]="'item-container-' + i">
+            <a data-toggle="collapse" routerlinkactive="active" aria-expanded="false" aria-controls="pages"
+              (click)="toggleMenuItem(i)"><i class="fas {{ item.iconCss }}"></i>
+              <p>{{ item.key | titlecase }}<b class="caret"></b></p>
+            </a>
+            <div class="collapse" [id]="'item-' + i" aria-expanded="false" aria-hidden="false">
+              <ul class="nav">
+
+                <li routerlinkactive="active" *ngFor="let subItem of item.childrenId">
+                  <a [routerLink]="['main/'+ toLowKey(subItem.name)]">
+                    <span class="sidebar-mini-icon">P</span>
+                    <span class="sidebar-normal">{{subItem.name}}</span>
+                  </a>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+          <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 0px; right: 0px;">
+          <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+        </div>
+      </div>
+    </div>
+    <!-- right -->
+    <div class="right">
+      <div *ngIf="!isLoginPage" class="row">
+        <div class="col-12">
+          <nav class="nav-top navbar navbar-expand-lg navbar-absolute" style="padding-right: 50px;">
+            <div  class=" container-fluid">
+              <button  aria-label="Toggle navigation" class=" navbar-toggler" id="navigation"
+                type="button" aria-expanded="false">
+                <span class=" navbar-toggler-bar navbar-kebab"></span>
+                <span class=" navbar-toggler-bar navbar-kebab"></span>
+                <span class=" navbar-toggler-bar navbar-kebab"></span>
+              </button>
+              <div  class="navbar-collapse collapse" id="navigation" aria-expanded="false"
+                aria-hidden="true" style="display: none;">
+                <!-- search bar -->
+                <div class="search-box">
+                  <input class="search-txt" type="text" name="" placeholder="Type to search">
+                  <a href="#" class="search-btn"></a>
+                  <i class="fas fa-search"></i>
+                </div>
+                <ul  class=" navbar-nav ml-auto">
+                  <li  class="dropdown nav-item" dropdown=""><a 
+                      class=" dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" dropdowntoggle=""
+                      href="javascript:void(0)" aria-haspopup="true" aria-expanded="false">
+                      <div  class=" notification d-none d-lg-block d-xl-block"></div>
+                      <i class="far fa-bell"></i>
+                      <p  class=" d-lg-none">Notifications</p>
+                    </a>
+                    <!---->
+                    <ul  class="dropdown-menu dropdown-menu-right dropdown-navbar"
+                      style="left: auto; right: 0px;">
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="#"> Mike John responded to your email </a></li>
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> You have 5 more tasks </a></li>
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> Your friend Michael is in town </a></li>
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> Another notification </a></li>
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> Another one </a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown nav-item open" dropdown="" placement="bottom left"><a
+                       class="nav-link dropdown-toggle" data-toggle="dropdown" dropdowntoggle="" href="#"
+                      aria-haspopup="true" aria-expanded="false">
+                      <div  class=" photo"><img  alt="Profile Photo"
+                          src="assets/img/mike.jpg"></div><b 
+                        class=" caret d-none d-lg-block d-xl-block"></b>
+                      <p  class=" d-lg-none">Log out</p>
+                    </a>
+                    <!---->
+                    <ul  class="dropdown-menu dropdown-navbar dropdown-menu-right"
+                      style="left: auto; right: 0px; top: 100%; transform: translateY(0px); bottom: auto;">
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> Profile </a></li>
+                      <li  class=" nav-link"><a  class=" nav-item dropdown-item"
+                          href="javascript:void(0)"> Settings </a></li>
+                      <li  class=" dropdown-divider"></li>
+                      <li  class=" nav-link"><a  (click)="logout()" class=" nav-item dropdown-item"
+                        > Log out </a></li>
+                    </ul>
+                  </li>
+                  <li  class=" separator d-lg-none"></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<app-loader></app-loader>
