@@ -3,7 +3,7 @@ import {
   FacebookLoginProvider,
   GoogleLoginProvider
 } from "angular-6-social-login";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { AuthenService } from "src/app/core/services/authen.service";
@@ -29,18 +29,18 @@ export class LoginComponent implements OnInit {
   model: any = {};
   returnUrl: string;
   socialusers = new Socialusers();
-  
+
   constructor(
     private authenService: AuthenService,
     private notificationService: NotificationService,
     private router: Router,
     private authService: AuthService,
     private _dataService: DataService,
-    private _http: HttpClient
+    private _http: HttpClient,
+    private zone: NgZone
   ) {}
   ngOnInit() {
-    console.log('login component');
-    
+    console.log("login component");
   }
 
   public socialSignIn(socialProvider: string) {
@@ -54,16 +54,21 @@ export class LoginComponent implements OnInit {
       this.socialusers = socialusers;
       console.log(this.socialusers);
       let loggedUsers = {
-        Token :this.socialusers.idToken,
-        FullName : this.socialusers.name,
-        UserName : this.socialusers.name,
-        Email : this.socialusers.email,
-        Avatar : this.socialusers.image
+        Token: this.socialusers.idToken,
+        FullName: this.socialusers.name,
+        UserName: this.socialusers.name,
+        Email: this.socialusers.email,
+        Avatar: this.socialusers.image
       };
       console.log(loggedUsers);
       this.authenService.loginExternal(loggedUsers).subscribe(
         data => {
-          this.router.navigate([UrlConstants.HOME]);
+          if (data != null) {
+            this.zone.run(() => {
+              window.location.href=SystemConstants.BASE_URL+'/'+UrlConstants.HOME;
+              // this.router.navigate([UrlConstants.HOME]);
+            });
+          }
         },
         error => {
           this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
@@ -97,8 +102,8 @@ export class LoginComponent implements OnInit {
               "You was blocked out in 5 minutes"
             );
           } else {
-            this.router.navigate([UrlConstants.HOME]);
-            
+            // this.router.navigate([UrlConstants.HOME]);
+            window.location.href=SystemConstants.BASE_URL+'/'+UrlConstants.HOME;
           }
           // if(data == null)
           //   this.notificationService.printErrorMessage("Username or password is incorrect");

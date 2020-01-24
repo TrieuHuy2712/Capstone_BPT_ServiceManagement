@@ -35,6 +35,8 @@ import { SystemConstants } from './core/common/system,constants';
 import { LoaderComponent } from './component/loader/loader.component';
 import { LoaderInterceptor } from './interceptor/loader.interceptor';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { LanguageService } from './core/services/language.service';
+import { TranslatePipe } from './core/common/translate.pipe';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -90,7 +92,9 @@ export function getAuthServiceConfigs() {
       useFactory: getAuthServiceConfigs
   },
   { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  LanguageService,
+  TranslatePipe
   ],
   bootstrap: [AppComponent],
   schemas: [ NO_ERRORS_SCHEMA ]

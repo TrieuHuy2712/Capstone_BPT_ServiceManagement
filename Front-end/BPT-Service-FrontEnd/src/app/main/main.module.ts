@@ -24,7 +24,7 @@ import { ServiceTagComponent } from './service-tag/service-tag.component';
     HomeModule,
     RouterModule.forChild(mainRoutes)
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
+  declarations: [MainComponent,SidebarMenuComponent],
   providers:[UtilityService,AuthenService]
 })
 export class MainModule { }

@@ -3,6 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { AuthenService } from "src/app/core/services/authen.service";
 import { DataService } from "src/app/core/services/data.service";
 import { SystemConstants } from "src/app/core/common/system,constants";
+import { LanguageService } from 'src/app/core/services/language.service';
 
 @Component({
   selector: "app-sidebar-menu",
@@ -13,7 +14,8 @@ export class SidebarMenuComponent implements OnInit {
   public _functions: any[];
   constructor(
     private dataService: DataService,
-    private _authenService: AuthenService
+    private _authenService: AuthenService,
+    private languageService : LanguageService
   ) { }
   ngOnInit() {
     this.dataService
@@ -26,4 +28,5 @@ export class SidebarMenuComponent implements OnInit {
         this._functions = this._functions.filter(x => x.key != null);
       });
   }
+
 }

@@ -6,6 +6,7 @@ import { LoggedInUser } from './core/domain/loggedin.user';
 import { AuthenService } from './core/services/authen.service';
 import { NotificationService } from './core/services/notification.service';
 import { UrlConstants } from './core/common/url.constants';
+import { LanguageService } from './core/services/language.service';
 
 export const loginState = false;
 
@@ -22,7 +23,8 @@ export class AppComponent {
   isLoginPage: boolean = true;
   constructor(private dataService: DataService, private router:Router, private _authenService: AuthenService,
     
-    private notificationService: NotificationService ) {
+    private notificationService: NotificationService, 
+    private languageService: LanguageService) {
     
   }
 
@@ -70,8 +72,15 @@ export class AppComponent {
   toLowKey(str:string){
     return str.toLowerCase();
   }
+  onChange(deviceValue) {
+    console.log(deviceValue);
+    this.languageService.setLanguage(deviceValue);
+  }
 
   logout() {
+    localStorage.removeItem(SystemConstants.CURRENT_USER);
+    localStorage.clear();
+    this._authenService.logout();
     localStorage.removeItem('token');
     this.isLoginPage = true;
     this.router.navigate(['login']);

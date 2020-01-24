@@ -1,0 +1,23 @@
+//Đăng ký Provider
+1. [Add Provider] Khi người dùng đăng ký provider thì sẽ đợi duyệt
+2. [Duyết Provider] Accept Provider, Decline Provider
+3. [Update Provider] Cập nhật thông tin Provider
+4. [Delete] Provider] Xóa provider thông tin Provider
+5. [Xem danh sách và xem chi tiết và xem danh sách paging]
+
+//Đăng ký Service
+1. [Add Provider] Khi người dùng đăng ký provider thì sẽ đợi duyệt
+2. [Duyết Provider] Accept Provider, Decline Provider
+3. [Update Provider] Cập nhật thông tin Provider
+4. [Delete] Provider] Xóa provider thông tin Provider
+5. [Xem danh sách và xem chi tiết và xem danh sách paging]mm
+
+//Permission in Role
+1. Truyền vào 1 cái role và chức năng cái role đó 
+CheckPermission(identityUser, Function, Role)
+-------Lấy Role User ==> tra xem Function và get Role
+
+//Another
+1. Theo dõi provider
+----User đăng ký provider khi có bài mới [Service, News, Khuyến mãi] sẽ gửi mail
+----User đăng ký theo dõi dịch vụ nào đó

@@ -4,6 +4,7 @@ import { DataService } from "src/app/core/services/data.service";
 import { NotificationService } from "src/app/core/services/notification.service";
 import { MessageConstants } from "src/app/core/common/message.constants";
 import { SystemConstants } from "src/app/core/common/system,constants";
+import { TranslationService } from 'src/app/core/services/translation.service';
 @Component({
   selector: "app-role",
   templateUrl: "./role.component.html",
@@ -23,7 +24,8 @@ export class RoleComponent implements OnInit {
   public functionId: string = "ROLE";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit() {
@@ -76,6 +78,7 @@ export class RoleComponent implements OnInit {
     this.loadData();
   }
   showAddModal() {
+    debugger;
     this.entity = {};
     this.modalAddEdit.show();
   }
