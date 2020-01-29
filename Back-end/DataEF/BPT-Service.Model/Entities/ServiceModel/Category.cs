@@ -12,9 +12,6 @@ namespace BPT_Service.Model.Entities
         [Required]
         public string CategoryName { get; set; }
 
-        [Required]
-        public string NameVietnamese { get; set; }
-
         [StringLength(200)]
         public string Description { get; set; }
 
@@ -22,7 +19,6 @@ namespace BPT_Service.Model.Entities
         public Category() {  }
         public Category(string categoryName, string vietnameseName, string description) {
             CategoryName = categoryName;
-            NameVietnamese = vietnameseName;
             Description = description;
         }
     }

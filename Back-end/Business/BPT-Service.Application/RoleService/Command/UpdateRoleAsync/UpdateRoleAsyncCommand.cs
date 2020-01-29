@@ -12,12 +12,41 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
         {
             _roleManager = roleManager;
         }
-        public async Task ExecuteAsync(AppRoleViewModel roleVm)
+        public async Task<CommandResult<AppRoleViewModel>> ExecuteAsync(AppRoleViewModel roleVm)
         {
-            var role = await _roleManager.FindByIdAsync(roleVm.Id.ToString());
-            role.Description = roleVm.Description;
-            role.Name = roleVm.Name;
-            await _roleManager.UpdateAsync(role);
+            try
+            {
+                var role = await _roleManager.FindByIdAsync(roleVm.Id.ToString());
+                if (role != null)
+                {
+                    role.Description = roleVm.Description;
+                    role.Name = roleVm.Name;
+                    await _roleManager.UpdateAsync(role);
+                    return new CommandResult<AppRoleViewModel>
+                    {
+                        isValid = true,
+                        myModel = new AppRoleViewModel
+                        {
+                            Description = role.Description,
+                            Id = role.Id,
+                            Name = role.Name
+                        }
+                    };
+                }
+                return new CommandResult<AppRoleViewModel>
+                {
+                    isValid = false,
+                    errorMessage = "Cannot find Id Role"
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new CommandResult<AppRoleViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
     }
 }

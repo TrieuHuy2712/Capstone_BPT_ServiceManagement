@@ -1,4 +1,4 @@
- 
+
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BPT_Service.Model.Entities
 {
     [Table("AppRoles")]
-    public class AppRole:  IdentityRole<Guid>
+    public class AppRole : IdentityRole<Guid>
     {
         public AppRole() : base()
         {
@@ -21,7 +21,5 @@ namespace BPT_Service.Model.Entities
         [StringLength(250)]
         public string Description { get; set; }
 
-        [StringLength(125)]
-        public string NameVietNamese { get; set; }
     }
 }

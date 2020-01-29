@@ -21,6 +21,9 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public string TaxCode { get; set; }
 
         [Required]
+        public int CityId { get; set; }
+
+        [Required]
         public string PhoneNumber { get; set; }
 
         [Required]
@@ -30,11 +33,17 @@ namespace BPT_Service.Model.Entities.ServiceModel
 
         [ForeignKey("UserId")]
         public virtual AppUser AppUser { get; set; }
+
         public Status Status { get; set; }
+
         public DateTime DateCreated { get; set; }
+
         public DateTime DateModified { get; set; }
 
+        [ForeignKey("CityId")]
+        public virtual CityProvince ServiceCityProvince { get; set; }
+
         public ICollection<ProviderService> ProviderServices { get; set; }
-        public ICollection<ProviderNew> ProviderNews {get; set;}
+        public ICollection<ProviderNew> ProviderNews { get; set; }
     }
 }

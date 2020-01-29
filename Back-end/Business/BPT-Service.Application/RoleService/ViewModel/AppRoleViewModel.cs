@@ -8,8 +8,6 @@ namespace BPT_Service.Application.RoleService.ViewModel
 
         public string Name { set; get; }
 
-        public string NameVietNamese { set; get; }
-
         public string Description { set; get; }
 
         public PermissionSingleViewModel permissionSingleViewModel { set; get; }

@@ -21,7 +21,6 @@ namespace BPT_Service.Application.RoleService.Query.GetAllAsync
             {
                 Id = x.Id,
                 Description = x.Description,
-                NameVietNamese = x.NameVietNamese,
                 Name = x.Name
             }).ToListAsync();
         }

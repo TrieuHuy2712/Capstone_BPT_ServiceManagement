@@ -13,7 +13,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<bool> ExecuteAsync(CategoryServiceViewModel userVm)
+        public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
             try
             {
@@ -21,19 +21,33 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                 if (CategoryUpdate != null)
                 {
                     CategoryUpdate.CategoryName = userVm.CategoryName;
-                    CategoryUpdate.NameVietnamese = userVm.NameVietnamese;
                     CategoryUpdate.Description = userVm.Description;
                     _categoryRepository.Update(CategoryUpdate);
-                    return true;
+                    await _categoryRepository.SaveAsync();
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = true,
+                        myModel = userVm,
+                        errorMessage = "Can't not find your Id"
+                    };
                 }
                 else
                 {
-                    return false;
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = false,
+                        myModel = userVm,
+                    };
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                return new CommandResult<CategoryServiceViewModel>
+                {
+                    isValid = false,
+                    myModel = userVm,
+                    errorMessage = ex.InnerException.ToString()
+                };
             }
         }
     }

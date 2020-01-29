@@ -17,9 +17,9 @@ namespace BPT_Service.Data
         {
             _context = context;
         }
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            _context.Add(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
         public void Dispose()
@@ -49,7 +49,10 @@ namespace BPT_Service.Data
             return await this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefaultAsync(predicate);
         }
 
-
+        public async Task Add(List<T> entities)
+        {
+            await _context.Set<T>().AddRangeAsync(entities);
+        }
         public void Remove(T entity)
         {
             _context.Set<T>().Remove(entity);
@@ -111,6 +114,8 @@ namespace BPT_Service.Data
         {
             return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(predicate);
         }
+
+
         #endregion
     }
 }

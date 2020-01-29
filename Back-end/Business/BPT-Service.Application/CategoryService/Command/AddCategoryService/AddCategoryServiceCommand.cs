@@ -12,15 +12,44 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<bool> ExecuteAsync(CategoryServiceViewModel userVm)
+        public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
+        {
+            try
+            {
+                var mappingCate = mappingCategory(userVm);
+                await _categoryRepository.Add(mappingCate);
+                await _categoryRepository.SaveAsync();
+
+                return new CommandResult<CategoryServiceViewModel>
+                {
+                    isValid = true,
+                    myModel = new CategoryServiceViewModel
+                    {
+                        Id = mappingCate.Id,
+                        CategoryName = mappingCate.CategoryName,
+                        Description = mappingCate.Description,
+                    },
+                };
+            }
+            catch (System.Exception ex)
+            {
+
+                return new CommandResult<CategoryServiceViewModel>
+                {
+                    isValid = false,
+                    myModel = userVm,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
+        }
+        
+        private Category mappingCategory(CategoryServiceViewModel userVm)
         {
             Category category = new Category();
             category.Id = userVm.Id;
             category.CategoryName = userVm.CategoryName;
-            category.NameVietnamese = userVm.NameVietnamese;
             category.Description = userVm.Description;
-            _categoryRepository.Add(category);
-            return true;
+            return category;
         }
     }
 }

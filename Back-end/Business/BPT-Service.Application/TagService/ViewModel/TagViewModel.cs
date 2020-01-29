@@ -6,6 +6,5 @@ namespace BPT_Service.Application.TagService.ViewModel
 
         public string TagName { get; set; }
 
-        public string Description { get; set; }
     }
 }

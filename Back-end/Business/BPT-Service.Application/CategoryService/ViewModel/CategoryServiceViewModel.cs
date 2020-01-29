@@ -6,8 +6,6 @@ namespace BPT_Service.Application.CategoryService.ViewModel
 
         public string CategoryName { get; set; }
 
-        public string NameVietnamese { get; set; }
-
         public string Description { get; set; }
     }
 }

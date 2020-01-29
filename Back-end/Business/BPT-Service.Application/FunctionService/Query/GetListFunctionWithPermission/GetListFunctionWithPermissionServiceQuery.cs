@@ -46,7 +46,6 @@ namespace BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermi
                     {
                         Id = x.Id,
                         Description = x.Description,
-                        NameVietNamese = x.NameVietNamese,
                         Name = x.Name
                     }).Where(x => x.Name == item).FirstOrDefaultAsync();
                     listRoleUser.Add(roleId);
@@ -58,23 +57,22 @@ namespace BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermi
             foreach (var item in listRoleUser)
             {
                 var getListFunction = (from f in listFunction
-                                             join p in listPermission on f.Id equals p.FunctionId
-                                             where p.RoleId == item.Id && p.CanRead == true
-                                             select new FunctionViewModelinFunctionService
-                                             {
-                                                 Id = f.Id,
-                                                 IconCss = f.IconCss,
-                                                 Name = f.Name,
-                                                 ParentId = f.ParentId,
-                                                 SortOrder = f.SortOrder,
-                                                 Status = f.Status,
-                                                 URL = f.URL,
-                                                 NameVietNamese = f.NameVietNamese,
-                                             }).ToList();
+                                       join p in listPermission on f.Id equals p.FunctionId
+                                       where p.RoleId == item.Id && p.CanRead == true
+                                       select new FunctionViewModelinFunctionService
+                                       {
+                                           Id = f.Id,
+                                           IconCss = f.IconCss,
+                                           Name = f.Name,
+                                           ParentId = f.ParentId,
+                                           SortOrder = f.SortOrder,
+                                           Status = f.Status,
+                                           URL = f.URL,
+                                       }).ToList();
 
                 functions.AddRange(getListFunction);
             }
-             var query = functions.GroupBy(x => new { x.Id, x.Name, x.NameVietNamese, x.ParentId, x.SortOrder, x.Status }).Where(x => x.Skip(1).Any()).ToArray();
+            var query = functions.GroupBy(x => new { x.Id, x.Name, x.ParentId, x.SortOrder, x.Status }).Where(x => x.Skip(1).Any()).ToArray();
 
             foreach (var item in query)
             {

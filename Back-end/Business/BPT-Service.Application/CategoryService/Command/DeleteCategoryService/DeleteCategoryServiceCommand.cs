@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BPT_Service.Application.CategoryService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 
@@ -11,17 +12,42 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<bool> ExecuteAsync(int id)
+        public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(int id)
         {
-            var CategoryDel = await _categoryRepository.FindByIdAsync(id);
-            if (CategoryDel != null)
+            try
             {
-                _categoryRepository.Remove(CategoryDel);
-                return true;
+                var CategoryDel = await _categoryRepository.FindByIdAsync(id);
+                if (CategoryDel != null)
+                {
+                    _categoryRepository.Remove(CategoryDel);
+                    await _categoryRepository.SaveAsync();
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = true,
+                        myModel = new CategoryServiceViewModel
+                        {
+                            CategoryName = CategoryDel.CategoryName,
+                            Description = CategoryDel.Description,
+                            Id = CategoryDel.Id
+                        }
+                    };
+                }
+                else
+                {
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Cannot find your Id"
+                    };
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                return false;
+                return new CommandResult<CategoryServiceViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
             }
         }
     }

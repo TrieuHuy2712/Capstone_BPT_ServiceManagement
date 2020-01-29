@@ -26,7 +26,6 @@ namespace BPT_Service.Application.FunctionService.Query.GetByIdFunctionService
                 Status = function.Status,
                 URL = function.URL
             };
-            function.NameVietNamese = function.NameVietNamese;
             return functionViewModel;
         }
     }

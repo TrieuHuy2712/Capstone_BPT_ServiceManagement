@@ -21,8 +21,7 @@ namespace BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync
         {
             var query = await _tagRepository.FindAllAsync();
             if (!string.IsNullOrEmpty(keyword))
-                query = query.Where(x => x.TagName.Contains(keyword)
-                || x.Description.Contains(keyword));
+                query = query.Where(x => x.TagName.Contains(keyword));
 
             int totalRow = query.Count();
             query = query.Skip((page - 1) * pageSize)
@@ -32,7 +31,6 @@ namespace BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync
             {
                 Id = x.Id.ToString(),
                 TagName = x.TagName,
-                Description = x.Description
             }).ToList();
 
             var paginationSet = new PagedResult<TagViewModel>()

@@ -14,14 +14,32 @@ namespace BPT_Service.Application.TagService.Command.AddServiceAsync
         {
             _tagRepository = tagRepository;
         }
-        public async Task<bool> ExecuteAsync(TagViewModel userVm)
+        public async Task<CommandResult<TagViewModel>> ExecuteAsync(TagViewModel userVm)
         {
-            Tag tag = new Tag();
-            tag.Id = Guid.Parse(userVm.Id);
-            tag.TagName = userVm.TagName;
-            tag.Description = userVm.Description;
-            _tagRepository.Add(tag);
-            return true;
+            try
+            {
+                Tag tag = new Tag();
+                tag.TagName = userVm.TagName;
+                await _tagRepository.Add(tag);
+                await _tagRepository.SaveAsync();
+                return new CommandResult<TagViewModel>
+                {
+                    isValid = true,
+                    myModel = new TagViewModel
+                    {
+                        Id = tag.Id.ToString(),
+                        TagName = tag.TagName
+                    }
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new CommandResult<TagViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
     }
 }

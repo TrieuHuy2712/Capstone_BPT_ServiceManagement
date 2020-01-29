@@ -13,25 +13,48 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
         {
             _userManager = userManager;
         }
-        public async Task<bool> ExecuteAsync(AppUserViewModelinUserService userVm)
+        public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
         {
-            var user = new AppUser()
+            try
             {
-                UserName = userVm.UserName,
-                Avatar = userVm.Avatar,
-                Email = userVm.Email,
-                FullName = userVm.FullName,
-                DateCreated = DateTime.Now,
-                PhoneNumber = userVm.PhoneNumber
-            };
-            var result = await _userManager.CreateAsync(user, userVm.Password);
-            if (result.Succeeded && userVm.Roles.Count > 0)
-            {
-                var appUser = await _userManager.FindByNameAsync(user.UserName);
-                if (appUser != null)
-                    await _userManager.AddToRolesAsync(appUser, userVm.Roles);
+                var user = new AppUser()
+                {
+                    UserName = userVm.UserName,
+                    Avatar = userVm.Avatar,
+                    Email = userVm.Email,
+                    FullName = userVm.FullName,
+                    DateCreated = DateTime.Now,
+                    PhoneNumber = userVm.PhoneNumber
+                };
+                var result = await _userManager.CreateAsync(user, userVm.Password);
+                if (result.Succeeded && userVm.Roles.Count > 0)
+                {
+                    var appUser = await _userManager.FindByNameAsync(user.UserName);
+                    if (appUser != null)
+                        await _userManager.AddToRolesAsync(appUser, userVm.Roles);
+                }
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = true,
+                    myModel = new AppUserViewModelinUserService
+                    {
+                        UserName = userVm.UserName,
+                        Avatar = userVm.Avatar,
+                        Email = userVm.Email,
+                        FullName = userVm.FullName,
+                        DateCreated = DateTime.Now,
+                        PhoneNumber = userVm.PhoneNumber
+                    }
+                };
             }
-            return true;
+            catch (System.Exception ex)
+            {
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
     }
 }

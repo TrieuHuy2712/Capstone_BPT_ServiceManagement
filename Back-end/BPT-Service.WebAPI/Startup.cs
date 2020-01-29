@@ -1,3 +1,4 @@
+using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync;
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
 using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
@@ -20,6 +21,13 @@ using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermissio
 using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
+using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
+using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
+using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
+using BPT_Service.Application.ProviderService.Command.RejectProviderService;
+using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
+using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
+using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -61,7 +69,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
-using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 
 namespace BPT_Service.WebAPI
 {
@@ -147,6 +155,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IUpdateParentIdServiceCommand, UpdateParentIdServiceCommand>();
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
+            services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
@@ -177,6 +186,15 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllUserAsyncQuery, GetAllUserAsyncQuery>();
             services.AddScoped<IGetByIdUserAsyncQuery, GetByIdUserAsyncQuery>();
 
+            //Provider service
+            services.AddScoped<IApproveProviderServiceCommand, ApproveProviderServiceCommand>();
+            services.AddScoped<IDeleteProviderServiceCommand, DeleteProviderServiceCommand>();
+            services.AddScoped<IRegisterProviderServiceCommand, RegisterProviderServiceCommand>();
+            services.AddScoped<IRejectProviderServiceCommand, RejectProviderServiceCommand>();
+            services.AddScoped<IGetAllPagingProviderServiceQuery, GetAllPagingProviderServiceQuery>();
+            services.AddScoped<IGetAllProviderofUserServiceQuery, GetAllProviderofUserServiceQuery>();
+            services.AddScoped<IGetByIdProviderServiceQuery, GetByIdProviderServiceQuery>();
+
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
@@ -205,7 +223,7 @@ namespace BPT_Service.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor)
         {
             if (env.IsDevelopment())
             {

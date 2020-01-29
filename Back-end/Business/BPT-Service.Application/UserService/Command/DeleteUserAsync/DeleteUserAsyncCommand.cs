@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,15 +12,41 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
         {
             _userManager = userManager;
         }
-        public async Task<bool> ExecuteAsync(string id)
+        public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
+            try
             {
-                await _userManager.DeleteAsync(user);
-                return true;
+                var user = await _userManager.FindByIdAsync(id);
+                if (user != null)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return new CommandResult<AppUserViewModelinUserService>
+                    {
+                        isValid = true,
+                        myModel = new AppUserViewModelinUserService
+                        {
+                            UserName = user.UserName,
+                            Avatar = user.Avatar,
+                            Email = user.Email,
+                            FullName = user.FullName,
+                            DateCreated = user.DateCreated,
+                        }
+                    };
+                }
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = false,
+                    errorMessage = " Cannot not find Id User"
+                };
             }
-            return false;
+            catch (System.Exception ex)
+            {
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
     }
 }

@@ -19,7 +19,6 @@ namespace BPT_Service.Application.TagService.Query.GetByIDTagServiceAsync
             TagViewModel tagViewModels = new TagViewModel();
             tagViewModels.Id = TagItem.Id.ToString();
             tagViewModels.TagName = TagItem.TagName;
-            tagViewModels.Description = TagItem.Description;
             return tagViewModels;
         }
     }

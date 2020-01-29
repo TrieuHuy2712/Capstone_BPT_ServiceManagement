@@ -15,9 +15,6 @@ namespace BPT_Service.Model.Entities
         [Required]
         public string TagName { get; set; }
 
-        [StringLength(200)]
-        public string Description { get; set; }
-
         public DateTime DateCreated { get; set; }
 
         public DateTime DateModified { get; set; }
@@ -28,7 +25,6 @@ namespace BPT_Service.Model.Entities
         public Tag(string tagName, string description)
         {
             TagName = tagName;
-            Description = description;
         }
     }
 }

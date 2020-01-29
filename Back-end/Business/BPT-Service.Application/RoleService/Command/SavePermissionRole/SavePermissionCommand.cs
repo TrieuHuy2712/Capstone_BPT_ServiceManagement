@@ -14,28 +14,54 @@ namespace BPT_Service.Application.RoleService.Command.SavePermissionRole
         {
             _permissionRepository = permissionRepository;
         }
-        public async Task<bool> ExecuteAsync(RolePermissionViewModel rolePermissionViewModel)
+        public async Task<CommandResult<RolePermissionViewModel>> ExecuteAsync(RolePermissionViewModel rolePermissionViewModel)
         {
-            var permissions = rolePermissionViewModel.Permissions.Select(x => new Permission
+            try
             {
-                CanCreate = x.CanCreate,
-                CanDelete = x.CanDelete,
-                CanRead = x.CanRead,
-                CanUpdate = x.CanUpdate,
-                FunctionId = rolePermissionViewModel.FunctionId,
-                RoleId = x.RoleId
-            }).ToList();
-            var oldPermission = await _permissionRepository.FindAllAsync(x => x.FunctionId == rolePermissionViewModel.FunctionId);
-            if (oldPermission.Count() > 0)
-            {
-                _permissionRepository.RemoveMultiple(oldPermission.ToList());
+                var permissions = rolePermissionViewModel.Permissions.Select(x => new Permission
+                {
+                    CanCreate = x.CanCreate,
+                    CanDelete = x.CanDelete,
+                    CanRead = x.CanRead,
+                    CanUpdate = x.CanUpdate,
+                    FunctionId = rolePermissionViewModel.FunctionId,
+                    RoleId = x.RoleId
+                }).ToList();
+                var oldPermission = await _permissionRepository.FindAllAsync(x => x.FunctionId == rolePermissionViewModel.FunctionId);
+                if (oldPermission.Count() > 0)
+                {
+                    _permissionRepository.RemoveMultiple(oldPermission.ToList());
+                }
+                foreach (var permission in permissions)
+                {
+                    _permissionRepository.Add(permission);
+                }
+                await _permissionRepository.SaveAsync();
+                return new CommandResult<RolePermissionViewModel>
+                {
+                    isValid = true,
+                    myModel = new RolePermissionViewModel
+                    {
+                        FunctionId = rolePermissionViewModel.FunctionId,
+                        Permissions = permissions.Select(x => new PermissionViewModel
+                        {
+                            CanCreate = x.CanCreate,
+                            CanDelete = x.CanDelete,
+                            CanRead = x.CanRead,
+                            CanUpdate = x.CanUpdate,
+                            FunctionId = rolePermissionViewModel.FunctionId,
+                            RoleId = x.RoleId
+                        }).ToList()
+                    }
+                };
             }
-            foreach (var permission in permissions)
+            catch (System.Exception ex)
             {
-                _permissionRepository.Add(permission);
+                return new CommandResult<RolePermissionViewModel>{
+                    isValid = false,
+                    errorMessage= ex.InnerException.ToString()
+                };
             }
-            await _permissionRepository.SaveAsync();
-            return true;
         }
     }
 }

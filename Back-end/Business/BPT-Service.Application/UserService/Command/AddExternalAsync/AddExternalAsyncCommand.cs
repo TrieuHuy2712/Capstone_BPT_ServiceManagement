@@ -27,51 +27,73 @@ namespace BPT_Service.Application.UserService.Command.AddExternalAsync
             _randomSupport = randomSupport;
             _removeSupport = removeSupport;
         }
-        public async Task<AppUserViewModelinUserService> ExecuteAsync(AppUserViewModelinUserService socialUserViewModel)
+        public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService socialUserViewModel)
         {
-            var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
-            if (getExistEmail == null)
+            try
             {
-                var user = new AppUser
-                {
-                    Email = socialUserViewModel.Email,
-                    Avatar = socialUserViewModel.Avatar,
-                    UserName = _removeSupport.RemoveUnicode(socialUserViewModel.UserName).Replace(" ", "_"),
-                    FullName = socialUserViewModel.UserName,
-                    DateCreated = DateTime.Now
-                };
-                var newPassword = _randomSupport.RandomString(12);
-                var result = await _userManager.CreateAsync(user, newPassword);
-                if (result.Succeeded)
-                {
-                    var appUser = await _userManager.FindByNameAsync(user.UserName);
-                    if (appUser != null)
-                        await _userManager.AddToRoleAsync(appUser, "Customer");
 
-                    ContentEmail(KeySetting.SENDGRIDKEY, ExternalLoginEmailSetting.Subject,
-                                ExternalLoginEmailSetting.Content + newPassword, socialUserViewModel.Email).Wait();
-                }
-                var getNewEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
-                var getToken = SetToken(getNewEmail);
-                return new AppUserViewModelinUserService
+
+                var getExistEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
+                if (getExistEmail == null)
                 {
-                    Email = getNewEmail.Email,
-                    Avatar = getNewEmail.Avatar,
-                    UserName = getNewEmail.UserName,
-                    FullName = getNewEmail.FullName,
-                    Token = getToken.Token
+                    var user = new AppUser
+                    {
+                        Email = socialUserViewModel.Email,
+                        Avatar = socialUserViewModel.Avatar,
+                        UserName = _removeSupport.RemoveUnicode(socialUserViewModel.UserName).Replace(" ", "_"),
+                        FullName = socialUserViewModel.UserName,
+                        DateCreated = DateTime.Now
+                    };
+                    var newPassword = _randomSupport.RandomString(12);
+                    var result = await _userManager.CreateAsync(user, newPassword);
+                    if (result.Succeeded)
+                    {
+                        var appUser = await _userManager.FindByNameAsync(user.UserName);
+                        if (appUser != null)
+                            await _userManager.AddToRoleAsync(appUser, "Customer");
+
+                        ContentEmail(KeySetting.SENDGRIDKEY, ExternalLoginEmailSetting.Subject,
+                                    ExternalLoginEmailSetting.Content + newPassword, socialUserViewModel.Email).Wait();
+                    }
+                    var getNewEmail = await _userManager.Users.Where(x => x.Email == socialUserViewModel.Email).FirstOrDefaultAsync();
+                    var getToken = SetToken(getNewEmail);
+                    return new CommandResult<AppUserViewModelinUserService>
+                    {
+                        isValid = true,
+                        myModel = new AppUserViewModelinUserService
+                        {
+                            Email = getNewEmail.Email,
+                            Avatar = getNewEmail.Avatar,
+                            UserName = getNewEmail.UserName,
+                            FullName = getNewEmail.FullName,
+                            Token = getToken.Token
+                        }
+                    };
+                }
+                var getExistToken = SetToken(getExistEmail);
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = true,
+                    myModel = new AppUserViewModelinUserService
+                    {
+                        Email = getExistEmail.Email,
+                        Avatar = getExistEmail.Avatar,
+                        UserName = getExistEmail.UserName,
+                        FullName = getExistEmail.FullName,
+                        Token = getExistToken.Token
+                    }
                 };
             }
-            var getExistToken = SetToken(getExistEmail);
-            return new AppUserViewModelinUserService
+            catch (System.Exception ex)
             {
-                Email = getExistEmail.Email,
-                Avatar = getExistEmail.Avatar,
-                UserName = getExistEmail.UserName,
-                FullName = getExistEmail.FullName,
-                Token = getExistToken.Token
-            };
+                return new CommandResult<AppUserViewModelinUserService>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
+
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
@@ -83,7 +105,7 @@ namespace BPT_Service.Application.UserService.Command.AddExternalAsync
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }
-         private AppUser SetToken(AppUser appUser)
+        private AppUser SetToken(AppUser appUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(KeySetting.JWTSetting);

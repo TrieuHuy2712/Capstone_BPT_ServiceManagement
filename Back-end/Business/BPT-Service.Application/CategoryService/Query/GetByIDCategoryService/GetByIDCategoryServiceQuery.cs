@@ -19,7 +19,6 @@ namespace BPT_Service.Application.CategoryService.Query.GetByIDCategoryService
             {
                 Id = CategoryItem.Id,
                 CategoryName = CategoryItem.CategoryName,
-                NameVietnamese = CategoryItem.NameVietnamese,
                 Description = CategoryItem.Description
             };
             return categoryViewModels;

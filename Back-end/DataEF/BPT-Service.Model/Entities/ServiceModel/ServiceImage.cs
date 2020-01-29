@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using BPT_Service.Data.Infrastructure.SharedKernel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 namespace BPT_Service.Model.Entities.ServiceModel
 {
     [Table("ServiceImage")]
-    public class ServiceImage : IdentityUser<Guid>, IDateTracking, ISwitchable
+    public class ServiceImage : DomainEntity<int>, IDateTracking, ISwitchable
     {
         public string Path{get; set; }
         public DateTime DateCreated { get; set; }

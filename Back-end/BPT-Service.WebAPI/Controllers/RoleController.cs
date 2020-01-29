@@ -1,3 +1,14 @@
+
+using BPT_Service.Application.RoleService.Command.AddRoleAsync;
+using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
+using BPT_Service.Application.RoleService.Command.SavePermissionRole;
+using BPT_Service.Application.RoleService.Command.UpdateRoleAsync;
+using BPT_Service.Application.RoleService.Query.GetAllAsync;
+using BPT_Service.Application.RoleService.Query.GetAllPagingAsync;
+using BPT_Service.Application.RoleService.Query.GetAllPermission;
+using BPT_Service.Application.RoleService.Query.GetByIdAsync;
+using BPT_Service.Application.RoleService.Query.GetListFunctionWithRole;
+using BPT_Service.Application.RoleService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
@@ -5,17 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using BPT_Service.Application.RoleService.Command.AddRoleAsync;
-using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
-using BPT_Service.Application.RoleService.Command.SavePermissionRole;
-using BPT_Service.Application.RoleService.Command.UpdateRoleAsync;
-using BPT_Service.Application.RoleService.Query.GetAllPermission;
-using BPT_Service.Application.RoleService.Query.GetAllAsync;
-using BPT_Service.Application.RoleService.Query.GetAllPagingAsync;
-using BPT_Service.Application.RoleService.Query.GetListFunctionWithRole;
-using BPT_Service.Application.RoleService.Query.GetByIdAsync;
-using BPT_Service.Application.RoleService.ViewModel;
-
 namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]

@@ -28,7 +28,6 @@ namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
             var data = query.Select(x => new AppRoleViewModel
             {
                 Name = x.Name,
-                NameVietNamese = x.NameVietNamese,
                 Id = x.Id,
                 Description = x.Description
             }).ToList();

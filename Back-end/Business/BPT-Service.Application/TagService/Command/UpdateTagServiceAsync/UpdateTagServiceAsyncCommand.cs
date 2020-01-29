@@ -13,21 +13,44 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
         {
             _tagRepository = tagRepository;
         }
-        public async Task<bool> ExecuteAsync(TagViewModel userVm)
+        public async Task<CommandResult<TagViewModel>> ExecuteAsync(TagViewModel userVm)
         {
-            var TagUpdate = await _tagRepository.FindByIdAsync(Guid.Parse(userVm.Id));
-            if (TagUpdate != null)
+            try
             {
-                Tag tag = new Tag();
-                tag.Id = Guid.Parse(userVm.Id);
-                tag.TagName = userVm.TagName;
-                tag.Description = userVm.Description;
-                _tagRepository.Update(tag);
-                return true;
+                var TagUpdate = await _tagRepository.FindByIdAsync(Guid.Parse(userVm.Id));
+                if (TagUpdate != null)
+                {
+                    Tag tag = new Tag();
+                    tag.Id = Guid.Parse(userVm.Id);
+                    tag.TagName = userVm.TagName;
+                    _tagRepository.Update(tag);
+                    await _tagRepository.SaveAsync();
+                    return new CommandResult<TagViewModel>
+                    {
+                        isValid = true,
+                        myModel = new TagViewModel
+                        {
+                            Id = tag.Id.ToString(),
+                            TagName = tag.TagName
+                        }
+                    };
+                }
+                else
+                {
+                    return new CommandResult<TagViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Cannot find Tag"
+                    };
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                return false;
+                return new CommandResult<TagViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
             }
         }
     }

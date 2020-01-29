@@ -22,7 +22,6 @@ namespace BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryServi
                 Id = x.Id,
                 CategoryName = x.CategoryName,
                 Description = x.Description,
-                NameVietnamese = x.NameVietnamese
             }).ToList();
             return categoryViewModels;
         }

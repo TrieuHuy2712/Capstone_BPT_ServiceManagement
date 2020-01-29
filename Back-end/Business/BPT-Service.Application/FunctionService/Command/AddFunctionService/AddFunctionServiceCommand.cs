@@ -14,7 +14,39 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
         {
             _functionRepository = functionRepository;
         }
-        public async Task<bool> ExecuteAsync(FunctionViewModelinFunctionService function)
+        public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
+        {
+            try
+            {
+                var mappingFunction = MappingFunction(function);
+                await _functionRepository.Add(mappingFunction);
+                await _functionRepository.SaveAsync();
+                return new CommandResult<FunctionViewModelinFunctionService>
+                {
+                    isValid = true,
+                    myModel = new FunctionViewModelinFunctionService
+                    {
+                        IconCss = mappingFunction.IconCss,
+                        Id = mappingFunction.Id,
+                        Name = mappingFunction.Name,
+                        ParentId = mappingFunction.ParentId,
+                        SortOrder = mappingFunction.SortOrder,
+                        Status = mappingFunction.Status,
+                        URL = mappingFunction.URL
+                    }
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new CommandResult<FunctionViewModelinFunctionService>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
+        }
+        
+        public Function MappingFunction(FunctionViewModelinFunctionService function)
         {
             Function newfunction = new Function();
             newfunction.Id = function.Id;
@@ -24,9 +56,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             newfunction.SortOrder = function.SortOrder;
             newfunction.Status = function.Status;
             newfunction.URL = function.URL;
-            newfunction.NameVietNamese = function.NameVietNamese;
-            _functionRepository.Add(newfunction);
-            return true;
+            return newfunction;
         }
     }
 }

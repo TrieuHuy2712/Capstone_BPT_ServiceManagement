@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BPT_Service.Application.FunctionService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 
@@ -13,19 +14,36 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
         {
             _functionRepository = functionRepository;
         }
-        public async Task<bool> ExecuteAsync(string id)
+        public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(string id)
         {
-            var getChildItem = await _functionRepository.FindAllAsync(x => x.ParentId == id && x.ParentId != null);
-            if (getChildItem.Count() > 0)
+            try
             {
-                foreach (var item in getChildItem)
+                var getChildItem = await _functionRepository.FindAllAsync(x => x.ParentId == id && x.ParentId != null);
+                if (getChildItem.Count() > 0)
                 {
-                    item.ParentId = null;
-                    _functionRepository.Update(item);
+                    foreach (var item in getChildItem)
+                    {
+                        item.ParentId = null;
+                        _functionRepository.Update(item);
+                    }
                 }
+                _functionRepository.Remove(id);
+                await _functionRepository.SaveAsync();
+                return new CommandResult<FunctionViewModelinFunctionService>
+                {
+                    isValid = true,
+                    myModel = null
+                };
             }
-            _functionRepository.Remove(id);
-            return true;
+            catch (System.Exception ex)
+            {
+                return new CommandResult<FunctionViewModelinFunctionService>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
+
         }
     }
 }

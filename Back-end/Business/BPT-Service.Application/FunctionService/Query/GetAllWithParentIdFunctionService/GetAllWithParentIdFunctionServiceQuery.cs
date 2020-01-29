@@ -25,7 +25,6 @@ namespace BPT_Service.Application.FunctionService.Query.GetAllWithParentIdFuncti
                 ParentId = x.ParentId,
                 SortOrder = x.SortOrder,
                 Status = x.Status,
-                NameVietNamese = x.NameVietNamese,
                 URL = x.URL
             });
         }

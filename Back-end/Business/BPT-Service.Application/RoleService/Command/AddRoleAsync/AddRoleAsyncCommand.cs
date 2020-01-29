@@ -9,22 +9,43 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
     public class AddRoleAsyncCommand : IAddRoleAsyncCommand
     {
         private readonly RoleManager<AppRole> _roleManager;
-        private  readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         public AddRoleAsyncCommand(RoleManager<AppRole> roleManager,
-        IUnitOfWork unitOfWork){
+        IUnitOfWork unitOfWork)
+        {
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> ExecuteAync(AppRoleViewModel roleVm)
+        public async Task<CommandResult<AppRoleViewModel>> ExecuteAync(AppRoleViewModel roleVm)
         {
-           var role = new AppRole()
+            try
             {
-                Name = roleVm.Name,
-                Description = roleVm.Description
-            };
-            var result = await _roleManager.CreateAsync(role);
-            _unitOfWork.Commit();
-            return result.Succeeded;
+                var role = new AppRole()
+                {
+                    Name = roleVm.Name,
+                    Description = roleVm.Description
+                };
+                var result = await _roleManager.CreateAsync(role);
+                _unitOfWork.Commit();
+                return new CommandResult<AppRoleViewModel>
+                {
+                    isValid = result.Succeeded,
+                    myModel = new AppRoleViewModel
+                    {
+                        Description = role.Description,
+                        Name = role.Name,
+                        Id = role.Id
+                    }
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new CommandResult<AppRoleViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.ToString()
+                };
+            }
         }
     }
 }

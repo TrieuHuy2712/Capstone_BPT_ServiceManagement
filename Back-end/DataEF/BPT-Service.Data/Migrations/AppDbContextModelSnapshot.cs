@@ -32,10 +32,6 @@ namespace BPT_Service.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("NameVietNamese")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(125);
-
                     b.Property<string>("NormalizedName")
                         .HasColumnType("TEXT");
 
@@ -129,13 +125,26 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<string>("NameVietnamese")
-                        .IsRequired()
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.CityProvince", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Province")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("CityProvinces");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.Function", b =>
@@ -147,11 +156,6 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("NameVietNamese")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
@@ -221,6 +225,9 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CityId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
@@ -250,30 +257,11 @@ namespace BPT_Service.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Provider");
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("ProviderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProviderId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("ProviderService");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderNew", b =>
@@ -308,6 +296,27 @@ namespace BPT_Service.Data.Migrations
                     b.HasIndex("ProviderId");
 
                     b.ToTable("ProviderNews");
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ProviderService");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.Service", b =>
@@ -375,15 +384,9 @@ namespace BPT_Service.Data.Migrations
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ServiceImage", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
@@ -391,37 +394,7 @@ namespace BPT_Service.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Path")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ServiceId")
@@ -429,12 +402,6 @@ namespace BPT_Service.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -560,10 +527,6 @@ namespace BPT_Service.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(200);
-
                     b.Property<string>("TagName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -683,6 +646,12 @@ namespace BPT_Service.Data.Migrations
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.Provider", b =>
                 {
+                    b.HasOne("BPT_Service.Model.Entities.CityProvince", "ServiceCityProvince")
+                        .WithMany("Providers")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
                         .WithMany("Providers")
                         .HasForeignKey("UserId")
@@ -690,7 +659,16 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderService", b =>
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderNew", b =>
+                {
+                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Provider", "Provider")
+                        .WithMany("ProviderNews")
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderService", b =>
                 {
                     b.HasOne("BPT_Service.Model.Entities.ServiceModel.Provider", "Provider")
                         .WithMany("ProviderServices")
@@ -701,15 +679,6 @@ namespace BPT_Service.Data.Migrations
                     b.HasOne("BPT_Service.Model.Entities.ServiceModel.Service", "Service")
                         .WithMany("ProviderServices")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderNew", b =>
-                {
-                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Provider", "Provider")
-                        .WithMany("ProviderNews")
-                        .HasForeignKey("ProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -46,7 +46,6 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRole
                     {
                         Id = x.Id,
                         Description = x.Description,
-                        NameVietNamese = x.NameVietNamese,
                         Name = x.Name
                     }).Where(x => x.Name == item).FirstOrDefaultAsync();
                     listRoleUser.Add(roleId);

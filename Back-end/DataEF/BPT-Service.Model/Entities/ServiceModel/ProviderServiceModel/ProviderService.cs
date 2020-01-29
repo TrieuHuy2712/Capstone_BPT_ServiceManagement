@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BPT_Service.Data.Infrastructure.SharedKernel;
 
-namespace BPT_Service.Model.Entities.ServiceModel
+namespace BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel
 {
     [Table("ProviderService")]
     public class ProviderService: DomainEntity<int>

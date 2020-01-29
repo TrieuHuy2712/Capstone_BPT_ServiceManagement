@@ -31,7 +31,6 @@ namespace BPT_Service.Data
                     Name = "Admin",
                     NormalizedName = "Admin",
                     Description = "Top manager",
-                    NameVietNamese = "Nguoi quan ly"
 
 
                 });
@@ -40,14 +39,12 @@ namespace BPT_Service.Data
                     Name = "Staff",
                     NormalizedName = "Staff",
                     Description = "Staff",
-                    NameVietNamese = "Nhan vien"
                 });
                 await _roleManager.CreateAsync(new AppRole()
                 {
                     Name = "Customer",
                     NormalizedName = "Customer",
                     Description = "Customer",
-                    NameVietNamese = "Khach hang"
                 });
             }
             if (!_userManager.Users.Any())
@@ -86,13 +83,11 @@ namespace BPT_Service.Data
                     {
                         CategoryName="Cleaner",
                         Description="This is cleaner",
-                        NameVietnamese="Dich vu don nha"
                     },
                     new Category()
                     {
                         CategoryName="Cleaner 1",
                         Description="This is cleaner 1",
-                        NameVietnamese="Dich vu don nha 1"
                     }
                 };
                 await _context.Categories.AddRangeAsync(categories);
@@ -102,18 +97,31 @@ namespace BPT_Service.Data
             {
                 List<Function> functions = new List<Function>()
                 {
-                    new Function() {Id = "SYSTEM", Name = "System",ParentId = null,SortOrder = 1,Status = Status.Active,URL = "/",IconCss = "fa-desktop",NameVietNamese="Cấu hình "  },
-                    new Function() {Id = "ROLE", Name = "Role",ParentId = "SYSTEM",SortOrder = 1,Status = Status.Active,URL = "/main/role/index",IconCss = "fa-home",NameVietNamese="Vai trò"  },
-                    new Function() {Id = "FUNCTION", Name = "Function",ParentId = "SYSTEM",SortOrder = 2,Status = Status.Active,URL = "/main/function/index",IconCss = "fa-home",NameVietNamese="Chức năng"  },
-                    new Function() {Id = "USER", Name = "User",ParentId = "SYSTEM",SortOrder =3,Status = Status.Active,URL = "/main/user/index",IconCss = "fa-home",NameVietNamese="Người dùng"  },
+                    new Function() {Id = "SYSTEM", Name = "System",ParentId = null,SortOrder = 1,Status = Status.Active,URL = "/",IconCss = "fa-desktop"},
+                    new Function() {Id = "ROLE", Name = "Role",ParentId = "SYSTEM",SortOrder = 1,Status = Status.Active,URL = "/main/role/index",IconCss = "fa-home"},
+                    new Function() {Id = "FUNCTION", Name = "Function",ParentId = "SYSTEM",SortOrder = 2,Status = Status.Active,URL = "/main/function/index",IconCss = "fa-home"},
+                    new Function() {Id = "USER", Name = "User",ParentId = "SYSTEM",SortOrder =3,Status = Status.Active,URL = "/main/user/index",IconCss = "fa-home"},
 
 
-                    new Function() {Id = "PROVIDER",Name = "Provider",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down",NameVietNamese="Nhà cung cấp"  },
-                    new Function() {Id = "SERVICE_CATEGORY",Name = "Category",ParentId = "PROVIDER",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down",NameVietNamese="Loại sản phẩm"  },
-                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "PROVIDER",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down",NameVietNamese="Thông tin sản phẩm"  },
-                    new Function() {Id = "SERVICE_TAG",Name = "Service_Tag",ParentId = "PROVIDER",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down",NameVietNamese="Đuôi"  },
+                    new Function() {Id = "PROVIDER",Name = "Provider",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "SERVICE_CATEGORY",Name = "Category",ParentId = "PROVIDER",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "PROVIDER",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "SERVICE_TAG",Name = "Service_Tag",ParentId = "PROVIDER",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
                 };
                 await _context.Functions.AddRangeAsync(functions);
+                await _context.SaveChangesAsync();
+            }
+            if (_context.CityProvinces.Count() == 0)
+            {
+                List<CityProvince> cities = new List<CityProvince>()
+                {
+                    new CityProvince() {City="Hà Nội",Province="Hà Nội"},
+                     new CityProvince() {City="Hồ Chí Minh",Province="Hồ Chí Minh"},
+                      new CityProvince() {City="Bảo Lộc",Province="Lâm Đồng"},
+                       new CityProvince() {City="Buôn Ma Thuột",Province="Đắk Lắk"},
+                        new CityProvince() {City="Đà Lạt",Province="Lâm Đồng"},
+                };
+                await _context.CityProvinces.AddRangeAsync(cities);
                 await _context.SaveChangesAsync();
             }
         }

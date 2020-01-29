@@ -23,7 +23,6 @@ namespace BPT_Service.Application.TagService.Query.GetAllServiceAsync
             {
                 Id = x.Id.ToString(),
                 TagName = x.TagName,
-                Description = x.Description,
             }).ToList();
         }
     }

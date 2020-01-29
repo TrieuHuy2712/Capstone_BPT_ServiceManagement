@@ -30,8 +30,7 @@ namespace BPT_Service.Data.Migrations
                     Name = table.Column<string>(nullable: true),
                     NormalizedName = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(maxLength: 250, nullable: true),
-                    NameVietNamese = table.Column<string>(maxLength: 125, nullable: true)
+                    Description = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,7 +130,6 @@ namespace BPT_Service.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CategoryName = table.Column<string>(nullable: false),
-                    NameVietnamese = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
@@ -140,12 +138,25 @@ namespace BPT_Service.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CityProvinces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    City = table.Column<string>(nullable: true),
+                    Province = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CityProvinces", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Functions",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    NameVietNamese = table.Column<string>(maxLength: 128, nullable: false),
                     URL = table.Column<string>(maxLength: 250, nullable: false),
                     ParentId = table.Column<string>(maxLength: 128, nullable: true),
                     IconCss = table.Column<string>(nullable: true),
@@ -163,39 +174,12 @@ namespace BPT_Service.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     TagName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tag", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Provider",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ProviderName = table.Column<string>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    TaxCode = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Provider", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Provider_AppUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AppUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -218,6 +202,39 @@ namespace BPT_Service.Data.Migrations
                         name: "FK_Service_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Provider",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ProviderName = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    TaxCode = table.Column<string>(nullable: false),
+                    CityId = table.Column<int>(nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: false),
+                    Address = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Provider", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Provider_CityProvinces_CityId",
+                        column: x => x.CityId,
+                        principalTable: "CityProvinces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Provider_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -248,57 +265,6 @@ namespace BPT_Service.Data.Migrations
                         name: "FK_Permissions_AppRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AppRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProviderNews",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: true),
-                    Author = table.Column<string>(nullable: true),
-                    Content = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    ProviderId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProviderNews", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProviderNews_Provider_ProviderId",
-                        column: x => x.ProviderId,
-                        principalTable: "Provider",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProviderService",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ServiceId = table.Column<Guid>(nullable: false),
-                    ProviderId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProviderService", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProviderService_Provider_ProviderId",
-                        column: x => x.ProviderId,
-                        principalTable: "Provider",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProviderService_Service_ServiceId",
-                        column: x => x.ServiceId,
-                        principalTable: "Service",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -364,21 +330,8 @@ namespace BPT_Service.Data.Migrations
                 name: "ServiceImage",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Path = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
@@ -477,6 +430,57 @@ namespace BPT_Service.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProviderNews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(nullable: true),
+                    Author = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    ProviderId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProviderNews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProviderNews_Provider_ProviderId",
+                        column: x => x.ProviderId,
+                        principalTable: "Provider",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProviderService",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ServiceId = table.Column<Guid>(nullable: false),
+                    ProviderId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProviderService", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProviderService_Provider_ProviderId",
+                        column: x => x.ProviderId,
+                        principalTable: "Provider",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProviderService_Service_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Service",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Permissions_FunctionId",
                 table: "Permissions",
@@ -486,6 +490,11 @@ namespace BPT_Service.Data.Migrations
                 name: "IX_Permissions_RoleId",
                 table: "Permissions",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Provider_CityId",
+                table: "Provider",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Provider_UserId",
@@ -626,6 +635,9 @@ namespace BPT_Service.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Service");
+
+            migrationBuilder.DropTable(
+                name: "CityProvinces");
 
             migrationBuilder.DropTable(
                 name: "AppUsers");

@@ -26,10 +26,6 @@ namespace BPT_Service.Model.Entities
         public string Name { set; get; }
 
         [Required]
-        [StringLength(128)]
-        public string NameVietNamese{set;get;}
-
-        [Required]
         [StringLength(250)]
         public string URL { set; get; }
 
