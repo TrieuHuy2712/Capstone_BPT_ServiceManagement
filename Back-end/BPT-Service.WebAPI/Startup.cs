@@ -70,6 +70,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
+using BPT_Service.Application.PostService.Command.RejectPostService;
+using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetPostServiceById;
 
 namespace BPT_Service.WebAPI
 {
@@ -194,6 +204,18 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingProviderServiceQuery, GetAllPagingProviderServiceQuery>();
             services.AddScoped<IGetAllProviderofUserServiceQuery, GetAllProviderofUserServiceQuery>();
             services.AddScoped<IGetByIdProviderServiceQuery, GetByIdProviderServiceQuery>();
+            services.AddScoped<ICheckUserIsProviderQuery,CheckUserProviderQuery>();
+
+            //Post service 
+            services.AddScoped<IApprovePostServiceCommand,ApprovePostServiceCommand>();
+            services.AddScoped<IDeleteServiceFromProviderCommand,DeleteServiceFromProviderCommand>();
+            services.AddScoped<IRegisterServiceFromProviderCommand,RegisterServiceFromProviderCommand>();
+            services.AddScoped<IDeleteServiceFromUserCommand,DeleteServiceFromUserCommand>();
+            services.AddScoped<IRegisterServiceFromUserCommand,RegisterServiceFromUserCommand>();
+            services.AddScoped<IRejectPostServiceCommand,RejectPostServiceCommand>();
+            services.AddScoped<IUpdatePostServiceCommand,UpdatePostServiceCommand>();
+            services.AddScoped<IGetAllPagingPostServiceQuery,GetAllPagingPostServiceQuery>();
+            services.AddScoped<IGetPostServiceByIdQuery,GetPostServiceByIdQuery>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();

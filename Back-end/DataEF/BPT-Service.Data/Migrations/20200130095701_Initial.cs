@@ -514,7 +514,8 @@ namespace BPT_Service.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProviderService_ServiceId",
                 table: "ProviderService",
-                column: "ServiceId");
+                column: "ServiceId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Service_CategoryId",
@@ -569,7 +570,8 @@ namespace BPT_Service.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserService_ServiceId",
                 table: "UserService",
-                column: "ServiceId");
+                column: "ServiceId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserService_UserId",

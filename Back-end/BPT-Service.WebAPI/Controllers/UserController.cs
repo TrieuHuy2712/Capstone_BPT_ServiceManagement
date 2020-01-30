@@ -56,7 +56,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpGet("GetAllPaging")]
         public async Task<IActionResult> GetAllPagingUser(string keyword, int page, int pageSize)
         {
-            var model = _getPagingUserService.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getPagingUserService.ExecuteAsync(keyword, page, pageSize);
             return new ObjectResult(model);
         }
 

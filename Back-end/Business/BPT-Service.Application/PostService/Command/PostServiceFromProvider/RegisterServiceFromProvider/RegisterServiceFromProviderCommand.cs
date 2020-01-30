@@ -65,7 +65,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
 
                 var getIdProvider = _getIdProvider.ExecuteAsync(Guid.Parse(userId)).Result.myModel.Id;
                 var mappingService = MappingService(vm, getIdProvider);
-                await _postServiceRepository.Add(mappingService);
+
 
                 foreach (var item in newTag)
                 {
@@ -73,7 +73,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     mappingTag.TagId = item.Id;
                     mappingService.TagServices.Add(mappingTag);
                 }
-
+                await _postServiceRepository.Add(mappingService);
                 await _tagServiceRepository.SaveAsync();
                 await _postServiceRepository.SaveAsync();
 
@@ -110,12 +110,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 ServiceId = x.ServiceId
             }).ToList();
 
-            sv.ProviderServices = vm.serviceofProvider.Select(x => new Model.Entities.ServiceModel.ProviderServiceModel.ProviderService
-            {
-                ProviderId = idProvider,
-                ServiceId = x.ServiceId
-            }).ToList();
-
+            sv.ProviderServices.ProviderId = idProvider;
+            sv.ProviderServices.ServiceId = vm.Id;
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
             {
                 ServiceId = x.ServiceId,

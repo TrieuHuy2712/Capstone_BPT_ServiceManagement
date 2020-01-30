@@ -46,14 +46,14 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpGet("GetAllTag")]
         public async Task<IActionResult> GetAllTag()
         {
-            var model = _getAllTagService.ExecuteAsync();
+            var model = await _getAllTagService.ExecuteAsync();
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetTagById")]
         public async Task<IActionResult> GetAllFillter(Guid id)
         {
-            var model = _getByIdTagService.ExecuteAsync(id);
+            var model = await _getByIdTagService.ExecuteAsync(id);
             return new OkObjectResult(model);
         }
 

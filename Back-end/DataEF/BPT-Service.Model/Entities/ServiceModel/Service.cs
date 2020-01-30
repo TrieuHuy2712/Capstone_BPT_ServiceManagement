@@ -34,9 +34,9 @@ namespace BPT_Service.Model.Entities.ServiceModel
 
         public Status Status { get; set; }
 
-        public ICollection<ProviderService> ProviderServices { get; set; }
+        public virtual ProviderService ProviderServices { get; set; }
 
-        public ICollection<UserService> UserServices { get; set; }
+        public virtual UserService UserServices { get; set; }
 
         public ICollection<TagService> TagServices { get; set; }
 

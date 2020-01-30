@@ -23,9 +23,9 @@ namespace BPT_Service.Application.PostService.ViewModel
 
         public Status Status { get; set; }
         public List<PostServiceImageViewModel> listImages { get; set; }
-        public List<ServiceofProviderViewModel> serviceofProvider { get; set; }
+        public ServiceofProviderViewModel serviceofProvider { get; set; }
         public List<TagofServiceViewModel> tagofServices { get; set; }
-        public List<ServiceofUserViewModel> userofServices { get; set; }
+        public ServiceofUserViewModel userofServices { get; set; }
 
     }
     public class PostServiceImageViewModel
@@ -53,6 +53,7 @@ namespace BPT_Service.Application.PostService.ViewModel
     public class TagofServiceViewModel
     {
         public bool isAdd { get; set; }
+        public bool isDelete { get; set; }
         public string TagName { get; set; }
         public Guid ServiceId { get; set; }
 

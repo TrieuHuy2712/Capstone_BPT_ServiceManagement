@@ -36,7 +36,7 @@ namespace BPT_Service.Data
         }
         public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).ToListAsync();
+            return await this.FindAll(predicate, (Expression<Func<T, object>>[])includeProperties).ToListAsync();
         }
 
         public async Task<T> FindByIdAsync(K id, params Expression<Func<T, object>>[] includeProperties)

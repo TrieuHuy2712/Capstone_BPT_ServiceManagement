@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200129105459_Initial")]
+    [Migration("20200130095701_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -316,7 +316,8 @@ namespace BPT_Service.Data.Migrations
 
                     b.HasIndex("ProviderId");
 
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("ServiceId")
+                        .IsUnique();
 
                     b.ToTable("ProviderService");
                 });
@@ -355,6 +356,39 @@ namespace BPT_Service.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Service");
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ServiceComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentOfRating")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ServiceComment");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ServiceFollowing", b =>
@@ -463,7 +497,7 @@ namespace BPT_Service.Data.Migrations
                     b.ToTable("TagService");
                 });
 
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserService", b =>
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserServiceModel.UserService", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -477,44 +511,12 @@ namespace BPT_Service.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("ServiceId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserService");
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserServiceModel.ServiceComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ContentOfRating")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ParentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ServiceComment");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.Tag", b =>
@@ -679,8 +681,8 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BPT_Service.Model.Entities.ServiceModel.Service", "Service")
-                        .WithMany("ProviderServices")
-                        .HasForeignKey("ServiceId")
+                        .WithOne("ProviderServices")
+                        .HasForeignKey("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderService", "ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -690,6 +692,21 @@ namespace BPT_Service.Data.Migrations
                     b.HasOne("BPT_Service.Model.Entities.Category", "ServiceCategory")
                         .WithMany("Services")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ServiceComment", b =>
+                {
+                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Service", "Service")
+                        .WithMany("ServiceComments")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
+                        .WithMany("ServiceComments")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -748,31 +765,16 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserService", b =>
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserServiceModel.UserService", b =>
                 {
                     b.HasOne("BPT_Service.Model.Entities.ServiceModel.Service", "Service")
-                        .WithMany("UserServices")
-                        .HasForeignKey("ServiceId")
+                        .WithOne("UserServices")
+                        .HasForeignKey("BPT_Service.Model.Entities.ServiceModel.UserServiceModel.UserService", "ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
                         .WithMany("UserServices")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.UserServiceModel.ServiceComment", b =>
-                {
-                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Service", "Service")
-                        .WithMany("ServiceComments")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
-                        .WithMany("ServiceComments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

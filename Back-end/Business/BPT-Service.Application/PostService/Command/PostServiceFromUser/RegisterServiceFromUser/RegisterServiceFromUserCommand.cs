@@ -104,11 +104,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 ServiceId = x.ServiceId
             }).ToList();
 
-            sv.UserServices = vm.userofServices.Select(x => new Model.Entities.ServiceModel.UserServiceModel.UserService
-            {
-                ServiceId = x.ServiceId,
-                UserId = idUser,
-            }).ToList();
+            sv.UserServices.UserId = idUser;
+            sv.UserServices.ServiceId = vm.Id;
 
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
             {
