@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using BPT_Service.Data.Infrastructure.SharedKernel;
 using BPT_Service.Model.Interfaces;
 
-namespace BPT_Service.Model.Entities.ServiceModel.UserServiceModel
+namespace BPT_Service.Model.Entities.ServiceModel
 {
     [Table("ServiceComment")]
     public class ServiceComment : DomainEntity<Guid>, IDateTracking

@@ -18,7 +18,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
         {
             try
             {
-                var getChildItem = await _functionRepository.FindAllAsync(x => x.ParentId == id && x.ParentId != null);
+                var getChildItem = await _functionRepository.FindAllAsync(x => x.ParentId == id);
                 if (getChildItem.Count() > 0)
                 {
                     foreach (var item in getChildItem)

@@ -15,7 +15,7 @@ namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
         {
             _userManager = userManager;
         }
-        public PagedResult<AppUserViewModelinUserService> ExecuteAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<AppUserViewModelinUserService>> ExecuteAsync(string keyword, int page, int pageSize)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(keyword))

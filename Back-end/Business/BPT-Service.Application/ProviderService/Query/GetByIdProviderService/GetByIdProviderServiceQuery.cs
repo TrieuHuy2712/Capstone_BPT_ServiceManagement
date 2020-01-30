@@ -54,7 +54,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,
-                    myModel = null
+                    errorMessage = ex.InnerException.ToString()
                 };
             }
         }

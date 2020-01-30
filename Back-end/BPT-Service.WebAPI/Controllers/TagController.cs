@@ -76,8 +76,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _addTagService.ExecuteAsync(tagVm);
-                return new OkObjectResult(tagVm);
+                var execute = await _addTagService.ExecuteAsync(tagVm);
+                return new OkObjectResult(execute);
             }
         }
         #endregion
@@ -93,8 +93,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _updateTagService.ExecuteAsync(tagVM);
-                return new OkObjectResult(tagVM);
+                var execute = await _updateTagService.ExecuteAsync(tagVM);
+                return new OkObjectResult(execute);
             }
         }
         #endregion
@@ -109,8 +109,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _deleteTagService.ExecuteAsync(id);
-                return new OkObjectResult(id);
+                var execute = await _deleteTagService.ExecuteAsync(id);
+                return new OkObjectResult(execute);
             }
         }
         #endregion

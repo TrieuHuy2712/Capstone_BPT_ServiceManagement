@@ -62,7 +62,13 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
             catch (System.Exception)
             {
 
-                throw;
+                return new PagedResult<ProviderServiceViewModel>()
+                {
+                    Results = null,
+                    CurrentPage = page,
+                    RowCount = 0,
+                    PageSize = pageSize
+                };
             }
         }
     }

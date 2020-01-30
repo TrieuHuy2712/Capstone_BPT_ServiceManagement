@@ -131,8 +131,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _adddFunctionService.ExecuteAsync(functionVm);
-                return new OkObjectResult(functionVm);
+                var execute = await _adddFunctionService.ExecuteAsync(functionVm);
+                return new OkObjectResult(execute);
             }
         }
 
@@ -151,8 +151,8 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 else
                 {
-                    await _updateParentFunctionService.ExecuteAsync(sourceId, targetId, items);
-                    return new OkResult();
+                    var execute = await _updateParentFunctionService.ExecuteAsync(sourceId, targetId, items);
+                    return new OkObjectResult(execute);
                 }
             }
         }
@@ -172,8 +172,8 @@ namespace BPT_Service.WebAPI.Controllers
                 }
                 else
                 {
-                    await _reOrderFunctionService.ExecuteAsync(sourceId, targetId);
-                    return new OkObjectResult(sourceId);
+                    var execute = await _reOrderFunctionService.ExecuteAsync(sourceId, targetId);
+                    return new OkObjectResult(execute);
                 }
             }
         }
@@ -190,8 +190,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _updateFunctionService.ExecuteAsync(functionVm);
-                return new OkObjectResult(functionVm);
+                var execute = await _updateFunctionService.ExecuteAsync(functionVm);
+                return new OkObjectResult(execute);
             }
         }
         #endregion
@@ -206,8 +206,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _deleteFunctionService.ExecuteAsync(id);
-                return new OkObjectResult(id.FirstOrDefault());
+                var execute = await _deleteFunctionService.ExecuteAsync(id);
+                return new OkObjectResult(execute);
             }
         }
         #endregion

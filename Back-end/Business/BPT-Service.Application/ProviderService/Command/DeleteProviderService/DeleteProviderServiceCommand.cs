@@ -21,31 +21,43 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
         }
         public async Task<CommandResult<Provider>> ExecuteAsync(Guid id)
         {
-             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            if (userId == null)
+            try
+            {
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if (userId == null)
+                {
+                    return new CommandResult<Provider>
+                    {
+                        isValid = false,
+                        myModel = null
+                    };
+                }
+                var getId = await _providerRepository.FindByIdAsync(id);
+                if (getId != null && getId.AppUser.Id == Guid.Parse(userId))
+                {
+                    _providerRepository.Remove(id);
+                    await _providerRepository.SaveAsync();
+                    return new CommandResult<Provider>
+                    {
+                        isValid = true,
+                        myModel = getId
+                    };
+                }
+                else
+                {
+                    return new CommandResult<Provider>
+                    {
+                        isValid = false,
+                        errorMessage = "Cannot find Id"
+                    };
+                }
+            }
+            catch (System.Exception ex)
             {
                 return new CommandResult<Provider>
                 {
                     isValid = false,
-                    myModel = null
-                };
-            }
-            var getId = await _providerRepository.FindByIdAsync(id);
-            if (getId != null && getId.AppUser.Id == Guid.Parse(userId))
-            {
-                _providerRepository.Remove(id);
-                return new CommandResult<Provider>
-                {
-                    isValid = true,
-                    myModel = getId
-                };
-            }
-            else
-            {
-                return new CommandResult<Provider>
-                {
-                    isValid = false,
-                    myModel = null
+                    errorMessage = ex.InnerException.ToString()
                 };
             }
         }

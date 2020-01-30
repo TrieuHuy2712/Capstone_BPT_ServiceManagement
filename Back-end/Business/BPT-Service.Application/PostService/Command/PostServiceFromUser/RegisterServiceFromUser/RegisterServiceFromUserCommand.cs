@@ -3,38 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BPT_Service.Application.PostService.ViewModel;
-using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
-using BPT_Service.Application.TagService.Command.AddServiceAsync;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider
+namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser
 {
-    public class RegisterServiceFromProviderCommand : IRegisterServiceFromProviderCommand
+    public class RegisterServiceFromUserCommand : IRegisterServiceFromUserCommand
     {
         private readonly IRepository<Service, Guid> _postServiceRepository;
         private readonly IRepository<ServiceImage, int> _imageServiceRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
-        private readonly IGetByIdProviderServiceQuery _getIdProvider;
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
-        , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+        public RegisterServiceFromUserCommand(IRepository<Service, Guid> postServiceRepository,
         IRepository<ServiceImage, int> imageServiceRepository,
         IRepository<Tag, Guid> tagServiceRepository,
-        IGetByIdProviderServiceQuery getIdProvider,
+        IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
         IHttpContextAccessor httpContextAccessor)
         {
             _postServiceRepository = postServiceRepository;
-            _providerServiceRepository = providerServiceRepository;
             _imageServiceRepository = imageServiceRepository;
-            _getIdProvider = getIdProvider;
             _httpContextAccessor = httpContextAccessor;
             _tagServiceRepository = tagServiceRepository;
+            _userServiceRepository = userServiceRepository;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -63,8 +58,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 }
                 await _tagServiceRepository.Add(newTag);
 
-                var getIdProvider = _getIdProvider.ExecuteAsync(Guid.Parse(userId)).Result.myModel.Id;
-                var mappingService = MappingService(vm, getIdProvider);
+                var mappingService = MappingService(vm, Guid.Parse(userId));
                 await _postServiceRepository.Add(mappingService);
 
                 foreach (var item in newTag)
@@ -94,7 +88,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             }
         }
 
-        private Service MappingService(PostServiceViewModel vm, Guid idProvider)
+        private Service MappingService(PostServiceViewModel vm, Guid idUser)
         {
             Service sv = new Service();
             sv.CategoryId = vm.CategoryId;
@@ -110,10 +104,10 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 ServiceId = x.ServiceId
             }).ToList();
 
-            sv.ProviderServices = vm.serviceofProvider.Select(x => new Model.Entities.ServiceModel.ProviderServiceModel.ProviderService
+            sv.UserServices = vm.userofServices.Select(x => new Model.Entities.ServiceModel.UserServiceModel.UserService
             {
-                ProviderId = idProvider,
-                ServiceId = x.ServiceId
+                ServiceId = x.ServiceId,
+                UserId = idUser,
             }).ToList();
 
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService

@@ -100,27 +100,29 @@ namespace BPT_Service.WebAPI.Controllers
             if (!roleVm.Id.HasValue)
             {
                 var notificationId = Guid.NewGuid().ToString();
-                await _addRoleService.ExecuteAync(roleVm);
+                var execute = await _addRoleService.ExecuteAync(roleVm);
+                return new OkObjectResult(execute);
             }
             else
             {
-                await _updateRoleService.ExecuteAsync(roleVm);
+                var execute = await _updateRoleService.ExecuteAsync(roleVm);
+                return new OkObjectResult(execute);
             }
-            return new OkObjectResult(roleVm);
+
         }
 
         [HttpPost("ListAllFunction/{roleId}")]
-        public IActionResult ListAllFunction([FromBody]Guid roleId)
+        public async Task<IActionResult> ListAllFunction([FromBody]Guid roleId)
         {
-            var functions = _getListFunctionwithRoleService.ExecuteAsync(roleId);
+            var functions = await _getListFunctionwithRoleService.ExecuteAsync(roleId);
             return new OkObjectResult(functions);
         }
 
         [HttpPost("SavePermission")]
-        public IActionResult SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
+        public async Task<IActionResult> SavePermission([FromBody]RolePermissionViewModel rolePermissionViewModel)
         {
-            _savePerRoleService.ExecuteAsync(rolePermissionViewModel);
-            return new OkObjectResult(rolePermissionViewModel);
+            var execute = await _savePerRoleService.ExecuteAsync(rolePermissionViewModel);
+            return new OkObjectResult(execute);
         }
         #endregion
 
@@ -132,8 +134,8 @@ namespace BPT_Service.WebAPI.Controllers
             {
                 return new BadRequestObjectResult(ModelState);
             }
-            await _deleteRoleService.ExecuteAsync(id);
-            return new OkObjectResult(id);
+            var execute = await _deleteRoleService.ExecuteAsync(id);
+            return new OkObjectResult(execute);
         }
         #endregion
     }

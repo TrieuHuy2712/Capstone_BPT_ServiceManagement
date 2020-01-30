@@ -35,7 +35,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                     };
                 }
                 var mappingProvider = MappingProvider(vm, Guid.Parse(userId));
-                _providerRepository.Add(mappingProvider);
+                await _providerRepository.Add(mappingProvider);
                 await _providerRepository.SaveAsync();
                 vm.Id = mappingProvider.Id;
                 return new CommandResult<ProviderServiceViewModel>

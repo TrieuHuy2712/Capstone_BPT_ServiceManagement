@@ -81,7 +81,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpPost("CreateNewuser")]
         public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModelinUserService userVm, string password)
         {
-            var model = _addCustomerService.ExecuteAsync(userVm, password);
+            var model = await _addCustomerService.ExecuteAsync(userVm, password);
             return new ObjectResult(model);
         }
 
@@ -89,8 +89,8 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpPost("LoginExternal")]
         public async Task<IActionResult> LoginExternal([FromBody]AppUserViewModelinUserService userViewModel)
         {
-            var model =_addExternalService.ExecuteAsync(userViewModel);
-            return new ObjectResult(model.Result);
+            var model = await _addExternalService.ExecuteAsync(userViewModel);
+            return new ObjectResult(model);
         }
 
         [HttpPost("AddNewUser")]
@@ -105,7 +105,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var model = _deleteUserService.ExecuteAsync(id);
+            var model = await _deleteUserService.ExecuteAsync(id);
             return new ObjectResult(model);
         }
         #endregion

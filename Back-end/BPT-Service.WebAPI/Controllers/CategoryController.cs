@@ -74,8 +74,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _addCategoryService.ExecuteAsync(categoryVm);
-                return new OkObjectResult(categoryVm);
+                var execute = await _addCategoryService.ExecuteAsync(categoryVm);
+                return new OkObjectResult(execute);
             }
         }
         #endregion
@@ -91,8 +91,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _updateCategoryService.ExecuteAsync(categoryVm);
-                return new OkObjectResult(categoryVm);
+                var execute = await _updateCategoryService.ExecuteAsync(categoryVm);
+                return new OkObjectResult(execute);
             }
         }
         #endregion
@@ -107,8 +107,8 @@ namespace BPT_Service.WebAPI.Controllers
             }
             else
             {
-                await _deleteCategoryService.ExecuteAsync(id);
-                return new OkObjectResult(id);
+                var execute = await _deleteCategoryService.ExecuteAsync(id);
+                return new OkObjectResult(execute);
             }
         }
         #endregion

@@ -48,6 +48,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                 }
                 var map = MappingProvider(mappingProvider, vm);
                 _providerRepository.Update(map);
+                await _providerRepository.SaveAsync();
 
                 //Set content for email
                 var content = "Your provider: " + vm.ProviderName + " has been approved. Please check in our system";
@@ -64,7 +65,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,
-                    myModel = vm
+                    errorMessage = ex.InnerException.ToString()
                 };
             }
         }
