@@ -4,7 +4,7 @@ using BPT_Service.Model.Entities;
 
 namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider
 {
-    public interface IApproveNewsProviderService
+    public interface IApproveNewsProviderServiceCommand
     {
          Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm);
     }

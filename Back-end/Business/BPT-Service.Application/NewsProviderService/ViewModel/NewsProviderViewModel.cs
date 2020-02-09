@@ -14,5 +14,6 @@ namespace BPT_Service.Application.NewsProviderService.ViewModel
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
         public Guid ProviderId { get; set; }
+        public string ProviderName { get; set; }
     }
 }

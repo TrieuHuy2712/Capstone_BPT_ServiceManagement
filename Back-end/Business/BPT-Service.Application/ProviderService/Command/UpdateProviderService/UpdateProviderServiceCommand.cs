@@ -1,71 +1,62 @@
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
-using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Http;
 
-namespace BPT_Service.Application.ProviderService.Command.RegisterProviderService
+namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
 {
-    public class RegisterProviderServiceCommand : IRegisterProviderServiceCommand
+    public class UpdateProviderServiceCommand : IUpdateProviderServiceCommand
     {
-        private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public RegisterProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
-        IRepository<Provider, Guid> providerRepository)
+        private readonly IRepository<Provider, Guid> _providerRepostiroy;
+        public UpdateProviderServiceCommand(IRepository<Provider, Guid> providerRepostiroy)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _providerRepository = providerRepository;
+            _providerRepostiroy = providerRepostiroy;
         }
-
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
+                var getProviderService = await _providerRepostiroy.FindByIdAsync(vm.Id);
+                if (getProviderService != null)
                 {
+                    var mappingProvider = MappingProvider(vm);
+                    _providerRepostiroy.Update(mappingProvider);
+                    await _providerRepostiroy.SaveAsync();
                     return new CommandResult<ProviderServiceViewModel>
                     {
-                        isValid = false,
+                        isValid = true,
                         myModel = vm
                     };
                 }
-                var mappingProvider = MappingProvider(vm, Guid.Parse(userId));
-                await _providerRepository.Add(mappingProvider);
-                await _providerRepository.SaveAsync();
-                vm.Id = mappingProvider.Id;
                 return new CommandResult<ProviderServiceViewModel>
                 {
-                    isValid = true,
-                    myModel = vm
+                    isValid = false,
+                    errorMessage = "Cannot not find Id of Provider"
                 };
             }
             catch (System.Exception ex)
             {
-
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,
-                    myModel = vm,
                     errorMessage = ex.InnerException.ToString()
                 };
             }
         }
-        private Provider MappingProvider(ProviderServiceViewModel vm, Guid userId)
+
+        private Provider MappingProvider(ProviderServiceViewModel vm)
         {
             Provider pro = new Provider();
             pro.Id = vm.Id;
             pro.PhoneNumber = vm.PhoneNumber;
-            pro.Status = Status.Pending;
+            pro.Status = vm.Status;
             pro.CityId = vm.CityId;
-            pro.UserId = userId;
+            pro.UserId = vm.UserId;
             pro.TaxCode = vm.TaxCode;
             pro.Description = vm.Description;
-            pro.DateCreated = DateTime.Now;
+            pro.DateModified = DateTime.Now;
             pro.ProviderName = vm.ProviderName;
             pro.Address = vm.Address;
             return pro;
