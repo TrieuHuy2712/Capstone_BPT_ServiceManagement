@@ -8,6 +8,7 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -17,47 +18,48 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userRepository;
         public ApproveProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
-        IRepository<Provider, Guid> providerRepository)
+        IRepository<Provider, Guid> providerRepository,
+        UserManager<AppUser> userRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId)
         {
             try
             {
                  var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null || userId != vm.UserId)
+                if (userId == null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
-                        myModel = vm
                     };
                 }
-                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
+                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
                 if (mappingProvider != null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
-                        myModel = vm
                     };
                 }
-                var map = MappingProvider(mappingProvider, vm);
-                _providerRepository.Update(map);
+                mappingProvider.Status = Status.Active;
+                _providerRepository.Update(mappingProvider);
                 await _providerRepository.SaveAsync();
+                var userMail= await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
 
                 //Set content for email
-                var content = "Your provider: " + vm.ProviderName + " has been approved. Please check in our system";
+                var content = "Your provider: " + userMail.Email + " has been approved. Please check in our system";
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
                                 content, mappingProvider.AppUser.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
-                    myModel = vm
                 };
             }
             catch (Exception ex)
@@ -68,21 +70,6 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     errorMessage = ex.InnerException.ToString()
                 };
             }
-        }
-
-        private Provider MappingProvider(Provider pro, ProviderServiceViewModel vm)
-        {
-            pro.Id = Guid.Parse(vm.Id);
-            pro.PhoneNumber = vm.PhoneNumber;
-            pro.Status = Status.Active;
-            pro.CityId = vm.CityId;
-            pro.UserId = Guid.Parse(vm.UserId);
-            pro.TaxCode = vm.TaxCode;
-            pro.Description = vm.Description;
-            pro.DateCreated = DateTime.Now;
-            pro.ProviderName = vm.ProviderName;
-            pro.Address = vm.Address;
-            return pro;
         }
 
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)

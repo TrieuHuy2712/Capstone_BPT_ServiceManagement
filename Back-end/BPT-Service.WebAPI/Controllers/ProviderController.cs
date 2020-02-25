@@ -86,16 +86,16 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveProvider")]
-        public async Task<IActionResult> ApproveAProvider(ProviderServiceViewModel vm)
+        public async Task<IActionResult> ApproveAProvider(string providerId)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(providerId);
             return new OkObjectResult(model);
         }
 
         [HttpPost("RejectProvider")]
-        public async Task<IActionResult> RejectAProvider(ProviderServiceViewModel vm)
+        public async Task<IActionResult> RejectAProvider(string providerId)
         {
-            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectProviderServiceCommand.ExecuteAsync(providerId);
             return new OkObjectResult(model);
         }
 

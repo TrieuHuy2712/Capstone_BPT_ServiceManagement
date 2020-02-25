@@ -6,6 +6,6 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 {
     public interface IRejectProviderServiceCommand
     {
-         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm);
+         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string idProvider);
     }
 }

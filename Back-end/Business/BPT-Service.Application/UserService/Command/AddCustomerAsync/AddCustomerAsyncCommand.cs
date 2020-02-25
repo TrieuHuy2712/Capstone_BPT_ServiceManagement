@@ -14,7 +14,7 @@ namespace BPT_Service.Application.UserService.Command.AddCustomerAsync
         {
             _userManager = userManager;
         }
-        public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm, string password)
+        public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace BPT_Service.Application.UserService.Command.AddCustomerAsync
                         DateCreated = DateTime.Now,
                         DateModified = DateTime.Now,
                         Status = Status.Active
-                    }, password);
+                    }, userVm.Password);
                     var newUser = await _userManager.FindByNameAsync(userVm.UserName);
                     await _userManager.AddToRoleAsync(user, "Customer");
                     return new CommandResult<AppUserViewModelinUserService>

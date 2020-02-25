@@ -46,7 +46,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
         {
-            var user = await _resetPasswordCommand.ExecuteAsync(model.Username, model.OldPassword, model.NewPassword);
+            var user = await _resetPasswordCommand.ExecuteAsync(model);
             return new OkObjectResult(user);
         }
         #endregion
