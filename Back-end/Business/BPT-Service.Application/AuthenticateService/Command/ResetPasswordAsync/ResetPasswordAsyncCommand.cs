@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Model.Entities;
+using BPT_Service.WebAPI.Models.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync
@@ -14,13 +15,13 @@ namespace BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync
             _userManager = userManager;
 
         }
-        public async Task<bool> ExecuteAsync(string username, string oldPassword, string newPassword)
+        public async Task<bool> ExecuteAsync(ChangePasswordViewModel model)
         {
-             var user = await _userManager.FindByNameAsync(username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, oldPassword))
+             var user = await _userManager.FindByNameAsync(model.Username);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.OldPassword))
             {
                 string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+                IdentityResult passwordChangeResult = await _userManager.ResetPasswordAsync(user, resetToken, model.NewPassword);
                 if (passwordChangeResult.Succeeded)
                 {
                     return true;

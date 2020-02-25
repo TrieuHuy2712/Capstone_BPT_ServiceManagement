@@ -58,7 +58,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetProviderById")]
-        public async Task<IActionResult> GetProviderById(Guid id)
+        public async Task<IActionResult> GetProviderById(string id)
         {
             var model = await _getByIdProviderServiceQuery.ExecuteAsync(id);
             return new OkObjectResult(model);
@@ -72,7 +72,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpDelete("DeleteProvider")]
-        public async Task<IActionResult> DeleteAProvider(Guid id)
+        public async Task<IActionResult> DeleteAProvider(string id)
         {
             var model = await _deleteProviderServiceCommand.ExecuteAsync(id);
             return new OkObjectResult(model);

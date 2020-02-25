@@ -29,7 +29,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             try
             {
                  var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null || userId != vm.UserId.ToString())
+                if (userId == null || userId != vm.UserId)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
@@ -37,7 +37,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                         myModel = vm
                     };
                 }
-                var mappingProvider = await _providerRepository.FindByIdAsync(vm.Id);
+                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (mappingProvider != null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
@@ -72,11 +72,11 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 
         private Provider MappingProvider(Provider pro, ProviderServiceViewModel vm)
         {
-            pro.Id = vm.Id;
+            pro.Id = Guid.Parse(vm.Id);
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = Status.Active;
             pro.CityId = vm.CityId;
-            pro.UserId = vm.UserId;
+            pro.UserId = Guid.Parse(vm.UserId);
             pro.TaxCode = vm.TaxCode;
             pro.Description = vm.Description;
             pro.DateCreated = DateTime.Now;

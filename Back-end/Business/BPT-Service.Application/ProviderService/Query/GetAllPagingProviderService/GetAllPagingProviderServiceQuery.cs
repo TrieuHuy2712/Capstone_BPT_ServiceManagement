@@ -30,7 +30,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
 
                 var data = query.Select(x => new ProviderServiceViewModel
                 {
-                    Id = x.Id,
+                    Id = x.Id.ToString(),
                     Address = x.Address,
                     CityId = x.CityId,
                     DateCreated = x.DateCreated,

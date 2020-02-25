@@ -18,7 +18,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
         {
             try
             {
-                var getProviderService = await _providerRepostiroy.FindByIdAsync(vm.Id);
+                var getProviderService = await _providerRepostiroy.FindByIdAsync(Guid.Parse(vm.Id));
                 if (getProviderService != null)
                 {
                     var mappingProvider = MappingProvider(vm);
@@ -49,11 +49,11 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
         private Provider MappingProvider(ProviderServiceViewModel vm)
         {
             Provider pro = new Provider();
-            pro.Id = vm.Id;
+            pro.Id = Guid.Parse(vm.Id);
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = vm.Status;
             pro.CityId = vm.CityId;
-            pro.UserId = vm.UserId;
+            pro.UserId = Guid.Parse(vm.UserId);
             pro.TaxCode = vm.TaxCode;
             pro.Description = vm.Description;
             pro.DateModified = DateTime.Now;

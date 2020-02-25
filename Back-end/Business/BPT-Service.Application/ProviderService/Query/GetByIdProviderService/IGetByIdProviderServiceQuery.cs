@@ -7,6 +7,6 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
 {
     public interface IGetByIdProviderServiceQuery
     {
-         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(Guid id);
+         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string id);
     }
 }
