@@ -93,9 +93,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("RejectProvider")]
-        public async Task<IActionResult> RejectAProvider(string providerId)
+        public async Task<IActionResult> RejectAProvider(ProviderServiceViewModel vm)
         {
-            var model = await _rejectProviderServiceCommand.ExecuteAsync(providerId);
+            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
 

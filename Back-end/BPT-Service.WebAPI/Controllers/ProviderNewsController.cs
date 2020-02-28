@@ -46,9 +46,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveNewsProvider")]
-        public async Task<IActionResult> ApproveNewsProvider(NewsProviderViewModel vm)
+        public async Task<IActionResult> ApproveNewsProvider(int id)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(id);
 
             return new OkObjectResult(model);
         }
