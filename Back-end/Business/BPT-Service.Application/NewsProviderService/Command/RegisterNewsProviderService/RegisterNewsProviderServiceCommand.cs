@@ -40,7 +40,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                 var countProvider = 0;
                 foreach (var item in checkUser)
                 {
-                    if (item.Id == vm.ProviderId)
+                    if (item.Id == Guid.Parse(vm.ProviderId))
                     {
                         countProvider++;
                     }
@@ -53,7 +53,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                         myModel = vm
                     };
                 }
-                var getProvider = await _providerRepository.FindByIdAsync(vm.ProviderId);
+                var getProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.ProviderId));
                 if (getProvider == null)
                 {
                     return new CommandResult<NewsProviderViewModel>
@@ -87,7 +87,6 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
         private ProviderNew MappingProvider(NewsProviderViewModel vm, Guid providerId)
         {
             ProviderNew pro = new ProviderNew();
-            pro.Id = vm.Id;
             pro.Author = vm.Author;
             pro.Status = Status.Pending;
             pro.Author = vm.Author;

@@ -13,7 +13,8 @@ namespace BPT_Service.Application.NewsProviderService.ViewModel
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
-        public Guid ProviderId { get; set; }
+        public string ProviderId { get; set; }
         public string ProviderName { get; set; }
+        public string Reason { get; set; }
     }
 }

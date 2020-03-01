@@ -65,7 +65,7 @@ namespace BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsS
             pro.Author = vm.Author;
             pro.Status = vm.Status;
             pro.Author = vm.Author;
-            pro.ProviderId = vm.ProviderId;
+            pro.ProviderId = vm.ProviderId.ToString();
             pro.Title = vm.Title;
             pro.Content = vm.Content;
             pro.DateModified = DateTime.Now;

@@ -58,7 +58,6 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
         private Provider MappingProvider(ProviderServiceViewModel vm, Guid userId)
         {
             Provider pro = new Provider();
-            pro.Id = Guid.Parse(vm.Id);
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = Status.Pending;
             pro.CityId = vm.CityId;

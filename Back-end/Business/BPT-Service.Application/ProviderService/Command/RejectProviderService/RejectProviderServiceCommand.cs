@@ -29,7 +29,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
             _userRepository = userRepository;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string idProvider)
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                         myModel = null
                     };
                 }
-                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(idProvider));
+                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (mappingProvider != null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
@@ -57,7 +57,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 
                 var getEmail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policu";
+                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+vm.Reason;
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
                                 content, mappingProvider.AppUser.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>

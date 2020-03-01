@@ -4,10 +4,12 @@ using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Helpers.NewsProviderEmail;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -16,46 +18,53 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
     public class ApproveNewsProviderServiceCommand : IApproveNewsProviderServiceCommand
     {
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
+        private readonly UserManager<AppUser> _userRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ApproveNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository, IHttpContextAccessor httpContextAccessor)
+        public ApproveNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository,
+        IHttpContextAccessor httpContextAccessor,
+        UserManager<AppUser> userRepository,
+        IRepository<Provider, Guid> providerRepository)
         {
             _newProviderRepository = newProviderRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+            _providerRepository = providerRepository;
         }
-        public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
+        public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews)
         {
             try
             {
+                //Please check user has permission
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null || userId != vm.UserId)
+                if (userId == null)
                 {
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
-                        myModel = vm
                     };
                 }
-                var mappingProvider = await _newProviderRepository.FindByIdAsync(vm.Id);
+                var mappingProvider = await _newProviderRepository.FindByIdAsync(idNews);
                 if (mappingProvider != null)
                 {
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
-                        myModel = vm
                     };
                 }
-                var map = MappingNewProvider(mappingProvider, vm);
+                var map = MappingNewProvider(mappingProvider);
                 _newProviderRepository.Update(map);
                 await _newProviderRepository.SaveAsync();
 
+                var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == mappingProvider.ProviderId);
+                var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your news: " + vm.Title + " has been approved. Please check in our system";
+                var content = "Your news: " + mappingProvider.Title + " has been approved. Please check in our system";
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveNewsProviderEmailSetting.Subject,
-                                content, mappingProvider.Provider.AppUser.Email).Wait();
+                                content, getEmail.Email).Wait();
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = true,
-                    myModel = vm
                 };
             }
             catch (Exception ex)
@@ -68,7 +77,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             }
         }
 
-        private ProviderNew MappingNewProvider(ProviderNew proNew, NewsProviderViewModel vm)
+        private ProviderNew MappingNewProvider(ProviderNew proNew)
         {
             proNew.Status = Status.Active;
             return proNew;

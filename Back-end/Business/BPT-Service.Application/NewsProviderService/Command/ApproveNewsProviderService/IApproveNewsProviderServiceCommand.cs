@@ -6,6 +6,6 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
 {
     public interface IApproveNewsProviderServiceCommand
     {
-         Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm);
+         Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews);
     }
 }

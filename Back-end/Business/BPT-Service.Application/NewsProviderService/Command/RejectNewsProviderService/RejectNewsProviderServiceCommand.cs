@@ -5,10 +5,12 @@ using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Helpers.NewsProviderEmail;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -17,11 +19,18 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
     public class RejectNewsProviderServiceCommand : IRejectNewsProviderServiceCommand
     {
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
+        private readonly UserManager<AppUser> _userRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public RejectNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository, IHttpContextAccessor httpContextAccessor)
+        public RejectNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository,
+        IHttpContextAccessor httpContextAccessor,
+        UserManager<AppUser> userRepository,
+        IRepository<Provider, Guid> providerRepository)
         {
             _newProviderRepository = newProviderRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+            _providerRepository = providerRepository;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
@@ -46,14 +55,17 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                         myModel = vm
                     };
                 }
-                var map = MappingNewProvider(mappingProvider, vm);
+                var map = MappingNewProvider(mappingProvider);
                 _newProviderRepository.Update(map);
                 await _newProviderRepository.SaveAsync();
 
+                var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == mappingProvider.ProviderId);
+                var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
+
                 //Set content for email
-                var content = "Your news: " + vm.Title + " has been rejected. Please check in our system";
+                var content = "Your news: " + mappingProvider.Title + " has been rejected. Please check in our system. Because " + vm.Reason;
                 ContentEmail(KeySetting.SENDGRIDKEY, RejectNewsProviderEmailSetting.Subject,
-                                content, mappingProvider.Provider.AppUser.Email).Wait();
+                                content, getEmail.Email).Wait();
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = true,
@@ -69,7 +81,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                 };
             }
         }
-        private ProviderNew MappingNewProvider(ProviderNew proNew, NewsProviderViewModel vm)
+        private ProviderNew MappingNewProvider(ProviderNew proNew)
         {
             proNew.Status = Status.InActive;
             return proNew;
