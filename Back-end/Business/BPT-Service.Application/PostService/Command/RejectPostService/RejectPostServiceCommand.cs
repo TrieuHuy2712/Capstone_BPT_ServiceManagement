@@ -9,6 +9,8 @@ using SendGrid.Helpers.Mail;
 using SendGrid;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Identity;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 
 namespace BPT_Service.Application.PostService.Command.RejectPostService
 {
@@ -16,30 +18,103 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
     {
         private readonly IRepository<Service, Guid> _postServiceRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public RejectPostServiceCommand(IRepository<Service, Guid> postServiceRepository, IHttpContextAccessor httpContextAccessor)
+        private readonly UserManager<AppUser> _userRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+
+        public RejectPostServiceCommand(IRepository<Service, Guid> postServiceRepository,
+           IHttpContextAccessor httpContextAccessor,
+            UserManager<AppUser> userRepository,
+            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+            IRepository<Provider, Guid> providerRepository,
+            IGetPermissionActionQuery getPermissionActionQuery)
         {
             _postServiceRepository = postServiceRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+            _userServiceRepository = userServiceRepository;
+            _providerServiceRepository = providerServiceRepository;
+            _providerRepository = providerRepository;
+            _getPermissionActionQuery = getPermissionActionQuery;
         }
+
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
             try
             {
-                var getCurrentPost = await _postServiceRepository.FindByIdAsync(vm.Id);
+                var idUser = "";
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if (!await _getPermissionActionQuery.ExecuteAsync(userId, "Service", ActionSetting.CanUpdate))
+                {
+                    return new CommandResult<PostServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "You don't have permission"
+                    };
+                }
+                var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (getCurrentPost != null)
                 {
                     getCurrentPost.Status = Status.InActive;
                     _postServiceRepository.Update(getCurrentPost);
                     await _postServiceRepository.SaveAsync();
 
-                    //Set content for email
-                    var content = "Your provider: " + vm.ServiceName + " has been rejected. " + vm.Reason;
-                    ContentEmail(KeySetting.SENDGRIDKEY, RejectServiceEmailSetting.Subject,
-                                    content, vm.Email).Wait();
+                    //Check is UserService
+                    var serviceInformation = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(vm.Id));
+                    if (serviceInformation == null)
+                    {
+                        //Check is ProviderService
+                        var providerInformation = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(vm.Id));
+                        if (providerInformation != null)
+                        {
+                            var getProviderInformation = await _providerRepository.FindSingleAsync(x => x.Id == providerInformation.ProviderId);
+                            idUser = getProviderInformation.UserId.ToString();
+                        }
+                        else
+                        {
+                            return new CommandResult<PostServiceViewModel>
+                            {
+                                isValid = false,
+                            };
+                        }
+                    }
+                    else
+                    {
+                        idUser = serviceInformation.UserId.ToString();
+                    }
+
+                    if (idUser != "")
+                    {
+                        var findEmailUser = await _userRepository.FindByIdAsync(idUser);
+                        if (findEmailUser != null)
+                        {
+                            //Set content for email
+                            var content = "Your provider: " + getCurrentPost.ServiceName + " has been approved. Please check in our system. Because "+vm.Reason;
+                            ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
+                                            content, findEmailUser.Email).Wait();
+                        }
+                        else
+                        {
+                            return new CommandResult<PostServiceViewModel>
+                            {
+                                isValid = false,
+                            };
+                        }
+                    }
+                    else
+                    {
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = false,
+                        };
+                    }
+
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = vm
                     };
                 }
                 return new CommandResult<PostServiceViewModel>

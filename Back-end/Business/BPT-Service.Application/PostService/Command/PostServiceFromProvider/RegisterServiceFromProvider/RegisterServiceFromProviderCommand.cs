@@ -107,15 +107,13 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             {
                 Path = x.Path,
                 DateCreated = DateTime.Now,
-                ServiceId = x.ServiceId
             }).ToList();
 
             sv.ProviderServices.ProviderId = idProvider;
-            sv.ProviderServices.ServiceId = vm.Id;
+            sv.ProviderServices.ServiceId = Guid.Parse(vm.Id);
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
             {
-                ServiceId = x.ServiceId,
-                TagId = x.TagId,
+                TagId = Guid.Parse(x.TagId),
             }).ToList();
             return sv;
         }
