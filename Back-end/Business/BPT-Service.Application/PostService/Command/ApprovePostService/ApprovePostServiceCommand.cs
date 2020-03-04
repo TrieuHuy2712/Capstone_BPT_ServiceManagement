@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
@@ -16,15 +17,28 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
     {
         private readonly IRepository<Service, Guid> _postServiceRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ApprovePostServiceCommand(IRepository<Service, Guid> postServiceRepository, IHttpContextAccessor httpContextAccessor)
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        public ApprovePostServiceCommand(IRepository<Service, Guid> postServiceRepository, 
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery)
         {
             _postServiceRepository = postServiceRepository;
             _httpContextAccessor = httpContextAccessor;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
         }
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
             try
             {
+                var getCurrentUser = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if(await _checkUserIsAdminQuery.ExecuteAsync(getCurrentUser) == false)
+                {
+                    return new CommandResult<PostServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "You don't have permission in this action"
+                    };
+                }
                 var getCurrentPost = await _postServiceRepository.FindByIdAsync(vm.Id);
                 if (getCurrentPost != null)
                 {

@@ -89,6 +89,7 @@ using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderServ
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 
 namespace BPT_Service.WebAPI
 {
@@ -175,6 +176,7 @@ namespace BPT_Service.WebAPI
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
             services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
+            services.AddScoped<ICheckUserIsAdminQuery, CheckUserIsAdminQuery>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
