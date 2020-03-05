@@ -28,6 +28,7 @@ using BPT_Service.Application.ProviderService.Command.RejectProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
+using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -80,6 +81,7 @@ using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
+using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 
 namespace BPT_Service.WebAPI
 {
@@ -216,6 +218,10 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IUpdatePostServiceCommand,UpdatePostServiceCommand>();
             services.AddScoped<IGetAllPagingPostServiceQuery,GetAllPagingPostServiceQuery>();
             services.AddScoped<IGetPostServiceByIdQuery,GetPostServiceByIdQuery>();
+
+            //Comment service
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery,GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand,AddCommentServiceAsyncCommand>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();

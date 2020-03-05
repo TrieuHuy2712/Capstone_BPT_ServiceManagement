@@ -10,16 +10,6 @@ namespace BPT_Service.Model.Entities.ServiceModel
     public class ServiceComment : DomainEntity<Guid>, IDateTracking
     {
 
-        public ServiceComment(Guid userId, Guid serviceId, Guid parentId, string contentOfRating, DateTime dateCreated, DateTime dateModified)
-        {
-            this.UserId = userId;
-            this.ServiceId = serviceId;
-            this.ParentId = parentId;
-            this.ContentOfRating = contentOfRating;
-            this.DateCreated = dateCreated;
-            this.DateModified = dateModified;
-
-        }
         public Guid UserId { get; set; }
         public Guid ServiceId { get; set; }
 
