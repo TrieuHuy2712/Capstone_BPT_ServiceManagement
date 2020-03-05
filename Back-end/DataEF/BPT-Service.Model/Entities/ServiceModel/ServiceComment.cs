@@ -7,9 +7,8 @@ using BPT_Service.Model.Interfaces;
 namespace BPT_Service.Model.Entities.ServiceModel
 {
     [Table("ServiceComment")]
-    public class ServiceComment : DomainEntity<Guid>, IDateTracking
+    public class ServiceComment : DomainEntity<Guid>
     {
-
         public Guid UserId { get; set; }
         public Guid ServiceId { get; set; }
 

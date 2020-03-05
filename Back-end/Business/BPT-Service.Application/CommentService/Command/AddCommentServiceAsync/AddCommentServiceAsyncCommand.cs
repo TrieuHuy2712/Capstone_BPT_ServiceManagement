@@ -7,7 +7,6 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 
 namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
 {
-
     public class AddCommentServiceAsyncCommand : IAddCommentServiceAsyncCommand
     {
         private readonly IRepository<ServiceComment, Guid> _commentRepository;

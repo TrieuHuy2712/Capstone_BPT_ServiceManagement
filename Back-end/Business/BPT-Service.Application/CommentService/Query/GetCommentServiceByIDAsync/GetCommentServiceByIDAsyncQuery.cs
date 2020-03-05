@@ -11,8 +11,8 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
 {
     public class GetCommentServiceByIDAsyncQuery : IGetCommentServiceByIDAsyncQuery
     {
-        private readonly IRepository<ServiceComment, string> _commentRepository;
-        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, string> commentRepository){
+        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, Guid> commentRepository){
             _commentRepository = commentRepository;
         }
         
