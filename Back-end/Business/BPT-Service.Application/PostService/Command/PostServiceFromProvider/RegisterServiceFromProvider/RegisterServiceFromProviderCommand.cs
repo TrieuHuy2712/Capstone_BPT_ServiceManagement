@@ -63,8 +63,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 }
                 await _tagServiceRepository.Add(newTag);
 
-                var getIdProvider = _getIdProvider.ExecuteAsync(Guid.Parse(userId)).Result.myModel.Id;
-                var mappingService = MappingService(vm, getIdProvider);
+                var getIdProvider = _getIdProvider.ExecuteAsync(userId).Result.myModel.Id;
+                var mappingService = MappingService(vm, Guid.Parse(getIdProvider));
 
 
                 foreach (var item in newTag)

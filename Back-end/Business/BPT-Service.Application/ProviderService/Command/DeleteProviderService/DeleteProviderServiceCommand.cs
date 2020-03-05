@@ -19,10 +19,11 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
         }
-        public async Task<CommandResult<Provider>> ExecuteAsync(Guid id)
+        public async Task<CommandResult<Provider>> ExecuteAsync(string id)
         {
             try
             {
+                var newId= Guid.Parse(id);
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (userId == null)
                 {
@@ -32,10 +33,10 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
                         myModel = null
                     };
                 }
-                var getId = await _providerRepository.FindByIdAsync(id);
+                var getId = await _providerRepository.FindByIdAsync(newId);
                 if (getId != null && getId.AppUser.Id == Guid.Parse(userId))
                 {
-                    _providerRepository.Remove(id);
+                    _providerRepository.Remove(newId);
                     await _providerRepository.SaveAsync();
                     return new CommandResult<Provider>
                     {

@@ -20,12 +20,12 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(Guid id)
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string id)
         {
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                var getPro = await _providerRepository.FindByIdAsync(id);
+                var getPro = await _providerRepository.FindByIdAsync(Guid.Parse(id));
                 if (getPro == null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
@@ -62,11 +62,11 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
         private ProviderServiceViewModel MappingProvider(Provider vm)
         {
             ProviderServiceViewModel pro = new ProviderServiceViewModel();
-            pro.Id = vm.Id;
+            pro.Id = vm.Id.ToString();
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = vm.Status;
             pro.CityId = vm.CityId;
-            pro.UserId = vm.UserId;
+            pro.UserId = vm.UserId.ToString();
             pro.TaxCode = pro.TaxCode;
             pro.Description = pro.Description;
             pro.DateModified = DateTime.Now;

@@ -7,6 +7,6 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
 {
     public interface IDeleteProviderServiceCommand
     {
-         Task<CommandResult<Provider>> ExecuteAsync(Guid id);
+         Task<CommandResult<Provider>> ExecuteAsync(string id);
     }
 }

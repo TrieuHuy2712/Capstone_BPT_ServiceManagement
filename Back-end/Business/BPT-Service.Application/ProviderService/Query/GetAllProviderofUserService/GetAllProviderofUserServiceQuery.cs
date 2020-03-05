@@ -28,7 +28,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllProviderofUserServ
                 var getProviderOfUser = getallProviderUser.Where(x => x.UserId == Guid.Parse(userId)).ToList();
                 List<ProviderServiceViewModel> listService = getProviderOfUser.Select(x => new ProviderServiceViewModel
                 {
-                    Id = x.Id,
+                    Id = x.Id.ToString(),
                     ProviderName = x.ProviderName
                 }).ToList();
                 return listService.ToList();

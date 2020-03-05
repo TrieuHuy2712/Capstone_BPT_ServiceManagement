@@ -8,6 +8,7 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -17,46 +18,52 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userRepository;
+
         public RejectProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
-        IRepository<Provider, Guid> providerRepository)
+        IRepository<Provider, Guid> providerRepository,
+        UserManager<AppUser> userRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
             try
             {
-                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null || userId != vm.UserName)
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if (userId == null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
-                        myModel = vm
+                        myModel = null
                     };
                 }
-                var mappingProvider = await _providerRepository.FindByIdAsync(vm.Id);
+                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (mappingProvider != null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
-                        myModel = vm
+                        myModel = null
                     };
                 }
-                var map = MappingProvider(mappingProvider, vm);
-                _providerRepository.Update(map);
+                mappingProvider.Status = Status.InActive;
+                _providerRepository.Update(mappingProvider);
                 await _providerRepository.SaveAsync();
+
+                var getEmail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your provider: " + vm.ProviderName + " has been rejected. Because it is not suitable with my policu";
+                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+vm.Reason;
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
                                 content, mappingProvider.AppUser.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
-                    myModel = vm
+                    myModel = null,
                 };
             }
             catch (Exception ex)
@@ -67,21 +74,6 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                     errorMessage = ex.InnerException.ToString()
                 };
             }
-        }
-
-        private Provider MappingProvider(Provider pro, ProviderServiceViewModel vm)
-        {
-            pro.Id = vm.Id;
-            pro.PhoneNumber = vm.PhoneNumber;
-            pro.Status = Status.InActive;
-            pro.CityId = vm.CityId;
-            pro.UserId = vm.UserId;
-            pro.TaxCode = vm.TaxCode;
-            pro.Description = vm.Description;
-            pro.DateModified = DateTime.Now;
-            pro.ProviderName = vm.ProviderName;
-            pro.Address = vm.Address;
-            return pro;
         }
 
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)

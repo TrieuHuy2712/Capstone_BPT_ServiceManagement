@@ -4,6 +4,7 @@ using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
 using BPT_Service.Application.ProviderService.Command.RejectProviderService;
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
@@ -27,6 +28,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetAllProviderofUserServiceQuery _getAllProviderofUserServiceQuery;
         private readonly IGetByIdProviderServiceQuery _getByIdProviderServiceQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly IUpdateProviderServiceCommand _updateProviderServiceCommand;
         public ProviderController(IApproveProviderServiceCommand approveProviderServiceCommand,
         IDeleteProviderServiceCommand deleteProviderServiceCommand,
         IRegisterProviderServiceCommand registerProviderServiceCommand,
@@ -34,6 +36,7 @@ namespace BPT_Service.WebAPI.Controllers
         IGetAllPagingProviderServiceQuery getAllPagingProviderServiceQuery,
         IGetAllProviderofUserServiceQuery getAllProviderofUserServiceQuery,
         IGetByIdProviderServiceQuery getByIdProviderServiceQuery,
+        IUpdateProviderServiceCommand updateProviderServiceCommand,
         ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _approveProviderServiceCommand = approveProviderServiceCommand;
@@ -44,6 +47,7 @@ namespace BPT_Service.WebAPI.Controllers
             _getAllProviderofUserServiceQuery = getAllProviderofUserServiceQuery;
             _getByIdProviderServiceQuery = getByIdProviderServiceQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _updateProviderServiceCommand = updateProviderServiceCommand;
         }
 
         [HttpGet("GetAllPaging")]
@@ -54,7 +58,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetProviderById")]
-        public async Task<IActionResult> GetProviderById(Guid id)
+        public async Task<IActionResult> GetProviderById(string id)
         {
             var model = await _getByIdProviderServiceQuery.ExecuteAsync(id);
             return new OkObjectResult(model);
@@ -68,7 +72,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpDelete("DeleteProvider")]
-        public async Task<IActionResult> DeleteAProvider(Guid id)
+        public async Task<IActionResult> DeleteAProvider(string id)
         {
             var model = await _deleteProviderServiceCommand.ExecuteAsync(id);
             return new OkObjectResult(model);
@@ -82,9 +86,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveProvider")]
-        public async Task<IActionResult> ApproveAProvider(ProviderServiceViewModel vm)
+        public async Task<IActionResult> ApproveAProvider(string providerId)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(providerId);
             return new OkObjectResult(model);
         }
 
@@ -99,6 +103,13 @@ namespace BPT_Service.WebAPI.Controllers
         public async Task<IActionResult> CheckUserIsProvider()
         {
             var model = await _checkUserIsProviderQuery.ExecuteAsync();
+            return new OkObjectResult(model);
+        }
+
+        [HttpPost("UpdateProviderService")]
+        public async Task<IActionResult> UpdateProviderServiceCommand(ProviderServiceViewModel vm)
+        {
+            var model = await _updateProviderServiceCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
     }

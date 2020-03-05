@@ -37,7 +37,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 var mappingProvider = MappingProvider(vm, Guid.Parse(userId));
                 await _providerRepository.Add(mappingProvider);
                 await _providerRepository.SaveAsync();
-                vm.Id = mappingProvider.Id;
+                vm.Id = mappingProvider.Id.ToString();
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
@@ -58,9 +58,8 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
         private Provider MappingProvider(ProviderServiceViewModel vm, Guid userId)
         {
             Provider pro = new Provider();
-            pro.Id = vm.Id;
             pro.PhoneNumber = vm.PhoneNumber;
-            pro.Status = Status.Active;
+            pro.Status = Status.Pending;
             pro.CityId = vm.CityId;
             pro.UserId = userId;
             pro.TaxCode = vm.TaxCode;

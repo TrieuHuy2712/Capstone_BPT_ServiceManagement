@@ -5,9 +5,9 @@ namespace BPT_Service.Application.ProviderService.ViewModel
 {
     public class ProviderServiceViewModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string ProviderName { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public string UserName { get; set; }
         public string TaxCode { get; set; }
         public int CityId { get; set; }

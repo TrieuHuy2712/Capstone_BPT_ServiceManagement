@@ -82,7 +82,26 @@ using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
-
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
+using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 namespace BPT_Service.WebAPI
 {
     public class Startup
@@ -168,6 +187,7 @@ namespace BPT_Service.WebAPI
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
             services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
+            services.AddScoped<ICheckUserIsAdminQuery, CheckUserIsAdminQuery>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
@@ -200,24 +220,35 @@ namespace BPT_Service.WebAPI
 
             //Provider service
             services.AddScoped<IApproveProviderServiceCommand, ApproveProviderServiceCommand>();
+            services.AddScoped<ICheckUserIsProviderQuery, CheckUserProviderQuery>();
             services.AddScoped<IDeleteProviderServiceCommand, DeleteProviderServiceCommand>();
-            services.AddScoped<IRegisterProviderServiceCommand, RegisterProviderServiceCommand>();
-            services.AddScoped<IRejectProviderServiceCommand, RejectProviderServiceCommand>();
             services.AddScoped<IGetAllPagingProviderServiceQuery, GetAllPagingProviderServiceQuery>();
             services.AddScoped<IGetAllProviderofUserServiceQuery, GetAllProviderofUserServiceQuery>();
             services.AddScoped<IGetByIdProviderServiceQuery, GetByIdProviderServiceQuery>();
-            services.AddScoped<ICheckUserIsProviderQuery,CheckUserProviderQuery>();
+            services.AddScoped<IRegisterProviderServiceCommand, RegisterProviderServiceCommand>();
+            services.AddScoped<IRejectProviderServiceCommand, RejectProviderServiceCommand>();
+            services.AddScoped<IUpdateProviderServiceCommand, UpdateProviderServiceCommand>();
 
             //Post service 
-            services.AddScoped<IApprovePostServiceCommand,ApprovePostServiceCommand>();
-            services.AddScoped<IDeleteServiceFromProviderCommand,DeleteServiceFromProviderCommand>();
-            services.AddScoped<IRegisterServiceFromProviderCommand,RegisterServiceFromProviderCommand>();
-            services.AddScoped<IDeleteServiceFromUserCommand,DeleteServiceFromUserCommand>();
-            services.AddScoped<IRegisterServiceFromUserCommand,RegisterServiceFromUserCommand>();
-            services.AddScoped<IRejectPostServiceCommand,RejectPostServiceCommand>();
-            services.AddScoped<IUpdatePostServiceCommand,UpdatePostServiceCommand>();
-            services.AddScoped<IGetAllPagingPostServiceQuery,GetAllPagingPostServiceQuery>();
-            services.AddScoped<IGetPostServiceByIdQuery,GetPostServiceByIdQuery>();
+            services.AddScoped<IApprovePostServiceCommand, ApprovePostServiceCommand>();
+            services.AddScoped<IDeleteServiceFromProviderCommand, DeleteServiceFromProviderCommand>();
+            services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
+            services.AddScoped<IDeleteServiceFromUserCommand, DeleteServiceFromUserCommand>();
+            services.AddScoped<IRegisterServiceFromUserCommand, RegisterServiceFromUserCommand>();
+            services.AddScoped<IRejectPostServiceCommand, RejectPostServiceCommand>();
+            services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
+            services.AddScoped<IGetAllPagingPostServiceQuery, GetAllPagingPostServiceQuery>();
+            services.AddScoped<IGetPostServiceByIdQuery, GetPostServiceByIdQuery>();
+
+            //NewsProvider
+            services.AddScoped<IApproveNewsProviderServiceCommand, ApproveNewsProviderServiceCommand>();
+            services.AddScoped<IDeleteNewsProviderServiceCommand, DeleteNewsProviderServiceCommand>();
+            services.AddScoped<IGetAllPagingProviderNewsOfProviderQuery, GetAllPagingProviderNewsOfProviderQuery>();
+            services.AddScoped<IGetAllPagingProviderNewsServiceQuery, GetAllPagingProviderNewsServiceQuery>();
+            services.AddScoped<IGetByIdProviderNewsServiceQuery,GetByIdProviderNewsServiceQuery>();
+            services.AddScoped<IRegisterNewsProviderServiceCommand, RegisterNewsProviderServiceCommand>();
+            services.AddScoped<IRejectNewsProviderServiceCommand, RejectNewsProviderServiceCommand>();
+            services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
 
             //Comment service
             services.AddScoped<IGetCommentServiceByIDAsyncQuery,GetCommentServiceByIDAsyncQuery>();

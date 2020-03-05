@@ -6,6 +6,6 @@ namespace BPT_Service.Application.UserService.Command.AddCustomerAsync
 {
     public interface IAddCustomerAsyncCommand
     {
-         Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm, string password);
+         Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm);
     }
 }
