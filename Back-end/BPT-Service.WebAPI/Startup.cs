@@ -28,6 +28,7 @@ using BPT_Service.Application.ProviderService.Command.RejectProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
+using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -80,6 +81,17 @@ using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
+using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
 using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
@@ -90,7 +102,6 @@ using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNews
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
-
 namespace BPT_Service.WebAPI
 {
     public class Startup
@@ -238,6 +249,10 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRegisterNewsProviderServiceCommand, RegisterNewsProviderServiceCommand>();
             services.AddScoped<IRejectNewsProviderServiceCommand, RejectNewsProviderServiceCommand>();
             services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
+
+            //Comment service
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery,GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand,AddCommentServiceAsyncCommand>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
