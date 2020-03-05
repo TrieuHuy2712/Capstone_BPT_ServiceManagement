@@ -11,12 +11,12 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
 {
     public class GetCommentServiceByIDAsyncQuery : IGetCommentServiceByIDAsyncQuery
     {
-        private readonly IRepository<ServiceComment, string> _commentRepository;
-        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, string> commentRepository){
+        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, Guid> commentRepository){
             _commentRepository = commentRepository;
         }
         
-        public async Task<List<CommentViewModel>> ExecuteAsync(string id)
+        public async Task<List<CommentViewModel>> ExecuteAsync(Guid id)
         {
            var IDProvider = await _commentRepository.FindAllAsync(x=>x.ServiceId==Guid.Parse(id));
 

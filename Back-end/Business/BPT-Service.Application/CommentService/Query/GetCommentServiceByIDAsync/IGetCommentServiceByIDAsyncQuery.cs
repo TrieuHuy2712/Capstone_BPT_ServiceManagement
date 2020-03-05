@@ -7,6 +7,6 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
 {
     public interface IGetCommentServiceByIDAsyncQuery
     {
-          Task<List<CommentViewModel>> ExecuteAsync(string id);
+          Task<List<CommentViewModel>> ExecuteAsync(Guid id);
     }
 }
