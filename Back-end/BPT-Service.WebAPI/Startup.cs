@@ -11,6 +11,10 @@ using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategorySer
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
 using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.FollowingPostService.Command.FollowPostService;
+using BPT_Service.Application.FollowingPostService.Command.UnFollowPostService;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByPost;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByUser;
 using BPT_Service.Application.FunctionService.Command.AddFunctionService;
 using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
 using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
@@ -258,6 +262,12 @@ namespace BPT_Service.WebAPI
             //Comment service
             services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
             services.AddScoped<IAddCommentServiceAsyncCommand, AddCommentServiceAsyncCommand>();
+
+            //Follow service
+            services.AddScoped<IFollowPostServiceCommand, FollowPostServiceCommand>();
+            services.AddScoped<IGetFollowByPostQuery, GetFollowByPostQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+            services.AddScoped<IUnFollowPostServiceCommand, UnFollowPostServiceCommand>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();

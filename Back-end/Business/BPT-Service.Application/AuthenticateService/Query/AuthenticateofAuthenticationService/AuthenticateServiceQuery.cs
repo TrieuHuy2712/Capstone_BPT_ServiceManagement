@@ -27,7 +27,15 @@ namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthen
             // return null if user not found
             if (user == null)
             {
-                return null;
+                var email = await _userManager.FindByEmailAsync(username);
+                if(email == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    user = email;
+                }
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, true);
