@@ -38,6 +38,7 @@ namespace BPT_Service.Data
         public DbSet<ProviderService> ProviderServices {get; set;}
         public DbSet<TagService> TagServices{get; set;}
         public DbSet<CityProvince> CityProvinces { get; set; }
+        public DbSet<ProviderFollowing> ProviderFollowings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

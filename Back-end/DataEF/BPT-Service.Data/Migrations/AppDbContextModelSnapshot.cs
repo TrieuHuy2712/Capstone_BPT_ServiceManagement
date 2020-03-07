@@ -264,6 +264,36 @@ namespace BPT_Service.Data.Migrations
                     b.ToTable("Provider");
                 });
 
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderFollowing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsReceiveEmail")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProviderFollowing");
+                });
+
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderNew", b =>
                 {
                     b.Property<int>("Id")
@@ -656,6 +686,21 @@ namespace BPT_Service.Data.Migrations
 
                     b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
                         .WithMany("Providers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderFollowing", b =>
+                {
+                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Provider", "Service")
+                        .WithMany()
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

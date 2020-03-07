@@ -61,6 +61,9 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 var mappingService = MappingService(vm, Guid.Parse(userId));
                 await _postServiceRepository.Add(mappingService);
 
+                var mappingUserService = MappingUserService(mappingService.Id, Guid.Parse(userId));
+                await _userServiceRepository.Add(mappingUserService);
+
                 foreach (var item in newTag)
                 {
                     Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
@@ -70,6 +73,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
 
                 await _tagServiceRepository.SaveAsync();
                 await _postServiceRepository.SaveAsync();
+                await _userServiceRepository.SaveAsync();
 
                 return new CommandResult<PostServiceViewModel>
                 {
@@ -104,15 +108,19 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 ServiceId = x.ServiceId
             }).ToList();
 
-            sv.UserServices.UserId = idUser;
-            sv.UserServices.ServiceId = vm.Id;
-
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
             {
                 ServiceId = x.ServiceId,
                 TagId = x.TagId,
             }).ToList();
             return sv;
+        }
+        
+        private Model.Entities.ServiceModel.UserServiceModel.UserService MappingUserService(Guid serviceId, Guid idUser) {
+            Model.Entities.ServiceModel.UserServiceModel.UserService userService = new Model.Entities.ServiceModel.UserServiceModel.UserService();
+            userService.UserId = idUser;
+            userService.ServiceId = serviceId;
+            return userService;
         }
     }
 }
