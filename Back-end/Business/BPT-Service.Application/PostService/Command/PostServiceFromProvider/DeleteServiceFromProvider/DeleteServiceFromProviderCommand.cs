@@ -48,6 +48,10 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
                         errorMessage = "Cannot find your ProviderService"
                     };
                 }
+                else
+                {
+                    _providerServiceRepository.Remove(getProviderService);
+                }
 
                 var getProvider = await _providerRepository.FindSingleAsync(x => x.UserId == userId);
                 if (getProvider == null)

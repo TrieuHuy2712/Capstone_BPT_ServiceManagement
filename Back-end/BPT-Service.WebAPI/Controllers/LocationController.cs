@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BPT_Service.Application.LocationService.Command.AddCityProvinceService;
+﻿using BPT_Service.Application.LocationService.Command.AddCityProvinceService;
 using BPT_Service.Application.LocationService.Command.DeleteCityProvinceService;
 using BPT_Service.Application.LocationService.Command.UpdateCityProvinceService;
 using BPT_Service.Application.LocationService.Query.GetAllCityProvinceService;
@@ -9,8 +6,11 @@ using BPT_Service.Application.LocationService.Query.GetAllPagingCityProvinceServ
 using BPT_Service.Application.LocationService.Query.GetByIdCityProvinceService;
 using BPT_Service.Application.LocationService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {

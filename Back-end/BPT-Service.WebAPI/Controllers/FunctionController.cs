@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.FunctionService.Command.AddFunctionService;
 using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
 using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
@@ -13,9 +10,12 @@ using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermissio
 using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
 using BPT_Service.Application.FunctionService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {

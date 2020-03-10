@@ -1,4 +1,3 @@
-
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
 using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
@@ -7,6 +6,7 @@ using BPT_Service.WebAPI.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+
 namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
@@ -30,7 +30,8 @@ namespace BPT_Service.WebAPI.Controllers
             _getByIdAuthenticate = getByIdAuthenticate;
         }
 
-        #region  Post API
+        #region Post API
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody]LoginViewModel model)
@@ -40,7 +41,6 @@ namespace BPT_Service.WebAPI.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
             return Ok(user);
-
         }
 
         [HttpPost("changePassword")]
@@ -49,16 +49,18 @@ namespace BPT_Service.WebAPI.Controllers
             var user = await _resetPasswordCommand.ExecuteAsync(model);
             return new OkObjectResult(user);
         }
-        #endregion
 
-        #region  GET API
+        #endregion Post API
+
+        #region GET API
+
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _getAllAuthenticateQuery.ExecuteAsync();
             return Ok(users);
         }
-        #endregion
 
+        #endregion GET API
     }
 }

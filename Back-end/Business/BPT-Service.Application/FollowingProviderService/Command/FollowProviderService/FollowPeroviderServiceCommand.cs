@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace BPT_Service.Application.FollowingProviderService.Command.FollowProviderService
 {
-    public class FollowPeroviderServiceCommand : IFollowProviderServiceCommand
+    public class FollowProviderServiceCommand : IFollowProviderServiceCommand
     {
         private readonly IRepository<ProviderFollowing, int> _providerFollowingRepository;
-        public FollowPeroviderServiceCommand(IRepository<ProviderFollowing, int> providerFollowingRepository)
+        public FollowProviderServiceCommand(IRepository<ProviderFollowing, int> providerFollowingRepository)
         {
             _providerFollowingRepository = providerFollowingRepository;
         }

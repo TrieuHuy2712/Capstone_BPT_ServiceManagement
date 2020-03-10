@@ -11,10 +11,20 @@ using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategorySer
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
 using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.EmailService.Command.AddNewEmailService;
+using BPT_Service.Application.EmailService.Command.DeleteEmailService;
+using BPT_Service.Application.EmailService.Command.UpdateNewEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllPagingEmailService;
+using BPT_Service.Application.EmailService.Query.GetEmailByIdService;
 using BPT_Service.Application.FollowingPostService.Command.FollowPostService;
 using BPT_Service.Application.FollowingPostService.Command.UnFollowPostService;
 using BPT_Service.Application.FollowingPostService.Query.GetFollowByPost;
 using BPT_Service.Application.FollowingPostService.Query.GetFollowByUser;
+using BPT_Service.Application.FollowingProviderService.Command.FollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.RegisterEmailProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.UnFollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Query.GetFollowByProvider;
 using BPT_Service.Application.FunctionService.Command.AddFunctionService;
 using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
 using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
@@ -269,6 +279,20 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
             services.AddScoped<IUnFollowPostServiceCommand, UnFollowPostServiceCommand>();
 
+            //Follow provider
+            services.AddScoped<IFollowProviderServiceCommand, FollowProviderServiceCommand>();
+            services.AddScoped<IUnFollowProviderServiceCommand, UnFollowProviderServiceCommand>();
+            services.AddScoped<IRegisterEmailProviderServiceCommand, RegisterEmailProviderServiceCommand>();
+            services.AddScoped<IGetFollowByProviderQuery, GetFollowByProviderQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+
+            //Email
+            services.AddScoped<IAddNewEmailServiceCommand, AddNewEmailServiceCommand>();
+            services.AddScoped<IUpdateNewEmailServiceCommand, UpdateNewEmailServiceCommand>();
+            services.AddScoped<IDeleteEmailServiceCommand, DeleteEmailServiceCommand>();
+            services.AddScoped<IGetAllEmailServiceQuery, GetAllEmailServiceQuery>();
+            services.AddScoped<IGetAllPagingEmailServiceQuery, GetAllPagingEmailServiceQuery>();
+            services.AddScoped<IGetEmailByIdService, GetEmailByIdService>();
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();

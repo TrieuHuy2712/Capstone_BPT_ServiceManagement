@@ -58,7 +58,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 }
                 await _tagServiceRepository.Add(newTag);
 
-                var mappingService = MappingService(vm, Guid.Parse(userId));
+                var mappingService = MappingService(vm);
                 await _postServiceRepository.Add(mappingService);
 
                 var mappingUserService = MappingUserService(mappingService.Id, Guid.Parse(userId));
@@ -72,8 +72,6 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 }
 
                 await _tagServiceRepository.SaveAsync();
-                await _postServiceRepository.SaveAsync();
-                await _userServiceRepository.SaveAsync();
 
                 return new CommandResult<PostServiceViewModel>
                 {
@@ -85,14 +83,14 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             {
                 return new CommandResult<PostServiceViewModel>
                 {
-                    isValid = true,
+                    isValid = false,
                     myModel = vm,
                     errorMessage = ex.InnerException.ToString()
                 };
             }
         }
 
-        private Service MappingService(PostServiceViewModel vm, Guid idUser)
+        private Service MappingService(PostServiceViewModel vm)
         {
             Service sv = new Service();
             sv.CategoryId = vm.CategoryId;
@@ -105,12 +103,10 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             {
                 Path = x.Path,
                 DateCreated = DateTime.Now,
-                ServiceId = x.ServiceId
             }).ToList();
 
-            sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
+            sv.TagServices = vm.tagofServices.Where(x=>x.isDelete==false && x.isAdd ==false).Select(x => new Model.Entities.ServiceModel.TagService
             {
-                ServiceId = x.ServiceId,
                 TagId = x.TagId,
             }).ToList();
             return sv;

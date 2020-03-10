@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
+using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
 using BPT_Service.Application.CommentService.ViewModel;
-using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {

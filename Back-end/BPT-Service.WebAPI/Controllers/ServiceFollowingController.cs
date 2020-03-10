@@ -5,9 +5,6 @@ using BPT_Service.Application.FollowingPostService.Query.GetFollowByUser;
 using BPT_Service.Application.FollowingPostService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI
@@ -32,9 +29,8 @@ namespace BPT_Service.WebAPI
             _getFollowByUserQuery = getFollowByUserQuery;
 
         }
-        #region GET API
         
-
+        #region GET API
         [HttpGet("GetServiceFollow")]
         public async Task<IActionResult> GetServiceFollow(string idService)
         {
