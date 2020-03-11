@@ -1,13 +1,20 @@
 using System.Threading.Tasks;
 using BPT_Service.Application.CategoryService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
 {
     public class AddCategoryServiceCommand : IAddCategoryServiceCommand
     {
         private readonly IRepository<Category, int> _categoryRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AddCategoryServiceCommand(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
         {
             _categoryRepository = categoryRepository;
@@ -16,6 +23,9 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
         {
             try
             {
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY",ActionSetting.CanCreate) )
+                {
                 var mappingCate = mappingCategory(userVm);
                 await _categoryRepository.Add(mappingCate);
                 await _categoryRepository.SaveAsync();
@@ -30,6 +40,13 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
                         Description = mappingCate.Description,
                     },
                 };
+                }else
+                {
+                    return new CommandResult<CategoryServiceViewModel>{
+                        isValid = false,
+                        errorMessage = "You don't have permission"
+                    };
+                }
             }
             catch (System.Exception ex)
             {
