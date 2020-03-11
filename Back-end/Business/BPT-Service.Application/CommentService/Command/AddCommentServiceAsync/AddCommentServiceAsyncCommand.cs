@@ -18,14 +18,15 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(CommentViewModel addComment)
         {
             
-            ServiceComment comment = new ServiceComment();
-            addComment.ContentOfRating = comment.ContentOfRating;
-            addComment.ParentId = comment.ParentId.ToString();
-            addComment.UserId = comment.UserId.ToString();
-            addComment.ServiceId = comment.ServiceId.ToString();
+            var comment = new ServiceComment{
+                ContentOfRating = addComment.ContentOfRating,
+                UserId = Guid.Parse(addComment.UserId),
+                ServiceId = Guid.Parse(addComment.ServiceId),
+                ParentId = Guid.Parse(addComment.ParentId)
+            };
 
-            await _commentRepository.Add(comment);
-            await _commentRepository.SaveAsync();
+            _commentRepository.Add(comment);
+            _commentRepository.SaveAsync();
             return new CommandResult<CommentViewModel>
                 {
                     isValid = true,

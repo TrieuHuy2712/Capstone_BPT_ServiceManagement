@@ -102,6 +102,9 @@ using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNews
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
+using BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsync;
+
 namespace BPT_Service.WebAPI
 {
     public class Startup
@@ -253,6 +256,8 @@ namespace BPT_Service.WebAPI
             //Comment service
             services.AddScoped<IGetCommentServiceByIDAsyncQuery,GetCommentServiceByIDAsyncQuery>();
             services.AddScoped<IAddCommentServiceAsyncCommand,AddCommentServiceAsyncCommand>();
+            services.AddScoped<IUpdateCommentServiceAsyncCommand,UpdateCommentServiceAsyncCommand>();
+            services.AddScoped<IDeleteCommentServiceAsyncCommand,DeleteCommentServiceAsyncCommand>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
