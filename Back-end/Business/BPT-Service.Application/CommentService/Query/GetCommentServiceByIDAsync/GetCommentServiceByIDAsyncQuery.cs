@@ -18,7 +18,7 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
         
         public async Task<List<CommentViewModel>> ExecuteAsync(string id)
         {
-           var IDProvider = await _commentRepository.FindAllAsync(x=>x.ServiceId==Guid.Parse(id));
+            var IDProvider = await _commentRepository.FindAllAsync(x=>x.ServiceId==Guid.Parse(id));
 
             var data = IDProvider.Select(x => new CommentViewModel
             {
@@ -29,18 +29,13 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
                 ServiceId = x.ServiceId.ToString(),
             }).ToList();
 
-            var parentComment = data.Where(x=>x.ParentId == null).ToList();
+            var parentComment = data.Where(x=>x.ParentId == Guid.Empty.ToString()).ToList();
 
             foreach (var item in parentComment)
             {
                 var commentChild = data.Where(x=>x.ParentId==item.Id).ToList();
                 item.ListVm = commentChild; 
             }
-            // CommentViewModel commentViewModels = new CommentViewModel();
-            // commentViewModels.Id = IDProvider.Id.ToString();
-            // commentViewModels.UserId = IDProvider.UserId.ToString();
-            // commentViewModels.ParentId = IDProvider.ParentId.ToString();
-            // commentViewModels.ContentOfRating = IDProvider.ContentOfRating;
             return parentComment;
         }
     }
