@@ -16,11 +16,15 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
         }
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(CommentViewModel addComment)
         {
+            if (addComment.ParentId == "")
+                {
+                    addComment.ParentId = Guid.Empty.ToString();
+                }
             var comment = new ServiceComment{
                 ContentOfRating = addComment.ContentOfRating,
                 UserId = Guid.Parse(addComment.UserId),
                 ServiceId = Guid.Parse(addComment.ServiceId),
-                // ParentId = Guid.Parse(addComment.ParentId)
+                ParentId = Guid.Parse(addComment.ParentId)
             };
 
             _commentRepository.Add(comment);
