@@ -51,7 +51,7 @@ namespace BPT_Service.WebAPI.Controllers
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
         }
-        #region GETAPI
+        #region GET API
         [HttpGet("getAllPagingPostService")]
         public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize)
         {
