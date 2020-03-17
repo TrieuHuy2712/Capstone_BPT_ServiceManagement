@@ -4,6 +4,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { MessageConstants } from 'src/app/core/common/message.constants';
+import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
   selector: 'app-service-tag',
@@ -23,7 +24,8 @@ export class ServiceTagComponent implements OnInit {
   public functionId: string = "TAG";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private translationService: TranslationService
   ) {
 
   }
