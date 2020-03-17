@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'BPT-ServiceManagement'`, () => {
+  it(`should have as title 'BPT-Service-FrontEnd'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('BPT-ServiceManagement');
+    expect(app.title).toEqual('BPT-Service-FrontEnd');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('BPT-ServiceManagement app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('BPT-Service-FrontEnd app is running!');
   });
 });

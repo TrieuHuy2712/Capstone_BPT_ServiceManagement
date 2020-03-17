@@ -5,13 +5,14 @@ using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServ
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
 using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -29,6 +30,8 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
+        private readonly IFilterAllPagingPostServiceQuery _filterAllPagingPostServiceQuery;
+
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
             IDeleteServiceFromProviderCommand deleteServiceFromProviderCommand,
@@ -38,7 +41,8 @@ namespace BPT_Service.WebAPI.Controllers
             IRegisterServiceFromProviderCommand registerServiceFromProviderCommand,
             IRegisterServiceFromUserCommand registerServiceFromUserCommand,
             IRejectPostServiceCommand rejectPostServiceCommand,
-            IUpdatePostServiceCommand updatePostServiceCommand
+            IUpdatePostServiceCommand updatePostServiceCommand,
+            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery
         )
         {
             _approvePostServiceCommand = approvePostServiceCommand;
@@ -50,8 +54,11 @@ namespace BPT_Service.WebAPI.Controllers
             _registerServiceFromUserCommand = registerServiceFromUserCommand;
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
+            _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
         }
-        #region GET API
+
+        #region GETAPI
+
         [HttpGet("getAllPagingPostService")]
         public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize)
         {
@@ -65,9 +72,18 @@ namespace BPT_Service.WebAPI.Controllers
             var model = await _getPostServiceByIdQuery.ExecuteAsync(idService);
             return new OkObjectResult(model);
         }
-        #endregion
 
-        #region DeleteAPI 
+        [HttpGet("getFilterAllPaging")]
+        public async Task<IActionResult> GetFilterAllPaging(int page, int pageSize, string typeFilter, string filterName)
+        {
+            var model = await _filterAllPagingPostServiceQuery.ExecuteAsync(page, pageSize, typeFilter, filterName);
+            return new OkObjectResult(model);
+        }
+
+        #endregion GETAPI
+
+        #region DeleteAPI
+
         [HttpDelete("deleteServiceFromProvider")]
         public async Task<IActionResult> DeleteServiceFromProvider(Guid idService)
         {
@@ -81,9 +97,11 @@ namespace BPT_Service.WebAPI.Controllers
             var model = await _deleteServiceFromUserCommand.ExecuteAsync(idService);
             return new OkObjectResult(model);
         }
-        #endregion
 
-        #region  Post API
+        #endregion DeleteAPI
+
+        #region Post API
+
         [HttpPost("approvePostService")]
         public async Task<IActionResult> ApprovePostService(string idService)
         {
@@ -111,16 +129,18 @@ namespace BPT_Service.WebAPI.Controllers
             var model = await _registerServiceFromUserCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
-        #endregion
+
+        #endregion Post API
 
         #region PUT API
+
         [HttpPost("updatePostService")]
         public async Task<IActionResult> updatePostService([FromBody]PostServiceViewModel vm)
         {
             var model = await _updatePostServiceCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
-        #endregion
 
+        #endregion PUT API
     }
 }

@@ -15,6 +15,12 @@ import { UserComponent } from './user/user.component';
 import { UserModule } from './user/user.module';
 import { ServiceCategoryComponent } from './service-category/service-category.component';
 import { ServiceTagComponent } from './service-tag/service-tag.component';
+import { TranslatePipe } from '../core/common/translate.pipe';
+import { LanguageService } from '../core/services/language.service';
+import { TranslationService } from '../core/services/translation.service';
+import { ListOfItemComponent } from './list-of-item/list-of-item.component';
+import { DetailItemComponent } from './detail-item/detail-item.component';
+import { UserManageComponent } from './user-manage/user-manage.component';
 
 
 @NgModule({
@@ -24,7 +30,7 @@ import { ServiceTagComponent } from './service-tag/service-tag.component';
     HomeModule,
     RouterModule.forChild(mainRoutes)
   ],
-  declarations: [MainComponent,SidebarMenuComponent],
-  providers:[UtilityService,AuthenService]
+  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
+  providers:[UtilityService,AuthenService,TranslationService]
 })
 export class MainModule { }

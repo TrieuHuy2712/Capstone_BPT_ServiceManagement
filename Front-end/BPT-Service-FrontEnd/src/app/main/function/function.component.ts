@@ -7,6 +7,7 @@ import { NotificationService } from "src/app/core/services/notification.service"
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { TreeComponent } from "angular-tree-component";
 import { UtilityService } from "src/app/core/services/utility.service";
+import { LanguageService } from 'src/app/core/services/language.service';
 
 @Component({
   selector: "app-function",
@@ -32,13 +33,16 @@ export class FunctionComponent implements OnInit {
   public _userPermission:any;
   public _currentUser:string=localStorage.getItem(SystemConstants.const_username);
   public _adminPermission:any;
+  public _currentLang:any;
   constructor(
     private _dataService: DataService,
     private notificationService: NotificationService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private languageService: LanguageService
   ) {}
 
   ngOnInit() {
+    this._currentLang = this.languageService.getLanguage();
     this._userPermission = {
       canCreate: true,
       canDelete: true,
@@ -122,6 +126,7 @@ export class FunctionComponent implements OnInit {
   //Save change for modal popup
   public saveChanges(valid: boolean) {
     if (valid) {
+      this.entity.name = this.entity.name + "%%%" + this.entity.nameVietNamese
       if (this.editFlag == false) {
         this._dataService.post("/function/addEntity", this.entity).subscribe(
           (response: any) => {

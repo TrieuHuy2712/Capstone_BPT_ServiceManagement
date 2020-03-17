@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-// declare var alertify: any;
+declare var alertify: any;
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private _notifier: any;
-  public alertify: any = {};
+  private _notifier: any = alertify;
   constructor() {
-    this.alertify.defaults = {
+    alertify.defaults = {
       // dialogs defaults
       autoReset: true,
       basic: false,
@@ -56,10 +55,15 @@ export class NotificationService {
         ok: 'ajs-ok',
         // class name attached to cancel button 
         cancel: 'ajs-cancel'
-      }
+      },
+      hooks:{
+        // invoked before initializing any dialog
+        preinit:function(instance){},
+        // invoked after initializing any dialog
+        postinit:function(instance){},
+    },
     };
 
-    this._notifier = this.alertify;
   }
 
 

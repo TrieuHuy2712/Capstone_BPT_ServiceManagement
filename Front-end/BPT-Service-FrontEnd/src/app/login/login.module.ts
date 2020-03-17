@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { LoginComponent } from "./login.component";
 import { AuthenService } from "src/app/core/services/authen.service";
 import { NotificationService } from "src/app/core/services/notification.service";
+
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,
@@ -25,7 +26,7 @@ export function socialConfigs() {
     },
     {
       id: GoogleLoginProvider.PROVIDER_ID,
-      provider: new GoogleLoginProvider("306109909114-c06j0q9fg0s7ktfbnfe1ibr0vcqschbs.apps.googleusercontent.com")
+      provider: new GoogleLoginProvider("487693545984-p55d5vbmvqlnvt6atu6hcvd5o9c4l2vg.apps.googleusercontent.com")
     }
   ]);
   return config;

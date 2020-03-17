@@ -1,6 +1,6 @@
 <div class="page-title">
   <div class="title_left">
-    <h3>Danh sách người dùng</h3>
+    <h3>{{'listOfUser'|translate}}</h3>
   </div>
 
   <div class="title_right">
@@ -9,7 +9,7 @@
         <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
           placeholder="Gõ tên quyền...">
         <span class="input-group-btn">
-          <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
+          <button class="btn btn-default" (click)="loadData()" type="button">{{'search'|translate}}</button>
         </span>
       </div>
     </div>
@@ -22,22 +22,22 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button *ngIf="permission.canCreate" class="btn btn-success" (click)="showAddModal()">Thêm mới</button>
+            <button *ngIf="permission.canCreate" class="btn btn-success" (click)="showAddModal()">{{'add'|translate}}</button>
           </li>
 
         </ul>
         <div class="clearfix"></div>
       </div>
-      <div class="x_content">
+      <div class="card-body table-responsive p-0">
 
-        <table class="table table-bordered">
+        <table class="table table-hover text-nowrap">
           <thead>
             <tr>
-              <th>Tài khoản</th>
-              <th>Họ tên</th>
-              <th>Email</th>
-              <th>Avatar</th>
-              <th>Tác vụ</th>
+              <th>{{'acccount'|translate}}</th>
+              <th>{{'fullName'|translate}}</th>
+              <th>{{'email'|translate}}</th>
+              <th>{{'avatar'|translate}}</th>
+              <th>{{'action'|translate}}</th>
 
               <th></th>
             </tr>
@@ -74,7 +74,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Thêm/Sửa người dùng</h4>
+        <h4 class="modal-title pull-left">{{'addAndEdit'|translate}}</h4>
         <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -84,28 +84,28 @@
           (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
 
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Họ tên</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'fullName'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #name="ngModel" [(ngModel)]="entity.fullName" required minlength="3" name="name"
                 class="form-control">
               <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập tên ít nhất 3 ký tự
+                {{'nameWarning'|translate}}
               </small>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tài khoản</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'account'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required name="username"
                 class="form-control">
               <small [hidden]="username.valid || (username.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập tài khoản
+                {{'accountWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group" *ngIf="!entity.id">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mật khẩu</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'password'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="password" #password="ngModel" [(ngModel)]="entity.Password" required minlength="6"
                 name="password" class="form-control">
@@ -115,34 +115,34 @@
             </div>
           </div>
           <div class="form-group" *ngIf="!entity.id">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Xác nhận mật khẩu</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'passwordConfirm'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="password" #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required
                 validateEqual="password" minlength="6" name="confirmpassword" class="form-control">
               <small [hidden]="confirmpassword.valid || (confirmpassword.pristine && !addEditForm.submitted)"
                 class="text-danger">
-                Xác nhận mật khẩu sai
+                {{'passwordConfirmWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'email'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                 [(ngModel)]="entity.email" required name="email" class="form-control">
               <small [hidden]="email.valid || (email.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập email
+                {{'emailWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Địa chỉ</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'address'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #address="ngModel" [(ngModel)]="entity.address" name="address" class="form-control">
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Avatar</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'avatar'|translate}}</label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input type="file" #avatar name="avatar" class="form-control">
               <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
@@ -154,7 +154,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Thuộc nhóm</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'role'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [options]="allRoles"
                 [(ngModel)]="myRoles"></ss-multiselect-dropdown>
@@ -163,8 +163,8 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
         </form>

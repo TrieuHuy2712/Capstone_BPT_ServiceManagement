@@ -1,6 +1,6 @@
 <div class="page-title">
   <div class="title_left">
-    <h3>Danh sách người dùng</h3>
+    <h3>{{'listOfUser'|translate}}</h3>
   </div>
 
   <div class="title_right">
@@ -9,7 +9,7 @@
         <input type="text" class="form-control" name="filter" (keyup.enter)="search()" [(ngModel)]="filter"
           placeholder="Gõ tên quyền...">
         <span class="input-group-btn">
-          <button class="btn btn-default" (click)="search()" type="button">Tìm!</button>
+          <button class="btn btn-default" (click)="search()" type="button">{{'search'|translate}}</button>
         </span>
       </div>
     </div>
@@ -22,27 +22,27 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button class="btn btn-success" *ngIf="_userPermission.canCreate" (click)="showAddModal()">Thêm mới</button>
+            <button class="btn btn-success" *ngIf="_userPermission.canCreate" (click)="showAddModal()">{{'add'|translate}}</button>
           </li>
 
         </ul>
         <div class="clearfix"></div>
       </div>
-      <div class="x_content">
+      <div class="card-body table-responsive p-0">
         <div>
           <div class="menu_section">
             <ul>
-              <li *ngFor="let item of _functions"><a><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</a>
+              <li *ngFor="let item of _functions"><div class="function_lv1"><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</div>
                 <button class="btn btn-xs btn-danger" *ngIf="_userPermission.canDelete" (click)="delete(item.key)"><i
                     class="fa fa-trash" aria-hidden="true"></i></button>
                 <ul class="">
                   <li *ngFor="let subItem of item.childrenId">
-                    <a>{{subItem.name}} </a>
-                    <button class="btn btn-xs btn-success" *ngIf="_userPermission.canRead"
+                    <div class="function_lv2">{{subItem.name}} </div>
+                    <button class="btn btn-xs btn-success ct" *ngIf="_userPermission.canRead"
                       (click)="showPermission(subItem.id)"> <i class="fa fa-lock" aria-hidden="true"></i></button>
-                    <button class="btn btn-xs btn-primary fbutton" *ngIf="_userPermission.canUpdate"
+                    <button class="btn btn-xs btn-primary fbutton ct" *ngIf="_userPermission.canUpdate"
                       (click)="showEdit(subItem.id)"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-xs btn-danger fbutton" (click)="delete(subItem.id)"
+                    <button class="btn btn-xs btn-danger fbutton ct" (click)="delete(subItem.id)"
                       *ngIf="_userPermission.canDelete"><i class="fa fa-trash" aria-hidden="true"></i></button>
                   </li>
                 </ul>
@@ -61,7 +61,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Thêm mới / Chỉnh sửa</h4>
+        <h4 class="modal-title pull-left">{{'addAndUpdate'|translate}}</h4>
         <button type="button" class="close pull-right" (click)="addEditModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -70,61 +70,61 @@
         <form class="form-horizontal form-label-left input_mask" novalidate #addEditForm="ngForm"
           (ngSubmit)="saveChanges(addEditForm.valid)" *ngIf="entity">
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mã chức năng</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'functionId'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="hidden" [(ngModel)]="entity.ID" name="id" />
               <input type="text" #id="ngModel" [disabled]="editFlg" [(ngModel)]="entity.id" required name="id"
                 class="form-control" />
               <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập mã chức năng
+                {{'functionIdWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên chức năng</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'functionName'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3" name="name"
                 class="form-control" />
               <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập tên ít nhất 3 ký tự
+                {{'nameWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên việt nam</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'vietnameseName'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #nameVietNamese="ngModel" [(ngModel)]="entity.nameVietNamese" required minlength="3" name="nameVietNamese"
                 class="form-control" />
               <small [hidden]="nameVietNamese.valid || (nameVietNamese.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập tên ít nhất 3 ký tự
+                {{'nameWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Đường dẫn</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'link'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #url="ngModel" [(ngModel)]="entity.url" required name="url" class="form-control" />
               <small [hidden]="url.valid || (url.pristine && !addEditForm.submitted)" class="text-danger">
-                Bạn phải nhập đường dẫn
+                {{'linkWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Thứ tự</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'order'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="number" #displayOrder="ngModel" [(ngModel)]="entity.sortOrder" required name="displayOrder"
                 class="form-control" />
               <small [hidden]="displayOrder.valid || (displayOrder.pristine && !addEditForm.submitted)"
                 class="text-danger">
-                Bạn phải nhập thứ tự
+                {{'orderWarning'|translate}}
               </small>
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Chức năng cha</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'rootFunction'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <select class="form-control" name="parentId" [(ngModel)]="entity.parentId">
-                <option value="">--Chọn chức năng cha--</option>
+                <option value="">{{'selectFunction'|translate}}</option>
                 <option *ngFor="let x of _functions" [value]="x.key">{{x.key}}</option>
               </select>
               <input type="hidden" [(ngModel)]="entity.parentId" name="parentId" class="form-control" />
@@ -138,11 +138,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">Trạng thái</label>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'status'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" [(ngModel)]="entity.status" name="status" #status="ngModel"> Kích hoạt
+                  <input type="checkbox" [(ngModel)]="entity.status" name="status" #status="ngModel"> {{'active'|translate}}
                 </label>
               </div>
             </div>
@@ -150,8 +150,8 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="addEditModal.hide()" class="btn btn-primary">Hủy bỏ</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+              <button type="button" (click)="addEditModal.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
 
@@ -167,7 +167,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Phân quyền cho chức năng</h4>
+        <h4 class="modal-title pull-left">{{'decentralization'|translate}}</h4>
         <button type="button" class="close pull-right" (click)="permissionModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -179,10 +179,10 @@
             <thead>
               <tr>
                 <th>
-                  Tên quyền
+                  {{'roleName'|translate}}
                 </th>
                 <th>
-                  Quyền được làm
+                  {{'yourRole'|translate}}
                 </th>
               </tr>
             </thead>
@@ -195,25 +195,25 @@
                   <div class="checkbox">
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canRead" [name]="permission.roleId"
-                        [ngModelOptions]="{standalone: true}" [checked]="permission.canRead"> Xem
+                        [ngModelOptions]="{standalone: true}" [checked]="permission.canRead"> {{'read'|translate}}
                     </label>
                   </div>
                   <div class="checkbox">
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canCreate" [name]="permission.roleId" name="status"
-                        [ngModelOptions]="{standalone: true}" [checked]="permission.canCreate"> Thêm
+                        [ngModelOptions]="{standalone: true}" [checked]="permission.canCreate"> {{'add'|translate}}
                     </label>
                   </div>
                   <div class="checkbox">
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canUpdate" [name]="permission.roleId" name="status"
-                        [ngModelOptions]="{standalone: true}" [checked]="permission.canUpdate"> Sửa
+                        [ngModelOptions]="{standalone: true}" [checked]="permission.canUpdate"> {{'edit'|translate}}
                     </label>
                   </div>
                   <div class="checkbox">
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canDelete" [name]="permission.roleId" name="status"
-                        [ngModelOptions]="{standalone: true}" [checked]="permission.canDelete"> Xóa
+                        [ngModelOptions]="{standalone: true}" [checked]="permission.canDelete"> {{'delete'|translate}}
                     </label>
                   </div>
                 </td>
@@ -223,8 +223,8 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="permissionModal.hide()" class="btn btn-primary">Hủy bỏ</button>
-              <button type="submit" class="btn btn-success" [disabled]="!permissionForm.form.valid">Cập nhật</button>
+              <button type="button" (click)="permissionModal.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success" [disabled]="!permissionForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
         </form>

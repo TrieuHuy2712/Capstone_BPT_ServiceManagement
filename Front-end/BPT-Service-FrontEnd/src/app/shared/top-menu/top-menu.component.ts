@@ -5,6 +5,8 @@ import { UrlConstants } from "src/app/core/common/url.constants";
 import { SystemConstants } from "src/app/core/common/system,constants";
 import { Router } from "@angular/router";
 import { NotificationService } from "src/app/core/services/notification.service";
+import { LanguageService } from 'src/app/core/services/language.service';
+
 
 @Component({
   selector: "app-top-menu",
@@ -17,7 +19,9 @@ export class TopMenuComponent implements OnInit {
   constructor(
     private _authenService: AuthenService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private languageService: LanguageService
+
   ) {}
 
   ngOnInit() {
@@ -31,5 +35,10 @@ export class TopMenuComponent implements OnInit {
     this.router.navigate([UrlConstants.LOGIN]);
     this.notificationService.printErrorMessage("Đã logout");
     this.loading = false;
+  }
+
+  onChange(deviceValue) {
+    console.log(deviceValue);
+    this.languageService.setLanguage(deviceValue);
   }
 }

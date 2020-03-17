@@ -13,6 +13,16 @@ export const mainRoutes: Routes = [
       { path: "role", loadChildren: "./role/role.module#RoleModule" },
       { path: "category", loadChildren: "./service-category/service-category.module#ServiceCategoryModule" },
       { path: "tag", loadChildren: "./service-tag/service-tag.module#ServiceTagModule" },
+      {
+        path: "listOfItem", loadChildren: "./list-of-item/list-of-item.module#ListOfItemModule"
+      },
+
+      {
+        path: "detailItem", loadChildren: "./detail-item/detail-item.module#DetailItemModule"
+      },
+      {
+        path: "userManage", loadChildren: "./user-manage/user-manage.module#UserManageModule"
+      },
      
       {
         path: "function",
