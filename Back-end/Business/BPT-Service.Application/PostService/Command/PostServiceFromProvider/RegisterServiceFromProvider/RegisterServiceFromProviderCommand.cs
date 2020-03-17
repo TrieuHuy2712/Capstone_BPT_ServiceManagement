@@ -121,7 +121,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             
             sv.TagServices = vm.tagofServices.Where(x=>x.isDelete == false && x.isAdd==false).Select(x => new Model.Entities.ServiceModel.TagService
             {
-                TagId = x.TagId,
+                TagId = Guid.Parse(x.TagId),
             }).ToList();
             return sv;
         }
