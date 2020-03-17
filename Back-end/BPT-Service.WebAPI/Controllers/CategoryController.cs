@@ -4,14 +4,13 @@ using BPT_Service.Application.CategoryService.Command.UpdateCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
+using BPT_Service.Application.CategoryService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using BPT_Service.Application.CategoryService.ViewModel;
 
 namespace BPT_Service.WebAPI.Controllers
 {

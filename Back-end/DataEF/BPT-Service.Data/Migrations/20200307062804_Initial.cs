@@ -431,6 +431,35 @@ namespace BPT_Service.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProviderFollowing",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<Guid>(nullable: false),
+                    ProviderId = table.Column<Guid>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    IsReceiveEmail = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProviderFollowing", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProviderFollowing_Provider_ProviderId",
+                        column: x => x.ProviderId,
+                        principalTable: "Provider",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProviderFollowing_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProviderNews",
                 columns: table => new
                 {
@@ -499,6 +528,16 @@ namespace BPT_Service.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Provider_UserId",
                 table: "Provider",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProviderFollowing_ProviderId",
+                table: "ProviderFollowing",
+                column: "ProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProviderFollowing_UserId",
+                table: "ProviderFollowing",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -598,6 +637,9 @@ namespace BPT_Service.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Permissions");
+
+            migrationBuilder.DropTable(
+                name: "ProviderFollowing");
 
             migrationBuilder.DropTable(
                 name: "ProviderNews");

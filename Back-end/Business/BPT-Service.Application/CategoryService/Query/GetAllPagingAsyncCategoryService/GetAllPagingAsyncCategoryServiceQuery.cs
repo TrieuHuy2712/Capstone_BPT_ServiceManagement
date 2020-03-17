@@ -10,7 +10,7 @@ namespace BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategor
     public class GetAllPagingAsyncCategoryServiceQuery : IGetAllPagingAsyncCategoryServiceQuery
     {
         private readonly IRepository<Category, int> _categoryRepository;
-        public GetAllPagingAsyncCategoryServiceQuery(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
+        public GetAllPagingAsyncCategoryServiceQuery(IRepository<Category, int> categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

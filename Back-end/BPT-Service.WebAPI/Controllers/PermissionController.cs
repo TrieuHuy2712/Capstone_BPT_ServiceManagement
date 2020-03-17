@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {

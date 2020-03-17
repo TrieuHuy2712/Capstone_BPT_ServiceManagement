@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,19 +14,22 @@ namespace BPT_Service.WebAPI.Controllers
     public class UploadController : ControllerBase
     {
         //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
-        private const string BaseUrl= "http://localhost:5000";
-        #region  Constructor
-        public UploadController()
-        {
+        private const string BaseUrl = "http://localhost:5000";
+        private readonly IWebHostEnvironment _env;
 
+        #region  Constructor
+        public UploadController(IWebHostEnvironment env)
+        {
+            _env = env;
         }
         #endregion
         [HttpPost]
         [Route("saveImage/{type}")]
-        public async Task<IActionResult> SaveImage([FromForm(Name = "uploadedFile")] IFormFile postedFile, long userId, string type)
+        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, long userId, string type)
         {
             try
             {
+                string returnPath = "";
                 if (postedFile != null && postedFile.Length > 0)
                 {
                     int MaxContentLength = 1024 * 1024 * 5; //Size = 5 MB
@@ -69,20 +73,21 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             directory = "/UploadedFiles/";
                         }
-                        if (!Directory.Exists((directory)))
+                        if (!Directory.Exists(_env.WebRootPath + directory))
                         {
-                            Directory.CreateDirectory(BaseUrl + "/" + directory);
+                            Directory.CreateDirectory(_env.WebRootPath + directory);
                         }
 
-                        string path = Path.Combine(BaseUrl + "/" + directory, postedFile.FileName);
+                        string path = Path.Combine(_env.WebRootPath + directory, postedFile.FileName);
                         //Userimage myfolder name where i want to save my image
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             await postedFile.CopyToAsync(fileStream);
                         }
+                        returnPath = path;
                     }
                     var message1 = string.Format("Image Updated Successfully.");
-                    return new OkObjectResult(message1);
+                    return new OkObjectResult(returnPath);
                 }
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);

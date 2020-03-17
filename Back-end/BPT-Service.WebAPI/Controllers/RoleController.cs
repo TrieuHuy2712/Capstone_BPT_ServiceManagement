@@ -1,4 +1,3 @@
-
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -16,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+
 namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
@@ -24,6 +24,7 @@ namespace BPT_Service.WebAPI.Controllers
     public class RoleController : ControllerBase
     {
         #region Constructor
+
         private readonly IAddRoleAsyncCommand _addRoleService;
         private readonly IDeleteRoleAsyncCommand _deleteRoleService;
         private readonly ISavePermissionCommand _savePerRoleService;
@@ -54,9 +55,11 @@ namespace BPT_Service.WebAPI.Controllers
             _getListFunctionwithRoleService = getListFunctionwithRoleService;
             _getByIdRoleService = getByIdRoleService;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region GET API
+
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -86,9 +89,11 @@ namespace BPT_Service.WebAPI.Controllers
             var function = await _getAllPermissionService.ExecuteAsync(functionId);
             return new OkObjectResult(function);
         }
-        #endregion
+
+        #endregion GET API
 
         #region POST API
+
         [HttpPost("SaveEntity")]
         public async Task<IActionResult> SaveEntity([FromBody]AppRoleViewModel roleVm)
         {
@@ -108,7 +113,6 @@ namespace BPT_Service.WebAPI.Controllers
                 var execute = await _updateRoleService.ExecuteAsync(roleVm);
                 return new OkObjectResult(execute);
             }
-
         }
 
         [HttpPost("ListAllFunction/{roleId}")]
@@ -124,9 +128,11 @@ namespace BPT_Service.WebAPI.Controllers
             var execute = await _savePerRoleService.ExecuteAsync(rolePermissionViewModel);
             return new OkObjectResult(execute);
         }
-        #endregion
+
+        #endregion POST API
 
         #region DELETE API
+
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -137,6 +143,7 @@ namespace BPT_Service.WebAPI.Controllers
             var execute = await _deleteRoleService.ExecuteAsync(id);
             return new OkObjectResult(execute);
         }
-        #endregion
+
+        #endregion DELETE API
     }
 }

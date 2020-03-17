@@ -45,6 +45,10 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Delete
                         errorMessage = "Cannot find your ProviderService"
                     };
                 }
+                else
+                {
+                    _userServiceRepository.Remove(getUserService);
+                }
 
                 if (getUserService.UserId == userId)
                 {

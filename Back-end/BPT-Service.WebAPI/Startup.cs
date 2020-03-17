@@ -9,6 +9,24 @@ using BPT_Service.Application.CategoryService.Command.UpdateCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
+using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
+using BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsync;
+using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
+using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.EmailService.Command.AddNewEmailService;
+using BPT_Service.Application.EmailService.Command.DeleteEmailService;
+using BPT_Service.Application.EmailService.Command.UpdateNewEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllPagingEmailService;
+using BPT_Service.Application.EmailService.Query.GetEmailByIdService;
+using BPT_Service.Application.FollowingPostService.Command.FollowPostService;
+using BPT_Service.Application.FollowingPostService.Command.UnFollowPostService;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByPost;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByUser;
+using BPT_Service.Application.FollowingProviderService.Command.FollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.RegisterEmailProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.UnFollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Query.GetFollowByProvider;
 using BPT_Service.Application.FunctionService.Command.AddFunctionService;
 using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
 using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
@@ -19,12 +37,39 @@ using BPT_Service.Application.FunctionService.Query.GetAllWithParentIdFunctionSe
 using BPT_Service.Application.FunctionService.Query.GetByIdFunctionService;
 using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermission;
 using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
+using BPT_Service.Application.LocationService.Command.AddCityProvinceService;
+using BPT_Service.Application.LocationService.Command.DeleteCityProvinceService;
+using BPT_Service.Application.LocationService.Command.UpdateCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetAllCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetAllPagingCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetByIdCityProvinceService;
+using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
+using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
+using BPT_Service.Application.PostService.Command.RejectPostService;
+using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
 using BPT_Service.Application.ProviderService.Command.RejectProviderService;
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
@@ -69,26 +114,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
-using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
-using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
-using BPT_Service.Application.PostService.Command.ApprovePostService;
-using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
-using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
-using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
-using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
-using BPT_Service.Application.PostService.Command.RejectPostService;
-using BPT_Service.Application.PostService.Command.UpdatePostService;
-using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
-using BPT_Service.Application.PostService.Query.GetPostServiceById;
-using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
-using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
-using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
-using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
-using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
-using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
 
 namespace BPT_Service.WebAPI
 {
@@ -137,7 +162,7 @@ namespace BPT_Service.WebAPI
                 options.User.RequireUniqueEmail = true;
             });
 
-            // Services 
+            // Services
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
 
@@ -175,6 +200,7 @@ namespace BPT_Service.WebAPI
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
             services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
+            services.AddScoped<ICheckUserIsAdminQuery, CheckUserIsAdminQuery>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
@@ -216,7 +242,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRejectProviderServiceCommand, RejectProviderServiceCommand>();
             services.AddScoped<IUpdateProviderServiceCommand, UpdateProviderServiceCommand>();
 
-            //Post service 
+            //Post service
             services.AddScoped<IApprovePostServiceCommand, ApprovePostServiceCommand>();
             services.AddScoped<IDeleteServiceFromProviderCommand, DeleteServiceFromProviderCommand>();
             services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
@@ -232,11 +258,49 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IDeleteNewsProviderServiceCommand, DeleteNewsProviderServiceCommand>();
             services.AddScoped<IGetAllPagingProviderNewsOfProviderQuery, GetAllPagingProviderNewsOfProviderQuery>();
             services.AddScoped<IGetAllPagingProviderNewsServiceQuery, GetAllPagingProviderNewsServiceQuery>();
-            services.AddScoped<IGetByIdProviderNewsServiceQuery,GetByIdProviderNewsServiceQuery>();
+            services.AddScoped<IGetByIdProviderNewsServiceQuery, GetByIdProviderNewsServiceQuery>();
             services.AddScoped<IRegisterNewsProviderServiceCommand, RegisterNewsProviderServiceCommand>();
             services.AddScoped<IRejectNewsProviderServiceCommand, RejectNewsProviderServiceCommand>();
             services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
 
+            //Location Service
+            services.AddScoped<IAddCityProvinceServiceCommand, AddCityProvinceServiceCommand>();
+            services.AddScoped<IDeleteCityProvinceServiceCommand, DeleteCityProvinceServiceCommand>();
+            services.AddScoped<IGetAllCityProvinceServiceQuery, GetAllCityProvinceServiceQuery>();
+            services.AddScoped<IGetAllPagingCityProvinceServiceQuery, GetAllPagingCityProvinceServiceQuery>();
+            services.AddScoped<IGetByIdCityProvinceServiceQuery, GetByIdCityProvinceServiceQuery>();
+            services.AddScoped<IUpdateCityProvinceServiceCommand, UpdateCityProvinceServiceCommand>();
+
+            //Comment service
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand, AddCommentServiceAsyncCommand>();
+
+            //Follow service
+            services.AddScoped<IFollowPostServiceCommand, FollowPostServiceCommand>();
+            services.AddScoped<IGetFollowByPostQuery, GetFollowByPostQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+            services.AddScoped<IUnFollowPostServiceCommand, UnFollowPostServiceCommand>();
+
+            //Follow provider
+            services.AddScoped<IFollowProviderServiceCommand, FollowProviderServiceCommand>();
+            services.AddScoped<IUnFollowProviderServiceCommand, UnFollowProviderServiceCommand>();
+            services.AddScoped<IRegisterEmailProviderServiceCommand, RegisterEmailProviderServiceCommand>();
+            services.AddScoped<IGetFollowByProviderQuery, GetFollowByProviderQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+
+            //Comment
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand, AddCommentServiceAsyncCommand>();
+            services.AddScoped<IUpdateCommentServiceAsyncCommand, UpdateCommentServiceAsyncCommand>();
+            services.AddScoped<IDeleteCommentServiceAsyncCommand, DeleteCommentServiceAsyncCommand>();
+
+            //Email
+            services.AddScoped<IAddNewEmailServiceCommand, AddNewEmailServiceCommand>();
+            services.AddScoped<IUpdateNewEmailServiceCommand, UpdateNewEmailServiceCommand>();
+            services.AddScoped<IDeleteEmailServiceCommand, DeleteEmailServiceCommand>();
+            services.AddScoped<IGetAllEmailServiceQuery, GetAllEmailServiceQuery>();
+            services.AddScoped<IGetAllPagingEmailServiceQuery, GetAllPagingEmailServiceQuery>();
+            services.AddScoped<IGetEmailByIdService, GetEmailByIdService>();
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();

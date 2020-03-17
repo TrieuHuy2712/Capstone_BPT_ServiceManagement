@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
@@ -10,6 +9,7 @@ using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsServi
 using BPT_Service.Application.NewsProviderService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -26,6 +26,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterNewsProviderServiceCommand _registerNewsProviderServiceCommand;
         private readonly IRejectNewsProviderServiceCommand _rejectNewsProviderServiceCommand;
         private readonly IUpdateNewsProviderServiceCommand _updateNewsProviderServiceCommand;
+
         public ProviderNewsController(IApproveNewsProviderServiceCommand approveProviderServiceCommand,
         IDeleteNewsProviderServiceCommand deleteNewsProviderServiceCommand,
         IGetAllPagingProviderNewsOfProviderQuery getAllPagingProviderNewsOfProviderQuery,
@@ -76,7 +77,6 @@ namespace BPT_Service.WebAPI.Controllers
 
             return new OkObjectResult(model);
         }
-
 
         [HttpGet("GetByIdProviderNewsServiceQuery")]
         public async Task<IActionResult> GetByIdProviderNewsServiceQuery(int id)

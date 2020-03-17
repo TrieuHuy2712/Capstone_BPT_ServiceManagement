@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200130095701_Initial")]
+    [Migration("20200307062804_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,6 +264,36 @@ namespace BPT_Service.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Provider");
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderFollowing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsReceiveEmail")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProviderFollowing");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderNew", b =>
@@ -658,6 +688,21 @@ namespace BPT_Service.Data.Migrations
 
                     b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
                         .WithMany("Providers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel.ProviderFollowing", b =>
+                {
+                    b.HasOne("BPT_Service.Model.Entities.ServiceModel.Provider", "Service")
+                        .WithMany()
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BPT_Service.Model.Entities.AppUser", "AppUser")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

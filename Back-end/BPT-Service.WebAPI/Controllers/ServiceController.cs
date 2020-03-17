@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using BPT_Service.Application.PostService.Command.ApprovePostService;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
@@ -12,6 +10,8 @@ using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -51,7 +51,7 @@ namespace BPT_Service.WebAPI.Controllers
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
         }
-        #region GETAPI
+        #region GET API
         [HttpGet("getAllPagingPostService")]
         public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize)
         {

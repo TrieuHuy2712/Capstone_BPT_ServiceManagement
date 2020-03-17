@@ -55,7 +55,7 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRole
             {
                 foreach (var item in listRoleUser)
                 {
-                    var getPermissions = _permissionRepository.FindSingleAsync(x => x.RoleId == item.Id && x.FunctionId == functionId).Result;
+                    var getPermissions = await _permissionRepository.FindSingleAsync(x => x.RoleId == item.Id && x.FunctionId == functionId);
 
                     if (getPermissions != null)
                     {
@@ -71,6 +71,17 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRole
                     }
                 }
 
+            }
+            if (permissionSingleVM.Count == 0)
+            {
+                return new PermissionSingleViewModel
+                {
+                    CanCreate = false,
+                    CanDelete = false,
+                    CanRead = false,
+                    CanUpdate = false,
+                    FunctionId = functionId
+                };
             }
             return GetDuplicate(permissionSingleVM);
         }

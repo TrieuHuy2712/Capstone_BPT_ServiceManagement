@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
@@ -12,6 +10,7 @@ using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Application.ProviderService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {

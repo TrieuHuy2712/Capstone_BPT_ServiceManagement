@@ -42,47 +42,51 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionAction
                     listRoleUser.Add(roleId);
                 }
             }
+            bool isPermission = false;
             if (listRoleUser.Count > 0)
             {
                 foreach (var item in listRoleUser)
                 {
                     var getPermissions = await _permissionRepository.FindSingleAsync(x => x.RoleId == item.Id && x.FunctionId == functionId);
-
-                    if (action == ActionSetting.CanCreate)
+                    if(getPermissions != null)
                     {
-                        if (getPermissions.CanCreate)
+                        if (action == ActionSetting.CanCreate)
                         {
-                            return true;
+                            if (getPermissions.CanCreate)
+                            {
+                                isPermission = true;
+                            }
+                        }
+
+                        if (action == ActionSetting.CanUpdate)
+                        {
+                            if (getPermissions.CanUpdate)
+                            {
+                                isPermission = true;
+                            }
+                        }
+
+                        if (action == ActionSetting.CanRead)
+                        {
+                            if (getPermissions.CanRead)
+                            {
+                                isPermission = true;
+                            }
+                        }
+
+                        if (action == ActionSetting.CanDelete)
+                        {
+                            if (getPermissions.CanDelete)
+                            {
+                                isPermission = true;
+                            }
                         }
                     }
 
-                    if (action == ActionSetting.CanUpdate)
-                    {
-                        if (getPermissions.CanUpdate)
-                        {
-                            return true;
-                        }
-                    }
-
-                    if (action == ActionSetting.CanRead)
-                    {
-                        if (getPermissions.CanRead)
-                        {
-                            return true;
-                        }
-                    }
-
-                    if (action == ActionSetting.CanDelete)
-                    {
-                        if (getPermissions.CanDelete)
-                        {
-                            return true;
-                        }
-                    }
                 }
 
             }
-            return false;
+            return isPermission;
         }
 
     }

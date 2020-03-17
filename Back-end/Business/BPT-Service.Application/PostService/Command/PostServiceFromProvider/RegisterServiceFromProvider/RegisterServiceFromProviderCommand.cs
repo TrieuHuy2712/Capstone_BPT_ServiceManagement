@@ -50,6 +50,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                         myModel = vm
                     };
                 }
+
+                //Add new tag when isAdd equal true
                 List<Tag> newTag = new List<Tag>();
                 foreach (var item in vm.tagofServices)
                 {
@@ -63,19 +65,26 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 }
                 await _tagServiceRepository.Add(newTag);
 
-                var getIdProvider = _getIdProvider.ExecuteAsync(userId).Result.myModel.Id;
-                var mappingService = MappingService(vm, Guid.Parse(getIdProvider));
+                //Get Id of Provider
+                var getIdProvider = await _getIdProvider.ExecuteAsync(userId);
 
+                //Mapping between ViewModel and Model of Service
+                var mappingService = MappingService(vm);
+                await _postServiceRepository.Add(mappingService);
 
+                //Mapping between ViewModel and Model of ServiceProvider
+                var mappingProviderService = MappingProviderService(mappingService.Id, Guid.Parse(getIdProvider.myModel.Id));
+                await _providerServiceRepository.Add(mappingProviderService);
+
+                //Add new Tag with Id in TagService
                 foreach (var item in newTag)
                 {
                     Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
                     mappingTag.TagId = item.Id;
                     mappingService.TagServices.Add(mappingTag);
                 }
-                await _postServiceRepository.Add(mappingService);
+
                 await _tagServiceRepository.SaveAsync();
-                await _postServiceRepository.SaveAsync();
 
                 return new CommandResult<PostServiceViewModel>
                 {
@@ -94,7 +103,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             }
         }
 
-        private Service MappingService(PostServiceViewModel vm, Guid idProvider)
+        private Service MappingService(PostServiceViewModel vm)
         {
             Service sv = new Service();
             sv.CategoryId = vm.CategoryId;
@@ -109,13 +118,21 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 DateCreated = DateTime.Now,
             }).ToList();
 
-            sv.ProviderServices.ProviderId = idProvider;
-            sv.ProviderServices.ServiceId = Guid.Parse(vm.Id);
-            sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
+            
+            sv.TagServices = vm.tagofServices.Where(x=>x.isDelete == false && x.isAdd==false).Select(x => new Model.Entities.ServiceModel.TagService
             {
-                TagId = Guid.Parse(x.TagId),
+                TagId = x.TagId,
             }).ToList();
             return sv;
         }
+
+        private Model.Entities.ServiceModel.ProviderServiceModel.ProviderService MappingProviderService(Guid serviceId, Guid idProvider)
+        {
+            Model.Entities.ServiceModel.ProviderServiceModel.ProviderService providerService = new Model.Entities.ServiceModel.ProviderServiceModel.ProviderService();
+            providerService.ProviderId = idProvider;
+            providerService.ServiceId = serviceId;
+            return providerService;
+        }
+
     }
 }
