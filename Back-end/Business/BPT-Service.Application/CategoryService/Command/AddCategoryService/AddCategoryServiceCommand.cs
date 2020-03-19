@@ -15,9 +15,16 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AddCategoryServiceCommand(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
+        public AddCategoryServiceCommand(IRepository<Category, int> categoryRepository,
+        IUnitOfWork unitOfWork,
+        ICheckUserIsAdminQuery checkUserIsAdminQuery,
+        IGetPermissionActionQuery getPermissionActionQuery,
+        IHttpContextAccessor httpContextAccessor)
         {
             _categoryRepository = categoryRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
