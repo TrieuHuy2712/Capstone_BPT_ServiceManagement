@@ -25,21 +25,21 @@ export class FunctionComponent implements OnInit {
   public _functionHierachy: any[];
   public _functions: any[];
   public entity: any;
-  public editFlag: boolean;
+  public editFlag: boolean = false;
   public filter: string = "";
   public functionId: string;
   public _permission: any[];
   public _functionId: string = "FUNCTION";
-  public _userPermission:any;
-  public _currentUser:string=localStorage.getItem(SystemConstants.const_username);
-  public _adminPermission:any;
-  public _currentLang:any;
+  public _userPermission: any;
+  public _currentUser: string = localStorage.getItem(SystemConstants.const_username);
+  public _adminPermission: any;
+  public _currentLang: any;
   constructor(
     private _dataService: DataService,
     private notificationService: NotificationService,
     private utilityService: UtilityService,
     private languageService: LanguageService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this._currentLang = this.languageService.getLanguage();
@@ -53,12 +53,11 @@ export class FunctionComponent implements OnInit {
   }
   public showPermission(id: any) {
     this._dataService.get("/AdminRole/getAllPermission/" + id).subscribe((response: any[]) => {
-        console.log(response);
-        this.functionId = id;
-        this._permission = response;
-        this.permissionModal.show();
-      },
-      error => {console.log(error)}
+      this.functionId = id;
+      this._permission = response;
+      this.permissionModal.show();
+    },
+      error => { console.log(error) }
     )
   }
   public savePermission(valid: boolean, _permission: any[]) {
@@ -69,12 +68,11 @@ export class FunctionComponent implements OnInit {
       };
       this._dataService.post("/AdminRole/SavePermission", data).subscribe(
         (response: any) => {
-          console.log(response);
           this.notificationService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
           this.permissionModal.hide();
         },
-        error => {console.log(error)}
-    )
+        error => { console.log(error) }
+      )
     }
   }
   //Show add form
@@ -87,7 +85,6 @@ export class FunctionComponent implements OnInit {
   public search() {
     this._dataService.get("/function/GetAll/admin").subscribe(
       (response: any) => {
-        console.log(response);
         this._functions = response;
         this._functionHierachy = this._functions[0].childrenId;
         this._functions = this._functions.filter(x => x.key != null);
@@ -107,20 +104,16 @@ export class FunctionComponent implements OnInit {
             }
           }
         }
-        console.log(this._functions);
-        if (this._currentUser != "admin") {
-          this.loadPermission();
-        }
+        this.loadPermission();
       },
       error => this._dataService.handleError(error)
     );
   }
   loadPermission() {
-    this._dataService.get("/PermissionManager/GetAllPermission/" +this._currentUser+"/"+this._functionId
-      ).subscribe((response: any) => {
-        this._userPermission = response.result;
-        console.log(response);
-      });
+    this._dataService.get("/PermissionManager/GetAllPermission/" + this._functionId
+    ).subscribe((response: any) => {
+      this._userPermission = response.result;
+    });
   }
 
   //Save change for modal popup
@@ -183,6 +176,6 @@ export class FunctionComponent implements OnInit {
       MessageConstants.CONFIRM_DELETE_MSG,
       () => this.deleteConfirm(id)
     );
-    
+
   }
 }

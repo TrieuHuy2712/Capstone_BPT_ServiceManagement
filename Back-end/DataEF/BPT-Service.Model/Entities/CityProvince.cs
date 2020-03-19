@@ -8,6 +8,7 @@ namespace BPT_Service.Model.Entities
     {
         public string City { get; set; }
         public string Province { get; set; }
+        public string ImgPath { get; set; }
         public ICollection<Provider> Providers { get; set; }
 
     }

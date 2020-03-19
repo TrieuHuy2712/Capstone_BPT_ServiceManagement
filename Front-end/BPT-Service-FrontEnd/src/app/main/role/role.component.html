@@ -40,7 +40,7 @@
           </thead>
           <tbody *ngIf="permission.canRead">
             <tr *ngFor="let role of roles">
-              <td>{{role.name}}</td>
+              <td> {{role.name}}</td>
               <td>{{role.description}}</td>
               <td>
                 <button *ngIf="role.name != 'Admin' && permission.canUpdate" class="btn btn-primary"

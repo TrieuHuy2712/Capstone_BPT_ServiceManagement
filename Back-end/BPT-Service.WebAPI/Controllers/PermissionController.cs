@@ -19,9 +19,9 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region GET API
         [HttpGet("GetAllPermission/{userName}/{functionId}")]
-        public async Task<IActionResult> GetAllPermission(string userName, string functionId)
+        public async Task<IActionResult> GetAllPermission(string functionId)
         {
-            var model = await _permissionService.ExecuteAsync(userName, functionId);
+            var model = await _permissionService.ExecuteAsync(functionId);
             return new OkObjectResult(model);
         }
         #endregion

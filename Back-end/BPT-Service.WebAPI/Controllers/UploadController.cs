@@ -69,6 +69,14 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             directory = "/UploadedFiles/Banners/";
                         }
+                        else if (type == "location")
+                        {
+                            directory = "/UploadedFiles/Location/";
+                        }
+                        else if (type == "category")
+                        {
+                            directory = "/UploadedFiles/Categories/";
+                        }
                         else
                         {
                             directory = "/UploadedFiles/";
