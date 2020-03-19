@@ -11,11 +11,11 @@ import { UrlConstants } from '../core/common/url.constants';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  link:string;
+  link: string;
   isSidebar: boolean = false;
   currentURL = '';
   public user: LoggedInUser;
-  constructor(private utilityService: UtilityService, private authenService: AuthenService) { 
+  constructor(private utilityService: UtilityService, private authenService: AuthenService) {
     this.currentURL = window.location.href;
   }
 
@@ -24,8 +24,8 @@ export class MainComponent implements OnInit {
     console.log(this.user);
     SystemConstants.const_permission = this.user.username;
     console.log(this.currentURL);
-    if(this.currentURL == "http://localhost:4200/main/userManage/followingProvider/index" || this.currentURL == "http://localhost:4200/main/userManage/followingService/index"){
-      this.isSidebar = true; 
+    if (this.currentURL == "http://localhost:4200/main/userManage/followingProvider/index" || this.currentURL == "http://localhost:4200/main/userManage/userProfile/index" || this.currentURL == "http://localhost:4200/main/userManage/followingService/index" || this.currentURL == "http://localhost:4200/main/userManage/email" || this.currentURL == "http://localhost:4200/main/userManage/email/inbox/index" || this.currentURL == "http://localhost:4200/main/userManage/email/read/index" || this.currentURL == "http://localhost:4200/main/userManage/email/sent/index") {
+      this.isSidebar = true;
     }
   }
   logout() {

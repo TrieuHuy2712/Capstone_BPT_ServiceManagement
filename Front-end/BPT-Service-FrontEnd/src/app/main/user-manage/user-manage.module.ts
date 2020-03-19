@@ -8,6 +8,8 @@ import { userManageRoutes } from './user-manage.routes';
 import { SidebarMenuComponent } from 'src/app/shared/sidebar-menu/sidebar-menu.component';
 import { TopMenuComponent } from 'src/app/shared/top-menu/top-menu.component';
 import { TranslationService } from 'src/app/core/services/translation.service';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { EmailComponent } from './email/email.component';
 
 
 @NgModule({

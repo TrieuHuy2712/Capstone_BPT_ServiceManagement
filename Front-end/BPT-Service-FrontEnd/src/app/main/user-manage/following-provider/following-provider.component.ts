@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-following-provider',
   templateUrl: './following-provider.component.html',
@@ -11,5 +10,5 @@ export class FollowingProviderComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
 }

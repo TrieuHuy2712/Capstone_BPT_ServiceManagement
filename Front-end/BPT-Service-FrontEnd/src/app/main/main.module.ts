@@ -21,16 +21,17 @@ import { TranslationService } from '../core/services/translation.service';
 import { ListOfItemComponent } from './list-of-item/list-of-item.component';
 import { DetailItemComponent } from './detail-item/detail-item.component';
 import { UserManageComponent } from './user-manage/user-manage.component';
-
+import { TopbarUserComponent } from '../shared/topbar-user/topbar-user.component';
 
 @NgModule({
   imports: [
     CommonModule,
     UserModule,
     HomeModule,
-    RouterModule.forChild(mainRoutes)
+    RouterModule.forChild(mainRoutes),
+
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
+  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, TopbarUserComponent],
   providers:[UtilityService,AuthenService,TranslationService]
 })
 export class MainModule { }

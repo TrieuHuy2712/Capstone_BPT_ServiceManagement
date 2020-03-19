@@ -9,14 +9,13 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
-import { FollowingProviderComponent } from './following-provider.component';
-import { RatingModule } from 'ngx-bootstrap';
+import { UserProfileComponent } from './user-profile.component';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
   { path: '', redirectTo: 'index', pathMatch: 'full' },
   //localhost:4200/main/home/index
-  { path: 'index', component: FollowingProviderComponent }
+  { path: 'index', component: UserProfileComponent }
 ]
 @NgModule({
   imports: [
@@ -26,10 +25,9 @@ const itemRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(itemRoutes),
     SharedModule,
-    SlickModule.forRoot(),
-    
+    SlickModule.forRoot()
   ],
-  declarations: [FollowingProviderComponent],
+  declarations: [UserProfileComponent],
   providers:[DataService,NotificationService, TranslationService]
 })
-export class FollowingProviderModule { }
+export class UserProfileModule { }

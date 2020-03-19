@@ -1,5 +1,10 @@
 <div class="wrapper">
-    <app-top-menu></app-top-menu>
+    <div *ngIf=!isSidebar>
+      <app-top-menu></app-top-menu>
+    </div>
+    <div *ngIf="isSidebar" class="newtopbar">
+      <app-topbar-user></app-topbar-user>
+    </div>
     <div *ngIf="isSidebar">
       <app-sidebar-menu></app-sidebar-menu>
     </div>
