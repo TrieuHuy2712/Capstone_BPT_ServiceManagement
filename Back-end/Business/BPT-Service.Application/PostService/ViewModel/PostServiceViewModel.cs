@@ -6,7 +6,7 @@ namespace BPT_Service.Application.PostService.ViewModel
 {
     public class PostServiceViewModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string ServiceName { get; set; }
 
         public int CategoryId { set; get; }
@@ -40,23 +40,23 @@ namespace BPT_Service.Application.PostService.ViewModel
 
     public class ServiceofProviderViewModel
     {
-        public Guid ServiceId { get; set; }
+        public string ServiceId { get; set; }
 
-        public Guid ProviderId { get; set; }
+        public string ProviderId { get; set; }
     }
     public class ServiceofUserViewModel
     {
-        public Guid ServiceId { get; set; }
+        public string ServiceId { get; set; }
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
     }
     public class TagofServiceViewModel
     {
         public bool isAdd { get; set; }
         public bool isDelete { get; set; }
         public string TagName { get; set; }
-        public Guid ServiceId { get; set; }
+        public string ServiceId { get; set; }
 
-        public Guid TagId { get; set; }
+        public string TagId { get; set; }
     }
 }

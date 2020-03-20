@@ -125,6 +125,9 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Category");
@@ -139,12 +142,38 @@ namespace BPT_Service.Data.Migrations
                     b.Property<string>("City")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Province")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("CityProvinces");
+                });
+
+            modelBuilder.Entity("BPT_Service.Model.Entities.Email", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("To")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Emails");
                 });
 
             modelBuilder.Entity("BPT_Service.Model.Entities.Function", b =>
@@ -465,6 +494,9 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isAvatar")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

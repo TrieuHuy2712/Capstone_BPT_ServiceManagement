@@ -4,7 +4,6 @@ import { DataService } from "src/app/core/services/data.service";
 import { NotificationService } from "src/app/core/services/notification.service";
 import { MessageConstants } from "src/app/core/common/message.constants";
 import { SystemConstants } from "src/app/core/common/system,constants";
-import { TranslationService } from 'src/app/core/services/translation.service';
 @Component({
   selector: "app-role",
   templateUrl: "./role.component.html",
@@ -24,8 +23,7 @@ export class RoleComponent implements OnInit {
   public functionId: string = "ROLE";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService,
-    private translationService: TranslationService
+    private _notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -53,23 +51,16 @@ export class RoleComponent implements OnInit {
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
           this.loadPermission();
-        } 
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        "/PermissionManager/GetAllPermission/" +this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
         this.permission = response.result;
-        console.log(this.permission);
       });
   }
 
@@ -78,7 +69,6 @@ export class RoleComponent implements OnInit {
     this.loadData();
   }
   showAddModal() {
-    debugger;
     this.entity = {};
     this.modalAddEdit.show();
   }
@@ -87,7 +77,6 @@ export class RoleComponent implements OnInit {
       .get("/AdminRole/GetById/" + id)
       .subscribe((response: any) => {
         this.entity = response;
-        console.log(this.entity);
       });
   }
   showEditModal(id: any) {
@@ -96,7 +85,6 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
-    debugger;
     if (valid) {
       if (this.entity.Id == undefined) {
         console.log("vo day duoc");

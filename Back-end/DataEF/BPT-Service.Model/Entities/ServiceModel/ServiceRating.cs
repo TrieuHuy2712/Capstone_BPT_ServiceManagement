@@ -1,8 +1,7 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using BPT_Service.Data.Infrastructure.SharedKernel;
 using BPT_Service.Model.Interfaces;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BPT_Service.Model.Entities.ServiceModel
 {
@@ -15,6 +14,7 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public int NumberOfRating { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
+
         [ForeignKey("UserId")]
         public virtual AppUser AppUser { get; set; }
 

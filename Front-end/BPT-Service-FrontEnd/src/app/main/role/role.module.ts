@@ -7,6 +7,8 @@ import {FormsModule} from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { TranslationService } from 'src/app/core/services/translation.service';
+import { SharedModule } from 'src/app/core/common/SharedModule';
 
 const roleRoutes: Routes = [
   //localhost:4200/main/user
@@ -20,9 +22,10 @@ const roleRoutes: Routes = [
     PaginationModule,
     FormsModule,
     ModalModule.forRoot(),
-    RouterModule.forChild(roleRoutes)
+    RouterModule.forChild(roleRoutes),
+    SharedModule
   ],
   declarations: [RoleComponent],
-  providers:[DataService,NotificationService]
+  providers:[DataService,NotificationService, TranslationService]
 })
 export class RoleModule { }

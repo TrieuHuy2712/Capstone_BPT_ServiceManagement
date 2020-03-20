@@ -7,9 +7,9 @@
       <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
         <div class="input-group">
           <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
-            placeholder="Gõ tên ...">
+            placeholder="{{'typeAFunction'|translate}}">
           <span class="input-group-btn">
-            <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
+            <button class="btn btn-default" (click)="loadData()" type="button">{{'search'|translate}}</button>
           </span>
         </div>
       </div>
@@ -22,26 +22,26 @@
         <div class="x_title">
           <ul class="nav navbar-right panel_toolbox">
             <li>
-              <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">Thêm mới</button>
+              <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">{{'add'|translate}}</button>
             </li>
   
           </ul>
           <div class="clearfix"></div>
         </div>
-        <div class="x_content">
+        <div class="card-body table-responsive p-0">
   
-          <table class="table table-bordered">
+          <table class="table table-hover text-nowrap">
             <thead>
               <tr>
-                <th>Mã</th>
-                <th>Tên</th>
-                <th>Mô tả</th>
+                <th>Id</th>
+                <th>{{'name'|translate}}</th>
+                <th>{{'description'|translate}}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody *ngIf="permission.canRead">
-              <tr *ngFor="let tag of tags">
-                <td>{{tag.id}}</td>
+              <tr *ngFor="let tag of tags, let i= index">
+                <td>{{i+1}}</td>
                 <td>{{tag.tagName}}</td>
                 <td>{{tag.description}}</td>
                 <td>
@@ -70,7 +70,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title pull-left">Thêm/Sửa quyền</h4>
+          <h4 class="modal-title pull-left">{{'addAndEdit'|translate}}</h4>
           <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -79,32 +79,32 @@
           <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
             (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên nhóm</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <input type="hidden" [(ngModel)]="entity.id" name="id" />
                 <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3" name="name"
                   class="form-control">
                 <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
-                  Bạn phải nhập tên ít nhất 3 ký tự
+                  {{'nameWarning'|translate}}                
                 </small>
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả </label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'description'|translate}}</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.description"
                   name="description" rows="3"></textarea>
                 <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
                   class="text-danger">
-                  Bạn phải nhập mô tả
+                  {{'description'|translate}}
                 </small>
               </div>
             </div>
             <div class="ln_solid"></div>
             <div class="form-group">
               <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy bỏ</button>
-                <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+                <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
+                <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
               </div>
             </div>
           </form>

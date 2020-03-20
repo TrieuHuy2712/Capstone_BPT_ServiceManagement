@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { TreeModule } from 'angular-tree-component';
+import { SharedModule } from 'src/app/core/common/SharedModule';
 
 const functionRoutes: Routes = [
   //localhost:4200/main/user
@@ -19,7 +20,8 @@ const functionRoutes: Routes = [
     RouterModule.forChild(functionRoutes),
     TreeModule,
     FormsModule,
-    ModalModule
+    ModalModule,
+    SharedModule
   ]
 })
 export class FunctionModule { }

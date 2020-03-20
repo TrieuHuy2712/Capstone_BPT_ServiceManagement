@@ -51,6 +51,7 @@ using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderServ
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.PermissionService.Query.CheckOwnService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
@@ -62,6 +63,12 @@ using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServ
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
 using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.Extension.GetAvtInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetListTagInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetProviderInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetServiceRating;
+using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
+using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
@@ -73,6 +80,11 @@ using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
+using BPT_Service.Application.RatingService.Command.AddRatingService;
+using BPT_Service.Application.RatingService.Command.DeleteRatingService;
+using BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceByOwner;
+using BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser;
+using BPT_Service.Application.RatingService.Query.GetListAllPagingRatingService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -112,8 +124,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
 namespace BPT_Service.WebAPI
 {
@@ -141,7 +157,40 @@ namespace BPT_Service.WebAPI
             services.AddMvc()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
 
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement(){
+                    {
+                        new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                      }
+                    });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
             services.AddTransient<DbInitializer>();
             // Configure Identity
             services.Configure<IdentityOptions>(options =>
@@ -165,6 +214,71 @@ namespace BPT_Service.WebAPI
             // Services
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            ApplicationContext(services);
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+        }
+
+        public void ApplicationContext(IServiceCollection services)
+        {
 
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
@@ -197,10 +311,12 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IReOrderFunctionServiceQuery, ReOrderFunctionServiceQuery>();
             services.AddScoped<IUpdateFunctionServiceCommand, UpdateFunctionServiceCommand>();
             services.AddScoped<IUpdateParentIdServiceCommand, UpdateParentIdServiceCommand>();
+
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
             services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
             services.AddScoped<ICheckUserIsAdminQuery, CheckUserIsAdminQuery>();
+            services.AddScoped<ICheckOwnService, CheckOwnService>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
@@ -245,13 +361,20 @@ namespace BPT_Service.WebAPI
             //Post service
             services.AddScoped<IApprovePostServiceCommand, ApprovePostServiceCommand>();
             services.AddScoped<IDeleteServiceFromProviderCommand, DeleteServiceFromProviderCommand>();
-            services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
             services.AddScoped<IDeleteServiceFromUserCommand, DeleteServiceFromUserCommand>();
+            services.AddScoped<IFilterAllPagingPostServiceQuery, FilterAllPagingPostServiceQuery>();
+            services.AddScoped<IGetAllPagingPostServiceQuery, GetAllPagingPostServiceQuery>();
+            services.AddScoped<IGetPostServiceByIdQuery, GetPostServiceByIdQuery>();
+            services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
             services.AddScoped<IRegisterServiceFromUserCommand, RegisterServiceFromUserCommand>();
             services.AddScoped<IRejectPostServiceCommand, RejectPostServiceCommand>();
             services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
-            services.AddScoped<IGetAllPagingPostServiceQuery, GetAllPagingPostServiceQuery>();
-            services.AddScoped<IGetPostServiceByIdQuery, GetPostServiceByIdQuery>();
+            //Extension
+            services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
+            services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
+            services.AddScoped<IGetProviderInformationQuery, GetProviderInformationQuery>();
+            services.AddScoped<IGetServiceRatingQuery, GetServiceRatingQuery>();
+            services.AddScoped<IGetUserInformationQuery, GetUserInformationQuery>();
 
             //NewsProvider
             services.AddScoped<IApproveNewsProviderServiceCommand, ApproveNewsProviderServiceCommand>();
@@ -301,61 +424,17 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllEmailServiceQuery, GetAllEmailServiceQuery>();
             services.AddScoped<IGetAllPagingEmailServiceQuery, GetAllPagingEmailServiceQuery>();
             services.AddScoped<IGetEmailByIdService, GetEmailByIdService>();
+
+            //Rating service
+            services.AddScoped<IAddUpdateRatingServiceCommand, AddUpdateRatingServiceCommand>();
+            services.AddScoped<IDeleteRatingServiceCommand, DeleteRatingServiceCommand>();
+            services.AddScoped<IGetAllPagingRatingServiceByOwnerQuery, GetAllPagingRatingServiceByOwnerQuery>();
+            services.AddScoped<IGetAllServiceRatingByUserQuery, GetAllServiceRatingByUserQuery>();
+            services.AddScoped<IGetListAllPagingRatingServiceQuery, GetListAllPagingRatingServiceQuery>();
+
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv")),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseCors(x => x
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }

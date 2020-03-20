@@ -39,7 +39,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
         {
             try
             {
-                var getPermissionForService = await IsOwnService(vm.Id);
+                var getPermissionForService = await IsOwnService(Guid.Parse(vm.Id));
                 if (getPermissionForService.isValid)
                 {
                     var currentService = getPermissionForService.myModel;
@@ -58,7 +58,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                         {
                             deleteTag.Add(new Tag
                             {
-                                Id = item.TagId,
+                                Id = Guid.Parse(item.TagId),
                                 TagName = item.TagName
                             });
                         }
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                         Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
                         if (tag.isAdd || !tag.isDelete)
                         {
-                            mappingTag.TagId = tag.TagId;
+                            mappingTag.TagId = Guid.Parse(tag.TagId);
                             mappingService.TagServices.Add(mappingTag);
                         }
                     }
@@ -156,8 +156,8 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             }).ToList();
             sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
             {
-                ServiceId = x.ServiceId,
-                TagId = x.TagId,
+                ServiceId = Guid.Parse(x.ServiceId),
+                TagId = Guid.Parse(x.TagId),
             }).ToList();
             return sv;
         }

@@ -101,7 +101,7 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
         private PostServiceViewModel MapViewModel(Service serv)
         {
             PostServiceViewModel postServiceView = new PostServiceViewModel();
-            postServiceView.Id = serv.Id;
+            postServiceView.Id = serv.Id.ToString();
             postServiceView.listImages = serv.ServiceImages.Select(x => new PostServiceImageViewModel
             {
                 Path = x.Path
