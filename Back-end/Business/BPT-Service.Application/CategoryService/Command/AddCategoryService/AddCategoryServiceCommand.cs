@@ -33,20 +33,20 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY",ActionSetting.CanCreate) )
                 {
-                var mappingCate = mappingCategory(userVm);
-                await _categoryRepository.Add(mappingCate);
-                await _categoryRepository.SaveAsync();
+                    var mappingCate = mappingCategory(userVm);
+                    await _categoryRepository.Add(mappingCate);
+                    await _categoryRepository.SaveAsync();
 
-                return new CommandResult<CategoryServiceViewModel>
-                {
-                    isValid = true,
-                    myModel = new CategoryServiceViewModel
+                    return new CommandResult<CategoryServiceViewModel>
                     {
-                        Id = mappingCate.Id,
-                        CategoryName = mappingCate.CategoryName,
-                        Description = mappingCate.Description,
-                    },
-                };
+                        isValid = true,
+                        myModel = new CategoryServiceViewModel
+                        {
+                            Id = mappingCate.Id,
+                            CategoryName = mappingCate.CategoryName,
+                            Description = mappingCate.Description,
+                        },
+                    };
                 }else
                 {
                     return new CommandResult<CategoryServiceViewModel>{
