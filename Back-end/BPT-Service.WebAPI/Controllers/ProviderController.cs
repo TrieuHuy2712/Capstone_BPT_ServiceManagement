@@ -8,6 +8,7 @@ using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.WebAPI.Models.ProviderViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        [HttpGet("GetProviderById")]
+        [HttpGet("GetProviderById/{id}")]
         public async Task<IActionResult> GetProviderById(string id)
         {
             var model = await _getByIdProviderServiceQuery.ExecuteAsync(id);
@@ -85,16 +86,16 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveProvider")]
-        public async Task<IActionResult> ApproveAProvider(string providerId)
+        public async Task<IActionResult> ApproveAProvider([FromBody]RejectProviderViewModel vm)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(providerId);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.providerId);
             return new OkObjectResult(model);
         }
 
         [HttpPost("RejectProvider")]
-        public async Task<IActionResult> RejectAProvider(ProviderServiceViewModel vm)
+        public async Task<IActionResult> RejectAProvider([FromBody]RejectProviderViewModel vm)
         {
-            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm.providerId, vm.reason);
             return new OkObjectResult(model);
         }
 
@@ -106,7 +107,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("UpdateProviderService")]
-        public async Task<IActionResult> UpdateProviderServiceCommand(ProviderServiceViewModel vm)
+        public async Task<IActionResult> UpdateProviderServiceCommand([FromBody]ProviderServiceViewModel vm)
         {
             var model = await _updateProviderServiceCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);

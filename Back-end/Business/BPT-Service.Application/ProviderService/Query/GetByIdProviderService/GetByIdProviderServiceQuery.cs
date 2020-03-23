@@ -1,11 +1,10 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
 {
@@ -13,11 +12,15 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepository<CityProvince, int> _locationRepository;
+
         public GetByIdProviderServiceQuery(IRepository<Provider, Guid> providerRepository,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IRepository<CityProvince, int> locationRepository)
         {
             _providerRepository = providerRepository;
             _httpContextAccessor = httpContextAccessor;
+            _locationRepository = locationRepository;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string id)
@@ -34,7 +37,17 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
                         myModel = null
                     };
                 }
-                if (getPro.AppUser.Id != Guid.Parse(userId))
+                //Check don't have location
+                var location = await _locationRepository.FindSingleAsync(x => x.Id == getPro.CityId);
+                if (location == null)
+                {
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Cannot find your location"
+                    };
+                }
+                if (getPro.UserId != Guid.Parse(userId))
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
@@ -42,7 +55,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
                         myModel = null
                     };
                 }
-                var mappingProvider = MappingProvider(getPro);
+                var mappingProvider = MappingProvider(getPro, location);
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
@@ -59,9 +72,9 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             }
         }
 
-        private ProviderServiceViewModel MappingProvider(Provider vm)
+        private ProviderServiceViewModel MappingProvider(Provider vm, CityProvince cityProvince)
         {
-            ProviderServiceViewModel pro = new ProviderServiceViewModel();
+            ProviderServiceViewModel pro =  new ProviderServiceViewModel();
             pro.Id = vm.Id.ToString();
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = vm.Status;
@@ -72,8 +85,8 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             pro.DateModified = DateTime.Now;
             pro.ProviderName = vm.ProviderName;
             pro.Address = vm.Address;
-            pro.LocationCity.City = vm.ServiceCityProvince.City;
-            pro.LocationCity.Province = vm.ServiceCityProvince.Province;
+            pro.CityName = cityProvince.City;
+            pro.ProvinceName = cityProvince.Province;
             return pro;
         }
     }

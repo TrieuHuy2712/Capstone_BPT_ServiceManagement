@@ -42,6 +42,12 @@ namespace BPT_Service.Data
                 });
                 await _roleManager.CreateAsync(new AppRole()
                 {
+                    Name = "Provider",
+                    NormalizedName = "Provider",
+                    Description = "Provider",
+                });
+                await _roleManager.CreateAsync(new AppRole()
+                {
                     Name = "Customer",
                     NormalizedName = "Customer",
                     Description = "Customer",
@@ -53,7 +59,7 @@ namespace BPT_Service.Data
                 {
                     UserName = "admin",
                     FullName = "Administrator",
-                    Email = "admin@gmail.com",
+                    Email = "huytrieu2712@gmail.com",
                     DateCreated = DateTime.Now,
                     DateModified = DateTime.Now,
                     Status = Status.Active

@@ -34,7 +34,7 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
                     };
                 }
                 var getId = await _providerRepository.FindByIdAsync(newId);
-                if (getId != null && getId.AppUser.Id == Guid.Parse(userId))
+                if (getId != null)
                 {
                     _providerRepository.Remove(newId);
                     await _providerRepository.SaveAsync();
