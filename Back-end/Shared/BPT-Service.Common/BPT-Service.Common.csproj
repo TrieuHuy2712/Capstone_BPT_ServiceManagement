@@ -5,4 +5,8 @@
     <RootNamespace>BPT_Service.Common</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\EmailConstant\" />
+  </ItemGroup>
+
 </Project>

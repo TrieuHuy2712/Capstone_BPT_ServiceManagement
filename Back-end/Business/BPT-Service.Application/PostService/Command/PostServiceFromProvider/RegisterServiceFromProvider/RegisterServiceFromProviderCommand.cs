@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
-using BPT_Service.Application.TagService.Command.AddServiceAsync;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider
 {
@@ -67,6 +66,14 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
 
                 //Get Id of Provider
                 var getIdProvider = await _getIdProvider.ExecuteAsync(userId);
+                if (getIdProvider == null || getIdProvider.isValid==false)
+                {
+                    return new CommandResult<PostServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "You don't have a provider"
+                    };
+                }
 
                 //Mapping between ViewModel and Model of Service
                 var mappingService = MappingService(vm);
@@ -114,12 +121,11 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             sv.Status = Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
-                Path = x.Path,
+                Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
             }).ToList();
 
-            
-            sv.TagServices = vm.tagofServices.Where(x=>x.isDelete == false && x.isAdd==false).Select(x => new Model.Entities.ServiceModel.TagService
+            sv.TagServices = vm.tagofServices.Where(x => x.isDelete == false && x.isAdd == false).Select(x => new Model.Entities.ServiceModel.TagService
             {
                 TagId = Guid.Parse(x.TagId),
             }).ToList();
@@ -133,6 +139,5 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             providerService.ServiceId = serviceId;
             return providerService;
         }
-
     }
 }

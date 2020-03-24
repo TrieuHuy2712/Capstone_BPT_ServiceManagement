@@ -1,11 +1,10 @@
+using BPT_Service.Model.Entities;
+using BPT_Service.Model.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BPT_Service.Model.Entities;
-using BPT_Service.Model.Enums;
-using Microsoft.AspNetCore.Identity;
-
 
 namespace BPT_Service.Data
 {
@@ -14,13 +13,13 @@ namespace BPT_Service.Data
         private readonly AppDbContext _context;
         private UserManager<AppUser> _userManager;
         private RoleManager<AppRole> _roleManager;
+
         public DbInitializer(AppDbContext context, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
 
         public async Task Seed()
         {
@@ -31,8 +30,6 @@ namespace BPT_Service.Data
                     Name = "Admin",
                     NormalizedName = "Admin",
                     Description = "Top manager",
-
-
                 });
                 await _roleManager.CreateAsync(new AppRole()
                 {
@@ -67,12 +64,11 @@ namespace BPT_Service.Data
                 var user = await _userManager.FindByNameAsync("admin");
                 await _userManager.AddToRoleAsync(user, "Admin");
 
-
                 await _userManager.CreateAsync(new AppUser()
                 {
                     UserName = "huytrieu",
                     FullName = "Trieu Duc Huy",
-                    Email = "huytrieu2712@gmail.com",
+                    Email = "tommy.jimm2712@gmail.com",
                     DateCreated = DateTime.Now,
                     DateModified = DateTime.Now,
                     Status = Status.Active
@@ -108,7 +104,6 @@ namespace BPT_Service.Data
                     new Function() {Id = "FUNCTION", Name = "Function",ParentId = "SYSTEM",SortOrder = 2,Status = Status.Active,URL = "/main/function/index",IconCss = "fa-home"},
                     new Function() {Id = "USER", Name = "User",ParentId = "SYSTEM",SortOrder =3,Status = Status.Active,URL = "/main/user/index",IconCss = "fa-home"},
 
-
                     new Function() {Id = "PROVIDER",Name = "Provider",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
                     new Function() {Id = "SERVICE_CATEGORY",Name = "Category",ParentId = "PROVIDER",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "SERVICE",Name = "Service",ParentId = "PROVIDER",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
@@ -129,6 +124,39 @@ namespace BPT_Service.Data
                 };
                 await _context.CityProvinces.AddRangeAsync(cities);
                 await _context.SaveChangesAsync();
+            }
+
+            if (_context.CityProvinces.Count() == 0)
+            {
+                List<Email> emails = new List<Email>()
+                {
+                    new Email()
+                    {
+                        Subject="Approve Provider Request",
+                        Name ="Approve_Provider",
+                        Message= "Dear #UserName </br> Your provider has been accepted."
+                    },
+                    new Email()
+                    {
+                        Subject="Reject Provider Request",
+                        Name ="Reject_Provider",
+                        Message= "Dear #UserName </br> Your provider has been rejected.<br> " +
+                        "<strong>#Reason</strong>"
+                    },
+                    new Email()
+                    {
+                        Subject="Approve Service Request",
+                        Name ="Approve_Service",
+                        Message= "Dear #UserName </br> Your provider has been accepted."
+                    },
+                    new Email()
+                    {
+                        Subject="Reject Provider Request",
+                        Name ="Reject_Service",
+                        Message= "Dear #ProviderName_#UserName </br> Your provider has been rejected.<br> " +
+                        "<strong>#Reason</strong>"
+                    }
+                };
             }
         }
     }

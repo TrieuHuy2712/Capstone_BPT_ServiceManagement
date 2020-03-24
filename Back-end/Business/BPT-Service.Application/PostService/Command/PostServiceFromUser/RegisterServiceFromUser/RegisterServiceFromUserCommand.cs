@@ -101,7 +101,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             sv.Status = Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
-                Path = x.Path,
+                Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
             }).ToList();
 
