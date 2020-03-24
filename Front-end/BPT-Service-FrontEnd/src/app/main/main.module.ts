@@ -1,27 +1,17 @@
-import { NgModule } from '@angular/core';
+
+import { AuthenService } from 'src/app/core/services/authen.service';
 import { CommonModule } from '@angular/common';
+import { HomeModule } from './home/home.module';
+import { LocationComponent } from './location/location.component';
 import { MainComponent } from './main.component';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SidebarMenuComponent } from '../shared/sidebar-menu/sidebar-menu.component';
 import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
-import { AuthenService } from 'src/app/core/services/authen.service';
-import { UtilityService } from 'src/app/core/services/utility.service';
-import { RouterModule } from '@angular/router';
-import { mainRoutes } from './main.routes';
-import { HomeComponent } from './home/home.component';
-import { FunctionComponent } from './function/function.component';
-import { RoleComponent } from './role/role.component';
-import { HomeModule } from './home/home.module';
-import { UserComponent } from './user/user.component';
-import { UserModule } from './user/user.module';
-import { ServiceCategoryComponent } from './service-category/service-category.component';
-import { ServiceTagComponent } from './service-tag/service-tag.component';
-import { TranslatePipe } from '../core/common/translate.pipe';
-import { LanguageService } from '../core/services/language.service';
 import { TranslationService } from '../core/services/translation.service';
-import { ListOfItemComponent } from './list-of-item/list-of-item.component';
-import { DetailItemComponent } from './detail-item/detail-item.component';
-import { UserManageComponent } from './user-manage/user-manage.component';
-
+import { UserModule } from './user/user.module';
+import { UtilityService } from 'src/app/core/services/utility.service';
+import { mainRoutes } from './main.routes';
 
 @NgModule({
   imports: [
@@ -30,7 +20,7 @@ import { UserManageComponent } from './user-manage/user-manage.component';
     HomeModule,
     RouterModule.forChild(mainRoutes)
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
-  providers:[UtilityService,AuthenService,TranslationService]
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, LocationComponent],
+  providers: [UtilityService, AuthenService, TranslationService]
 })
 export class MainModule { }

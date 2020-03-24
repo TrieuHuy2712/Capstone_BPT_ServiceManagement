@@ -113,6 +113,7 @@ using BPT_Service.Common.Support;
 using BPT_Service.Data;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -145,6 +146,8 @@ namespace BPT_Service.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(x => x.UseSqlServerStorage("Data Source=6YLCMH2\\SQLEXPRESS;Initial Catalog=HangFireTutorial;Integrated Security=True"));
+            services.AddHangfireServer();
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
                 o => o.MigrationsAssembly("DataEF/BPT-Service.Data")));
@@ -256,6 +259,7 @@ namespace BPT_Service.WebAPI
                .AllowAnyMethod()
                .AllowAnyHeader());
 
+            app.UseHangfireDashboard();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

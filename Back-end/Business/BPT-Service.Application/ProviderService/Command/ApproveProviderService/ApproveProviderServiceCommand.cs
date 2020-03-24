@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
@@ -19,13 +20,17 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+
         public ApproveProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
         IRepository<Provider, Guid> providerRepository,
-        UserManager<AppUser> userRepository)
+        UserManager<AppUser> userRepository,
+        ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId)
@@ -41,22 +46,33 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     };
                 }
                 var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
-                if (mappingProvider != null)
+                if (mappingProvider == null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
+                        errorMessage ="Cannot find your id provider"
+                    };
+                }
+                //Check user is Provider 
+                if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                {
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        errorMessage = "You had been a provider"
                     };
                 }
                 mappingProvider.Status = Status.Active;
                 _providerRepository.Update(mappingProvider);
+                var findUserId = await _userRepository.FindByIdAsync(userId);
+                await _userRepository.AddToRoleAsync(findUserId, "Provider");
                 await _providerRepository.SaveAsync();
                 var userMail= await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
 
                 //Set content for email
                 var content = "Your provider: " + userMail.Email + " has been approved. Please check in our system";
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
-                                content, mappingProvider.AppUser.Email).Wait();
+                                content, _userRepository.FindByIdAsync(userId).Result.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
