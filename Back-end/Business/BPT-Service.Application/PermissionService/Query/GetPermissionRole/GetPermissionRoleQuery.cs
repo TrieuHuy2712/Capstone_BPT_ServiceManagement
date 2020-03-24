@@ -6,6 +6,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
 using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,16 +17,21 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRole
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IRepository<Permission, int> _permissionRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public GetPermissionRoleQuery(RoleManager<AppRole> roleManager,
             IRepository<Permission, int> permissionRepository,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _roleManager = roleManager;
             _permissionRepository = permissionRepository;
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<PermissionSingleViewModel> ExecuteAsync(string userName, string functionId)
+        public async Task<PermissionSingleViewModel> ExecuteAsync(string functionId)
         {
+            var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
+
             List<Guid> listIdRole = new List<Guid>();
             List<PermissionSingleViewModel> permissionSingleVM = new List<PermissionSingleViewModel>();
             var userRoleIds = _roleManager.Roles.Select(x => new
@@ -34,7 +40,18 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRole
                 Name = x.Name,
 
             }).ToList();
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByIdAsync(getUserId);
+            if(user.UserName.ToLower()== "admin")
+            {
+                return new PermissionSingleViewModel
+                {
+                    CanCreate = true,
+                    CanDelete = true,
+                    CanRead = true,
+                    CanUpdate = true,
+                    FunctionId = functionId
+                };
+            }
             var roles = await _userManager.GetRolesAsync(user);
 
             List<AppRoleViewModel> listRoleUser = new List<AppRoleViewModel>();

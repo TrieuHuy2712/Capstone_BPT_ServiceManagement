@@ -84,32 +84,16 @@ export class UserComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-        console.log(response);
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
           this.loadPermission();
-        } else {
-          let adminPermission: any = {
-            canCreate: true,
-            canDelete: true,
-            canUpdate: true,
-            canRead: true
-          };
-          this.permission = adminPermission;
-        }
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        "/PermissionManager/GetAllPermission/" +this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
-        this.permission = response.result;
-        console.log(this.permission);
+        this.permission = response;
       });
   }
 
@@ -120,7 +104,6 @@ export class UserComponent implements OnInit {
         for (let role of response) {
           this.allRoles.push({ id: role.name, name: role.description });
         }
-        console.log(response);
       },
       error => this._dataService.handleError(error)
     );

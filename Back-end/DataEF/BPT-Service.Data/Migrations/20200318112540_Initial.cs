@@ -130,7 +130,8 @@ namespace BPT_Service.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CategoryName = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: true)
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
+                    ImgPath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,11 +145,28 @@ namespace BPT_Service.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     City = table.Column<string>(nullable: true),
-                    Province = table.Column<string>(nullable: true)
+                    Province = table.Column<string>(nullable: true),
+                    ImgPath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CityProvinces", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Emails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    To = table.Column<string>(nullable: true),
+                    Subject = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Emails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -336,7 +354,8 @@ namespace BPT_Service.Data.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    ServiceId = table.Column<Guid>(nullable: false)
+                    ServiceId = table.Column<Guid>(nullable: false),
+                    isAvatar = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -634,6 +653,9 @@ namespace BPT_Service.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Emails");
 
             migrationBuilder.DropTable(
                 name: "Permissions");

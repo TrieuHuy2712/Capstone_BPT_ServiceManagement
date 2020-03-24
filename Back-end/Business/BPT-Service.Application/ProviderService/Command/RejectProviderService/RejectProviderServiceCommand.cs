@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
@@ -19,17 +20,20 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
 
         public RejectProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
         IRepository<Provider, Guid> providerRepository,
-        UserManager<AppUser> userRepository)
+        UserManager<AppUser> userRepository,
+        ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
         {
             try
             {
@@ -42,8 +46,15 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                         myModel = null
                     };
                 }
-                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
-                if (mappingProvider != null)
+                if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                {
+                    var getUser = await _userRepository.FindByIdAsync(userId);
+                    var getAllRole = await _userRepository.GetRolesAsync(getUser);
+                    var providerCheck = await _userRepository.IsInRoleAsync(getUser, "PROVIDER"); 
+                    var check= await _userRepository.RemoveFromRoleAsync(getUser, "Provider");
+                }
+                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
+                if (mappingProvider == null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {
@@ -57,7 +68,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 
                 var getEmail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+vm.Reason;
+                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+ reason;
                 ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
                                 content, mappingProvider.AppUser.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>

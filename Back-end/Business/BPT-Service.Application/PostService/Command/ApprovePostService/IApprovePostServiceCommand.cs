@@ -6,6 +6,6 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
 {
     public interface IApprovePostServiceCommand
     {
-        Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm);
+        Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService);
     }
 }

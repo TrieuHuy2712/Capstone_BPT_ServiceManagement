@@ -103,9 +103,9 @@ namespace BPT_Service.WebAPI.Controllers
         #region Post API
 
         [HttpPost("approvePostService")]
-        public async Task<IActionResult> ApprovePostService([FromBody]PostServiceViewModel vm)
+        public async Task<IActionResult> ApprovePostService(string idService)
         {
-            var model = await _approvePostServiceCommand.ExecuteAsync(vm);
+            var model = await _approvePostServiceCommand.ExecuteAsync(idService);
             return new OkObjectResult(model);
         }
 

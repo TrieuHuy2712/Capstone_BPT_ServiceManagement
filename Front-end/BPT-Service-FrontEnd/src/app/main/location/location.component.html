@@ -1,6 +1,6 @@
 <div class="page-title">
     <div class="title_left">
-      <h3>Danh sách </h3>
+      <h3>Danh sách nhóm quyền</h3>
     </div>
   
     <div class="title_right">
@@ -33,22 +33,20 @@
           <table class="table table-hover text-nowrap">
             <thead>
               <tr>
-                <th>Id</th>
                 <th>{{'name'|translate}}</th>
                 <th>{{'description'|translate}}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody *ngIf="permission.canRead">
-              <tr *ngFor="let tag of tags, let i= index">
-                <td>{{i+1}}</td>
-                <td>{{tag.tagName}}</td>
-                <td>{{tag.description}}</td>
+              <tr *ngFor="let loc of location">
+                <td> {{loc.city}}</td>
+                <td>{{loc.province}}</td>
                 <td>
-                  <button *ngIf="tag.name != 'Admin' && permission.canUpdate" class="btn btn-primary"
-                    (click)="showEditModal(tag.id)"><i class="fa fa-pencil-square-o"></i></button>
-                  <button *ngIf="tag.name != 'Admin' && permission.canDelete" class="btn btn-danger"
-                    (click)="deleteItem(tag.id)"><i class="fa fa-trash"></i></button>
+                  <button *ngIf="permission.canUpdate" class="btn btn-primary"
+                    (click)="showEditModal(loc.id)"><i class="fa fa-pencil-square-o"></i></button>
+                  <button *ngIf="permission.canDelete" class="btn btn-danger"
+                    (click)="deleteItem(loc.id)"><i class="fa fa-trash"></i></button>
   
                 </td>
               </tr>
@@ -82,23 +80,22 @@
               <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <input type="hidden" [(ngModel)]="entity.id" name="id" />
-                <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3" name="name"
+                <input type="text" #city="ngModel" [(ngModel)]="entity.city" required minlength="3" name="city"
                   class="form-control">
-                <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
-                  {{'nameWarning'|translate}}                
+                <small [hidden]="city.valid || (city.pristine && !addEditForm.submitted)" class="text-danger">
+                  {{'nameWarning'|translate}}
                 </small>
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'description'|translate}}</label>
-              <div class="col-md-9 col-sm-9 col-xs-12">
-                <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.description"
-                  name="description" rows="3"></textarea>
-                <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
-                  class="text-danger">
-                  {{'description'|translate}}
-                </small>
-              </div>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                  <input type="text" #province="ngModel" [(ngModel)]="entity.province" required minlength="3" name="province"
+                    class="form-control">
+                  <small [hidden]="province.valid || (province.pristine && !addEditForm.submitted)" class="text-danger">
+                    {{'nameWarning'|translate}}
+                  </small>
+                </div>
             </div>
             <div class="ln_solid"></div>
             <div class="form-group">

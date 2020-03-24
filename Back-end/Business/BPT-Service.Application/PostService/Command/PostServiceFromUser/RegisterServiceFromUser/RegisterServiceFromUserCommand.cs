@@ -101,13 +101,13 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             sv.Status = Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
-                Path = x.Path,
+                Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
             }).ToList();
 
             sv.TagServices = vm.tagofServices.Where(x=>x.isDelete==false && x.isAdd ==false).Select(x => new Model.Entities.ServiceModel.TagService
             {
-                TagId = x.TagId,
+                TagId = Guid.Parse(x.TagId),
             }).ToList();
             return sv;
         }
