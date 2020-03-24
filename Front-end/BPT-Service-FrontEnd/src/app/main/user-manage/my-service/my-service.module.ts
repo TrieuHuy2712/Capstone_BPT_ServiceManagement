@@ -3,22 +3,19 @@ import { CommonModule } from '@angular/common';
 import { AuthenService } from 'src/app/core/services/authen.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { RouterModule } from '@angular/router';
-import { UserManageComponent } from './user-manage.component';
-import { userManageRoutes } from './user-manage.routes';
 import { SidebarMenuComponent } from 'src/app/shared/sidebar-menu/sidebar-menu.component';
 import { TopMenuComponent } from 'src/app/shared/top-menu/top-menu.component';
 import { TranslationService } from 'src/app/core/services/translation.service';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { EmailComponent } from './email/email.component';
-import { MyServiceComponent } from './my-service/my-service.component';
+import { MyServiceComponent } from './my-service.component';
+import { myServiceRoutes } from './my-service.routes';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(userManageRoutes)
+    RouterModule.forChild(myServiceRoutes)
   ],
-  declarations: [UserManageComponent],
+  declarations: [MyServiceComponent],
   providers:[UtilityService,AuthenService,TranslationService]
 })
-export class UserManageModule { }
+export class MyServiceModule { }

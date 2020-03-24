@@ -24,7 +24,16 @@ export class MainComponent implements OnInit {
     console.log(this.user);
     SystemConstants.const_permission = this.user.username;
     console.log(this.currentURL);
-    if (this.currentURL == "http://localhost:4200/main/userManage/followingProvider/index" || this.currentURL == "http://localhost:4200/main/userManage/userProfile/index" || this.currentURL == "http://localhost:4200/main/userManage/followingService/index" || this.currentURL == "http://localhost:4200/main/userManage/email" || this.currentURL == "http://localhost:4200/main/userManage/email/inbox/index" || this.currentURL == "http://localhost:4200/main/userManage/email/read/index" || this.currentURL == "http://localhost:4200/main/userManage/email/sent/index") {
+    if (this.currentURL == "http://localhost:4200/main/userManage/followingProvider/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/userProfile/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/followingService/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/email" 
+    || this.currentURL == "http://localhost:4200/main/userManage/email/inbox/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/email/read/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/email/sent/index" 
+    || this.currentURL == "http://localhost:4200/main/userManage/myService/index"
+    || this.currentURL == "http://localhost:4200/main/userManage/myService/post/index"
+    || this.currentURL == "http://localhost:4200/main/userManage/myService/view/index") {
       this.isSidebar = true;
     }
   }

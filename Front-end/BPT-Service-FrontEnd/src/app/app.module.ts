@@ -11,6 +11,7 @@ import { LanguageService } from './core/services/language.service';
 import { TranslatePipe } from './core/common/translate.pipe';
 import { TranslationService } from './core/services/translation.service';
 import { TopbarUserComponent } from './shared/topbar-user/topbar-user.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({

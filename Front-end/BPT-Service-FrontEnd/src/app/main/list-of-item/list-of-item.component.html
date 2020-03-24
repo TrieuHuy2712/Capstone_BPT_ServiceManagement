@@ -1254,7 +1254,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" *ngFor="let service of services">
                                 <div class="col-xs-6 col-md-3 col-lg-20">
                                     <div class="c-product-card--grid">
                                         <div class="promo is-relative"><a href="/vi/rooms/23052" class=""
@@ -1274,9 +1274,9 @@
                                                 </div>
                                             </a>
                                             <!---->
-                                            <div class="promo__content">
+                                            <div class="promo__content" >
                                                 <div class="promo__type bold" style="-webkit-box-orient: vertical;">
-                                                    Nhà riêng
+                                                    {{service.categoryId}}
                                                     <!---->
                                                 </div>
                                                 <div class="is-relative"><a href="/vi/rooms/23052" class=""

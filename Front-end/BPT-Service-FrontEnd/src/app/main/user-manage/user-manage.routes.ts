@@ -16,7 +16,10 @@ export const userManageRoutes: Routes = [
       },
       {
         path: "email", loadChildren: "./email/email.module#EmailModule"
-      }
+      },
+      {
+        path: "myService", loadChildren: "./my-service/my-service.module#MyServiceModule"
+      },
     ]
   }
 ];

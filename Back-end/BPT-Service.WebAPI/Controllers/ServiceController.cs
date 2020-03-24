@@ -18,7 +18,7 @@ namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("Service")]
     public class ServiceController : ControllerBase
     {
         private readonly IApprovePostServiceCommand _approvePostServiceCommand;

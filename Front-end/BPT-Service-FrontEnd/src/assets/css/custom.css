@@ -1821,6 +1821,7 @@ body:not(.sidebar-mini-md) .user-manage-content, body:not(.sidebar-mini-md) .mai
     -ms-flex-align: stretch;
     align-items: stretch;
     width: 100%;
+    margin-top: 20px;
 }
 
 .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
@@ -2182,6 +2183,20 @@ p {
     margin-bottom: 1rem;
 }
 
+.form-control-custom{
+    border-radius: 0 !important;
+    height: 100%;
+    overflow-y: none;
+}
+
+.option-cus{
+    text-align: center;
+    height: 2rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    cursor: pointer;
+}
 /* .sidebar-collapse .main-sidebar, .sidebar-collapse .main-sidebar::before {
   margin-left: -250px;
 }
