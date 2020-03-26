@@ -1,47 +1,60 @@
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
-using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
-using SendGrid.Helpers.Mail;
-using SendGrid;
-using System.Threading.Tasks;
-using System;
 using Microsoft.AspNetCore.Identity;
-using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.RejectPostService
 {
     public class RejectPostServiceCommand : IRejectPostServiceCommand
     {
-        private readonly IRepository<Service, Guid> _postServiceRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<AppUser> _userRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<EmailConfigModel> _configEmail;
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IRepository<Service, Guid> _postServiceRepository;
+        private readonly UserManager<AppUser> _userRepository;
 
-        public RejectPostServiceCommand(IRepository<Service, Guid> postServiceRepository,
-           IHttpContextAccessor httpContextAccessor,
-            UserManager<AppUser> userRepository,
-            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
+        public RejectPostServiceCommand(
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> configEmail,
             IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
             IRepository<Provider, Guid> providerRepository,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IRepository<Service, Guid> postServiceRepository,
+            UserManager<AppUser> userRepository
+            )
         {
-            _postServiceRepository = postServiceRepository;
+            _configEmail = configEmail;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
+            _postServiceRepository = postServiceRepository;
+            _providerRepository = providerRepository;
+            _providerServiceRepository = providerServiceRepository;
             _userRepository = userRepository;
             _userServiceRepository = userServiceRepository;
-            _providerServiceRepository = providerServiceRepository;
-            _providerRepository = providerRepository;
-            _getPermissionActionQuery = getPermissionActionQuery;
         }
 
-        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
+        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string id, string reason)
         {
             try
             {
@@ -55,7 +68,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                         errorMessage = "You don't have permission"
                     };
                 }
-                var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(vm.Id));
+                var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(id));
                 if (getCurrentPost != null)
                 {
                     getCurrentPost.Status = Status.InActive;
@@ -63,11 +76,11 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                     await _postServiceRepository.SaveAsync();
 
                     //Check is UserService
-                    var serviceInformation = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(vm.Id));
+                    var serviceInformation = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(id));
                     if (serviceInformation == null)
                     {
                         //Check is ProviderService
-                        var providerInformation = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(vm.Id));
+                        var providerInformation = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(id));
                         if (providerInformation != null)
                         {
                             var getProviderInformation = await _providerRepository.FindSingleAsync(x => x.Id == providerInformation.ProviderId);
@@ -92,9 +105,15 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                         if (findEmailUser != null)
                         {
                             //Set content for email
-                            var content = "Your provider: " + getCurrentPost.ServiceName + " has been approved. Please check in our system. Because "+vm.Reason;
-                            ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
-                                            content, findEmailUser.Email).Wait();
+                            //Get all email
+                            var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
+                            var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Reject_Service).FirstOrDefault();
+                            getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName)
+                                .Replace(EmailKey.UserNameKey, findEmailUser.Email)
+                                .Replace(EmailKey.ReasonKey, reason);
+                           
+                            ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
+                                            getFirstEmail.Message, findEmailUser.Email).Wait();
                         }
                         else
                         {
@@ -136,7 +155,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(RejectServiceEmailSetting.FromUserEmail, RejectServiceEmailSetting.FullNameUser);
+            var from = new EmailAddress(_configEmail.Value.FromUserEmail, _configEmail.Value.FullUserName);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;

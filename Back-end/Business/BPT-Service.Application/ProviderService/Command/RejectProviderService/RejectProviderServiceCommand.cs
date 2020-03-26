@@ -1,8 +1,12 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
@@ -10,6 +14,7 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -21,16 +26,22 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userRepository;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
+        private readonly IOptions<EmailConfigModel> _configEmail;
 
         public RejectProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
         IRepository<Provider, Guid> providerRepository,
         UserManager<AppUser> userRepository,
-        ICheckUserIsProviderQuery checkUserIsProviderQuery)
+        ICheckUserIsProviderQuery checkUserIsProviderQuery,
+        IOptions<EmailConfigModel> configEmail,
+        IGetAllEmailServiceQuery getAllEmailServiceQuery)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _configEmail = configEmail;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
@@ -68,9 +79,11 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 
                 var getEmail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+ reason;
-                ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
-                                content, mappingProvider.AppUser.Email).Wait();
+                var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Reject_Provider).FirstOrDefault();
+                getFirstEmail.Message= getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.Email).Replace(EmailKey.ReasonKey, reason);
+                ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
+                                getFirstEmail.Message, mappingProvider.AppUser.Email).Wait();
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
@@ -90,7 +103,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(RejectProviderEmailSetting.FromUserEmail, ApproveProviderEmailSetting.FullNameUser);
+            var from = new EmailAddress(_configEmail.Value.FromUserEmail, _configEmail.Value.FullUserName);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;

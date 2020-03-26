@@ -71,6 +71,7 @@ using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
+using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
@@ -108,6 +109,7 @@ using BPT_Service.Application.UserService.Command.UpdateUserAsync;
 using BPT_Service.Application.UserService.Query.GetAllAsync;
 using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
 using BPT_Service.Application.UserService.Query.GetByIdAsync;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Support;
 using BPT_Service.Data;
@@ -241,6 +243,9 @@ namespace BPT_Service.WebAPI
                 };
             });
             ApplicationContext(services);
+
+            //Read email config json
+            services.Configure<EmailConfigModel>(Configuration.GetSection("EmailConfig"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -373,6 +378,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRegisterServiceFromUserCommand, RegisterServiceFromUserCommand>();
             services.AddScoped<IRejectPostServiceCommand, RejectPostServiceCommand>();
             services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
+            services.AddScoped<IGetPostUserServiceByUserIdQuery, GetPostUserServiceByUserIdQuery>();
             //Extension
             services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
             services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
@@ -439,6 +445,7 @@ namespace BPT_Service.WebAPI
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
+            services.AddScoped<LevenshteinDistance, LevenshteinDistance>();
         }
     }
 }

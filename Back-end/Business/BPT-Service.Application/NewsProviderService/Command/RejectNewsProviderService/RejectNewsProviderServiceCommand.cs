@@ -1,9 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
-using BPT_Service.Application.ProviderService.ViewModel;
-using BPT_Service.Common.Helpers;
-using BPT_Service.Common.Helpers.NewsProviderEmail;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -11,6 +12,7 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -21,38 +23,43 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
         private readonly UserManager<AppUser> _userRepository;
         private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<EmailConfigModel> _configEmail;
         public RejectNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository,
         IHttpContextAccessor httpContextAccessor,
         UserManager<AppUser> userRepository,
-        IRepository<Provider, Guid> providerRepository)
+        IRepository<Provider, Guid> providerRepository,
+        IGetAllEmailServiceQuery getAllEmailServiceQuery,
+        IOptions<EmailConfigModel> configEmail)
         {
             _newProviderRepository = newProviderRepository;
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepository;
             _providerRepository = providerRepository;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
+            _configEmail = configEmail;
         }
 
-        public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
+        public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int id, string reason)
         {
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null || userId != vm.UserId)
+                if (userId == null)
                 {
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
-                        myModel = vm
                     };
                 }
-                var mappingProvider = await _newProviderRepository.FindByIdAsync(vm.Id);
+                var mappingProvider = await _newProviderRepository.FindByIdAsync(id);
                 if (mappingProvider != null)
                 {
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
-                        myModel = vm
+                        errorMessage ="Cannot find your new"
                     };
                 }
                 var map = MappingNewProvider(mappingProvider);
@@ -63,13 +70,18 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                 var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
 
                 //Set content for email
-                var content = "Your news: " + mappingProvider.Title + " has been rejected. Please check in our system. Because " + vm.Reason;
-                ContentEmail(KeySetting.SENDGRIDKEY, RejectNewsProviderEmailSetting.Subject,
-                                content, getEmail.Email).Wait();
+                var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
+                var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Social_Login).FirstOrDefault();
+                getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName)
+                                            .Replace(EmailKey.NewNameKey, mappingProvider.Title)
+                                            .Replace(EmailKey.ReasonKey, reason);
+
+                ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
+                                getFirstEmail.Message, getEmail.Email).Wait();
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = true,
-                    myModel = vm
+                    errorMessage="You have been accepted. Please check your email"
                 };
             }
             catch (Exception ex)
@@ -90,7 +102,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(RejectNewsProviderEmailSetting.FromUserEmail, RejectNewsProviderEmailSetting.FullNameUser);
+            var from = new EmailAddress(_configEmail.Value.FromUserEmail, _configEmail.Value.FullUserName);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;

@@ -1,8 +1,7 @@
-using System;
-using System.Threading.Tasks;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
-using BPT_Service.Common.Helpers;
-using BPT_Service.Common.Helpers.NewsProviderEmail;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -10,27 +9,40 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider
 {
     public class ApproveNewsProviderServiceCommand : IApproveNewsProviderServiceCommand
     {
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<EmailConfigModel> _configEmail;
+        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
         private readonly UserManager<AppUser> _userRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public ApproveNewsProviderServiceCommand(IRepository<ProviderNew, int> newProviderRepository,
-        IHttpContextAccessor httpContextAccessor,
-        UserManager<AppUser> userRepository,
-        IRepository<Provider, Guid> providerRepository)
+
+        public ApproveNewsProviderServiceCommand(
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> configEmail,
+            IRepository<Provider, Guid> providerRepository,
+            IRepository<ProviderNew, int> newProviderRepository,
+            UserManager<AppUser> userRepository)
         {
-            _newProviderRepository = newProviderRepository;
+            _configEmail = configEmail;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _httpContextAccessor = httpContextAccessor;
-            _userRepository = userRepository;
+            _newProviderRepository = newProviderRepository;
             _providerRepository = providerRepository;
+            _userRepository = userRepository;
         }
+
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews)
         {
             try
@@ -59,9 +71,11 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                 var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == mappingProvider.ProviderId);
                 var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
                 //Set content for email
-                var content = "Your news: " + mappingProvider.Title + " has been approved. Please check in our system";
-                ContentEmail(KeySetting.SENDGRIDKEY, ApproveNewsProviderEmailSetting.Subject,
-                                content, getEmail.Email).Wait();
+                var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
+                var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
+                getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName).Replace(EmailKey.NewNameKey, mappingProvider.Title);
+                ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
+                                getFirstEmail.Message, getEmail.Email).Wait();
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = true,
@@ -86,7 +100,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(ApproveNewsProviderEmailSetting.FromUserEmail, ApproveNewsProviderEmailSetting.FullNameUser);
+            var from = new EmailAddress(_configEmail.Value.FromUserEmail, _configEmail.Value.FullUserName);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;

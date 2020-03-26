@@ -29,6 +29,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetByIdProviderServiceQuery _getByIdProviderServiceQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
         private readonly IUpdateProviderServiceCommand _updateProviderServiceCommand;
+
         public ProviderController(IApproveProviderServiceCommand approveProviderServiceCommand,
         IDeleteProviderServiceCommand deleteProviderServiceCommand,
         IRegisterProviderServiceCommand registerProviderServiceCommand,
@@ -88,7 +89,7 @@ namespace BPT_Service.WebAPI.Controllers
         [HttpPost("ApproveProvider")]
         public async Task<IActionResult> ApproveAProvider([FromBody]RejectProviderViewModel vm)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.providerId);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.UserProvider, vm.providerId);
             return new OkObjectResult(model);
         }
 

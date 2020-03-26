@@ -155,7 +155,29 @@ namespace BPT_Service.Data
                         Name ="Reject_Service",
                         Message= "Dear #ProviderName_#UserName </br> Your provider has been rejected.<br> " +
                         "<strong>#Reason</strong>"
-                    }
+                    },
+                    new Email()
+                    {
+                        Subject="Approve News of your Provider Request",
+                        Name ="Approve_News",
+                        Message= "Dear #UserName </br> Your #TitleNews news has been accepted.<br> "
+                    },
+                    new Email()
+                    {
+                        Subject="Reject Provider Request",
+                        Name ="Reject_News",
+                        Message= "Dear #UserName </br> Your #TitleNews news has been rejected.<br> " +
+                        "<strong>#Reason</strong></br>"+
+                        "If you have problem, please contact us"
+                    },
+                    new Email()
+                    {
+                        Subject="You had sign in BPT Service",
+                        Name ="Social_Login",
+                        Message= "Dear #UserName </br> Your new password is #Password " +
+                        "<strong>You can access to your personal page for change password or using login by social login</strong></br>"+
+                        "If you have problem, please contact us"
+                    },
                 };
             }
         }
