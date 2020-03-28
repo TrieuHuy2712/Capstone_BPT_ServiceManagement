@@ -1,11 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Dtos;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService
 {
@@ -13,26 +14,38 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<CityProvince, int> _cityRepository;
+        private readonly LevenshteinDistance _levenshteinDistance;
+
         public GetAllPagingProviderServiceQuery(IRepository<Provider, Guid> providerRepository,
-            IRepository<CityProvince, int> cityRepository)
+            IRepository<CityProvince, int> cityRepository,
+            LevenshteinDistance levenshteinDistance)
         {
             _providerRepository = providerRepository;
             _cityRepository = cityRepository;
+            _levenshteinDistance = levenshteinDistance;
         }
+
         public async Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
         {
             try
             {
                 var query = await _providerRepository.FindAllAsync();
                 if (!string.IsNullOrEmpty(keyword))
-                    query = query.Where(x => x.ProviderName.Contains(keyword)
-                    || x.Description.Contains(keyword));
+                    query = query.Where(x => x.ProviderName.ToLower().Contains(keyword.ToLower())
+                    || _levenshteinDistance.Compute(x.ProviderName.ToLower(), keyword.ToLower()) <= 3
+                    || x.Description.ToLower().Contains(keyword.ToLower())
+                    || _levenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
+                     || x.TaxCode.ToLower().Contains(keyword.ToLower())
+                    || _levenshteinDistance.Compute(x.TaxCode.ToLower(), keyword.ToLower()) <= 3
+                     || x.PhoneNumber.ToLower().Contains(keyword.ToLower())
+                    || _levenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
+                    && x.Status == Model.Enums.Status.Active);
 
                 int totalRow = query.Count();
-                query = page == 0 && pageSize == 0 ? query :query.Skip((page - 1) * pageSize)
+                query = page == 0 && pageSize == 0 ? query : query.Skip((page - 1) * pageSize)
                    .Take(pageSize);
                 var getAllLocation = await _cityRepository.FindAllAsync();
-                var data = query.Select(x => new  ProviderServiceViewModel
+                var data = query.Select(x => new ProviderServiceViewModel
                 {
                     Id = x.Id.ToString(),
                     Address = x.Address,
@@ -44,6 +57,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                     ProviderName = x.ProviderName,
                     Status = x.Status,
                     TaxCode = x.TaxCode,
+                    UserId = x.UserId.ToString()
                 }).ToList();
 
                 var map = (from loc in getAllLocation
@@ -62,7 +76,8 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                                Status = x.Status,
                                TaxCode = x.TaxCode,
                                CityName = loc.City,
-                               ProvinceName = loc.Province
+                               ProvinceName = loc.Province,
+                               UserId = x.UserId
                            }).ToList();
 
                 var paginationSet = new PagedResult<ProviderServiceViewModel>()
@@ -77,7 +92,6 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
             }
             catch (System.Exception ex)
             {
-
                 return new PagedResult<ProviderServiceViewModel>()
                 {
                     Results = null,

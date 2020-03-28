@@ -7,6 +7,7 @@ using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNews
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
+using BPT_Service.WebAPI.Models.ProviderViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -95,9 +96,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("RejectNewsProvider")]
-        public async Task<IActionResult> RejectNewsProvider(NewsProviderViewModel vm)
+        public async Task<IActionResult> RejectNewsProvider([FromBody]RejectProviderNewsViewModel modeling)
         {
-            var model = await _rejectNewsProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectNewsProviderServiceCommand.ExecuteAsync(modeling.Id, modeling.Reason);
             return new OkObjectResult(model);
         }
 

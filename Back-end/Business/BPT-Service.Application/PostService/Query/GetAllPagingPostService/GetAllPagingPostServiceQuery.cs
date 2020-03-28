@@ -70,7 +70,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _getUserInformationQuery = getUserInformationQuery;
         }
 
-        public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage)
         {
             try
             {
@@ -101,9 +101,10 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                     var listViewModel = await MappingTagService(query, keyword, provider, provideService, userService, getAvatar, getAllTag, getAllServiceTag, allRating);
                     int totalRowSearch = listViewModel.Count();
                     listViewModel = listViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
                     return new PagedResult<ListServiceViewModel>
                     {
-                        Results = listViewModel,
+                        Results = isAdminPage == true ? listViewModel : listViewModel.Where(x => x.status == Model.Enums.Status.Active).ToList(),
                         CurrentPage = page,
                         RowCount = totalRowSearch,
                         PageSize = pageSize
@@ -114,12 +115,12 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 query = query.Skip((page - 1) * pageSize)
                    .Take(pageSize);
 
-                var data = query.Where(x=>x.Status==Model.Enums.Status.Active).Select(x => new ListServiceViewModel
+                var data = query.Where(x => x.Status == Model.Enums.Status.Active).Select(x => new ListServiceViewModel
                 {
                     Id = x.Id,
-                    CategoryName = getAllCateogry.Where(t=>t.Id==x.CategoryId).Select(x=>x.CategoryName).FirstOrDefault(),
+                    CategoryName = getAllCateogry.Where(t => t.Id == x.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
                     Author = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService)
-                            == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService),
+                                == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService),
                     status = x.Status,
                     isProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService) == "" ? false : true,
                     AvtService = _getAvtInformationQuery.ExecuteAsync(x.Id, getAvatar),
@@ -127,11 +128,11 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                     TagList = _getListTagInformationQuery.ExecuteAsync(x.Id, getAllServiceTag, getAllTag),
                     ServiceName = x.ServiceName,
                     Rating = _getServiceRatingQuery.ExecuteAsync(x.Id, allRating)
-                }).OrderByDescending(x=>x.Rating).ToList();
+                }).OrderByDescending(x => x.Rating).ToList();
 
                 var paginationSet = new PagedResult<ListServiceViewModel>()
                 {
-                    Results = data,
+                    Results = isAdminPage == true ? data : data.Where(x => x.status == Model.Enums.Status.Active).ToList(),
                     CurrentPage = page,
                     RowCount = totalRow,
                     PageSize = pageSize
@@ -150,7 +151,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 };
             }
         }
-
 
         private async Task<List<ListServiceViewModel>> MappingTagService(IEnumerable<Service> services, string keyword,
             IEnumerable<Provider> provider,
@@ -185,7 +185,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                             AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),
                             TagList = _getListTagInformationQuery.ExecuteAsync(serv.Id, getAllServiceTag, getAllTag),
                             Rating = _getServiceRatingQuery.ExecuteAsync(serv.Id, allRating)
-                        }).OrderByDescending(x=>x.Rating).ToList();
+                        }).OrderByDescending(x => x.Rating).ToList();
             return data;
         }
     }

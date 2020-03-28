@@ -10,6 +10,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { FollowingProviderComponent } from './following-provider.component';
+import { RatingModule } from 'ngx-bootstrap';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
@@ -25,7 +26,8 @@ const itemRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(itemRoutes),
     SharedModule,
-    SlickModule.forRoot()
+    SlickModule.forRoot(),
+    
   ],
   declarations: [FollowingProviderComponent],
   providers:[DataService,NotificationService, TranslationService]

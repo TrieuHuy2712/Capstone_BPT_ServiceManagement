@@ -10,7 +10,16 @@ export const userManageRoutes: Routes = [
       },
       {
         path: "followingService", loadChildren: "./following-service/following-service.module#FollowingServiceModule"
-      }
+      },
+      {
+        path: "userProfile", loadChildren: "./user-profile/user-profile.module#UserProfileModule"
+      },
+      {
+        path: "email", loadChildren: "./email/email.module#EmailModule"
+      },
+      {
+        path: "myService", loadChildren: "./my-service/my-service.module#MyServiceModule"
+      },
     ]
   }
 ];

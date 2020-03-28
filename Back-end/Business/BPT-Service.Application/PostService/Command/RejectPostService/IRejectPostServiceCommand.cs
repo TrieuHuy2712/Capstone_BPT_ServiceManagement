@@ -6,6 +6,6 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
 {
     public interface IRejectPostServiceCommand
     {
-         Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm);
+         Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string id, string reason);
     }
 }

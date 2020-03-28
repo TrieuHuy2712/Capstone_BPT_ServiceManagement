@@ -9,6 +9,8 @@ using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.WebAPI.Models.ProviderViewModels;
+using BPT_Service.WebAPI.Models.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,7 +20,7 @@ namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("Service")]
     public class ServiceController : ControllerBase
     {
         private readonly IApprovePostServiceCommand _approvePostServiceCommand;
@@ -60,9 +62,9 @@ namespace BPT_Service.WebAPI.Controllers
         #region GETAPI
 
         [HttpGet("getAllPagingPostService")]
-        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage)
         {
-            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage);
             return new OkObjectResult(model);
         }
 
@@ -110,9 +112,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("rejectPostService")]
-        public async Task<IActionResult> RejectPostService([FromBody]PostServiceViewModel vm)
+        public async Task<IActionResult> RejectPostService([FromBody]RejectServiceViewModel vm)
         {
-            var model = await _rejectPostServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectPostServiceCommand.ExecuteAsync(vm.serviceId, vm.reason);
             return new OkObjectResult(model);
         }
 
