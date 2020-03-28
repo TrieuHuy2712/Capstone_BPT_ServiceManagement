@@ -1,8 +1,11 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
+using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
 {
@@ -10,19 +13,25 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepository<Provider, Guid> _providerRepository;
+
         public CheckUserProviderQuery(
             UserManager<AppUser> userManager,
-            IHttpContextAccessor httpContextAccessor
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Provider, Guid> providerRepository
         )
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _providerRepository = providerRepository;
         }
+
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync()
         {
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                var getProvider = await _providerRepository.FindSingleAsync(x => x.UserId == Guid.Parse(userId));
                 var getUser = await _userManager.FindByIdAsync(userId);
                 if (getUser == null)
                 {
@@ -39,7 +48,11 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {
-                            isValid = true
+                            isValid = true,
+                            myModel = new ProviderServiceViewModel()
+                            {
+                                Id = getProvider.Id.ToString()
+                            }
                         };
                     }
                 }
@@ -51,7 +64,6 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
             }
             catch (System.Exception ex)
             {
-
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

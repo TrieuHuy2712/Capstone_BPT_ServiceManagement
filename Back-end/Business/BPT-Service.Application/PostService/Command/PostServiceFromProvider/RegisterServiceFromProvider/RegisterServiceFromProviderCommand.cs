@@ -1,4 +1,5 @@
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
@@ -20,13 +21,15 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
         private readonly IGetByIdProviderServiceQuery _getIdProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
 
         public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
         , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
         IRepository<ServiceImage, int> imageServiceRepository,
         IRepository<Tag, Guid> tagServiceRepository,
         IGetByIdProviderServiceQuery getIdProvider,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ICheckUserIsProviderQuery checkUserIsProvider)
         {
             _postServiceRepository = postServiceRepository;
             _providerServiceRepository = providerServiceRepository;
@@ -34,6 +37,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             _getIdProvider = getIdProvider;
             _httpContextAccessor = httpContextAccessor;
             _tagServiceRepository = tagServiceRepository;
+            _checkUserIsProvider = checkUserIsProvider;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -65,8 +69,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 await _tagServiceRepository.Add(newTag);
 
                 //Get Id of Provider
-                var getIdProvider = await _getIdProvider.ExecuteAsync(userId);
-                if (getIdProvider == null || getIdProvider.isValid==false)
+                var getIdProvider = await _checkUserIsProvider.ExecuteAsync();
+                if (getIdProvider == null || getIdProvider.isValid == false)
                 {
                     return new CommandResult<PostServiceViewModel>
                     {

@@ -126,7 +126,7 @@ namespace BPT_Service.Data
                 await _context.SaveChangesAsync();
             }
 
-            if (_context.CityProvinces.Count() == 0)
+            if (_context.Emails.Count() == 0)
             {
                 List<Email> emails = new List<Email>()
                 {
@@ -179,6 +179,8 @@ namespace BPT_Service.Data
                         "If you have problem, please contact us"
                     },
                 };
+                await _context.Emails.AddRangeAsync(emails);
+                await _context.SaveChangesAsync();
             }
         }
     }
