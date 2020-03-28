@@ -263,8 +263,8 @@ namespace BPT_Service.WebAPI
                .AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader());
-
             app.UseHangfireDashboard();
+            app.UseHangfireServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
