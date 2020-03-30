@@ -24,7 +24,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                 var findProviderNew = await _providerNewsRepository.FindByIdAsync(vm.Id);
                 if (findProviderNew != null)
                 {
-                    var mappingNewsProvider = MappingProvider(vm);
+                    var mappingNewsProvider = MappingProvider(findProviderNew, vm);
                     _providerNewsRepository.Update(mappingNewsProvider);
                     await _providerNewsRepository.SaveAsync();
                     return new CommandResult<NewsProviderViewModel>
@@ -49,10 +49,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             }
         }
         
-        private ProviderNew MappingProvider(NewsProviderViewModel vm)
+        private ProviderNew MappingProvider(ProviderNew pro, NewsProviderViewModel vm)
         {
-            ProviderNew pro = new ProviderNew();
-            pro.Id = vm.Id;
             pro.Author = vm.Author;
             pro.Status = vm.Status;
             pro.Author = vm.Author;
@@ -60,6 +58,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             pro.Title = vm.Title;
             pro.Content = vm.Content;
             pro.DateModified = DateTime.Now;
+            pro.ImgPath = vm.ImgPath;
             return pro;
         }
     }

@@ -72,9 +72,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetAllPagingProviderNews")]
-        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize, bool isAdminPage)
         {
-            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage);
 
             return new OkObjectResult(model);
         }

@@ -341,6 +341,9 @@ namespace BPT_Service.Data.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ProviderId")
                         .HasColumnType("TEXT");
 

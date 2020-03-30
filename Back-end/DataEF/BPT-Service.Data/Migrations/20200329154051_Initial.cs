@@ -490,6 +490,7 @@ namespace BPT_Service.Data.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
+                    ImgPath = table.Column<string>(nullable: true),
                     ProviderId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200318112540_Initial")]
+    [Migration("20200329154051_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -341,6 +341,9 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImgPath")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ProviderId")

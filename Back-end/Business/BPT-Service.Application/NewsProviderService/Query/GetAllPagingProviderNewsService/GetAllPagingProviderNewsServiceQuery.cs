@@ -18,7 +18,7 @@ namespace BPT_Service.Application.NewsProviderService.Query.GetAllPagingProvider
             _providerNewRepository = providerNewRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<PagedResult<NewsProviderViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<NewsProviderViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage)
         {
             try
             {
@@ -33,22 +33,40 @@ namespace BPT_Service.Application.NewsProviderService.Query.GetAllPagingProvider
 
                 var data = query.Select(x => new NewsProviderViewModel
                 {
+                    Id = x.Id,
+                    ImgPath = x.ImgPath,
                     Author = x.Author,
                     Content = x.Content,
-                    Status = x.Status,
-                    ProviderName = x.Provider.ProviderName,
+                    DateCreated = x.DateCreated,
+                    DateModified = x.DateModified == null ? x.DateCreated : x.DateModified,
+                    ProviderId = x.Id.ToString(),
                     Title = x.Title,
-                    Id = x.Id,
+                    Status = x.Status
                 }).ToList();
 
-                var paginationSet = new PagedResult<NewsProviderViewModel>()
+                if (isAdminPage)
                 {
-                    Results = data,
-                    CurrentPage = page,
-                    RowCount = totalRow,
-                    PageSize = pageSize
-                };
-                return paginationSet;
+                    var paginationSet = new PagedResult<NewsProviderViewModel>()
+                    {
+                        Results = data,
+                        CurrentPage = page,
+                        RowCount = totalRow,
+                        PageSize = pageSize
+                    };
+                    return paginationSet;
+                }
+                else
+                {
+                    var paginationSet = new PagedResult<NewsProviderViewModel>()
+                    {
+                        Results = data.Where(x=>x.Status== Model.Enums.Status.Active).ToList(),
+                        CurrentPage = page,
+                        RowCount = totalRow,
+                        PageSize = pageSize
+                    };
+                    return paginationSet;
+                }
+                
             }
             catch (System.Exception)
             {

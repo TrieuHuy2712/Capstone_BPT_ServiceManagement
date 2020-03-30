@@ -94,6 +94,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
             pro.Title = vm.Title;
             pro.Content = vm.Content;
             pro.DateCreated = DateTime.Now;
+            pro.ImgPath = vm.ImgPath;
             return pro;
         }
     }

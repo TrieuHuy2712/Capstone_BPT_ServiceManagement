@@ -1,5 +1,5 @@
-using System;
 using BPT_Service.Model.Enums;
+using System;
 
 namespace BPT_Service.Application.NewsProviderService.ViewModel
 {
@@ -16,5 +16,6 @@ namespace BPT_Service.Application.NewsProviderService.ViewModel
         public string ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string Reason { get; set; }
+        public string ImgPath { get; set; }
     }
 }

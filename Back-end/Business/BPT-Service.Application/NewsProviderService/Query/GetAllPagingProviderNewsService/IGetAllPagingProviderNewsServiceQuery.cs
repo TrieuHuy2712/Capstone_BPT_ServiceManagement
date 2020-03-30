@@ -6,6 +6,6 @@ namespace BPT_Service.Application.NewsProviderService.Query.GetAllPagingProvider
 {
     public interface IGetAllPagingProviderNewsServiceQuery
     {
-        Task<PagedResult<NewsProviderViewModel>> ExecuteAsync(string keyword, int page, int pageSize);
+        Task<PagedResult<NewsProviderViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage);
     }
 }
