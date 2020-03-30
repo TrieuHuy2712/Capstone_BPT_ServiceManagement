@@ -52,7 +52,8 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
             IGetListTagInformationQuery getListTagInformationQuery,
             IGetProviderInformationQuery getProviderInformationQuery,
             IGetServiceRatingQuery getServiceRatingQuery,
-            IGetUserInformationQuery getUserInformationQuery)
+            IGetUserInformationQuery getUserInformationQuery,
+            IRepository<ServiceImage, int> imageRepository)
         {
             _getAllAsyncCategoryServiceQuery = getAllAsyncCategoryServiceQuery;
             _locationRepository = locationRepository;
@@ -69,6 +70,7 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
             _getProviderInformationQuery = getProviderInformationQuery;
             _getServiceRatingQuery = getServiceRatingQuery;
             _getUserInformationQuery = getUserInformationQuery;
+            _imageRepository = imageRepository;
         }
 
         public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(int page, int pageSize, string typeFilter, string filterName)

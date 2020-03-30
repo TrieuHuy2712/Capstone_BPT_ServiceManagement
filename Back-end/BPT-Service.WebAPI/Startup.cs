@@ -271,7 +271,7 @@ namespace BPT_Service.WebAPI
             {
                 endpoints.MapControllers();
             });
-            RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
+            //RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

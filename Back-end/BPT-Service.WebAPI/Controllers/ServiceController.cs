@@ -9,7 +9,6 @@ using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
-using BPT_Service.WebAPI.Models.ProviderViewModels;
 using BPT_Service.WebAPI.Models.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

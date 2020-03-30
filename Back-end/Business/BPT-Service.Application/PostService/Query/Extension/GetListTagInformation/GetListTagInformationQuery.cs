@@ -21,8 +21,13 @@ namespace BPT_Service.Application.PostService.Query.Extension.GetListTagInformat
                          select new
                          {
                              tag.TagName
-                         }).ToString();
-            return query;
+                         }).ToList();
+            var parseString = "";
+            foreach (var item in query)
+            {
+                parseString += item.TagName;
+            }
+            return parseString;
         }
     }
 }

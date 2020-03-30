@@ -1,4 +1,5 @@
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -93,6 +94,20 @@ namespace BPT_Service.Data
                     }
                 };
                 await _context.Categories.AddRangeAsync(categories);
+                await _context.SaveChangesAsync();
+            }
+            if (_context.Services.Count() == 0)
+            {
+                List<Service> services = new List<Service>() {
+                    new Service()
+                    {
+                        ServiceName="Osin",
+                        Description="This is Osin",
+                        CategoryId=1,
+                        
+                    }
+                };
+                await _context.Services.AddRangeAsync(services);
                 await _context.SaveChangesAsync();
             }
             if (_context.Functions.Count() == 0)
