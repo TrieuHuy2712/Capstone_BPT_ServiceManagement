@@ -1,77 +1,69 @@
-using System;
-using System.Threading.Tasks;
 using BPT_Service.Application.NewsProviderService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService
 {
     public class RegisterNewsProviderServiceCommand : IRegisterNewsProviderServiceCommand
     {
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+
         public RegisterNewsProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
         IRepository<ProviderNew, int> newProviderRepository,
-        IRepository<Provider, Guid> providerRepository)
+        ICheckUserIsAdminQuery checkUserIsAdminQuery,
+        IGetPermissionActionQuery getPermissionActionQuery,
+        ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _httpContextAccessor = httpContextAccessor;
             _newProviderRepository = newProviderRepository;
-            _providerRepository = providerRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
         }
+
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
         {
             try
             {
+                var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                   await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanCreate) ||
+                   getIsProvider.isValid)
                 {
+                    var mappingProvider = MappingProvider(vm, Guid.Parse(vm.ProviderId));
+                    await _newProviderRepository.Add(mappingProvider);
+                    await _newProviderRepository.SaveAsync();
+                    vm.Id = mappingProvider.Id;
                     return new CommandResult<NewsProviderViewModel>
                     {
-                        isValid = false,
+                        isValid = true,
                         myModel = vm
                     };
                 }
-                var checkUser = await _providerRepository.FindAllAsync(x => x.AppUser.UserName == userId);
-                var countProvider = 0;
-                foreach (var item in checkUser)
-                {
-                    if (item.Id == Guid.Parse(vm.ProviderId))
-                    {
-                        countProvider++;
-                    }
-                }
-                if (countProvider == 0)
+                else
                 {
                     return new CommandResult<NewsProviderViewModel>
                     {
-                        isValid = false,
-                        myModel = vm
+                        isValid = true,
+                        errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
                     };
                 }
-                var getProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.ProviderId));
-                if (getProvider == null)
-                {
-                    return new CommandResult<NewsProviderViewModel>
-                    {
-                        isValid = false,
-                        myModel = vm,
-                        errorMessage = "You don't have permission with this Provider"
-                    };
-                }
-                var mappingProvider = MappingProvider(vm, getProvider.Id);
-                await _newProviderRepository.Add(mappingProvider);
-                await _newProviderRepository.SaveAsync();
-                vm.Id = mappingProvider.Id;
-                return new CommandResult<NewsProviderViewModel>
-                {
-                    isValid = true,
-                    myModel = vm
-                };
             }
             catch (System.Exception ex)
             {
@@ -83,7 +75,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                 };
             }
         }
-        
+
         private ProviderNew MappingProvider(NewsProviderViewModel vm, Guid providerId)
         {
             ProviderNew pro = new ProviderNew();

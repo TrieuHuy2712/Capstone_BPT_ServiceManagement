@@ -1,6 +1,8 @@
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -21,6 +23,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
 {
     public class ApprovePostServiceCommand : IApprovePostServiceCommand
     {
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -40,7 +43,8 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
              IRepository<BPT_Service.Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
              IRepository<Provider, Guid> providerRepository,
              IRepository<Service, Guid> postServiceRepository,
-             UserManager<AppUser> userRepository
+             UserManager<AppUser> userRepository,
+             ICheckUserIsAdminQuery checkUserIsAdminQuery
              )
         {
             _configEmail = configEmail;
@@ -52,6 +56,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
             _providerServiceRepository = providerServiceRepository;
             _userRepository = userRepository;
             _userServiceRepository = userServiceRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
@@ -59,79 +64,58 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (!await _getPermissionActionQuery.ExecuteAsync(userId, "Service", ActionSetting.CanUpdate))
+                //Check permission approve
+                if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate) ||
+                    await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
-                    return new CommandResult<PostServiceViewModel>
+                    //Check have current post
+                    var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
+                    if (getCurrentPost != null)
                     {
-                        isValid = false,
-                        errorMessage = "You don't have permission"
-                    };
-                }
-                var idUser = "";
-                var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
-                if (getCurrentPost != null)
-                {
-                    getCurrentPost.Status = Status.Active;
-                    _postServiceRepository.Update(getCurrentPost);
-                    await _postServiceRepository.SaveAsync();
+                        getCurrentPost.Status = Status.Active;
+                        _postServiceRepository.Update(getCurrentPost);
+                        await _postServiceRepository.SaveAsync();
 
-                    //Check is UserService
-                    var serviceInformation = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(idService));
-                    if (serviceInformation == null)
-                    {
-                        //Check is ProviderService
-                        var providerInformation = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(idService));
-                        if (providerInformation != null)
-                        {
-                            var getProviderInformation = await _providerRepository.FindSingleAsync(x => x.Id == providerInformation.ProviderId);
-                            idUser = getProviderInformation.UserId.ToString();
-                        }
-                        else
-                        {
-                            return new CommandResult<PostServiceViewModel>
-                            {
-                                isValid = false,
-                            };
-                        }
-                    }
-                    else
-                    {
-                        idUser = serviceInformation.UserId.ToString();
-                    }
-
-                    if (idUser != "")
-                    {
-                        var findEmailUser = await _userRepository.FindByIdAsync(idUser);
-                        if (findEmailUser != null)
+                        var findEmailUser = await GetEmailUserAsync(getCurrentPost);
+                        if (findEmailUser != ErrorMessageConstant.ERROR_CANNOT_FIND_ID)
                         {
                             //Set content for email
                             //Get All email
                             var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                             var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
-                            getFirstEmail.Message= getFirstEmail.Message.Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName).Replace(EmailKey.UserNameKey, findEmailUser.Email);
+                            getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName).Replace(EmailKey.UserNameKey, findEmailUser);
 
                             ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
-                                            getFirstEmail.Message, findEmailUser.Email).Wait();
+                                            getFirstEmail.Message, findEmailUser).Wait();
                         }
                         else
                         {
                             return new CommandResult<PostServiceViewModel>
                             {
                                 isValid = false,
+                                errorMessage = "Cannot find email user"
                             };
                         }
-                    }
 
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = true,
+                        };
+                    }
                     return new CommandResult<PostServiceViewModel>
                     {
-                        isValid = true,
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-                return new CommandResult<PostServiceViewModel>
+                else
                 {
-                    isValid = false,
-                    errorMessage = "Cannot find Id of PostService"
-                };
+                    return new CommandResult<PostServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_UPDATE_PERMISSION
+                    };
+                }
             }
             catch (System.Exception ex)
             {
@@ -153,6 +137,24 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
             var htmlContent = "<strong>" + message + "</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
+        }
+
+        private async Task<string> GetEmailUserAsync(Service service)
+        {
+            var informationUserService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == service.Id);
+            if (informationUserService != null)
+            {
+                var getUser = await _userRepository.FindByIdAsync(informationUserService.UserId.ToString());
+                return getUser.Email;
+            }
+            var informationProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == service.Id);
+            if (informationProviderService != null)
+            {
+                var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == informationProviderService.ProviderId);
+                var getUser = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
+                return getUser.Email;
+            }
+            return ErrorMessageConstant.ERROR_CANNOT_FIND_ID;
         }
     }
 }

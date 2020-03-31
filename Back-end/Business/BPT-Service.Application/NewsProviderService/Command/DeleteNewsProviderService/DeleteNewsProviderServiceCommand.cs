@@ -1,86 +1,76 @@
-using System;
-using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
-using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService
 {
     public class DeleteNewsProviderServiceCommand : IDeleteNewsProviderServiceCommand
     {
         private readonly IRepository<ProviderNew, int> _providerNewRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public DeleteNewsProviderServiceCommand(IRepository<ProviderNew, int> providerNewRepository, IHttpContextAccessor httpContextAccessor, IRepository<Provider, Guid> providerRepository)
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+
+        public DeleteNewsProviderServiceCommand(
+            IRepository<ProviderNew, int> providerNewRepository,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _providerNewRepository = providerNewRepository;
             _httpContextAccessor = httpContextAccessor;
-            _providerRepository = providerRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
         }
+
         public async Task<CommandResult<ProviderNew>> ExecuteAsync(int id)
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
-                {
-                    return new CommandResult<ProviderNew>
-                    {
-                        isValid = false,
-                        myModel = null
-                    };
-                }
                 var getId = await _providerNewRepository.FindByIdAsync(id);
                 if (getId != null)
                 {
-                    var getProvider = await _providerRepository.FindByIdAsync(getId.ProviderId);
-                    if (getProvider != null)
+                    var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                    var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
+                    if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                        await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanDelete) ||
+                        (checkUserIsProvider.isValid && checkUserIsProvider.myModel.Id == getId.ProviderId.ToString()))
                     {
-                        var getAllProviderOffUser = await _providerRepository.FindAllAsync(x => x.AppUser.UserName == userId);
-                        var counProvider = 0;
-                        foreach (var item in getAllProviderOffUser)
+                        _providerNewRepository.Remove(getId.Id);
+                        await _providerNewRepository.SaveAsync();
+                        return new CommandResult<ProviderNew>
                         {
-                            if (item.Id == getProvider.Id)
-                            {
-                                counProvider++;
-                            }
-                        }
-                        if (counProvider > 0)
-                        {
-                            _providerNewRepository.Remove(id);
-                            await _providerNewRepository.SaveAsync();
-                            return new CommandResult<ProviderNew>
-                            {
-                                isValid = true,
-                                myModel = getId
-                            };
-                        }
-                        else
-                        {
-                            return new CommandResult<ProviderNew>
-                            {
-                                isValid = false,
-                                errorMessage = "You don't have permission"
-                            };
-                        }
+                            isValid = true,
+                            myModel = getId
+                        };
                     }
                     else
                     {
                         return new CommandResult<ProviderNew>
                         {
                             isValid = false,
-                            errorMessage = "Cannot find your Provider"
+                            errorMessage = ErrorMessageConstant.ERROR_DELETE_PERMISSION
                         };
                     }
                 }
-                return new CommandResult<ProviderNew>
+                else
                 {
-                    isValid = false,
-                    errorMessage = "Cannot find Id"
-                };
-
+                    return new CommandResult<ProviderNew>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                    };
+                }
             }
             catch (System.Exception ex)
             {

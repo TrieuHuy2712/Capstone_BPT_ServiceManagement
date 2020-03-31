@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200329154051_Initial")]
+    [Migration("20200331164333_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,6 +254,9 @@ namespace BPT_Service.Data.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AvartarPath")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("CityId")

@@ -173,7 +173,7 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          on tag.Id equals userTag.TagId
                          join serv in service
                          on userTag.ServiceId equals serv.Id
-                         where tag.TagName != null && tag.TagName == filterName
+                         where tag.TagName != null && tag.TagName == filterName && serv.Status== Model.Enums.Status.Active
                          select new ListServiceViewModel
                          {
                              Id = serv.Id,
@@ -203,7 +203,7 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
             var query = (from serv in service.ToList()
                          join category in getAllCategory.ToList()
                          on serv.CategoryId equals category.Id
-                         where category.CategoryName != null && category.CategoryName == filterName
+                         where category.CategoryName != null && category.CategoryName == filterName && serv.Status == Model.Enums.Status.Active
                          select new ListServiceViewModel
                          {
                              Id = serv.Id,
@@ -238,7 +238,8 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          on providerService.ProviderId equals pro.Id
                          join loc in location.ToList()
                          on pro.CityId equals loc.Id
-                         where (loc.City != null && loc.City == filterName) || (loc.Province != null && loc.Province == filterName)
+                         where (loc.City != null && loc.City == filterName) || (loc.Province != null && loc.Province == filterName) 
+                         && serv.Status == Model.Enums.Status.Active
                          select new ListServiceViewModel
                          {
                              Id = serv.Id,

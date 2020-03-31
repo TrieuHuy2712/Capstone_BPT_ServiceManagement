@@ -86,14 +86,14 @@ namespace BPT_Service.WebAPI.Controllers
         #region DeleteAPI
 
         [HttpDelete("deleteServiceFromProvider")]
-        public async Task<IActionResult> DeleteServiceFromProvider(Guid idService)
+        public async Task<IActionResult> DeleteServiceFromProvider(string idService)
         {
             var model = await _deleteServiceFromProviderCommand.ExecuteAsync(idService);
             return new OkObjectResult(model);
         }
 
         [HttpDelete("deleteServiceFromUser")]
-        public async Task<IActionResult> DeleteServiceFromUser(Guid idService)
+        public async Task<IActionResult> DeleteServiceFromUser(string idService)
         {
             var model = await _deleteServiceFromUserCommand.ExecuteAsync(idService);
             return new OkObjectResult(model);

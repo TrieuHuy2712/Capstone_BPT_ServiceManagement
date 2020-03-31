@@ -1,69 +1,83 @@
-using System;
-using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser
 {
     public class DeleteServiceFromUserCommand : IDeleteServiceFromUserCommand
     {
-        private readonly IRepository<Service, Guid> _postServiceRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public DeleteServiceFromUserCommand(IRepository<Service, Guid> postServiceRepository,
-        IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
-        IHttpContextAccessor httpContextAccessor)
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
+        private readonly IRepository<Service, Guid> _postServiceRepository;
+
+        public DeleteServiceFromUserCommand(ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProvider,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
+            IRepository<Service, Guid> postServiceRepository)
         {
-            _postServiceRepository = postServiceRepository;
-            _userServiceRepository = userServiceRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _checkUserIsProvider = checkUserIsProvider;
+            _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
+            _userServiceRepository = userServiceRepository;
+            _postServiceRepository = postServiceRepository;
         }
-        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(Guid idService)
+
+        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
         {
             try
             {
-                var userId = Guid.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-                var getService = await _postServiceRepository.FindByIdAsync(idService);
-                if (getService == null)
+                var findIdService = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync();
+                if (findIdService != null)
                 {
-                    return new CommandResult<PostServiceViewModel>
+                    var findUserService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == findIdService.Id);
+                    //Check permission can delete
+                    if (findUserService != null ||
+                        await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanDelete) ||
+                        await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                        findUserService.UserId == Guid.Parse(userId))
                     {
-                        isValid = false,
-                        errorMessage = "Cannot find your Service"
-                    };
-                }
-
-                var getUserService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == getService.Id);
-                if (getUserService == null)
-                {
-                    return new CommandResult<PostServiceViewModel>
+                        _userServiceRepository.Remove(findUserService);
+                        _postServiceRepository.Remove(findIdService);
+                        await _postServiceRepository.SaveAsync();
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = true
+                        };
+                    }
+                    else
                     {
-                        isValid = false,
-                        errorMessage = "Cannot find your ProviderService"
-                    };
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_DELETE_PERMISSION
+                        };
+                    }
                 }
                 else
                 {
-                    _userServiceRepository.Remove(getUserService);
-                }
-
-                if (getUserService.UserId == userId)
-                {
-                    _postServiceRepository.Remove(getService);
-                    await _postServiceRepository.SaveAsync();
                     return new CommandResult<PostServiceViewModel>
                     {
-                        isValid = true,
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-                return new CommandResult<PostServiceViewModel>
-                {
-                    isValid = false,
-                    errorMessage = "Cannot find your information"
-                };
             }
             catch (System.Exception ex)
             {

@@ -1,40 +1,68 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.FunctionService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
 {
     public class AddFunctionServiceCommand : IAddFunctionServiceCommand
     {
         private readonly IRepository<Function, string> _functionRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AddFunctionServiceCommand(
-            IRepository<Function, string> functionRepository)
+            IRepository<Function, string> functionRepository,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor)
         {
             _functionRepository = functionRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
         {
             try
             {
-                var mappingFunction = MappingFunction(function);
-                await _functionRepository.Add(mappingFunction);
-                await _functionRepository.SaveAsync();
-                return new CommandResult<FunctionViewModelinFunctionService>
+                //Check user has permission first
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "FUNCTION", ActionSetting.CanCreate))
                 {
-                    isValid = true,
-                    myModel = new FunctionViewModelinFunctionService
+                    var mappingFunction = MappingFunction(function);
+                    await _functionRepository.Add(mappingFunction);
+                    await _functionRepository.SaveAsync();
+                    return new CommandResult<FunctionViewModelinFunctionService>
                     {
-                        IconCss = mappingFunction.IconCss,
-                        Id = mappingFunction.Id,
-                        Name = mappingFunction.Name,
-                        ParentId = mappingFunction.ParentId,
-                        SortOrder = mappingFunction.SortOrder,
-                        Status = mappingFunction.Status,
-                        URL = mappingFunction.URL
-                    }
-                };
+                        isValid = true,
+                        myModel = new FunctionViewModelinFunctionService
+                        {
+                            IconCss = mappingFunction.IconCss,
+                            Id = mappingFunction.Id,
+                            Name = mappingFunction.Name,
+                            ParentId = mappingFunction.ParentId,
+                            SortOrder = mappingFunction.SortOrder,
+                            Status = mappingFunction.Status,
+                            URL = mappingFunction.URL
+                        }
+                    };
+                }
+                else
+                {
+                    return new CommandResult<FunctionViewModelinFunctionService>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
+                    };
+                }
             }
             catch (System.Exception ex)
             {
@@ -45,7 +73,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                 };
             }
         }
-        
+
         public Function MappingFunction(FunctionViewModelinFunctionService function)
         {
             Function newfunction = new Function();

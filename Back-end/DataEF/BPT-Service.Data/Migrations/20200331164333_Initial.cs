@@ -238,6 +238,7 @@ namespace BPT_Service.Data.Migrations
                     Description = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
+                    AvartarPath = table.Column<string>(nullable: true),
                     DateModified = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

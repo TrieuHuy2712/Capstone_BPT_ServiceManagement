@@ -1,82 +1,88 @@
-using System;
-using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider
 {
     public class DeleteServiceFromProviderCommand : IDeleteServiceFromProviderCommand
     {
-        private readonly IRepository<Service, Guid> _postServiceRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public DeleteServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository,
-        IRepository<Provider, Guid> providerRepository,
-        IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
-        IHttpContextAccessor httpContextAccessor)
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IRepository<Service, Guid> _postServiceRepository;
+
+        public DeleteServiceFromProviderCommand(
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProvider,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+            IRepository<Provider, Guid> providerRepository,
+            IRepository<Service, Guid> postServiceRepository)
         {
-            _postServiceRepository = postServiceRepository;
-            _providerRepository = providerRepository;
-            _providerServiceRepository = providerServiceRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _checkUserIsProvider = checkUserIsProvider;
+            _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
+            _providerServiceRepository = providerServiceRepository;
+            _providerRepository = providerRepository;
+            _postServiceRepository = postServiceRepository;
         }
-        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(Guid idService)
+
+        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
         {
             try
             {
-                var userId = Guid.Parse(_httpContextAccessor.HttpContext.User.Identity.Name);
-                var getService = await _postServiceRepository.FindByIdAsync(idService);
-                if (getService == null)
+                //Get Id Service and Check it has permission by checkUserIsProvider
+                var findIdService = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync();
+                if (findIdService != null)
                 {
-                    return new CommandResult<PostServiceViewModel>
+                    var findProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == findIdService.Id);
+                    //Check permission can delete
+                    if (findProviderService != null ||
+                        await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanDelete) ||
+                        await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                        findProviderService.ProviderId == Guid.Parse(checkUserIsProvider.myModel.Id.ToString()))
                     {
-                        isValid = false,
-                        errorMessage = "Cannot find your Service"
-                    };
-                }
-
-                var getProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == getService.Id);
-                if (getProviderService == null)
-                {
-                    return new CommandResult<PostServiceViewModel>
+                        _providerServiceRepository.Remove(findProviderService);
+                        _postServiceRepository.Remove(findIdService);
+                        await _postServiceRepository.SaveAsync();
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = true
+                        };
+                    }
+                    else
                     {
-                        isValid = false,
-                        errorMessage = "Cannot find your ProviderService"
-                    };
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_DELETE_PERMISSION
+                        };
+                    }
                 }
                 else
                 {
-                    _providerServiceRepository.Remove(getProviderService);
-                }
-
-                var getProvider = await _providerRepository.FindSingleAsync(x => x.UserId == userId);
-                if (getProvider == null)
-                {
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
-                        errorMessage = "Cannot find your UserId"
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-
-                if (getProvider.Id == getProviderService.ProviderId)
-                {
-                    _postServiceRepository.Remove(getService);
-                    await _postServiceRepository.SaveAsync();
-                    return new CommandResult<PostServiceViewModel>
-                    {
-                        isValid = true,
-                    };
-                }
-                return new CommandResult<PostServiceViewModel>
-                {
-                    isValid = false,
-                    errorMessage = "Cannot find your information"
-                };
             }
             catch (System.Exception ex)
             {

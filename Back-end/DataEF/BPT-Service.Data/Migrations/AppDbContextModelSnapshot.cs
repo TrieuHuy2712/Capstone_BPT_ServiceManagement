@@ -254,6 +254,9 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AvartarPath")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CityId")
                         .HasColumnType("INTEGER");
 

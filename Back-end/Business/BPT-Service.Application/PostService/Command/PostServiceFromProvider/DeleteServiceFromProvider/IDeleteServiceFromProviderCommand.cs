@@ -7,6 +7,6 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
 {
     public interface IDeleteServiceFromProviderCommand
     {
-         Task<CommandResult<PostServiceViewModel>> ExecuteAsync(Guid idService);
+         Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService);
     }
 }

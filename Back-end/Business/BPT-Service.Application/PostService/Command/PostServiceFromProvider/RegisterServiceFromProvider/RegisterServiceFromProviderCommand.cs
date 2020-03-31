@@ -1,6 +1,10 @@
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
@@ -16,28 +20,28 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
     public class RegisterServiceFromProviderCommand : IRegisterServiceFromProviderCommand
     {
         private readonly IRepository<Service, Guid> _postServiceRepository;
-        private readonly IRepository<ServiceImage, int> _imageServiceRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
         private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
-        private readonly IGetByIdProviderServiceQuery _getIdProvider;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
 
         public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
         , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
-        IRepository<ServiceImage, int> imageServiceRepository,
         IRepository<Tag, Guid> tagServiceRepository,
-        IGetByIdProviderServiceQuery getIdProvider,
         IHttpContextAccessor httpContextAccessor,
-        ICheckUserIsProviderQuery checkUserIsProvider)
+        ICheckUserIsProviderQuery checkUserIsProvider,
+        ICheckUserIsAdminQuery checkUserIsAdminQuery,
+        IGetPermissionActionQuery getPermissionActionQuery)
         {
             _postServiceRepository = postServiceRepository;
             _providerServiceRepository = providerServiceRepository;
-            _imageServiceRepository = imageServiceRepository;
-            _getIdProvider = getIdProvider;
             _httpContextAccessor = httpContextAccessor;
             _tagServiceRepository = tagServiceRepository;
             _checkUserIsProvider = checkUserIsProvider;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -45,63 +49,56 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
+                var checkUserIsAdmin = await _checkUserIsProvider.ExecuteAsync();
+                if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
+                    await _checkUserIsAdminQuery.ExecuteAsync(userId) || checkUserIsAdmin.isValid)
                 {
+                    //Add new tag when isAdd equal true
+                    List<Tag> newTag = new List<Tag>();
+                    foreach (var item in vm.tagofServices)
+                    {
+                        if (item.isAdd == true)
+                        {
+                            newTag.Add(new Tag
+                            {
+                                TagName = item.TagName
+                            });
+                        }
+                    }
+                    await _tagServiceRepository.Add(newTag);
+
+                    //Mapping between ViewModel and Model of Service
+                    var mappingService = MappingService(vm);
+                    await _postServiceRepository.Add(mappingService);
+
+                    //Mapping between ViewModel and Model of ServiceProvider
+                    var mappingProviderService = MappingProviderService(mappingService.Id, Guid.Parse(vm.ProviderId));
+                    await _providerServiceRepository.Add(mappingProviderService);
+
+                    //Add new Tag with Id in TagService
+                    foreach (var item in newTag)
+                    {
+                        Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
+                        mappingTag.TagId = item.Id;
+                        mappingService.TagServices.Add(mappingTag);
+                    }
+
+                    await _tagServiceRepository.SaveAsync();
+
                     return new CommandResult<PostServiceViewModel>
                     {
-                        isValid = false,
+                        isValid = true,
                         myModel = vm
                     };
                 }
-
-                //Add new tag when isAdd equal true
-                List<Tag> newTag = new List<Tag>();
-                foreach (var item in vm.tagofServices)
-                {
-                    if (item.isAdd == true)
-                    {
-                        newTag.Add(new Tag
-                        {
-                            TagName = item.TagName
-                        });
-                    }
-                }
-                await _tagServiceRepository.Add(newTag);
-
-                //Get Id of Provider
-                var getIdProvider = await _checkUserIsProvider.ExecuteAsync();
-                if (getIdProvider == null || getIdProvider.isValid == false)
+                else
                 {
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
-                        errorMessage = "You don't have a provider"
+                        errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
                     };
                 }
-
-                //Mapping between ViewModel and Model of Service
-                var mappingService = MappingService(vm);
-                await _postServiceRepository.Add(mappingService);
-
-                //Mapping between ViewModel and Model of ServiceProvider
-                var mappingProviderService = MappingProviderService(mappingService.Id, Guid.Parse(getIdProvider.myModel.Id));
-                await _providerServiceRepository.Add(mappingProviderService);
-
-                //Add new Tag with Id in TagService
-                foreach (var item in newTag)
-                {
-                    Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
-                    mappingTag.TagId = item.Id;
-                    mappingService.TagServices.Add(mappingTag);
-                }
-
-                await _tagServiceRepository.SaveAsync();
-
-                return new CommandResult<PostServiceViewModel>
-                {
-                    isValid = true,
-                    myModel = vm
-                };
             }
             catch (System.Exception ex)
             {

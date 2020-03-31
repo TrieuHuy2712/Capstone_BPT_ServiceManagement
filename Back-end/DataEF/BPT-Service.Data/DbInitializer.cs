@@ -104,7 +104,7 @@ namespace BPT_Service.Data
                         ServiceName="Osin",
                         Description="This is Osin",
                         CategoryId=1,
-                        
+
                     }
                 };
                 await _context.Services.AddRangeAsync(services);
@@ -119,10 +119,11 @@ namespace BPT_Service.Data
                     new Function() {Id = "FUNCTION", Name = "Function",ParentId = "SYSTEM",SortOrder = 2,Status = Status.Active,URL = "/main/function/index",IconCss = "fa-home"},
                     new Function() {Id = "USER", Name = "User",ParentId = "SYSTEM",SortOrder =3,Status = Status.Active,URL = "/main/user/index",IconCss = "fa-home"},
 
-                    new Function() {Id = "PROVIDER",Name = "Provider",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
-                    new Function() {Id = "SERVICE_CATEGORY",Name = "Category",ParentId = "PROVIDER",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
-                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "PROVIDER",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
-                    new Function() {Id = "SERVICE_TAG",Name = "Service_Tag",ParentId = "PROVIDER",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
+                     new Function() {Id = "MANAGE",Name = "Manage",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "PROVIDER",Name = "Provider",ParentId = "MANAGE",SortOrder = 2,Status = Status.Active,URL = "/main/provider/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "CATEGORY",Name = "Category",ParentId = "MANAGE",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "MANAGE",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "TAG",Name = "Service_Tag",ParentId = "MANAGE",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
                 };
                 await _context.Functions.AddRangeAsync(functions);
                 await _context.SaveChangesAsync();
