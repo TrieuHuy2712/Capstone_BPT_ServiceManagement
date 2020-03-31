@@ -55,19 +55,25 @@ export class ServiceTagComponent implements OnInit {
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        this.loadPermission();
+        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
+          this.loadPermission();
+        }
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" + this.functionId
+        "/PermissionManager/GetAllPermission/" +
+        localStorage.getItem(SystemConstants.const_username) +
+        "/" +
+        this.functionId
       )
       .subscribe((response: any) => {
-        this.permission = response;
+        console.log(response);
+        this.permission = response.result;
+        console.log(this.permission);
       });
   }
-
   pageChanged(event: any): void {
     this.pageIndex = event.page;
     this.loadData();
@@ -80,7 +86,7 @@ export class ServiceTagComponent implements OnInit {
     this._dataService
       .get("/TagManagement/GetTagById?id=" + id)
       .subscribe((response: any) => {
-        this.entity = response;
+        this.entity = response.result;
         console.log(response);
       });
   }

@@ -518,7 +518,8 @@ ol, ul {
 }
 
 .c-gray-9 {
-    color: #999!important;
+    color: red!important;
+    font-size: 15px;
 }
 
 .btn-grad--primary:hover {
@@ -1824,6 +1825,8 @@ body:not(.sidebar-mini-md) .user-manage-content, body:not(.sidebar-mini-md) .mai
     margin-top: 20px;
 }
 
+
+
 .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -2192,10 +2195,26 @@ p {
 .option-cus{
     text-align: center;
     height: 2rem;
-    background-color: #fff;
     border: 1px solid #ddd;
     padding: 10px 15px;
     cursor: pointer;
+    
+}
+
+input{
+    outline-color: blueviolet !important;
+    border-radius: 10px !important;
+}
+textarea{
+    border-radius: 10px !important;
+}
+
+.option-cus:hover{
+    background-image: linear-gradient(90deg,#f65e38 0,#f68a39 51%,#f65e38);
+}
+
+input:focus{
+    outline: none;
 }
 /* .sidebar-collapse .main-sidebar, .sidebar-collapse .main-sidebar::before {
   margin-left: -250px;

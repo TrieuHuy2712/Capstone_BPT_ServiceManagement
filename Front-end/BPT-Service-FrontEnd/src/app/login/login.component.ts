@@ -27,6 +27,11 @@ export class LoginComponent implements OnInit {
   loading = false;
   model: any = {};
   returnUrl: string;
+  pass: boolean = true;
+  passVal: string = "";
+  email: boolean =true;
+  emailVal: string = "";
+  registerBtn: boolean =true;
   socialusers = new Socialusers();
 
   constructor(
@@ -105,4 +110,31 @@ export class LoginComponent implements OnInit {
         }
       );
   }
+
+  emailValid(event){
+    this.emailVal = event.target.value;
+    if(event.target.value.length < 10){
+      this.email = false;
+    }
+    else{
+      this.email = true;
+    }
+  }
+
+  passValid(event){
+    if(event.target.value.length < 8){
+      this.pass = false;
+    }
+    else{
+      this.pass = true;
+    }
+    if(event.target.value.length > 8 && this.emailVal.length > 8){
+      this.registerBtn = false;
+    }
+    else{
+      this.registerBtn = true;
+    }
+  }
+
+
 }

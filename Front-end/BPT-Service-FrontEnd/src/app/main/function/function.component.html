@@ -73,7 +73,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'functionId'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="hidden" [(ngModel)]="entity.ID" name="id" />
-              <input type="text" #id="ngModel" [(ngModel)]="entity.id" required name="id"
+              <input type="text" #id="ngModel" [disabled]="editFlg" [(ngModel)]="entity.id" required name="id"
                 class="form-control" />
               <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted)" class="text-danger">
                 {{'functionIdWarning'|translate}}

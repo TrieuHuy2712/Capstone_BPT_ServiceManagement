@@ -51,16 +51,23 @@ export class RoleComponent implements OnInit {
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
+        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
           this.loadPermission();
+        } 
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +this.functionId
+        "/PermissionManager/GetAllPermission/" +
+          localStorage.getItem(SystemConstants.const_username) +
+          "/" +
+          this.functionId
       )
       .subscribe((response: any) => {
+        console.log(response);
         this.permission = response.result;
+        console.log(this.permission);
       });
   }
 
@@ -77,6 +84,7 @@ export class RoleComponent implements OnInit {
       .get("/AdminRole/GetById/" + id)
       .subscribe((response: any) => {
         this.entity = response;
+        console.log(this.entity);
       });
   }
   showEditModal(id: any) {
@@ -85,6 +93,7 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
+    debugger;
     if (valid) {
       if (this.entity.Id == undefined) {
         console.log("vo day duoc");
