@@ -92,7 +92,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
 
                 return paginationSet;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 return new PagedResult<ProviderServiceViewModel>()
                 {

@@ -61,6 +61,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _ratingRepository = ratingRepository;
             _serviceRepository = serviceRepository;
             _tagRepository = tagRepository;
+            _imageRepository = imageRepository;
             _tagServiceRepository = tagServiceRepository;
             _userManager = userManager;
             _userServiceRepository = userServiceRepository;
@@ -69,7 +70,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _getProviderInformationQuery = getProviderInformationQuery;
             _getServiceRatingQuery = getServiceRatingQuery;
             _getUserInformationQuery = getUserInformationQuery;
-            _imageRepository = imageRepository;
         }
 
         public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage)
@@ -142,7 +142,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
 
                 return paginationSet;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 return new PagedResult<ListServiceViewModel>()
                 {
