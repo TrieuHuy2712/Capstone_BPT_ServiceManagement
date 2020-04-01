@@ -46,6 +46,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             IRepository<Service, Guid> serviceRepository,
             IRepository<ServiceRating, int> ratingRepository,
             IRepository<Tag, Guid> tagRepository,
+            IRepository<ServiceImage, int> imageRepository,
             UserManager<AppUser> userManager,
             IGetAvtInformationQuery getAvtInformationQuery,
             IGetListTagInformationQuery getListTagInformationQuery,
@@ -60,6 +61,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _ratingRepository = ratingRepository;
             _serviceRepository = serviceRepository;
             _tagRepository = tagRepository;
+            _imageRepository = imageRepository;
             _tagServiceRepository = tagServiceRepository;
             _userManager = userManager;
             _userServiceRepository = userServiceRepository;
@@ -140,7 +142,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
 
                 return paginationSet;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 return new PagedResult<ListServiceViewModel>()
                 {
