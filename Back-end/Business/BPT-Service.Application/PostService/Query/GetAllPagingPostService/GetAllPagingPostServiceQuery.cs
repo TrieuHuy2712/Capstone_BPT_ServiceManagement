@@ -47,7 +47,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             IRepository<ServiceRating, int> ratingRepository,
             IRepository<ServiceImage, int> imageRepository,
             IRepository<Tag, Guid> tagRepository,
-            IRepository<ServiceImage, int> imageRepository,
             UserManager<AppUser> userManager,
             IGetAvtInformationQuery getAvtInformationQuery,
             IGetListTagInformationQuery getListTagInformationQuery,
@@ -71,7 +70,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _getProviderInformationQuery = getProviderInformationQuery;
             _getServiceRatingQuery = getServiceRatingQuery;
             _getUserInformationQuery = getUserInformationQuery;
-            _imageRepository = imageRepository;
         }
 
         public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage)
