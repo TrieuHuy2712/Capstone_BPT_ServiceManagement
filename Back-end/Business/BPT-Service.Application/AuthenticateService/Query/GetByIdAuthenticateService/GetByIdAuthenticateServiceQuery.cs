@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.AuthenticateService.ViewModel;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateService
 {
@@ -15,6 +15,7 @@ namespace BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateS
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
         public async Task<AppUserViewModel> ExecuteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

@@ -1,7 +1,11 @@
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -26,6 +30,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<ProviderNew, int> _newProviderRepository;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
 
         public ApproveNewsProviderServiceCommand(
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
@@ -33,7 +39,9 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             IOptions<EmailConfigModel> configEmail,
             IRepository<Provider, Guid> providerRepository,
             IRepository<ProviderNew, int> newProviderRepository,
-            UserManager<AppUser> userRepository)
+            UserManager<AppUser> userRepository,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery)
         {
             _configEmail = configEmail;
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
@@ -41,45 +49,51 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             _newProviderRepository = newProviderRepository;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews)
         {
             try
-            {
-                //Please check user has permission
+            {//Check user has permission first
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
                 {
-                    return new CommandResult<NewsProviderViewModel>
+                    var mappingProvider = await _newProviderRepository.FindByIdAsync(idNews);
+                    if (mappingProvider != null)
                     {
-                        isValid = false,
-                    };
-                }
-                var mappingProvider = await _newProviderRepository.FindByIdAsync(idNews);
-                if (mappingProvider != null)
-                {
-                    return new CommandResult<NewsProviderViewModel>
-                    {
-                        isValid = false,
-                    };
-                }
-                var map = MappingNewProvider(mappingProvider);
-                _newProviderRepository.Update(map);
-                await _newProviderRepository.SaveAsync();
+                        return new CommandResult<NewsProviderViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                        };
+                    }
+                    var map = MappingNewProvider(mappingProvider);
+                    _newProviderRepository.Update(map);
+                    await _newProviderRepository.SaveAsync();
 
-                var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == mappingProvider.ProviderId);
-                var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
-                //Set content for email
-                var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
-                var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
-                getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName).Replace(EmailKey.NewNameKey, mappingProvider.Title);
-                ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
-                                getFirstEmail.Message, getEmail.Email).Wait();
-                return new CommandResult<NewsProviderViewModel>
+                    var getProvider = await _providerRepository.FindSingleAsync(x => x.Id == mappingProvider.ProviderId);
+                    var getEmail = await _userRepository.FindByIdAsync(getProvider.UserId.ToString());
+                    //Set content for email
+                    var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
+                    var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
+                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName).Replace(EmailKey.NewNameKey, mappingProvider.Title);
+                    ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
+                                    getFirstEmail.Message, getEmail.Email).Wait();
+                    return new CommandResult<NewsProviderViewModel>
+                    {
+                        isValid = true,
+                    };
+                }
+                else
                 {
-                    isValid = true,
-                };
+                    return new CommandResult<NewsProviderViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_UPDATE_PERMISSION
+                    };
+                }
             }
             catch (Exception ex)
             {

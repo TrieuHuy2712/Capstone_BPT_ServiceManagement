@@ -1,23 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPT-Service.WebAPI", "BPT-Service.WebAPI\BPT-Service.WebAPI.csproj", "{F8AC2CDE-DC6A-48D5-963E-1556E3E9F744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPT-Service.WebAPI", "BPT-Service.WebAPI\BPT-Service.WebAPI.csproj", "{F8AC2CDE-DC6A-48D5-963E-1556E3E9F744}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{6792CCB6-E925-45F3-AB83-E7B50D1D2774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPT-Service.Application", "Business\BPT-Service.Application\BPT-Service.Application.csproj", "{D0E5F617-104D-46B7-BD98-463D1DF2E22B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPT-Service.Application", "Business\BPT-Service.Application\BPT-Service.Application.csproj", "{D0E5F617-104D-46B7-BD98-463D1DF2E22B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataEF", "DataEF", "{D4C6F218-D838-4FA6-B583-C1D707D98666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPT-Service.Data", "DataEF\BPT-Service.Data\BPT-Service.Data.csproj", "{6C986DAC-07B3-44E6-AC81-56A20F64B774}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPT-Service.Data", "DataEF\BPT-Service.Data\BPT-Service.Data.csproj", "{6C986DAC-07B3-44E6-AC81-56A20F64B774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPT-Service.Model", "DataEF\BPT-Service.Model\BPT-Service.Model.csproj", "{44EF827E-3134-438A-8645-581D4ED83F72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPT-Service.Model", "DataEF\BPT-Service.Model\BPT-Service.Model.csproj", "{44EF827E-3134-438A-8645-581D4ED83F72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{AF2052FE-E4B0-48FC-BA30-E7E05338C42A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPT-Service.Common", "Shared\BPT-Service.Common\BPT-Service.Common.csproj", "{9DC688AD-49DC-4DD4-8A77-BC576C4F754D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPT-Service.Common", "Shared\BPT-Service.Common\BPT-Service.Common.csproj", "{9DC688AD-49DC-4DD4-8A77-BC576C4F754D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F8AC2CDE-DC6A-48D5-963E-1556E3E9F744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -93,10 +90,16 @@ Global
 		{9DC688AD-49DC-4DD4-8A77-BC576C4F754D}.Release|x86.ActiveCfg = Release|Any CPU
 		{9DC688AD-49DC-4DD4-8A77-BC576C4F754D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D0E5F617-104D-46B7-BD98-463D1DF2E22B} = {6792CCB6-E925-45F3-AB83-E7B50D1D2774}
 		{6C986DAC-07B3-44E6-AC81-56A20F64B774} = {D4C6F218-D838-4FA6-B583-C1D707D98666}
 		{44EF827E-3134-438A-8645-581D4ED83F72} = {D4C6F218-D838-4FA6-B583-C1D707D98666}
 		{9DC688AD-49DC-4DD4-8A77-BC576C4F754D} = {AF2052FE-E4B0-48FC-BA30-E7E05338C42A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {364C4B58-4530-42C4-BCED-3FD34420CB71}
 	EndGlobalSection
 EndGlobal

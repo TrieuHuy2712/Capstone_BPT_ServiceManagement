@@ -1,12 +1,12 @@
+using BPT_Service.Common.Helpers;
+using BPT_Service.Model.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BPT_Service.Common.Helpers;
-using BPT_Service.Model.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService
 {
@@ -20,6 +20,7 @@ namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthen
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
         public async Task<AppUser> ExecuteAsync(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -28,7 +29,7 @@ namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthen
             if (user == null)
             {
                 var email = await _userManager.FindByEmailAsync(username);
-                if(email == null)
+                if (email == null)
                 {
                     return null;
                 }

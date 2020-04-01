@@ -1,46 +1,57 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.UpdatePostService
 {
     public class UpdatePostServiceCommand : IUpdatePostServiceCommand
     {
-
-        private readonly IRepository<Service, Guid> _serviceRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContext;
         private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository<Service, Guid> _serviceRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
 
-        private readonly IHttpContextAccessor _httpContext;
         public UpdatePostServiceCommand(
-            IRepository<Service, Guid> serviceRepository,
-            UserManager<AppUser> userManager,
-        IRepository<Provider, Guid> providerRepository,
-        IHttpContextAccessor httpContext,
-        IRepository<Tag, Guid> tagServiceRepository
-        )
+            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            ICheckUserIsProviderQuery checkUserIsProvider, 
+            IGetPermissionActionQuery getPermissionActionQuery, 
+            IHttpContextAccessor httpContext, IRepository<Provider, Guid> providerRepository, 
+            IRepository<Service, Guid> serviceRepository, 
+            IRepository<Tag, Guid> tagServiceRepository)
         {
-            _serviceRepository = serviceRepository;
-            _providerRepository = providerRepository;
-            _userManager = userManager;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _checkUserIsProvider = checkUserIsProvider;
+            _getPermissionActionQuery = getPermissionActionQuery;
             _httpContext = httpContext;
+            _providerRepository = providerRepository;
+            _serviceRepository = serviceRepository;
             _tagServiceRepository = tagServiceRepository;
         }
+
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
             try
             {
                 var getPermissionForService = await IsOwnService(Guid.Parse(vm.Id));
-                if (getPermissionForService.isValid)
+                var userId = _httpContext.HttpContext.User.Identity.Name;
+
+                if (getPermissionForService.isValid || await _checkUserIsAdminQuery.ExecuteAsync(userId)
+                    || await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate))
                 {
                     var currentService = getPermissionForService.myModel;
                     List<Tag> newTag = new List<Tag>();
@@ -88,7 +99,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = false,
-                    errorMessage = "Cannot update",
+                    errorMessage = ErrorMessageConstant.ERROR_UPDATE_PERMISSION
                 };
             }
             catch (System.Exception ex)
@@ -100,6 +111,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                 };
             }
         }
+
         private async Task<CommandResult<Service>> IsOwnService(Guid idService)
         {
             var getCurrentId = _httpContext.HttpContext.User.Identity.Name;
@@ -140,6 +152,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                 errorMessage = "You don't have permission"
             };
         }
+
         private Service MappingService(PostServiceViewModel vm, Service sv)
         {
             sv.CategoryId = vm.CategoryId;
@@ -147,7 +160,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             sv.PriceOfService = vm.PriceOfService;
             sv.Description = vm.Description;
             sv.ServiceName = vm.ServiceName;
-            sv.Status = Status.Pending;
+            sv.Status =  IsOwnService(sv.Id).Result.isValid ? Status.Pending:Status.Active;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
                 Path = x.Path,

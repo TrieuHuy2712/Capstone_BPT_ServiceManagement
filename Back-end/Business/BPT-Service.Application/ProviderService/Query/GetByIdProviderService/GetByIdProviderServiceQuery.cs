@@ -87,6 +87,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             pro.Address = vm.Address;
             pro.CityName = cityProvince.City;
             pro.ProvinceName = cityProvince.Province;
+            pro.AvatarPath = vm.AvartarPath;
             return pro;
         }
     }

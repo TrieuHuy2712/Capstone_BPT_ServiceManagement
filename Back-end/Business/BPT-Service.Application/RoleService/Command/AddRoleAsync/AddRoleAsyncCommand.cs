@@ -1,41 +1,41 @@
-using System.Threading.Tasks;
-using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
-using BPT_Service.Model.Entities;
-using BPT_Service.Model.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
+using BPT_Service.Application.RoleService.ViewModel;
+using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Model.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
 {
     public class AddRoleAsyncCommand : IAddRoleAsyncCommand
     {
         private readonly RoleManager<AppRole> _roleManager;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public AddRoleAsyncCommand(
-        RoleManager<AppRole> roleManager,
-        IUnitOfWork unitOfWork,
-        ICheckUserIsAdminQuery checkUserIsAdminQuery,
-        IGetPermissionActionQuery getPermissionActionQuery,
-        IHttpContextAccessor httpContextAccessor)
+            RoleManager<AppRole> roleManager,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery)
         {
             _roleManager = roleManager;
-            _unitOfWork = unitOfWork;
-            _getPermissionActionQuery = getPermissionActionQuery;
-            _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _httpContextAccessor = httpContextAccessor;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
         }
+
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAync(AppRoleViewModel roleVm)
         {
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if( await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "APPROLES", ActionSetting.CanCreate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                    await _getPermissionActionQuery.ExecuteAsync(userId, "ROLE", ActionSetting.CanCreate))
                 {
                     var role = new AppRole()
                     {
@@ -43,7 +43,6 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
                         Description = roleVm.Description
                     };
                     var result = await _roleManager.CreateAsync(role);
-                    _unitOfWork.Commit();
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = result.Succeeded,
@@ -54,11 +53,13 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
                             Id = role.Id
                         }
                     };
-                }else
+                }
+                else
                 {
-                    return new CommandResult<AppRoleViewModel>{
+                    return new CommandResult<AppRoleViewModel>
+                    {
                         isValid = false,
-                        errorMessage = "You don't have permission"
+                        errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
                     };
                 }
             }

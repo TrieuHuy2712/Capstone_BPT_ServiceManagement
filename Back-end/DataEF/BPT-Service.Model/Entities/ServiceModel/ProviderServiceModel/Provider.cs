@@ -37,6 +37,7 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public Status Status { get; set; }
 
         public DateTime DateCreated { get; set; }
+        public string AvartarPath { get; set; }
 
         public DateTime DateModified { get; set; }
 

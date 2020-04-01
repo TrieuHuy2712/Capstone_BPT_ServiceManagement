@@ -20,6 +20,7 @@ namespace BPT_Service.Application.ProviderService.ViewModel
         public string Reason { get; set; }
         public string CityName { get; set; }
         public string ProvinceName { get; set; }
+        public string AvatarPath { get; set; }
         public LocationCityViewModel LocationCity { get; set; }
     }
 }

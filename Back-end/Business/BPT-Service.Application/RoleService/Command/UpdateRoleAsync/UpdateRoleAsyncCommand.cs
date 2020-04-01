@@ -1,43 +1,73 @@
-using System.Threading.Tasks;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.RoleService.ViewModel;
+using BPT_Service.Common;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
 {
     public class UpdateRoleAsyncCommand : IUpdateRoleAsyncCommand
     {
         private readonly RoleManager<AppRole> _roleManager;
-        public UpdateRoleAsyncCommand(RoleManager<AppRole> roleManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+
+        public UpdateRoleAsyncCommand(
+            RoleManager<AppRole> roleManager, 
+            IHttpContextAccessor httpContextAccessor, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            IGetPermissionActionQuery getPermissionActionQuery)
         {
             _roleManager = roleManager;
+            _httpContextAccessor = httpContextAccessor;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
         }
+
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAsync(AppRoleViewModel roleVm)
         {
             try
             {
-                var role = await _roleManager.FindByIdAsync(roleVm.Id.ToString());
-                if (role != null)
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
+                    await _getPermissionActionQuery.ExecuteAsync(userId, "ROLE", ActionSetting.CanUpdate))
                 {
-                    role.Description = roleVm.Description;
-                    role.Name = roleVm.Name;
-                    await _roleManager.UpdateAsync(role);
+                    var role = await _roleManager.FindByIdAsync(roleVm.Id.ToString());
+                    if (role != null)
+                    {
+                        role.Description = roleVm.Description;
+                        role.Name = roleVm.Name;
+                        await _roleManager.UpdateAsync(role);
+                        return new CommandResult<AppRoleViewModel>
+                        {
+                            isValid = true,
+                            myModel = new AppRoleViewModel
+                            {
+                                Description = role.Description,
+                                Id = role.Id,
+                                Name = role.Name
+                            }
+                        };
+                    }
                     return new CommandResult<AppRoleViewModel>
                     {
-                        isValid = true,
-                        myModel = new AppRoleViewModel
-                        {
-                            Description = role.Description,
-                            Id = role.Id,
-                            Name = role.Name
-                        }
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-                return new CommandResult<AppRoleViewModel>
+                else
                 {
-                    isValid = false,
-                    errorMessage = "Cannot find Id Role"
-                };
+                    return new CommandResult<AppRoleViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_UPDATE_PERMISSION
+                    };
+                }
             }
             catch (System.Exception ex)
             {

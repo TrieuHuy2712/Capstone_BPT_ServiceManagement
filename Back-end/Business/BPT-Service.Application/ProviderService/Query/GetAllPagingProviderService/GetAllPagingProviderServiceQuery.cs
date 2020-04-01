@@ -57,7 +57,8 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                     ProviderName = x.ProviderName,
                     Status = x.Status,
                     TaxCode = x.TaxCode,
-                    UserId = x.UserId.ToString()
+                    UserId = x.UserId.ToString(),
+                    AvatarPath=x.AvartarPath,
                 }).ToList();
 
                 var map = (from loc in getAllLocation
@@ -77,7 +78,8 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                                TaxCode = x.TaxCode,
                                CityName = loc.City,
                                ProvinceName = loc.Province,
-                               UserId = x.UserId
+                               UserId = x.UserId,
+                               AvatarPath = x.AvatarPath
                            }).ToList();
 
                 var paginationSet = new PagedResult<ProviderServiceViewModel>()

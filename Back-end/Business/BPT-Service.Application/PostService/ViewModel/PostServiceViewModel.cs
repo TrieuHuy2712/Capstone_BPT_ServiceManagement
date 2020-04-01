@@ -1,6 +1,6 @@
+using BPT_Service.Model.Enums;
 using System;
 using System.Collections.Generic;
-using BPT_Service.Model.Enums;
 
 namespace BPT_Service.Application.PostService.ViewModel
 {
@@ -8,7 +8,8 @@ namespace BPT_Service.Application.PostService.ViewModel
     {
         public string Id { get; set; }
         public string ServiceName { get; set; }
-
+        public string ProviderId { get; set; }
+        public string UserId { get; set; }
         public int CategoryId { set; get; }
 
         public string Description { get; set; }
@@ -26,8 +27,8 @@ namespace BPT_Service.Application.PostService.ViewModel
         public ServiceofProviderViewModel serviceofProvider { get; set; }
         public List<TagofServiceViewModel> tagofServices { get; set; }
         public ServiceofUserViewModel userofServices { get; set; }
-
     }
+
     public class PostServiceImageViewModel
     {
         public string Path { get; set; }
@@ -44,12 +45,14 @@ namespace BPT_Service.Application.PostService.ViewModel
 
         public string ProviderId { get; set; }
     }
+
     public class ServiceofUserViewModel
     {
         public string ServiceId { get; set; }
 
         public string UserId { get; set; }
     }
+
     public class TagofServiceViewModel
     {
         public bool isAdd { get; set; }

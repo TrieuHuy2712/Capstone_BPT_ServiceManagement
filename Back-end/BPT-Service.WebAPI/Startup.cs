@@ -86,6 +86,7 @@ using BPT_Service.Application.RatingService.Command.DeleteRatingService;
 using BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceByOwner;
 using BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser;
 using BPT_Service.Application.RatingService.Query.GetListAllPagingRatingService;
+using BPT_Service.Application.RecommedationService.Query.RecommendService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -249,13 +250,12 @@ namespace BPT_Service.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor, IRecommendService _recommendService)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -271,7 +271,7 @@ namespace BPT_Service.WebAPI
             {
                 endpoints.MapControllers();
             });
-
+            //RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -441,6 +441,9 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingRatingServiceByOwnerQuery, GetAllPagingRatingServiceByOwnerQuery>();
             services.AddScoped<IGetAllServiceRatingByUserQuery, GetAllServiceRatingByUserQuery>();
             services.AddScoped<IGetListAllPagingRatingServiceQuery, GetListAllPagingRatingServiceQuery>();
+
+            //Recommend service
+            services.AddScoped<IRecommendService, RecommendService>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
