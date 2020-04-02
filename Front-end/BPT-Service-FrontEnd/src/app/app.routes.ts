@@ -7,5 +7,6 @@ export const appRoutes: Routes = [
     { path: 'login', loadChildren: './login/login.module#LoginModule' },
     //localhost:4200/main
     { path: 'main', loadChildren: './main/main.module#MainModule',canActivate:[AuthGuard] },
-    { path: 'register', loadChildren: './register/register.module#RegisterModule' }
+    { path: 'register', loadChildren: './register/register.module#RegisterModule' },
+    { path: 'admin', loadChildren: './admin/admin.module#AdminModule' }
 ]
