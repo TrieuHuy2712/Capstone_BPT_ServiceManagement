@@ -4,11 +4,15 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
+using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService
@@ -37,6 +41,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
         {
+            var userName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var findProviderNew = await _providerNewsRepository.FindByIdAsync(vm.Id);
@@ -48,9 +53,11 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                        await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate) ||
                        (getIsProvider.isValid && getIsProvider.myModel.Id == findProviderNew.ProviderId.ToString()))
                     {
-                        var mappingNewsProvider = MappingProvider(findProviderNew, vm);
+                        var mappingNewsProvider = await MappingProvider(findProviderNew, vm, userId);
                         _providerNewsRepository.Update(mappingNewsProvider);
                         await _providerNewsRepository.SaveAsync();
+                        await Logging<UpdateNewsProviderServiceCommand>.
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mappingNewsProvider));
                         return new CommandResult<NewsProviderViewModel>
                         {
                             isValid = true,
@@ -59,6 +66,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                     }
                     else
                     {
+                        await Logging<UpdateNewsProviderServiceCommand>.
+                            WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                         return new CommandResult<NewsProviderViewModel>
                         {
                             isValid = false,
@@ -68,6 +77,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                 }
                 else
                 {
+                    await Logging<UpdateNewsProviderServiceCommand>.
+                            WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
@@ -77,6 +88,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             }
             catch (System.Exception ex)
             {
+                await Logging<UpdateNewsProviderServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = false,
@@ -85,10 +98,12 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             }
         }
 
-        private ProviderNew MappingProvider(ProviderNew pro, NewsProviderViewModel vm)
+        private async Task<ProviderNew> MappingProvider(ProviderNew pro, NewsProviderViewModel vm, string currentUserContext)
         {
             pro.Author = vm.Author;
-            pro.Status = vm.Status;
+            pro.Status = (await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext) ||
+                            await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanUpdate)) ?
+                            Status.Active : Status.UpdatePending;
             pro.Author = vm.Author;
             pro.ProviderId = Guid.Parse(vm.ProviderId);
             pro.Title = vm.Title;

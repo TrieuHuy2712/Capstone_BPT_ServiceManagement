@@ -3,11 +3,14 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
@@ -33,6 +36,7 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
 
         public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -52,6 +56,7 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                     await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
                     var userRoles1 = await _userManager.GetRolesAsync(user);
                     await _userManager.UpdateAsync(user);
+                    await Logging<UpdateUserAsyncCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(user));
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = true,
@@ -66,6 +71,8 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                 }
                 else
                 {
+                    await Logging<UpdateUserAsyncCommand>.
+                        WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = false,
@@ -75,6 +82,8 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
             }
             catch (Exception ex)
             {
+                await Logging<UpdateUserAsyncCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<AppUserViewModelinUserService>
                 {
                     isValid = false,

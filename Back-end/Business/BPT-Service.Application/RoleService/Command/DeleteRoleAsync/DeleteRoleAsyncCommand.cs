@@ -3,10 +3,12 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
@@ -32,6 +34,7 @@ namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
 
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAsync(Guid id)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -42,11 +45,14 @@ namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
                     if (role != null)
                     {
                         await _roleManager.DeleteAsync(role);
+                        await Logging<DeleteRoleAsyncCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Had delete" + role.Name);
                         return new CommandResult<AppRoleViewModel>
                         {
                             isValid = true,
                         };
                     }
+                    await Logging<DeleteRoleAsyncCommand>
+                        .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = false,
@@ -55,6 +61,8 @@ namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
                 }
                 else
                 {
+                    await Logging<DeleteRoleAsyncCommand>
+                        .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<AppRoleViewModel>
                     {
                         errorMessage = ErrorMessageConstant.ERROR_DELETE_PERMISSION,
@@ -64,6 +72,8 @@ namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteRoleAsyncCommand>
+                        .ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
                 return new CommandResult<AppRoleViewModel>
                 {
                     isValid = false,

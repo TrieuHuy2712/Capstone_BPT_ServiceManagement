@@ -2,11 +2,11 @@ using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
-using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -15,10 +15,12 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
@@ -55,6 +57,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int id, string reason)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -86,14 +89,21 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
 
                     ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, getEmail.Email).Wait();
+                    //Write Log
+                    await LoggingUser<RejectNewsProviderServiceCommand>.
+                   InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been rejecte.Please check your email");
+                    await Logging<RejectNewsProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(map));
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,
-                        errorMessage = "You have been accepted. Please check your email"
+                        errorMessage = "You have been rejected. Please check your email"
                     };
                 }
                 else
                 {
+                    await Logging<RejectNewsProviderServiceCommand>.
+                       WarningAsync(ActionCommand.COMMAND_REJECT, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
@@ -103,6 +113,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
             }
             catch (Exception ex)
             {
+                await Logging<RejectNewsProviderServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_REJECT, userName, "Has error");
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = false,

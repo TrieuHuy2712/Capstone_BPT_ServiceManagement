@@ -1,11 +1,13 @@
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
@@ -13,10 +15,12 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.RejectPostService
@@ -33,6 +37,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
         private readonly IRepository<Service, Guid> _postServiceRepository;
         private readonly UserManager<AppUser> _userRepository;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
 
         public RejectPostServiceCommand(
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
@@ -44,9 +49,11 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
             IRepository<Provider, Guid> providerRepository,
             IRepository<Service, Guid> postServiceRepository,
             UserManager<AppUser> userRepository,
-            ICheckUserIsAdminQuery checkUserIsAdminQuery
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetOwnServiceInformationQuery getOwnServiceInformationQuery
             )
         {
+            _getOwnServiceInformationQuery = getOwnServiceInformationQuery;
             _configEmail = configEmail;
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
@@ -61,6 +68,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService, string reason)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -72,6 +80,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                     var getCurrentPost = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
                     if (getCurrentPost != null)
                     {
+                        var getUserId = await _getOwnServiceInformationQuery.ExecuteAsync(idService);
                         getCurrentPost.Status = Status.Active;
                         _postServiceRepository.Update(getCurrentPost);
                         await _postServiceRepository.SaveAsync();
@@ -82,8 +91,11 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                             //Set content for email
                             //Get all email
                             var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
+
                             var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Reject_Service).FirstOrDefault();
-                            getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName)
+
+                            getFirstEmail.Message = getFirstEmail.Message.
+                                Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName)
                                 .Replace(EmailKey.UserNameKey, findEmailUser)
                                 .Replace(EmailKey.ReasonKey, reason);
 
@@ -92,18 +104,28 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                         }
                         else
                         {
+                            await Logging<RejectPostServiceCommand>.
+                                WarningAsync(ActionCommand.COMMAND_APPROVE, userName, "Cannot find email");
                             return new CommandResult<PostServiceViewModel>
                             {
                                 isValid = false,
                                 errorMessage = "Cannot find email user"
                             };
                         }
+                        //Write Log
+                        await Logging<RejectPostServiceCommand>.
+                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(getCurrentPost));
 
+                        await LoggingUser<RejectPostServiceCommand>.
+                            InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been rejected");
                         return new CommandResult<PostServiceViewModel>
                         {
                             isValid = true,
                         };
                     }
+                    //Write log
+                    await Logging<RejectPostServiceCommand>.
+                       WarningAsync(ActionCommand.COMMAND_APPROVE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
@@ -112,6 +134,8 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                 }
                 else
                 {
+                    await Logging<RejectPostServiceCommand>.
+                       WarningAsync(ActionCommand.COMMAND_APPROVE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
@@ -121,6 +145,8 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
             }
             catch (System.Exception ex)
             {
+                await Logging<RejectPostServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_APPROVE, userName, "Has error");
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = false,

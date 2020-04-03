@@ -4,14 +4,17 @@ using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.UpdatePostService
@@ -45,6 +48,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
+            var userName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var getPermissionForService = await IsOwnService(Guid.Parse(vm.Id));
@@ -90,12 +94,16 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                     _serviceRepository.Update(mappingService);
                     await _tagServiceRepository.SaveAsync();
                     await _serviceRepository.SaveAsync();
+                    await Logging<UpdatePostServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mappingService));
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
                         myModel = vm,
                     };
                 }
+                await Logging<UpdatePostServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = false,
@@ -104,6 +112,8 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             }
             catch (System.Exception ex)
             {
+                await Logging<UpdatePostServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = false,

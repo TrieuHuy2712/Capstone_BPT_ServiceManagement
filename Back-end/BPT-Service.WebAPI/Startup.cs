@@ -65,6 +65,7 @@ using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.Extension.GetAvtInformation;
 using BPT_Service.Application.PostService.Query.Extension.GetListTagInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
 using BPT_Service.Application.PostService.Query.Extension.GetProviderInformation;
 using BPT_Service.Application.PostService.Query.Extension.GetServiceRating;
 using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
@@ -385,6 +386,8 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetProviderInformationQuery, GetProviderInformationQuery>();
             services.AddScoped<IGetServiceRatingQuery, GetServiceRatingQuery>();
             services.AddScoped<IGetUserInformationQuery, GetUserInformationQuery>();
+            services.AddScoped<IGetOwnServiceInformationQuery, GetOwnServiceInformationQuery>();
+            
 
             //NewsProvider
             services.AddScoped<IApproveNewsProviderServiceCommand, ApproveNewsProviderServiceCommand>();

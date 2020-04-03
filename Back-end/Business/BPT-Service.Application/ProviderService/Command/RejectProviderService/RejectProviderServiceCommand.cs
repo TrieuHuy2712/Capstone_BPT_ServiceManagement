@@ -1,17 +1,13 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
-using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
@@ -19,8 +15,13 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 {
@@ -36,13 +37,13 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private readonly UserManager<AppUser> _userRepository;
 
         public RejectProviderServiceCommand(
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
-            ICheckUserIsProviderQuery checkUserIsProviderQuery, 
-            IGetAllEmailServiceQuery getAllEmailServiceQuery, 
-            IGetPermissionActionQuery getPermissionActionQuery, 
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<EmailConfigModel> config, 
-            IRepository<Provider, Guid> providerRepository, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> config,
+            IRepository<Provider, Guid> providerRepository,
             UserManager<AppUser> userRepository)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
@@ -57,6 +58,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -90,6 +92,11 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                     getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email).Replace(EmailKey.ReasonKey, reason);
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, mappingProvider.AppUser.Email).Wait();
+
+                    await LoggingUser<RejectProviderServiceCommand>.
+                   InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been rejecte.Please check your email");
+                    await Logging<RejectProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(mappingProvider));
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = true,
@@ -97,6 +104,8 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                 }
                 else
                 {
+                    await Logging<RejectProviderServiceCommand>.
+                       WarningAsync(ActionCommand.COMMAND_REJECT, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
@@ -106,6 +115,8 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
             }
             catch (Exception ex)
             {
+                await Logging<RejectProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_REJECT, userName, "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

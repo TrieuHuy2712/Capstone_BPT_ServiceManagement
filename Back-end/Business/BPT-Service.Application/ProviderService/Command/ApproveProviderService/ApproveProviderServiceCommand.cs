@@ -9,6 +9,7 @@ using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
@@ -16,10 +17,12 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
@@ -63,6 +66,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userProvider, string providerId)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -75,12 +79,15 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     }
 
                     var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
+                    //Write Log
+                    await Logging<ApproveProviderServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_APPROVE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     if (mappingProvider == null)
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {
                             isValid = false,
-                            errorMessage = "Cannot find your id provider"
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                         };
                     }
                     //Check user is Provider
@@ -99,13 +106,19 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     var userMail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
 
                     //Set content for email
-                    //var content = "Your provider: " + userMail.Email + " has been approved. Please check in our system";
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();
                     getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email);
 
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, _userRepository.FindByIdAsync(userId).Result.Email).Wait();
+
+                    //Write log
+                    await LoggingUser<ApproveProviderServiceCommand>.
+                    InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been approved");
+                    await Logging<ApproveProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(mappingProvider));
+
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = true,
@@ -113,6 +126,8 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                 }
                 else
                 {
+                    await Logging<ApproveProviderServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_APPROVE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
@@ -123,6 +138,8 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             }
             catch (Exception ex)
             {
+                await Logging<ApproveProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_APPROVE, userName, "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

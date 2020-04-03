@@ -3,9 +3,12 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
@@ -31,6 +34,7 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
 
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAync(AppRoleViewModel roleVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -43,6 +47,7 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
                         Description = roleVm.Description
                     };
                     var result = await _roleManager.CreateAsync(role);
+                    await Logging<AddRoleAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(role));
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = result.Succeeded,
@@ -56,6 +61,7 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
                 }
                 else
                 {
+                    await Logging<AddRoleAsyncCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = false,
@@ -65,6 +71,7 @@ namespace BPT_Service.Application.RoleService.Command.AddRoleAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<AddRoleAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<AppRoleViewModel>
                 {
                     isValid = false,

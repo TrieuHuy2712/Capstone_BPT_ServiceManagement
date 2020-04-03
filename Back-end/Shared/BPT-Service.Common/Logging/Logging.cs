@@ -19,9 +19,19 @@ namespace BPT_Service.Common.Logging
             await WritelLogAsync(INFO, message);
         }
 
+        public static async Task InformationAsync(string typeCommand, string userName, params string[] message)
+        {
+            await WritelLogAsync(INFO, typeCommand, userName, message);
+        }
+
         public static async Task ErrorAsync(params string[] message)
         {
             await WritelLogAsync(ERROR, message);
+        }
+
+        public static async Task ErrorAsync(string typeCommand, string userName, params string[] message)
+        {
+            await WritelLogAsync(ERROR, typeCommand, userName, message);
         }
 
         public static async Task ErrorAsync(Exception ex, params string[] message)
@@ -33,9 +43,45 @@ namespace BPT_Service.Common.Logging
                 "Source: " + (ex.Source != null ? ex.Source : "No Source"));
         }
 
+        public static async Task ErrorAsync(Exception ex, string typeCommand, string userName, params string[] message)
+        {
+            await WritelLogAsync(ERROR, typeCommand, userName, string.Join("||", message),
+                "Message: " + ex.Message,
+                "Inner: " + (ex.InnerException != null ? ex.InnerException.Message : "No inner"),
+                "StackTrace: " + (ex.StackTrace != null ? ex.StackTrace : "No StackTrace"),
+                "Source: " + (ex.Source != null ? ex.Source : "No Source"));
+        }
+
         public static async Task WarningAsync(params string[] message)
         {
             await WritelLogAsync(WARNING, message);
+        }
+
+        public static async Task WarningAsync(string typeCommand, string userName, params string[] message)
+        {
+            await WritelLogAsync(WARNING,typeCommand, userName, message);
+        }
+
+        private static async Task WritelLogAsync(string logType, string typeCommand, string userName, params string[] message)
+        {
+            try
+            {
+                DateTime datetime = DateTime.Now;
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                using (StreamWriter fs = File.AppendText(string.Format(path + fileName, datetime.ToString(DateFormat.DateFormatStandard))))
+                {
+                    var logContent = logType + "[" + datetime.ToString(DateFormat.DateTimeFormat) + "]:: " + typeof(T).Name + ":: " + typeCommand + ":: " + userName + ":: " + string.Join("||", message);
+                    await fs.WriteLineAsync(logContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                await ErrorAsync(ex, message);
+            }
         }
 
         private static async Task WritelLogAsync(string logType, params string[] message)

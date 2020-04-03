@@ -1,13 +1,16 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.TagService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
 {
@@ -32,6 +35,7 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
 
         public async Task<CommandResult<TagViewModel>> ExecuteAsync(TagViewModel userVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -46,6 +50,8 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
                         tag.TagName = userVm.TagName;
                         _tagRepository.Update(tag);
                         await _tagRepository.SaveAsync();
+                        await Logging<UpdateTagServiceAsyncCommand>.
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(tag));
                         return new CommandResult<TagViewModel>
                         {
                             isValid = true,
@@ -58,6 +64,8 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
                     }
                     else
                     {
+                        await Logging<UpdateTagServiceAsyncCommand>.
+                           WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<TagViewModel>
                         {
                             isValid = false,
@@ -67,6 +75,8 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
                 }
                 else
                 {
+                    await Logging<UpdateTagServiceAsyncCommand>.
+                           WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<TagViewModel>
                     {
                         isValid = false,
@@ -76,6 +86,7 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<UpdateTagServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<TagViewModel>
                 {
                     isValid = false,

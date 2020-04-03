@@ -6,6 +6,7 @@ using BPT_Service.Common;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -14,10 +15,12 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider
@@ -55,6 +58,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {//Check user has permission first
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -81,6 +85,10 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                     getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName).Replace(EmailKey.NewNameKey, mappingProvider.Title);
                     ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, getEmail.Email).Wait();
+                    await LoggingUser<ApproveNewsProviderServiceCommand>.
+                    InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been approved");
+                    await Logging<ApproveNewsProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(map));
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,
@@ -88,6 +96,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                 }
                 else
                 {
+                    await Logging<ApproveNewsProviderServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_APPROVE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = false,
@@ -97,6 +107,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             }
             catch (Exception ex)
             {
+                await Logging<ApproveNewsProviderServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_APPROVE, userName, "Has error");
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = false,

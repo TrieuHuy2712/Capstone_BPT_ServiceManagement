@@ -3,12 +3,15 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
@@ -33,6 +36,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
 
         public async Task<CommandResult<List<CityProvinceViewModel>>> ExecuteAsync(List<CityProvinceViewModel> listAddViewModel)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {//Check user has permission first
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -42,6 +46,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
                     var listModel = MappingCityProvince(listAddViewModel);
                     await _cityProvinceRepository.Add(listModel);
                     await _cityProvinceRepository.SaveAsync();
+                    await Logging<AddCityProvinceServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(listModel));
                     return new CommandResult<List<CityProvinceViewModel>>
                     {
                         isValid = true,
@@ -55,6 +60,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
                 }
                 else
                 {
+                    await Logging<AddCityProvinceServiceCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<List<CityProvinceViewModel>>
                     {
                         isValid = false,
@@ -64,6 +70,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             }
             catch (Exception ex)
             {
+                await Logging<AddCityProvinceServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<List<CityProvinceViewModel>>
                 {
                     isValid = false,

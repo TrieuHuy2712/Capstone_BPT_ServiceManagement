@@ -3,10 +3,13 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService
@@ -35,6 +38,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
 
         public async Task<CommandResult<ProviderNew>> ExecuteAsync(int id)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var getId = await _providerNewRepository.FindByIdAsync(id);
@@ -42,12 +46,16 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
                 {
                     var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                     var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
+                    //Check permission
                     if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                         await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanDelete) ||
                         (checkUserIsProvider.isValid && checkUserIsProvider.myModel.Id == getId.ProviderId.ToString()))
                     {
                         _providerNewRepository.Remove(getId.Id);
                         await _providerNewRepository.SaveAsync();
+                        //Write Log
+                        await Logging<DeleteNewsProviderServiceCommand>.
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(getId));
                         return new CommandResult<ProviderNew>
                         {
                             isValid = true,
@@ -56,6 +64,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
                     }
                     else
                     {
+                        await Logging<DeleteNewsProviderServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                         return new CommandResult<ProviderNew>
                         {
                             isValid = false,
@@ -65,6 +75,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
                 }
                 else
                 {
+                    await Logging<DeleteNewsProviderServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<ProviderNew>
                     {
                         isValid = false,
@@ -74,6 +86,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteNewsProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_APPROVE, userName, "Has error");
                 return new CommandResult<ProviderNew>
                 {
                     isValid = false,

@@ -3,12 +3,12 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.LocationService.Command.DeleteCityProvinceService
@@ -33,6 +33,7 @@ namespace BPT_Service.Application.LocationService.Command.DeleteCityProvinceServ
 
         public async Task<CommandResult<CityProvinceViewModel>> ExecuteAsync(int id)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Check user has permission first
@@ -42,14 +43,18 @@ namespace BPT_Service.Application.LocationService.Command.DeleteCityProvinceServ
                     var getById = await _cityProvinceRepository.FindByIdAsync(id);
                     if (getById == null)
                     {
+                        await Logging<DeleteCityProvinceServiceCommand>.WarningAsync(ActionCommand.COMMAND_DELETE, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<CityProvinceViewModel>
                         {
                             isValid = false,
                             errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                         };
                     }
+                    var city_Province = getById.City + "_" + getById.Province;
                     _cityProvinceRepository.Remove(getById);
                     await _cityProvinceRepository.SaveAsync();
+                    await Logging<DeleteCityProvinceServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Has delete " + city_Province);
                     return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = true,
@@ -58,6 +63,8 @@ namespace BPT_Service.Application.LocationService.Command.DeleteCityProvinceServ
                 }
                 else
                 {
+                    await Logging<DeleteCityProvinceServiceCommand>.
+                        WarningAsync(ActionCommand.COMMAND_DELETE, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = false,
@@ -67,7 +74,7 @@ namespace BPT_Service.Application.LocationService.Command.DeleteCityProvinceServ
             }
             catch (Exception ex)
             {
-
+                await Logging<DeleteCityProvinceServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
                 return new CommandResult<CityProvinceViewModel>
                 {
                     isValid = false,

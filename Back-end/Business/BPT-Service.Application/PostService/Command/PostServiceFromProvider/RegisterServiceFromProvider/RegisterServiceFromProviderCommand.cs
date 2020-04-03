@@ -5,14 +5,17 @@ using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider
@@ -46,6 +49,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -85,6 +89,9 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
 
                     await _tagServiceRepository.SaveAsync();
 
+                    //Write Log
+                    await Logging<RegisterServiceFromProviderCommand>.
+                        InformationAsync(ActionCommand.COMMAND_ADD,userName,JsonConvert.SerializeObject(mappingService));
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
@@ -93,6 +100,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                 }
                 else
                 {
+                    await Logging<RegisterServiceFromProviderCommand>.
+                        WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
@@ -102,6 +111,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             }
             catch (System.Exception ex)
             {
+                await Logging<RegisterServiceFromProviderCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Had error");
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = true,

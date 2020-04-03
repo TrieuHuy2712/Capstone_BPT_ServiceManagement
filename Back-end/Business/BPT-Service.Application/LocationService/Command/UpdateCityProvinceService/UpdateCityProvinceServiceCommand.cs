@@ -3,10 +3,13 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceService
@@ -31,7 +34,8 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
 
         public async Task<CommandResult<CityProvinceViewModel>> ExecuteAsync(CityProvinceViewModel vm)
         {
-            //Check user has permission
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             try
             {//Check user has permission first
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -40,6 +44,7 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
                     var getId = await _cityProvinceRepository.FindByIdAsync(vm.Id);
                     if (getId == null)
                     {
+                        await Logging<UpdateCityProvinceServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<CityProvinceViewModel>
                         {
                             isValid = false,
@@ -49,6 +54,8 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
                     MappingCityProvince(vm, getId);
                     _cityProvinceRepository.Update(getId);
                     await _cityProvinceRepository.SaveAsync();
+                    await Logging<UpdateCityProvinceServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(getId));
                     return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = true,
@@ -57,6 +64,8 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
                 }
                 else
                 {
+                    await Logging<UpdateCityProvinceServiceCommand>
+                        .WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = false,
@@ -66,6 +75,7 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
             }
             catch (Exception ex)
             {
+                await Logging<UpdateCityProvinceServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<CityProvinceViewModel>
                 {
                     isValid = false,

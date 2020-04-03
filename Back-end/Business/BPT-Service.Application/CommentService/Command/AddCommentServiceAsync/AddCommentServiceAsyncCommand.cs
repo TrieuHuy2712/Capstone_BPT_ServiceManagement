@@ -1,40 +1,79 @@
-using System;
-using System.Threading.Tasks;
 using BPT_Service.Application.CommentService.ViewModel;
+using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
+using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
 {
     public class AddCommentServiceAsyncCommand : IAddCommentServiceAsyncCommand
     {
         private readonly IRepository<ServiceComment, Guid> _commentRepository;
-        public AddCommentServiceAsyncCommand(IRepository<ServiceComment, Guid> commentRepository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
+
+        public AddCommentServiceAsyncCommand(
+            IRepository<ServiceComment, Guid> commentRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IGetOwnServiceInformationQuery getOwnServiceInformationQuery)
         {
             _commentRepository = commentRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _getOwnServiceInformationQuery = getOwnServiceInformationQuery;
         }
+
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(CommentViewModel addComment)
         {
-            if (addComment.ParentId == "")
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            try
+            {
+                if (addComment.ParentId == "")
                 {
                     addComment.ParentId = Guid.Empty.ToString();
                 }
-            var comment = new ServiceComment{
-                ContentOfRating = addComment.ContentOfRating,
-                UserId = Guid.Parse(addComment.UserId),
-                ServiceId = Guid.Parse(addComment.ServiceId),
-                ParentId = Guid.Parse(addComment.ParentId)
-            };
-
-            _commentRepository.Add(comment);
-            _commentRepository.SaveAsync();
-            return new CommandResult<CommentViewModel>
+                var comment = new ServiceComment
                 {
-                    isValid = true,
+                    ContentOfRating = addComment.ContentOfRating,
+                    UserId = Guid.Parse(addComment.UserId),
+                    ServiceId = Guid.Parse(addComment.ServiceId),
+                    ParentId = Guid.Parse(addComment.ParentId)
                 };
 
-       
+                await _commentRepository.Add(comment);
+                await _commentRepository.SaveAsync();
+                var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(addComment.ServiceId);
+                await LoggingUser<AddCommentServiceAsyncCommand>.
+                    InformationAsync(getOwnerService, userName, addComment.ContentOfRating);
+                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(comment));
+                return new CommandResult<CommentViewModel>
+                {
+                    isValid = true,
+                    myModel = new CommentViewModel
+                    {
+                        ContentOfRating = comment.ContentOfRating,
+                        Id = comment.Id.ToString(),
+                        ParentId = comment.ParentId.ToString(),
+                        ServiceId = comment.ServiceId.ToString(),
+                        UserId = comment.UserId.ToString()
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                await Logging<AddCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
+                return new CommandResult<CommentViewModel>
+                {
+                    isValid = false,
+                    errorMessage = ex.InnerException.Message.ToString()
+                };
+            }
         }
     }
 }

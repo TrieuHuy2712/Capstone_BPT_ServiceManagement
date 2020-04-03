@@ -4,11 +4,14 @@ using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider
@@ -43,6 +46,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Get Id Service and Check it has permission by checkUserIsProvider
@@ -61,6 +65,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
                         _providerServiceRepository.Remove(findProviderService);
                         _postServiceRepository.Remove(findIdService);
                         await _postServiceRepository.SaveAsync();
+                        await Logging<DeleteServiceFromProviderCommand>.
+                            InformationAsync(ActionCommand.COMMAND_DELETE,userName,JsonConvert.SerializeObject(findProviderService));
                         return new CommandResult<PostServiceViewModel>
                         {
                             isValid = true
@@ -68,6 +74,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
                     }
                     else
                     {
+                        await Logging<DeleteServiceFromProviderCommand>.
+                            WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                         return new CommandResult<PostServiceViewModel>
                         {
                             isValid = false,
@@ -77,6 +85,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
                 }
                 else
                 {
+                    await Logging<DeleteServiceFromProviderCommand>.
+                            WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = false,
@@ -86,6 +96,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteServiceFromProviderCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Had error");
                 return new CommandResult<PostServiceViewModel>
                 {
                     isValid = false,

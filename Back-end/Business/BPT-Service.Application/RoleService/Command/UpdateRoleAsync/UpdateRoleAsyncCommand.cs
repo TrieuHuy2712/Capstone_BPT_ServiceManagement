@@ -3,9 +3,12 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
@@ -18,9 +21,9 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
 
         public UpdateRoleAsyncCommand(
-            RoleManager<AppRole> roleManager, 
-            IHttpContextAccessor httpContextAccessor, 
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            RoleManager<AppRole> roleManager,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery)
         {
             _roleManager = roleManager;
@@ -31,6 +34,7 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
 
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAsync(AppRoleViewModel roleVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -43,6 +47,8 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
                         role.Description = roleVm.Description;
                         role.Name = roleVm.Name;
                         await _roleManager.UpdateAsync(role);
+                        await Logging<UpdateRoleAsyncCommand>.
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(role));
                         return new CommandResult<AppRoleViewModel>
                         {
                             isValid = true,
@@ -54,6 +60,8 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
                             }
                         };
                     }
+                    await Logging<UpdateRoleAsyncCommand>.
+                            WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = false,
@@ -62,6 +70,8 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
                 }
                 else
                 {
+                    await Logging<UpdateRoleAsyncCommand>.
+                            WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<AppRoleViewModel>
                     {
                         isValid = false,
@@ -71,6 +81,8 @@ namespace BPT_Service.Application.RoleService.Command.UpdateRoleAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<UpdateRoleAsyncCommand>
+                        .ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<AppRoleViewModel>
                 {
                     isValid = false,

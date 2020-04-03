@@ -3,12 +3,15 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.RegisterProviderService
@@ -37,6 +40,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -45,6 +49,8 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 await _providerRepository.Add(mappingProvider);
                 await _providerRepository.SaveAsync();
                 vm.Id = mappingProvider.Id.ToString();
+                await Logging<RegisterProviderServiceCommand>.
+                       InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingProvider));
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
@@ -53,6 +59,8 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             }
             catch (System.Exception ex)
             {
+                await Logging<RegisterProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

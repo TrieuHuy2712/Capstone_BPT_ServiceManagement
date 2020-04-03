@@ -1,12 +1,15 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
 {
@@ -18,9 +21,9 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
 
         public DeleteUserAsyncCommand(
-            UserManager<AppUser> userManager, 
-            IHttpContextAccessor httpContextAccessor, 
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery)
         {
             _userManager = userManager;
@@ -31,6 +34,7 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
 
         public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(string id)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -41,6 +45,7 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
                     if (user != null)
                     {
                         await _userManager.DeleteAsync(user);
+                        await Logging<DeleteUserAsyncCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(user));
                         return new CommandResult<AppUserViewModelinUserService>
                         {
                             isValid = true,
@@ -54,6 +59,8 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
                             }
                         };
                     }
+                    await Logging<DeleteUserAsyncCommand>.
+                        WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = false,
@@ -62,6 +69,8 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
                 }
                 else
                 {
+                    await Logging<DeleteUserAsyncCommand>.
+                        WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = false,
@@ -71,6 +80,8 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteUserAsyncCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
                 return new CommandResult<AppUserViewModelinUserService>
                 {
                     isValid = false,

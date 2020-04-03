@@ -3,9 +3,12 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
@@ -31,6 +34,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
 
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Check user has permission first
@@ -40,6 +44,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                     var mappingFunction = MappingFunction(function);
                     await _functionRepository.Add(mappingFunction);
                     await _functionRepository.SaveAsync();
+                    await Logging<AddFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingFunction));
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = true,
@@ -57,6 +62,8 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                 }
                 else
                 {
+                    await Logging<AddFunctionServiceCommand>
+                        .WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -66,6 +73,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             }
             catch (System.Exception ex)
             {
+                await Logging<AddFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,

@@ -3,10 +3,13 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.UserService.Command.AddUserAsync
@@ -19,9 +22,9 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
 
         public AddUserAsyncCommand(
-            UserManager<AppUser> userManager, 
-            IHttpContextAccessor httpContextAccessor, 
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery)
         {
             _userManager = userManager;
@@ -32,6 +35,7 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
 
         public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -54,6 +58,7 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                         if (appUser != null)
                             await _userManager.AddToRolesAsync(appUser, userVm.Roles);
                     }
+                    await Logging<AddUserAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(userVm));
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = true,
@@ -70,6 +75,7 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                 }
                 else
                 {
+                    await Logging<AddUserAsyncCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<AppUserViewModelinUserService>
                     {
                         isValid = false,
@@ -79,6 +85,7 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<AddUserAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<AppUserViewModelinUserService>
                 {
                     isValid = false,

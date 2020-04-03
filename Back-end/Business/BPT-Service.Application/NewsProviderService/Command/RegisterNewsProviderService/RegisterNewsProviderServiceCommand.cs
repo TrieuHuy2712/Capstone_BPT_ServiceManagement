@@ -4,13 +4,15 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
-using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService
@@ -38,6 +40,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
@@ -50,6 +53,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                     await _newProviderRepository.Add(mappingProvider);
                     await _newProviderRepository.SaveAsync();
                     vm.Id = mappingProvider.Id;
+                    await Logging<RegisterNewsProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingProvider));
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,
@@ -58,6 +63,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                 }
                 else
                 {
+                    await Logging<RegisterNewsProviderServiceCommand>.
+                           WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,
@@ -67,6 +74,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
             }
             catch (System.Exception ex)
             {
+                await Logging<RegisterNewsProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<NewsProviderViewModel>
                 {
                     isValid = false,

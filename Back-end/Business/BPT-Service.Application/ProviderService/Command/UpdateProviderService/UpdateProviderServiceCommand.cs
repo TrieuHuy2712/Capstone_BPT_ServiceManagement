@@ -6,6 +6,7 @@ using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
@@ -13,7 +14,9 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
@@ -22,35 +25,30 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
     {
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
-        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IOptions<EmailConfigModel> _config;
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userRepository;
 
         public UpdateProviderServiceCommand(
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             ICheckUserIsProviderQuery checkUserIsProviderQuery,
-            IGetAllEmailServiceQuery getAllEmailServiceQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<EmailConfigModel> config,
             IRepository<Provider, Guid> providerRepository,
             UserManager<AppUser> userRepository)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
-            _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
-            _config = config;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -65,6 +63,8 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
                         var mapping = await MappingProvider(getProvider, vm, userId);
                         _providerRepository.Update(mapping);
                         await _providerRepository.SaveAsync();
+                        await Logging<UpdateProviderServiceCommand>.
+                           InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mapping));
                         return new CommandResult<ProviderServiceViewModel>
                         {
                             isValid = true,
@@ -73,6 +73,8 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
                     }
                     else
                     {
+                        await Logging<UpdateProviderServiceCommand>.
+                           WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                         return new CommandResult<ProviderServiceViewModel>
                         {
                             isValid = false,
@@ -82,6 +84,8 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
                 }
                 else
                 {
+                    await Logging<UpdateProviderServiceCommand>.
+                            WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = false,
@@ -91,6 +95,8 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
             }
             catch (System.Exception ex)
             {
+                await Logging<UpdateProviderServiceCommand>.
+                        ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

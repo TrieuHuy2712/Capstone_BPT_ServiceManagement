@@ -3,10 +3,13 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
@@ -31,6 +34,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
 
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Check user has permission first
@@ -44,24 +48,31 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                         CategoryUpdate.Description = userVm.Description;
                         _categoryRepository.Update(CategoryUpdate);
                         await _categoryRepository.SaveAsync();
+                        await Logging<UpdateCategoryServiceCommand>.
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(userVm));
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = true,
                             myModel = userVm,
-                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+
                         };
                     }
                     else
                     {
+                        await Logging<UpdateCategoryServiceCommand>.
+                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = false,
                             myModel = userVm,
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                         };
                     }
                 }
                 else
                 {
+                    await Logging<UpdateCategoryServiceCommand>.
+                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,
@@ -71,6 +82,8 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
             }
             catch (Exception ex)
             {
+                await Logging<UpdateCategoryServiceCommand>.
+                         ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error: ");
                 return new CommandResult<CategoryServiceViewModel>
                 {
                     isValid = false,

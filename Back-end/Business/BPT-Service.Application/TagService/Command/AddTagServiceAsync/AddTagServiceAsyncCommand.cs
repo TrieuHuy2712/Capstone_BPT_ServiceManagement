@@ -3,10 +3,13 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.TagService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.TagService.Command.AddServiceAsync
@@ -32,6 +35,7 @@ namespace BPT_Service.Application.TagService.Command.AddServiceAsync
 
         public async Task<CommandResult<TagViewModel>> ExecuteAsync(TagViewModel userVm)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
@@ -42,6 +46,7 @@ namespace BPT_Service.Application.TagService.Command.AddServiceAsync
                     tag.TagName = userVm.TagName;
                     await _tagRepository.Add(tag);
                     await _tagRepository.SaveAsync();
+                    await Logging<AddTagServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(tag));
                     return new CommandResult<TagViewModel>
                     {
                         isValid = true,
@@ -54,6 +59,8 @@ namespace BPT_Service.Application.TagService.Command.AddServiceAsync
                 }
                 else
                 {
+                    await Logging<AddTagServiceAsyncCommand>.
+                        WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<TagViewModel>
                     {
                         isValid = false,
@@ -63,6 +70,7 @@ namespace BPT_Service.Application.TagService.Command.AddServiceAsync
             }
             catch (System.Exception ex)
             {
+                await Logging<AddTagServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
                 return new CommandResult<TagViewModel>
                 {
                     isValid = false,

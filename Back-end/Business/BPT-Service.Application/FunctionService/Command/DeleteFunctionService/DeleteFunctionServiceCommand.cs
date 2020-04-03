@@ -1,14 +1,15 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.FunctionService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
 {
@@ -18,6 +19,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public DeleteFunctionServiceCommand(
             IRepository<Function, string> functionRepository,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
@@ -29,8 +31,10 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
             _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(string id)
         {
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Check user has permission first
@@ -48,6 +52,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
                     }
                     _functionRepository.Remove(id);
                     await _functionRepository.SaveAsync();
+                    await Logging<DeleteFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Delete " + id);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = true,
@@ -56,6 +61,8 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
                 }
                 else
                 {
+                    await Logging<DeleteFunctionServiceCommand>
+                        .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -65,13 +72,13 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,
                     errorMessage = ex.InnerException.ToString()
                 };
             }
-
         }
     }
 }
