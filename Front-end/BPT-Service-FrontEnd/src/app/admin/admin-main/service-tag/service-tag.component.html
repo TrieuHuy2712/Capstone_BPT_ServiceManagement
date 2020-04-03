@@ -40,8 +40,8 @@
               </tr>
             </thead>
             <tbody *ngIf="permission.canRead">
-              <tr *ngFor="let tag of tags, let i= index">
-                <td>{{i+1}}</td>
+              <tr *ngFor="let tag of tags">
+                <td>{{tag.id}}</td>
                 <td>{{tag.tagName}}</td>
                 <td>{{tag.description}}</td>
                 <td>

@@ -1,0 +1,61 @@
+<div>
+  <a class="hiddenanchor" id="signup"></a>
+  <a class="hiddenanchor" id="signin"></a>
+
+  <div class="login_wrapper">
+    <div class="animate form login_form">
+      <section class="login_content" style="padding-top: 0;">
+        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+          <img class="img-shadow" src="assets/images/card-primary.png">
+          <h1 style="font-size: 40px; color: blueviolet;">Đăng nhập</h1>
+          <div [ngClass]="{ 'has-error' : f.submitted && !username.valid }" class="ip">
+            <input placeholder="Username" type="text" class="form-control input-group-addon" name="username" [(ngModel)]="model.username" #username="ngModel"
+              required />
+            <div *ngIf="f.submitted && !username.valid" class="help-block">Tên đăng nhập yêu cầu</div>
+          </div>
+          <div [ngClass]="{ 'has-error' : f.submitted && !password.valid }" class="ip">
+            <input placeholder="Password" type="password" class="form-control input-group-addon" name="password" [(ngModel)]="model.password" #password="ngModel"
+              required />
+            <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
+          </div>
+          <div *ngIf="blocked">
+            <p>You was blocked out in 5 minutes</p>
+            
+          </div>
+          <div class="ip">
+            <button class="btn btn-default" style="background-color: blueviolet; color: white;">Đăng nhập</button>
+            <img *ngIf="loading"
+              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <a class="reset_pass" href="#">Quên mật khẩu</a>
+          </div>
+          <hr style="border-top: 1px solid #eee;">
+          <div class="row">
+            <div class="col-md-12">ĐĂNG NHẬP BẰNG</div>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-md-6">
+              <button (click)="socialSignIn('facebook')" class="loginBtn loginBtn--facebook btnAnother">
+                <i class="fab fa-facebook-square"></i>
+              </button>
+
+            </div>
+            <div class="col-md-6">
+              <button (click)="socialSignIn('google')" class="loginBtn loginBtn--google btnAnother">
+                <i class="fab fa-google"></i>
+              </button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+
+          <div class="separator">
+            <div class="clearfix"></div>
+            <br/>
+            <div class="caption">
+              <p>©2020 All Rights Reserved. By <a href="#"><strong>Service Management Team</strong></a></p>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>

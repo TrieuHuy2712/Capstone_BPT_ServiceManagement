@@ -25,7 +25,7 @@
               </li>
             </ul>
 
-            <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+            <button class="btn btn-primary btn-block" (click)="showAddModal()"><b>Edit my profile</b></button>
           </div>
           <!-- /.card-body -->
         </div>
@@ -76,4 +76,73 @@
     </div>
   </div>
   <!-- /.row -->
+  <div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Sửa thông tin cá nhân</h4>
+          <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="form form-vertical" action="/site/avatar-upload/1" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-sm-4 text-center">
+                <div class="text-center">
+                  <img class="profile-user-img img-fluid img-circle" src="../../../../assets/images/tramanh.jpg"
+                    alt="User profile picture" style="margin-bottom: 20px;;">
+                </div>
+                <div class="kv-avatar">
+                  <div class="file-loading">
+                    <input id="avatar-1" name="avatar-1" type="file" required>
+                  </div>
+                </div>
+                <div class="kv-avatar-hint">
+                  <small>Select file < 1500 KB</small>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="email">Email Address<span class="kv-reqd">*</span></label>
+                      <input type="email" class="form-control" name="email" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="pwd">Password<span class="kv-reqd">*</span></label>
+                      <input type="password" class="form-control" name="pwd" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="fname">First Name</label>
+                      <input type="text" class="form-control" name="fname" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="lname">Last Name</label>
+                      <input type="text" class="form-control" name="lname" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <hr>
+                  <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

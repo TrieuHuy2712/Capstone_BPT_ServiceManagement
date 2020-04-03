@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { DataService } from "src/app/core/services/data.service";
-import { NotificationService } from "src/app/core/services/notification.service";
-import { MessageConstants } from "src/app/core/common/message.constants";
-import { SystemConstants } from "src/app/core/common/system,constants";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap';
+import { DataService } from 'src/app/core/services/data.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
+import { SystemConstants } from 'src/app/core/common/system,constants';
+import { MessageConstants } from 'src/app/core/common/message.constants';
+
 @Component({
-  selector: "app-role",
-  templateUrl: "./role.component.html",
-  styleUrls: ["./role.component.css"]
+  selector: 'app-service-category',
+  templateUrl: './service-category.component.html',
+  styleUrls: ['./service-category.component.css']
 })
-export class RoleComponent implements OnInit {
+export class ServiceCategoryComponent implements OnInit {
+
   @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
   public pageIndex: number = 1;
@@ -17,14 +19,16 @@ export class RoleComponent implements OnInit {
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = "";
-  public roles: any[];
+  public categories: any[];
   public permission: any;
   public entity: any;
-  public functionId: string = "ROLE";
+  public functionId: string = "CATEGORY";
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService
-  ) {}
+  ) {
+    
+   }
 
   ngOnInit() {
     this.permission = {
@@ -35,11 +39,10 @@ export class RoleComponent implements OnInit {
     };
     this.loadData();
   }
-
   loadData() {
     this._dataService
       .get(
-        "/AdminRole/GetAllPaging?page=" +
+        "/CategoryManagement/GetAllPaging?page=" +
           this.pageIndex +
           "&pageSize=" +
           this.pageSize +
@@ -47,23 +50,29 @@ export class RoleComponent implements OnInit {
           this.filter
       )
       .subscribe((response: any) => {
-        this.roles = response.results;
+        this.categories = response.results;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
+        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
           this.loadPermission();
+        } 
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +this.functionId
+        "/PermissionManager/GetAllPermission/" +
+          localStorage.getItem(SystemConstants.const_username) +
+          "/" +
+          this.functionId
       )
       .subscribe((response: any) => {
+        console.log(response);
         this.permission = response.result;
+        console.log(this.permission);
       });
   }
-
   pageChanged(event: any): void {
     this.pageIndex = event.page;
     this.loadData();
@@ -74,9 +83,10 @@ export class RoleComponent implements OnInit {
   }
   loadRole(id: any) {
     this._dataService
-      .get("/AdminRole/GetById/" + id)
+      .get("/CategoryManagement/GetCatagoryById?id=" + id)
       .subscribe((response: any) => {
-        this.entity = response;
+        this.entity = response.result;
+        console.log(response);
       });
   }
   showEditModal(id: any) {
@@ -85,10 +95,11 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
+    debugger;
     if (valid) {
-      if (this.entity.Id == undefined) {
+      if (this.entity.id == undefined) {
         console.log("vo day duoc");
-        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
+        this._dataService.post("/CategoryManagement/AddNewCategory", this.entity).subscribe(
           (response: any) => {
             this.loadData();
             this.modalAddEdit.hide();
@@ -99,7 +110,7 @@ export class RoleComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
+        this._dataService.put("/CategoryManagement/updateCategory", this.entity).subscribe(
           (response: any) => {
             this.loadData();
             this.modalAddEdit.hide();
@@ -120,7 +131,7 @@ export class RoleComponent implements OnInit {
   }
   deleteItemConfirm(id: any) {
     this._dataService
-      .delete("/AdminRole/Delete", "id", id)
+      .delete("/CategoryManagement/DeleteCategory", "id", id)
       .subscribe((response: Response) => {
         this._notificationService.printSuccessMessage(
           MessageConstants.DELETED_OK_MSG
@@ -129,3 +140,4 @@ export class RoleComponent implements OnInit {
       });
   }
 }
+

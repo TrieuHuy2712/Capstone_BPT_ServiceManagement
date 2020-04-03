@@ -8,13 +8,7 @@ import { UtilityService } from 'src/app/core/services/utility.service';
 import { RouterModule } from '@angular/router';
 import { mainRoutes } from './main.routes';
 import { HomeComponent } from './home/home.component';
-import { FunctionComponent } from './function/function.component';
-import { RoleComponent } from './role/role.component';
 import { HomeModule } from './home/home.module';
-import { UserComponent } from './user/user.component';
-import { UserModule } from './user/user.module';
-import { ServiceCategoryComponent } from './service-category/service-category.component';
-import { ServiceTagComponent } from './service-tag/service-tag.component';
 import { TranslatePipe } from '../core/common/translate.pipe';
 import { LanguageService } from '../core/services/language.service';
 import { TranslationService } from '../core/services/translation.service';
@@ -22,7 +16,7 @@ import { ListOfItemComponent } from './list-of-item/list-of-item.component';
 import { DetailItemComponent } from './detail-item/detail-item.component';
 import { UserManageComponent } from './user-manage/user-manage.component';
 import { TopbarUserComponent } from '../shared/topbar-user/topbar-user.component';
-
+import { UserModule } from './user/user.module';
 @NgModule({
   imports: [
     CommonModule,

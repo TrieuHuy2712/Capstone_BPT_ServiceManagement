@@ -7,31 +7,26 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { AuthenService } from "src/app/core/services/authen.service";
-import { DataService } from "../core/services/data.service";
-import { LoggedInUser } from "../core/domain/loggedin.user";
+
 import { NotificationService } from "src/app/core/services/notification.service";
 import { Router } from "@angular/router";
-import { Socialusers } from "../core/domain/social.user";
-import { SystemConstants } from "../core/common/system,constants";
+
 import { UrlConstants } from "src/app/core/common/url.constants";
 import { from } from "rxjs";
 import { map } from "rxjs/operators";
+import { Socialusers } from 'src/app/core/domain/social.user';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
   selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"]
+  templateUrl: "./admin-login.component.html",
+  styleUrls: ["./admin-login.component.css"]
 })
 export class LoginComponent implements OnInit {
   blocked = false;
   loading = false;
   model: any = {};
   returnUrl: string;
-  pass: boolean = true;
-  passVal: string = "";
-  email: boolean =true;
-  emailVal: string = "";
-  registerBtn: boolean =true;
   socialusers = new Socialusers();
 
   constructor(
@@ -110,31 +105,4 @@ export class LoginComponent implements OnInit {
         }
       );
   }
-
-  emailValid(event){
-    this.emailVal = event.target.value;
-    if(event.target.value.length < 10){
-      this.email = false;
-    }
-    else{
-      this.email = true;
-    }
-  }
-
-  passValid(event){
-    if(event.target.value.length < 8){
-      this.pass = false;
-    }
-    else{
-      this.pass = true;
-    }
-    if(event.target.value.length > 8 && this.emailVal.length > 8){
-      this.registerBtn = false;
-    }
-    else{
-      this.registerBtn = true;
-    }
-  }
-
-
 }

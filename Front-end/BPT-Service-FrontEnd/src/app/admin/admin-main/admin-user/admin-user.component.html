@@ -1,0 +1,174 @@
+<div class="page-title">
+  <div class="title_left">
+    <h3>{{'listOfUser'|translate}}</h3>
+  </div>
+
+  <div class="title_right">
+    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+      <div class="input-group">
+        <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
+          placeholder="Gõ tên quyền...">
+        <span class="input-group-btn">
+          <button class="btn btn-default" (click)="loadData()" type="button">{{'search'|translate}}</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <ul class="nav navbar-right panel_toolbox">
+          <li>
+            <button *ngIf="permission.canCreate" class="btn btn-success" (click)="showAddModal()">{{'add'|translate}}</button>
+          </li>
+
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="card-body table-responsive p-0">
+
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr>
+              <th>{{'acccount'|translate}}</th>
+              <th>{{'fullName'|translate}}</th>
+              <th>{{'email'|translate}}</th>
+              <th>{{'avatar'|translate}}</th>
+              <th>{{'action'|translate}}</th>
+
+              <th></th>
+            </tr>
+          </thead>
+          <tbody *ngIf="permission.canRead">
+            <tr *ngFor="let user of users">
+              <td>{{user.userName}}</td>
+              <td>{{user.fullName}}</td>
+              <td>{{user.email}}</td>
+              <td><img [src]="user.avatar" class="img-responsive" width="128" /></td>
+              <td>
+                <button class="btn btn-primary" *ngIf="permission.canUpdate && userName !='admin'"
+                  (click)="showEditModal(user.id)"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-danger" *ngIf="permission.canDelete && userName !='admin' "
+                  (click)="deleteItem(user.id)"><i class="fa fa-trash"></i></button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="col-md-12">
+          <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+            [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
+            nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">{{'addAndEdit'|translate}}</h4>
+        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+          (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'fullName'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #name="ngModel" [(ngModel)]="entity.fullName" required minlength="3" name="name"
+                class="form-control">
+              <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)" class="text-danger">
+                {{'nameWarning'|translate}}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'account'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required name="username"
+                class="form-control">
+              <small [hidden]="username.valid || (username.pristine && !addEditForm.submitted)" class="text-danger">
+                {{'accountWarning'|translate}}
+              </small>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="!entity.id">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'password'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="password" #password="ngModel" [(ngModel)]="entity.Password" required minlength="6"
+                name="password" class="form-control">
+              <small [hidden]="password.valid || (password.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập tên ít nhất 6 ký tự
+              </small>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="!entity.id">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'passwordConfirm'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="password" #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required
+                validateEqual="password" minlength="6" name="confirmpassword" class="form-control">
+              <small [hidden]="confirmpassword.valid || (confirmpassword.pristine && !addEditForm.submitted)"
+                class="text-danger">
+                {{'passwordConfirmWarning'|translate}}
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'email'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                [(ngModel)]="entity.email" required name="email" class="form-control">
+              <small [hidden]="email.valid || (email.pristine && !addEditForm.submitted)" class="text-danger">
+                {{'emailWarning'|translate}}
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'address'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #address="ngModel" [(ngModel)]="entity.address" name="address" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'avatar'|translate}}</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="file" #avatar name="avatar" class="form-control">
+              <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+              <input type="hidden" [(ngModel)]="entity.Avatar" name="avatarUrl" />
+            </div>
+
+            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.Avatar">
+              <img [src]="baseFolder+entity.Avatar" width="128" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'role'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [texts]="myTexts" [options]="allRoles"
+                [(ngModel)]="myRoles"></ss-multiselect-dropdown>
+            </div>
+          </div>
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

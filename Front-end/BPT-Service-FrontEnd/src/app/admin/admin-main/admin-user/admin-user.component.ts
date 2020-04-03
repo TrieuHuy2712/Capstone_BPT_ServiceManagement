@@ -19,8 +19,8 @@ declare var moment: any;
 
 @Component({
   selector: "app-user",
-  templateUrl: "./user.component.html",
-  styleUrls: ["./user.component.css"]
+  templateUrl: "./admin-user.component.html",
+  styleUrls: ["./admin-user.component.css"]
 })
 export class UserComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
