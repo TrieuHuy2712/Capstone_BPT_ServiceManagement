@@ -14,15 +14,12 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<CityProvince, int> _cityRepository;
-        private readonly LevenshteinDistance _levenshteinDistance;
 
         public GetAllPagingProviderServiceQuery(IRepository<Provider, Guid> providerRepository,
-            IRepository<CityProvince, int> cityRepository,
-            LevenshteinDistance levenshteinDistance)
+            IRepository<CityProvince, int> cityRepository)
         {
             _providerRepository = providerRepository;
             _cityRepository = cityRepository;
-            _levenshteinDistance = levenshteinDistance;
         }
 
         public async Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
@@ -32,13 +29,13 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                 var query = await _providerRepository.FindAllAsync();
                 if (!string.IsNullOrEmpty(keyword))
                     query = query.Where(x => x.ProviderName.ToLower().Contains(keyword.ToLower())
-                    || _levenshteinDistance.Compute(x.ProviderName.ToLower(), keyword.ToLower()) <= 3
+                    //|| _levenshteinDistance.Compute(x.ProviderName.ToLower(), keyword.ToLower()) <= 3
                     || x.Description.ToLower().Contains(keyword.ToLower())
-                    || _levenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
+                    //|| _levenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
                      || x.TaxCode.ToLower().Contains(keyword.ToLower())
-                    || _levenshteinDistance.Compute(x.TaxCode.ToLower(), keyword.ToLower()) <= 3
+                    //|| _levenshteinDistance.Compute(x.TaxCode.ToLower(), keyword.ToLower()) <= 3
                      || x.PhoneNumber.ToLower().Contains(keyword.ToLower())
-                    || _levenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
+                    //|| _levenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
                     && x.Status == Model.Enums.Status.Active);
 
                 int totalRow = query.Count();

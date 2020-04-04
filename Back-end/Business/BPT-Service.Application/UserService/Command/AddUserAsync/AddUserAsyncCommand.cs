@@ -35,10 +35,10 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
 
         public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                     await _getPermissionActionQuery.ExecuteAsync(userId, "USER", ActionSetting.CanCreate))
                 {

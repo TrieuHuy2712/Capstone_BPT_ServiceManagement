@@ -57,10 +57,10 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int id, string reason)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _newProviderRepository.FindByIdAsync(id);

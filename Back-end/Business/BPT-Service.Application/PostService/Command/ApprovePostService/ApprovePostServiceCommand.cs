@@ -68,10 +68,10 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 //Check permission approve
                 if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId))

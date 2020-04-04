@@ -7,6 +7,7 @@ using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Security.Claims;
@@ -20,25 +21,28 @@ namespace BPT_Service.Application.RoleService.Command.SavePermissionRole
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public SavePermissionCommand(
             IRepository<Permission, int> permissionRepository,
             IHttpContextAccessor httpContextAccessor,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IGetPermissionActionQuery getPermissionActionQuery,
+            UserManager<AppUser> userManager)
         {
             _permissionRepository = permissionRepository;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<RolePermissionViewModel>> ExecuteAsync(RolePermissionViewModel rolePermissionViewModel)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                     await _getPermissionActionQuery.ExecuteAsync(userId, "ROLE", ActionSetting.CanCreate))
                 {

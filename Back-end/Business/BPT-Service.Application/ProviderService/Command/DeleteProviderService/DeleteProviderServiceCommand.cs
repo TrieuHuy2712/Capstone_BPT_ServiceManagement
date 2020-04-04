@@ -7,6 +7,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -20,26 +21,29 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public DeleteProviderServiceCommand(
             IRepository<Provider, Guid> providerRepository,
             IHttpContextAccessor httpContextAccessor,
             IGetPermissionActionQuery getPermissionActionQuery,
-            ICheckUserIsAdminQuery checkUserIsAdminQuery)
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            UserManager<AppUser> userManager)
         {
             _providerRepository = providerRepository;
             _httpContextAccessor = httpContextAccessor;
             _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<Provider>> ExecuteAsync(string id)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var newId = Guid.Parse(id);
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanDelete))
                 {
                     var getId = await _providerRepository.FindByIdAsync(newId);

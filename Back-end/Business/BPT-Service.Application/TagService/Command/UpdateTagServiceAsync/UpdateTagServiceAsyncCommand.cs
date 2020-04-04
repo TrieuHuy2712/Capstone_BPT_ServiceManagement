@@ -10,6 +10,7 @@ using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
 namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
@@ -20,25 +21,27 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public UpdateTagServiceAsyncCommand(
             IRepository<Tag, Guid> tagRepository, 
             IHttpContextAccessor httpContextAccessor, 
             ICheckUserIsAdminQuery checkUserIsAdminQuery, 
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IGetPermissionActionQuery getPermissionActionQuery,
+            UserManager<AppUser> userManager)
         {
             _tagRepository = tagRepository;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<TagViewModel>> ExecuteAsync(TagViewModel userVm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            try
-            {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            try { 
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                     await _getPermissionActionQuery.ExecuteAsync(userId, "TAG", ActionSetting.CanUpdate))
                 {
@@ -46,7 +49,6 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
                     if (TagUpdate != null)
                     {
                         Tag tag = new Tag();
-                        tag.Id = Guid.Parse(userVm.Id);
                         tag.TagName = userVm.TagName;
                         _tagRepository.Update(tag);
                         await _tagRepository.SaveAsync();

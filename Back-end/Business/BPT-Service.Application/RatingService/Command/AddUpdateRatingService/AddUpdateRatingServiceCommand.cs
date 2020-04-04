@@ -7,6 +7,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -20,22 +21,26 @@ namespace BPT_Service.Application.RatingService.Command.AddRatingService
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepository<Service, Guid> _serviceRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public AddUpdateRatingServiceCommand(
             IRepository<ServiceRating, int> serviceRatingRepository,
             IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
             IHttpContextAccessor httpContextAccessor,
-            IRepository<Service, Guid> serviceRepository)
+            IRepository<Service, Guid> serviceRepository,
+            UserManager<AppUser> userManager)
         {
             _serviceRatingRepository = serviceRatingRepository;
             _getOwnServiceInformationQuery = getOwnServiceInformationQuery;
             _httpContextAccessor = httpContextAccessor;
             _serviceRepository = serviceRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ServiceRatingViewModel>> ExecuteAsync(ServiceRatingViewModel serviceRatingViewModel)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(getUserId).Result.UserName;
             try
             {
                 //Check provider has available
@@ -50,7 +55,6 @@ namespace BPT_Service.Application.RatingService.Command.AddRatingService
                         errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-                var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 var getServiceRating = await _serviceRatingRepository.FindSingleAsync(x => x.ServiceId == Guid.Parse(serviceRatingViewModel.ServiceId)
                 && x.UserId == Guid.Parse(serviceRatingViewModel.UserId));
 

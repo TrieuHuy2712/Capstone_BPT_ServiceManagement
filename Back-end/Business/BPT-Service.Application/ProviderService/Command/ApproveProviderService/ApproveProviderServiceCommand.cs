@@ -66,10 +66,10 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userProvider, string providerId)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId,"PROVIDER", ActionSetting.CanUpdate))
                 {
                     var getUserService = await _getPostUserServiceByUserIdQuery.ExecuteAsync(userProvider);

@@ -1,0 +1,45 @@
+ERROR[2020-04-05 0:37:59]:: AddTagServiceAsyncCommand:: ADD:: admin:: Has error||Message: An error occurred while updating the entries. See the inner exception for details.||Inner: SQLite Error 19: 'NOT NULL constraint failed: Tag.TagName'.||StackTrace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(DbContext _, ValueTuple`2 parameters, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(DbContext _, ValueTuple`2 parameters, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at BPT_Service.Data.EFRepository`2.SaveAsync() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\EFRepository.cs:line 82
+   at BPT_Service.Application.TagService.Command.AddServiceAsync.AddTagServiceAsyncCommand.ExecuteAsync(TagViewModel userVm) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\TagService\Command\AddTagServiceAsync\AddTagServiceAsyncCommand.cs:line 52||Source: Microsoft.EntityFrameworkCore.Relational
+INFO[2020-04-05 0:45:54]:: AddTagServiceAsyncCommand:: ADD:: admin:: {"TagName":"123123","DateCreated":"0001-01-01T00:00:00","DateModified":"0001-01-01T00:00:00","TagServices":null,"Id":"9ed434d5-161e-46d9-8724-7877b51f0246"}
+INFO[2020-04-05 0:47:34]:: AddTagServiceAsyncCommand:: ADD:: admin:: {"TagName":"123123","DateCreated":"0001-01-01T00:00:00","DateModified":"0001-01-01T00:00:00","TagServices":null,"Id":"1a436118-f420-47b0-8169-5f454104a5e1"}
+ERROR[2020-04-05 0:56:41]:: UpdateTagServiceAsyncCommand:: UPDATE:: admin:: Has error||Message: The instance of entity type 'Tag' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.||Inner: No inner||StackTrace:    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintAction(EntityEntryGraphNode`1 node)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraph[TState](EntityEntryGraphNode`1 node, Func`2 handleNode)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraph(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.DbContext.SetEntityState(InternalEntityEntry entry, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.DbContext.SetEntityState[TEntity](TEntity entity, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.DbContext.Update[TEntity](TEntity entity)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.Update(TEntity entity)
+   at BPT_Service.Data.EFRepository`2.Update(T entity) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\EFRepository.cs:line 77
+   at BPT_Service.Application.TagService.Command.UpdateTagServiceAsync.UpdateTagServiceAsyncCommand.ExecuteAsync(TagViewModel userVm) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\TagService\Command\UpdateTagServiceAsync\UpdateTagServiceAsyncCommand.cs:line 54||Source: Microsoft.EntityFrameworkCore
+ERROR[2020-04-05 0:57:18]:: UpdateTagServiceAsyncCommand:: UPDATE:: admin:: Has error||Message: The instance of entity type 'Tag' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.||Inner: No inner||StackTrace:    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.ThrowIdentityConflict(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry, Boolean updateDuplicate)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(TKey key, InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.IdentityMap`1.Add(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTracking(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState oldState, EntityState newState, Boolean acceptChanges, Boolean modifyProperties)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.SetEntityState(EntityState entityState, Boolean acceptChanges, Boolean modifyProperties, Nullable`1 forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.PaintAction(EntityEntryGraphNode`1 node)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityEntryGraphIterator.TraverseGraph[TState](EntityEntryGraphNode`1 node, Func`2 handleNode)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.EntityGraphAttacher.AttachGraph(InternalEntityEntry rootEntry, EntityState targetState, EntityState storeGeneratedWithKeySetTargetState, Boolean forceStateWhenUnknownKey)
+   at Microsoft.EntityFrameworkCore.DbContext.SetEntityState(InternalEntityEntry entry, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.DbContext.SetEntityState[TEntity](TEntity entity, EntityState entityState)
+   at Microsoft.EntityFrameworkCore.DbContext.Update[TEntity](TEntity entity)
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.Update(TEntity entity)
+   at BPT_Service.Data.EFRepository`2.Update(T entity) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\DataEF\BPT-Service.Data\EFRepository.cs:line 77
+   at BPT_Service.Application.TagService.Command.UpdateTagServiceAsync.UpdateTagServiceAsyncCommand.ExecuteAsync(TagViewModel userVm) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\TagService\Command\UpdateTagServiceAsync\UpdateTagServiceAsyncCommand.cs:line 54||Source: Microsoft.EntityFrameworkCore
+INFO[2020-04-05 0:59:07]:: UpdateTagServiceAsyncCommand:: UPDATE:: admin:: {"TagName":"huytrieu123","DateCreated":"0001-01-01T00:00:00","DateModified":"0001-01-01T00:00:00","TagServices":null,"Id":"6c336dc8-abc7-4eee-8bbb-a99c68e59b35"}
+INFO[2020-04-05 0:59:23]:: AddTagServiceAsyncCommand:: ADD:: admin:: {"TagName":"123123123","DateCreated":"0001-01-01T00:00:00","DateModified":"0001-01-01T00:00:00","TagServices":null,"Id":"cef2ca04-225b-4277-b82e-d6fc8567a931"}
+INFO[2020-04-05 1:01:12]:: DeleteTagServiceAsyncCommand:: DELETE:: admin:: {"TagName":"123123123","DateCreated":"0001-01-01T00:00:00","DateModified":"0001-01-01T00:00:00","TagServices":null,"Id":"cef2ca04-225b-4277-b82e-d6fc8567a931"}

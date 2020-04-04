@@ -7,6 +7,7 @@ using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,26 +20,29 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
         public AddFunctionServiceCommand(
             IRepository<Function, string> functionRepository,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<AppUser> userManager)
         {
             _functionRepository = functionRepository;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 //Check user has permission first
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "FUNCTION", ActionSetting.CanCreate))
                 {
                     var mappingFunction = MappingFunction(function);

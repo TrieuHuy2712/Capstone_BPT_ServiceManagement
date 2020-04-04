@@ -22,9 +22,18 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">{{'add'|translate}}</button>
+            <button class="btn btn-success" *ngIf="permission.canCreate"
+              (click)="showAddModal()">{{'add'|translate}}</button>
           </li>
-
+          <li>
+              <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+                <option value="0">All</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+          </li>
         </ul>
         <div class="clearfix"></div>
       </div>
@@ -39,20 +48,21 @@
             </tr>
           </thead>
           <tbody *ngIf="permission.canRead">
-            <tr *ngFor="let role of roles">
+            <tr *ngFor="let role of roles, let i=index">
               <td>{{role.name}}</td>
               <td>{{role.description}}</td>
               <td>
                 <button *ngIf="role.name != 'Admin' && permission.canUpdate" class="btn btn-primary"
-                  (click)="showEditModal(role.id)"><i class="fa fa-pencil-square-o"></i></button>
+                  (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
                 <button *ngIf="role.name != 'Admin' && permission.canDelete" class="btn btn-danger"
-                  (click)="deleteItem(role.id)"><i class="fa fa-trash"></i></button>
+                  (click)="deleteItem(role.id,i)"><i class="fa fa-trash"></i></button>
 
               </td>
             </tr>
           </tbody>
         </table>
         <div class="col-md-12">
+
           <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
             [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
             nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
@@ -101,8 +111,10 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
+              <button type="button" (click)="modalAddEdit.hide()"
+                class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success"
+                [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
         </form>

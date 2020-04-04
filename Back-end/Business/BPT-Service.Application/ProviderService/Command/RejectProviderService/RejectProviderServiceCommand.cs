@@ -20,7 +20,6 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
@@ -58,10 +57,10 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));

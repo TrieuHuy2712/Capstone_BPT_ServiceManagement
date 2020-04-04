@@ -13,7 +13,7 @@ export class RoleComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
   public pageIndex: number = 1;
-  public pageSize: number = 20;
+  public pageSize: number = 0;
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = "";
@@ -24,7 +24,7 @@ export class RoleComponent implements OnInit {
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.permission = {
@@ -40,34 +40,27 @@ export class RoleComponent implements OnInit {
     this._dataService
       .get(
         "/AdminRole/GetAllPaging?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&keyword=" +
-          this.filter
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&keyword=" +
+        this.filter
       )
       .subscribe((response: any) => {
         this.roles = response.results;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
-          this.loadPermission();
-        } 
+        this.loadPermission();
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        "/PermissionManager/GetAllPermission/" + this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
-        this.permission = response.result;
-        console.log(this.permission);
+        this.permission = response;
       });
   }
 
@@ -80,61 +73,81 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    this._dataService
-      .get("/AdminRole/GetById/" + id)
-      .subscribe((response: any) => {
-        this.entity = response;
-        console.log(this.entity);
-      });
+    let findIdthis = this.roles[id];
+    this.entity = findIdthis;
   }
   showEditModal(id: any) {
     this.loadRole(id);
-    console.log(id);
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
-    debugger;
     if (valid) {
-      if (this.entity.Id == undefined) {
-        console.log("vo day duoc");
+      if (this.entity.id === undefined) {
         this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              this.roles.push(response.myModel);
+              this._notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+              this.modalAddEdit.hide();
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.CREATED_FAIL_MSG
+              );
+            }
+
           },
           error => this._dataService.handleError(error)
         );
       } else {
         this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              let getPostition = this.roles.indexOf(x => x.id == this.entity.id);
+              this.roles[getPostition] = response.myModel;
+              this.modalAddEdit.hide();
+              this._notificationService.printSuccessMessage(
+                MessageConstants.UPDATED_OK_MSG
+              );
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.UPDATED_FAIL_MSG
+              );
+            }
+
           },
           error => this._dataService.handleError(error)
         );
       }
     }
   }
-  deleteItem(id: any) {
+  deleteItem(idRole: any, id: any) {
     this._notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemConfirm(id)
+      () => this.deleteItemConfirm(idRole, id)
     );
   }
-  deleteItemConfirm(id: any) {
+  deleteItemConfirm(idRole: any, id: any) {
     this._dataService
-      .delete("/AdminRole/Delete", "id", id)
-      .subscribe((response: Response) => {
-        this._notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.loadData();
+      .delete("/AdminRole/Delete", "id", idRole)
+      .subscribe((response: any) => {
+        if (response.isValid == true) {
+          this.roles.splice(id, 1);
+          this._notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.DELETED_FAIL_MSG
+          );
+        }
       });
+  }
+  filterChanged(id: any) {
+    console.log(id);
+    this.pageSize = id;
+    this.loadData()
+
   }
 }

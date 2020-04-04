@@ -11,6 +11,7 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
         , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
@@ -36,7 +38,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         IHttpContextAccessor httpContextAccessor,
         ICheckUserIsProviderQuery checkUserIsProvider,
         ICheckUserIsAdminQuery checkUserIsAdminQuery,
-        IGetPermissionActionQuery getPermissionActionQuery)
+        IGetPermissionActionQuery getPermissionActionQuery,
+        UserManager<AppUser> userManager)
         {
             _postServiceRepository = postServiceRepository;
             _providerServiceRepository = providerServiceRepository;
@@ -45,14 +48,15 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             _checkUserIsProvider = checkUserIsProvider;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 var checkUserIsAdmin = await _checkUserIsProvider.ExecuteAsync();
                 if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId) || checkUserIsAdmin.isValid)

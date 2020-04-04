@@ -19,25 +19,28 @@ namespace BPT_Service.Application.RoleService.Command.DeleteRoleAsync
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public DeleteRoleAsyncCommand(
             RoleManager<AppRole> roleManager,
             IHttpContextAccessor httpContextAccessor,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IGetPermissionActionQuery getPermissionActionQuery,
+            UserManager<AppUser> userManager)
         {
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<AppRoleViewModel>> ExecuteAsync(Guid id)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                     await _getPermissionActionQuery.ExecuteAsync(userId, "ROLE", ActionSetting.CanDelete))
                 {

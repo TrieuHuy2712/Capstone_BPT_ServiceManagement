@@ -8,8 +8,8 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService
@@ -21,30 +21,33 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public DeleteNewsProviderServiceCommand(
             IRepository<ProviderNew, int> providerNewRepository,
             IHttpContextAccessor httpContextAccessor,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
-            ICheckUserIsProviderQuery checkUserIsProviderQuery)
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            UserManager<AppUser> userManager)
         {
             _providerNewRepository = providerNewRepository;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ProviderNew>> ExecuteAsync(int id)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var getId = await _providerNewRepository.FindByIdAsync(id);
                 if (getId != null)
                 {
-                    var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                     var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
                     //Check permission
                     if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||

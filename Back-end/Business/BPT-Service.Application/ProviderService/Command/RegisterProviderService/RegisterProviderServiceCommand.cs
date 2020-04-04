@@ -9,9 +9,9 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.RegisterProviderService
@@ -23,27 +23,30 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public RegisterProviderServiceCommand(
             IRepository<Provider, Guid> providerRepository,
             IHttpContextAccessor httpContextAccessor,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
-            ICheckUserIsProviderQuery checkUserIsProviderQuery)
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            UserManager<AppUser> userManager)
         {
             _providerRepository = providerRepository;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
                 var mappingProvider = await MappingProvider(vm, Guid.Parse(userId), userId);
                 await _providerRepository.Add(mappingProvider);

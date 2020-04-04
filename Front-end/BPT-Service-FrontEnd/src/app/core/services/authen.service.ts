@@ -63,7 +63,6 @@ export class AuthenService {
       .pipe(
         map(
           (response: any) => {
-            console.log(response);
             socialusers = response;
             if (socialusers && socialusers.token) {
               localStorage.removeItem(SystemConstants.CURRENT_USER);
@@ -91,7 +90,6 @@ export class AuthenService {
         userData.roles,
         userData.permissions
       );
-      console.log(user);
     } else {
       user = null;
     }
@@ -101,7 +99,6 @@ export class AuthenService {
     var user = this.getLoggedInUser();
     var result: boolean = false;
     var permission: any[] = JSON.parse(user.permissions);
-    console.log(user.permissions);
     var roles: any[] = JSON.parse(user.roles);
     var hasPermission: number = permission.findIndex(
       x => x.FunctionId == functionId && x.CanRead == true

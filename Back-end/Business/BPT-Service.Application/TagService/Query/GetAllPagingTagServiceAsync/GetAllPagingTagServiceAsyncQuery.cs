@@ -19,13 +19,16 @@ namespace BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync
         }
         public async Task<PagedResult<TagViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
         {
+            int totalRow = 0;
             var query = await _tagRepository.FindAllAsync();
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.TagName.Contains(keyword));
-
-            int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+            if (pageSize != 0)
+            {
+                totalRow = query.Count();
+                query = query.Skip((page - 1) * pageSize)
+                   .Take(pageSize);
+            }
 
             var data = query.Select(x => new TagViewModel
             {

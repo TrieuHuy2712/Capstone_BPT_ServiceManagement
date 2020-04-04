@@ -27,8 +27,8 @@ export class ServiceCategoryComponent implements OnInit {
     private _dataService: DataService,
     private _notificationService: NotificationService
   ) {
-    
-   }
+
+  }
 
   ngOnInit() {
     this.permission = {
@@ -43,29 +43,24 @@ export class ServiceCategoryComponent implements OnInit {
     this._dataService
       .get(
         "/CategoryManagement/GetAllPaging?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&keyword=" +
-          this.filter
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&keyword=" +
+        this.filter
       )
       .subscribe((response: any) => {
         this.categories = response.results;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
-          this.loadPermission();
-        } 
+        this.loadPermission();
       });
   }
   loadPermission() {
     this._dataService
       .get(
-        "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        "/PermissionManager/GetAllPermission/" + this.functionId
       )
       .subscribe((response: any) => {
         console.log(response);

@@ -48,10 +48,10 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 var checkIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
                 var getProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (getProvider != null)

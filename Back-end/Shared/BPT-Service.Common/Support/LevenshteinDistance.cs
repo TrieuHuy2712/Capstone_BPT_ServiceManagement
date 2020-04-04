@@ -2,9 +2,9 @@
 
 namespace BPT_Service.Common.Support
 {
-    public class LevenshteinDistance
+    public static class LevenshteinDistance
     {
-        public int Compute(string s, string t)
+        public static int Compute(string s, string t)
         {
             int n = s.Length;
             int m = t.Length;

@@ -6,6 +6,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -17,18 +18,22 @@ namespace BPT_Service.Application.FollowingPostService.Command.UnFollowPostServi
     {
         private readonly IRepository<ServiceFollowing, int> _serviceFollowingRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
         public UnFollowPostServiceCommand(
             IRepository<ServiceFollowing, int> serviceFollowingRepository,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<AppUser> userManager)
         {
             _serviceFollowingRepository = serviceFollowingRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ServiceFollowingViewModel>> ExecuteAsync(ServiceFollowingViewModel model)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var checkUserHasFollow = await _serviceFollowingRepository.FindByIdAsync(model.Id);

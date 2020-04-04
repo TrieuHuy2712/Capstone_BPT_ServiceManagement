@@ -23,6 +23,7 @@
     "@angular/router": "~8.2.14",
     "@auth0/angular-jwt": "^3.0.1",
     "@ionic/angular": "^5.0.4",
+    "@ng-bootstrap/ng-bootstrap": "^5.3.0",
     "alertifyjs": "^1.13.1",
     "angular-2-dropdown-multiselect": "^1.9.0",
     "angular-6-social-login": "^1.1.1",

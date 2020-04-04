@@ -1,29 +1,39 @@
-using System.Linq;
 using BPT_Service.Application.RoleService.ViewModel;
 using BPT_Service.Common.Dtos;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
 {
     public class GetAllRolePagingAsyncQuery : IGetAllRolePagingAsyncQuery
     {
         private readonly RoleManager<AppRole> _roleManager;
-        public GetAllRolePagingAsyncQuery(RoleManager<AppRole> roleManager)
+
+        public GetAllRolePagingAsyncQuery(
+            RoleManager<AppRole> roleManager)
         {
             _roleManager = roleManager;
         }
 
         public PagedResult<AppRoleViewModel> ExecuteAsync(string keyword, int page, int pageSize)
         {
-            var query = _roleManager.Roles;
+            int totalRow = 0;
+            var query = _roleManager.Roles.ToList();
             if (!string.IsNullOrEmpty(keyword))
-                query = query.Where(x => x.Name.Contains(keyword)
-                || x.Description.Contains(keyword));
+                query = query.Where(x => x.Name.ToLower().Contains(keyword.ToLower())
+                || LevenshteinDistance.Compute(x.Name.ToLower(), keyword.ToLower()) <= 3
+                || LevenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
+                || x.Description.ToLower().Contains(keyword.ToLower())).ToList();
 
-            int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+
+            if (pageSize != 0)
+            {
+                totalRow = query.Count();
+                query = query.Skip((page - 1) * pageSize)
+                   .Take(pageSize).ToList();
+            }
 
             var data = query.Select(x => new AppRoleViewModel
             {

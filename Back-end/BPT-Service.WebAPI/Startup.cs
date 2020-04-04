@@ -295,7 +295,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddHttpContextAccessor();
             //Authenticate service
             services.AddScoped<IResetPasswordAsyncCommand, ResetPasswordAsyncCommand>();
             services.AddScoped<IAuthenticateServiceQuery, AuthenticateServiceQuery>();
@@ -451,7 +451,6 @@ namespace BPT_Service.WebAPI
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
-            services.AddScoped<LevenshteinDistance, LevenshteinDistance>();
         }
     }
 }

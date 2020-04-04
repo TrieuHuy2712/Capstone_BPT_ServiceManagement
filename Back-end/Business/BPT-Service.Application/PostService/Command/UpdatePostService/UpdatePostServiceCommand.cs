@@ -10,6 +10,7 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<Service, Guid> _serviceRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public UpdatePostServiceCommand(
             ICheckUserIsAdminQuery checkUserIsAdminQuery, 
@@ -35,7 +37,8 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             IGetPermissionActionQuery getPermissionActionQuery, 
             IHttpContextAccessor httpContext, IRepository<Provider, Guid> providerRepository, 
             IRepository<Service, Guid> serviceRepository, 
-            IRepository<Tag, Guid> tagServiceRepository)
+            IRepository<Tag, Guid> tagServiceRepository,
+            UserManager<AppUser> userManager)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProvider = checkUserIsProvider;
@@ -44,15 +47,16 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             _providerRepository = providerRepository;
             _serviceRepository = serviceRepository;
             _tagServiceRepository = tagServiceRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
         {
-            var userName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContext.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var getPermissionForService = await IsOwnService(Guid.Parse(vm.Id));
-                var userId = _httpContext.HttpContext.User.Identity.Name;
 
                 if (getPermissionForService.isValid || await _checkUserIsAdminQuery.ExecuteAsync(userId)
                     || await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate))

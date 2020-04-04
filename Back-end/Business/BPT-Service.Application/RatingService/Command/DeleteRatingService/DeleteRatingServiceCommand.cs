@@ -5,6 +5,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -17,20 +18,24 @@ namespace BPT_Service.Application.RatingService.Command.DeleteRatingService
         private readonly IRepository<ServiceRating, int> _serviceRatingRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepository<Service, Guid> _serviceRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public DeleteRatingServiceCommand(
             IRepository<ServiceRating, int> serviceRatingRepository,
             IHttpContextAccessor httpContextAccessor,
-            IRepository<Service, Guid> serviceRepository)
+            IRepository<Service, Guid> serviceRepository,
+            UserManager<AppUser> userManager)
         {
             _serviceRatingRepository = serviceRatingRepository;
             _httpContextAccessor = httpContextAccessor;
             _serviceRepository = serviceRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ServiceRating>> ExecuteAsync(int idRating)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(getUserId).Result.UserName;
             try
             {
                 var getRating = await _serviceRatingRepository.FindByIdAsync(idRating);
@@ -54,7 +59,6 @@ namespace BPT_Service.Application.RatingService.Command.DeleteRatingService
                         errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                     };
                 }
-                var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (getRating.UserId != Guid.Parse(getUserId))
                 {
                     await Logging<DeleteRatingServiceCommand>.

@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { SystemConstants } from 'src/app/core/common/system,constants';
 import { MessageConstants } from 'src/app/core/common/message.constants';
+import { ModalDirective } from 'ngx-bootstrap';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
@@ -12,6 +11,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
   styleUrls: ['./service-tag.component.css']
 })
 export class ServiceTagComponent implements OnInit {
+  @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
   public pageIndex: number = 1;
   public pageSize: number = 20;
@@ -24,9 +24,7 @@ export class ServiceTagComponent implements OnInit {
   public functionId: string = "TAG";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService,
-    private translationService: TranslationService
-  ) {
+    private _notificationService: NotificationService  ) {
 
   }
 
@@ -55,23 +53,17 @@ export class ServiceTagComponent implements OnInit {
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
-          this.loadPermission();
-        }
+        this.loadPermission();
       });
   }
   loadPermission() {
     this._dataService
       .get(
         "/PermissionManager/GetAllPermission/" +
-        localStorage.getItem(SystemConstants.const_username) +
-        "/" +
         this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
-        this.permission = response.result;
-        console.log(this.permission);
+        this.permission = response;
       });
   }
   pageChanged(event: any): void {
@@ -83,61 +75,79 @@ export class ServiceTagComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    this._dataService
-      .get("/TagManagement/GetTagById?id=" + id)
-      .subscribe((response: any) => {
-        this.entity = response.result;
-        console.log(response);
-      });
+    let findIdthis = this.tags[id];
+    this.entity = findIdthis;
   }
   showEditModal(id: any) {
     this.loadRole(id);
-    console.log(id);
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
-    debugger;
     if (valid) {
       if (this.entity.id == undefined) {
-        console.log("vo day duoc");
         this._dataService.post("/TagManagement/AddNewTag", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              this.tags.push(response.myModel);
+              this._notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+              this.modalAddEdit.hide();
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.CREATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
       } else {
         this._dataService.put("/TagManagement/updateTag", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              let getPostition = this.tags.indexOf(x => x.id == this.entity.id);
+              this.tags[getPostition] = response.myModel;
+              this.modalAddEdit.hide();
+              this._notificationService.printSuccessMessage(
+                MessageConstants.UPDATED_OK_MSG
+              );
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.UPDATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
       }
     }
   }
-  deleteItem(id: any) {
+  deleteItem(idTag: any, id: any) {
     this._notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemConfirm(id)
+      () => this.deleteItemConfirm(idTag,id)
     );
   }
-  deleteItemConfirm(id: any) {
+  deleteItemConfirm(idTag: any,id: any) {
     this._dataService
-      .delete("/TagManagement/DeleteTag", "id", id)
-      .subscribe((response: Response) => {
-        this._notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.loadData();
+      .delete("/TagManagement/DeleteTag", "id", idTag)
+      .subscribe((response: any) => {
+        if (response.isValid == true) {
+          this.tags.splice(id, 1);
+          this._notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.DELETED_FAIL_MSG
+          );
+        }
       });
+  }
+  filterChanged(id: any) {
+    console.log(id);
+    this.pageSize = id;
+    this.loadData()
+
   }
 }

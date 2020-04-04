@@ -5,10 +5,10 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProviderService
@@ -17,18 +17,22 @@ namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProvi
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepository<ProviderFollowing, int> _providerFollowingRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public UnFollowProviderServiceCommand(
             IHttpContextAccessor httpContextAccessor,
-            IRepository<ProviderFollowing, int> providerFollowingRepository)
+            IRepository<ProviderFollowing, int> providerFollowingRepository,
+            UserManager<AppUser> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerFollowingRepository = providerFollowingRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<FollowingProviderServiceViewModel>> ExecuteAsync(FollowingProviderServiceViewModel vm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var checkUserHasBeenFollow = await _providerFollowingRepository.FindAllAsync(x =>

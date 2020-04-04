@@ -10,6 +10,7 @@ using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -24,27 +25,30 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public RegisterNewsProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
         IRepository<ProviderNew, int> newProviderRepository,
         ICheckUserIsAdminQuery checkUserIsAdminQuery,
         IGetPermissionActionQuery getPermissionActionQuery,
-        ICheckUserIsProviderQuery checkUserIsProviderQuery)
+        ICheckUserIsProviderQuery checkUserIsProviderQuery,
+        UserManager<AppUser> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _newProviderRepository = newProviderRepository;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                    await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanCreate) ||
                    getIsProvider.isValid)

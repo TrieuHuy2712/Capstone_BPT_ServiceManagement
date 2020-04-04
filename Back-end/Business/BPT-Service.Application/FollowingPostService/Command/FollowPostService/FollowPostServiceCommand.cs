@@ -7,6 +7,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -20,22 +21,27 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
         private readonly IRepository<Service, Guid> _serviceRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
+        private readonly UserManager<AppUser> _userManager;
+
 
         public FollowPostServiceCommand(
             IRepository<ServiceFollowing, int> serviceFollowingRepository,
             IRepository<Service, Guid> serviceRepository,
             IHttpContextAccessor httpContextAccessor,
-            IGetOwnServiceInformationQuery getOwnServiceInformationQuery)
+            IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
+            UserManager<AppUser> userManager)
         {
             _serviceFollowingRepository = serviceFollowingRepository;
             _serviceRepository = serviceRepository;
             _httpContextAccessor = httpContextAccessor;
             _getOwnServiceInformationQuery = getOwnServiceInformationQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ServiceFollowingViewModel>> ExecuteAsync(ServiceFollowingViewModel serviceFollowingViewModel)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var checkUserHasFollow = await _serviceFollowingRepository.FindSingleAsync(x =>

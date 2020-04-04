@@ -7,6 +7,7 @@ using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
@@ -19,20 +20,24 @@ namespace BPT_Service.Application.FollowingProviderService.Command.RegisterEmail
         private readonly IRepository<ProviderFollowing, int> _providerFollowingRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public RegisterEmailProviderServiceCommand(
             IRepository<ProviderFollowing, int> providerFollowingRepository, 
             IHttpContextAccessor httpContextAccessor, 
-            IRepository<Provider, Guid> providerRepository)
+            IRepository<Provider, Guid> providerRepository,
+            UserManager<AppUser> userManager)
         {
             _providerFollowingRepository = providerFollowingRepository;
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<FollowingProviderServiceViewModel>> ExecuteAsync(int idRegister)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var findIdRegister = await _providerFollowingRepository.FindByIdAsync(idRegister);

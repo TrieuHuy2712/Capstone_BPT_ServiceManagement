@@ -7,6 +7,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,20 +19,24 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
         private readonly IRepository<ServiceComment, Guid> _commentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
+        private readonly UserManager<AppUser> _userManager;
 
         public DeleteCommentServiceAsyncCommand(
             IRepository<ServiceComment, Guid> commentRepository,
             IHttpContextAccessor httpContextAccessor,
-            IGetOwnServiceInformationQuery getOwnServiceInformationQuery)
+            IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
+            UserManager<AppUser> userManager)
         {
             _commentRepository = commentRepository;
             _httpContextAccessor = httpContextAccessor;
             _getOwnServiceInformationQuery = getOwnServiceInformationQuery;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(Guid id)
         {
-            var userName = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
                 var commentDel = await _commentRepository.FindByIdAsync(id);
