@@ -1,6 +1,3 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.TagService.ViewModel;
@@ -12,6 +9,8 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
 {
@@ -24,9 +23,9 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
         private readonly UserManager<AppUser> _userManager;
 
         public UpdateTagServiceAsyncCommand(
-            IRepository<Tag, Guid> tagRepository, 
-            IHttpContextAccessor httpContextAccessor, 
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            IRepository<Tag, Guid> tagRepository,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
             UserManager<AppUser> userManager)
         {
@@ -41,7 +40,8 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
-            try { 
+            try
+            {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                     await _getPermissionActionQuery.ExecuteAsync(userId, "TAG", ActionSetting.CanUpdate))
                 {

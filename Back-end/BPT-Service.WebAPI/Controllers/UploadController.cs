@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -15,14 +15,18 @@ namespace BPT_Service.WebAPI.Controllers
     {
         //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
         private const string BaseUrl = "http://localhost:5000";
+
         private readonly IWebHostEnvironment _env;
 
-        #region  Constructor
+        #region Constructor
+
         public UploadController(IWebHostEnvironment env)
         {
             _env = env;
         }
-        #endregion
+
+        #endregion Constructor
+
         [HttpPost]
         [Route("saveImage/{type}")]
         public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, long userId, string type)
@@ -45,7 +49,6 @@ namespace BPT_Service.WebAPI.Controllers
                     }
                     else if (postedFile.Length > MaxContentLength)
                     {
-
                         var message = string.Format("Please Upload a file upto 1 mb.");
 
                         return new ObjectResult(message);
@@ -85,17 +88,17 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             Directory.CreateDirectory(_env.WebRootPath + directory);
                         }
-
-                        string path = Path.Combine(_env.WebRootPath + directory, postedFile.FileName);
+                        var nameImage = type + System.DateTime.Now.ToString("MM_DD_YYYY_h_mm_ss_fffff_tt") + ext;
+                        string path = Path.Combine(_env.WebRootPath + directory, nameImage);
                         //Userimage myfolder name where i want to save my image
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             await postedFile.CopyToAsync(fileStream);
                         }
-                        returnPath = path;
+                        returnPath = BaseUrl + directory + "/" + nameImage;
                     }
                     var message1 = string.Format("Image Updated Successfully.");
-                    return new OkObjectResult(returnPath);
+                    return new JsonResult(returnPath);
                 }
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -49,7 +50,8 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                         Email = userVm.Email,
                         FullName = userVm.FullName,
                         DateCreated = DateTime.Now,
-                        PhoneNumber = userVm.PhoneNumber
+                        PhoneNumber = userVm.PhoneNumber,
+                        
                     };
                     var result = await _userManager.CreateAsync(user, userVm.Password);
                     if (result.Succeeded && userVm.Roles.Count > 0)
@@ -69,7 +71,10 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                             Email = userVm.Email,
                             FullName = userVm.FullName,
                             DateCreated = DateTime.Now,
-                            PhoneNumber = userVm.PhoneNumber
+                            PhoneNumber = userVm.PhoneNumber,
+                            Id= user.Id,
+                            Roles = _userManager.GetRolesAsync(user).Result.ToList()
+
                         }
                     };
                 }

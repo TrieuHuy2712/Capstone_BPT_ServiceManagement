@@ -4,6 +4,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { MessageConstants } from 'src/app/core/common/message.constants';
+import { UploadService } from 'src/app/core/services/upload.service';
 
 @Component({
   selector: 'app-service-category',
@@ -14,8 +15,9 @@ export class ServiceCategoryComponent implements OnInit {
 
   @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
+  @ViewChild('imgPath', { static: false }) imgPath;
   public pageIndex: number = 1;
-  public pageSize: number = 20;
+  public pageSize: number = 0;
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = "";
@@ -25,7 +27,8 @@ export class ServiceCategoryComponent implements OnInit {
   public functionId: string = "CATEGORY";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private _uploadService: UploadService
   ) {
 
   }
@@ -63,9 +66,7 @@ export class ServiceCategoryComponent implements OnInit {
         "/PermissionManager/GetAllPermission/" + this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
-        this.permission = response.result;
-        console.log(this.permission);
+        this.permission = response;
       });
   }
   pageChanged(event: any): void {
@@ -77,62 +78,86 @@ export class ServiceCategoryComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    this._dataService
-      .get("/CategoryManagement/GetCatagoryById?id=" + id)
-      .subscribe((response: any) => {
-        this.entity = response.result;
-        console.log(response);
-      });
+    let findIdthis = this.categories[id];
+    this.entity = findIdthis;
   }
   showEditModal(id: any) {
     this.loadRole(id);
-    console.log(id);
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
-    debugger;
     if (valid) {
+      let fi = this.imgPath.nativeElement;
+      if (fi.files.length > 0) {
+        this._uploadService.postWithFile('/UploadImage/saveImage/category', null, fi.files)
+          .then((imageUrl: any) => {
+            this.entity.imgPath = imageUrl;
+          }).then(() => {
+            this.saveData();
+          });
+      }
+      else {
+        this.saveData();
+      }
+    }
+  }
+  saveData() {
       if (this.entity.id == undefined) {
-        console.log("vo day duoc");
         this._dataService.post("/CategoryManagement/AddNewCategory", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              this.categories.push(response.myModel);
+              this._notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+              this.modalAddEdit.hide();
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.CREATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
       } else {
         this._dataService.put("/CategoryManagement/updateCategory", this.entity).subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              let getPostition = this.categories.indexOf(x => x.id == this.entity.id);
+              this.categories[getPostition] = response.myModel;
+              this.modalAddEdit.hide();
+              this._notificationService.printSuccessMessage(
+                MessageConstants.UPDATED_OK_MSG
+              );
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.UPDATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
-      }
     }
   }
-  deleteItem(id: any) {
+  deleteItem(idRole: any, id: any) {
     this._notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemConfirm(id)
+      () => this.deleteItemConfirm(idRole, id)
     );
   }
-  deleteItemConfirm(id: any) {
+  deleteItemConfirm(idRole: any, id: any) {
     this._dataService
-      .delete("/CategoryManagement/DeleteCategory", "id", id)
+      .delete("/CategoryManagement/DeleteCategory", "id", idRole)
       .subscribe((response: Response) => {
         this._notificationService.printSuccessMessage(
           MessageConstants.DELETED_OK_MSG
         );
         this.loadData();
       });
+  }
+  filterChanged(id: any) {
+    this.pageSize = id;
+    this.loadData()
   }
 }
 

@@ -145,7 +145,6 @@ export class RoleComponent implements OnInit {
       });
   }
   filterChanged(id: any) {
-    console.log(id);
     this.pageSize = id;
     this.loadData()
 

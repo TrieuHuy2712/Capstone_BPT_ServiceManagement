@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
   public myRoles: string[] = [];
   public currentRole: string[] = [];
   public pageIndex: number = 1;
-  public pageSize: number = 20;
+  public pageSize: number = 0;
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = "";
@@ -55,7 +55,7 @@ export class UserComponent implements OnInit {
     private _uploadService: UploadService,
     public _authenService: AuthenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.currentUser = SystemConstants.CURRENT_USER;
@@ -73,43 +73,29 @@ export class UserComponent implements OnInit {
     this._dataService
       .get(
         "/UserManagement/GetAllPaging?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&keyword=" +
-          this.filter
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&keyword=" +
+        this.filter
       )
       .subscribe((response: any) => {
         this.users = response.results;
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.totalRow = response.TotalRows;
-        console.log(response);
-        if (localStorage.getItem(SystemConstants.const_username) != "admin") {
-          this.loadPermission();
-        } else {
-          let adminPermission: any = {
-            canCreate: true,
-            canDelete: true,
-            canUpdate: true,
-            canRead: true
-          };
-          this.permission = adminPermission;
-        }
+        this.loadPermission();
+
       });
   }
   loadPermission() {
     this._dataService
       .get(
         "/PermissionManager/GetAllPermission/" +
-          localStorage.getItem(SystemConstants.const_username) +
-          "/" +
-          this.functionId
+        this.functionId
       )
       .subscribe((response: any) => {
-        console.log(response);
-        this.permission = response.result;
-        console.log(this.permission);
+        this.permission = response;
       });
   }
 
@@ -120,23 +106,17 @@ export class UserComponent implements OnInit {
         for (let role of response) {
           this.allRoles.push({ id: role.name, name: role.description });
         }
-        console.log(response);
       },
       error => this._dataService.handleError(error)
     );
   }
   loadUserDetail(id: any) {
-    this._dataService
-      .get("/UserManagement/GetById/" + id)
-      .subscribe((response: any) => {
-        console.log(response);
-        this.entity = response;
-        this.myRoles = [];
-        for (let role of this.entity.roles) {
-          this.myRoles.push(role);
-          this.currentRole.push(role);
-        }
-      });
+    let findIdthis = this.users[id];
+    this.entity = findIdthis;
+    for (let role of this.entity.roles) {
+      this.myRoles.push(role);
+      this.currentRole.push(role);
+    }
   }
   pageChanged(event: any): void {
     this.pageIndex = event.page;
@@ -153,13 +133,12 @@ export class UserComponent implements OnInit {
   saveChange(valid: boolean) {
     if (valid) {
       this.entity.NewRoles = this.myRoles;
-      console.log(this.myRoles);
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService
           .postWithFile("/api/upload/saveImage?type=avatar", null, fi.files)
           .then((imageUrl: string) => {
-            this.entity.Avatar = imageUrl;
+            this.entity.avatar = imageUrl;
           })
           .then(() => {
             this.saveData();
@@ -175,11 +154,17 @@ export class UserComponent implements OnInit {
         .post("/UserManagement/AddNewUser", this.entity)
         .subscribe(
           (response: any) => {
-            this.loadData();
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            if (response.isValid == true) {
+              this.users.push(response.myModel);
+              this.modalAddEdit.hide();
+              this._notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.CREATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
@@ -188,33 +173,50 @@ export class UserComponent implements OnInit {
         .put("/UserManagement/UpdateUser", this.entity)
         .subscribe(
           (response: any) => {
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-            );
-            this.loadData();
+            if (response.isValid == true) {
+              this.modalAddEdit.hide();
+              let getPostition = this.users.indexOf(x => x.id == this.entity.id);
+              this.users[getPostition] = response.myModel;
+              this._notificationService.printSuccessMessage(
+                MessageConstants.UPDATED_OK_MSG
+              );
+            } else {
+              this._notificationService.printErrorMessage(
+                MessageConstants.UPDATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
     }
   }
-  deleteItem(id: any) {
+  deleteItem(idRole: any, id: any) {
     this._notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemConfirm(id)
+      () => this.deleteItemConfirm(idRole, id)
     );
   }
-  deleteItemConfirm(id: any) {
+  deleteItemConfirm(idRole: any, id: any) {
     this._dataService
-      .delete("/UserManagement/DeleteUser", "id", id)
-      .subscribe((response: Response) => {
-        this._notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.loadData();
+      .delete("/UserManagement/DeleteUser", "id", idRole)
+      .subscribe((response: any) => {
+        if (response.isValid == true) {
+          this.users.splice(id, 1);
+          this._notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.DELETED_FAIL_MSG
+          );
+        }
       });
   }
   public selectGender(event) {
     this.entity.Gender = event.target.value;
+  }
+  filterChanged(id: any) {
+    this.pageSize = id;
+    this.loadData()
   }
 }

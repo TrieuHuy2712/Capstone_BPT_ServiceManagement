@@ -19,7 +19,7 @@ namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
 
         public PagedResult<AppRoleViewModel> ExecuteAsync(string keyword, int page, int pageSize)
         {
-            int totalRow = 0;
+            
             var query = _roleManager.Roles.ToList();
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.ToLower().Contains(keyword.ToLower())
@@ -27,10 +27,9 @@ namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
                 || LevenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
                 || x.Description.ToLower().Contains(keyword.ToLower())).ToList();
 
-
+            int totalRow = query.Count();
             if (pageSize != 0)
             {
-                totalRow = query.Count();
                 query = query.Skip((page - 1) * pageSize)
                    .Take(pageSize).ToList();
             }

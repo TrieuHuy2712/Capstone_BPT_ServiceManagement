@@ -64,7 +64,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region POST API
         [HttpPost("addNewLocation")]
-        public async Task<IActionResult> AddNewCategory([FromBody]List<CityProvinceViewModel> vm)
+        public async Task<IActionResult> AddNewCategory([FromBody]CityProvinceViewModel vm)
         {
             if (!ModelState.IsValid)
             {

@@ -22,9 +22,18 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button *ngIf="permission.canCreate" class="btn btn-success" (click)="showAddModal()">{{'add'|translate}}</button>
+            <button *ngIf="permission.canCreate" class="btn btn-success"
+              (click)="showAddModal()">{{'add'|translate}}</button>
           </li>
-
+          <li>
+            <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+              <option value="0">All</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          </li>
         </ul>
         <div class="clearfix"></div>
       </div>
@@ -43,16 +52,16 @@
             </tr>
           </thead>
           <tbody *ngIf="permission.canRead">
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let user of users,let i=index">
               <td>{{user.userName}}</td>
               <td>{{user.fullName}}</td>
               <td>{{user.email}}</td>
               <td><img [src]="user.avatar" class="img-responsive" width="128" /></td>
               <td>
-                <button class="btn btn-primary" *ngIf="permission.canUpdate && userName !='admin'"
-                  (click)="showEditModal(user.id)"><i class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" *ngIf="permission.canDelete && userName !='admin' "
-                  (click)="deleteItem(user.id)"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-primary" *ngIf="permission.canUpdate" (click)="showEditModal(i)"><i
+                    class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-danger" *ngIf="permission.canDelete " (click)="deleteItem(user.id,i)"><i
+                    class="fa fa-trash"></i></button>
 
               </td>
             </tr>
@@ -146,11 +155,11 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input type="file" #avatar name="avatar" class="form-control">
               <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
-              <input type="hidden" [(ngModel)]="entity.Avatar" name="avatarUrl" />
+              <input type="hidden" [(ngModel)]="entity.avatar" name="avatar" />
             </div>
 
-            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.Avatar">
-              <img [src]="baseFolder+entity.Avatar" width="128" />
+            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatar">
+              <img [src]="baseFolder+entity.avatar" width="128" />
             </div>
           </div>
           <div class="form-group">
@@ -163,8 +172,10 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
+              <button type="button" (click)="modalAddEdit.hide()"
+                class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success"
+                [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
         </form>

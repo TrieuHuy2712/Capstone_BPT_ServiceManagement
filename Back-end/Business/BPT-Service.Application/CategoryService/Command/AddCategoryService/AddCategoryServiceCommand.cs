@@ -54,6 +54,7 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
                             Id = mappingCate.Id,
                             CategoryName = mappingCate.CategoryName,
                             Description = mappingCate.Description,
+                            ImgPath = mappingCate.ImgPath
                         },
                     };
                     await Logging<AddCategoryServiceCommand>.

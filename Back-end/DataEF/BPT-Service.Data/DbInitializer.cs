@@ -118,13 +118,15 @@ namespace BPT_Service.Data
                     new Function() {Id = "ROLE", Name = "Role",ParentId = "SYSTEM",SortOrder = 1,Status = Status.Active,URL = "/main/role/index",IconCss = "fa-home"},
                     new Function() {Id = "FUNCTION", Name = "Function",ParentId = "SYSTEM",SortOrder = 2,Status = Status.Active,URL = "/main/function/index",IconCss = "fa-home"},
                     new Function() {Id = "USER", Name = "User",ParentId = "SYSTEM",SortOrder =3,Status = Status.Active,URL = "/main/user/index",IconCss = "fa-home"},
+                    
 
-                     new Function() {Id = "MANAGE",Name = "Manage",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "MANAGE",Name = "Manage",ParentId = null,SortOrder = 2,Status = Status.Active,URL = "/",IconCss = "fa-chevron-down"},
                     new Function() {Id = "PROVIDER",Name = "Provider",ParentId = "MANAGE",SortOrder = 2,Status = Status.Active,URL = "/main/provider/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "CATEGORY",Name = "Category",ParentId = "MANAGE",SortOrder =1,Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "SERVICE",Name = "Service",ParentId = "MANAGE",SortOrder = 2,Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "TAG",Name = "Service_Tag",ParentId = "MANAGE",SortOrder = 4,Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
-                };
+                    new Function() { Id = "LOCATION", Name = "Location", ParentId = "SYSTEM", SortOrder = 4, Status = Status.Active, URL = "/main/location/index", IconCss = "fa-home" }
+            };
                 await _context.Functions.AddRangeAsync(functions);
                 await _context.SaveChangesAsync();
             }
@@ -141,6 +143,7 @@ namespace BPT_Service.Data
                 await _context.CityProvinces.AddRangeAsync(cities);
                 await _context.SaveChangesAsync();
             }
+           
 
             if (_context.Emails.Count() == 0)
             {

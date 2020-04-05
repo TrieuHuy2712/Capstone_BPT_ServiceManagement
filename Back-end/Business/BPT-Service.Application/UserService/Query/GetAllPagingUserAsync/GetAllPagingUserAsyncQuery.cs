@@ -1,20 +1,21 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
 {
     public class GetAllPagingUserAsyncQuery : IGetAllPagingUserAsyncQuery
     {
         private readonly UserManager<AppUser> _userManager;
+
         public GetAllPagingUserAsyncQuery(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
         }
+
         public async Task<PagedResult<AppUserViewModelinUserService>> ExecuteAsync(string keyword, int page, int pageSize)
         {
             var query = _userManager.Users;
@@ -24,8 +25,11 @@ namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
                 || x.Email.Contains(keyword));
 
             int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+            if (pageSize != 0)
+            {
+                query = query.Skip((page - 1) * pageSize)
+                   .Take(pageSize);
+            }
 
             var data = query.Select(x => new AppUserViewModelinUserService()
             {
@@ -36,7 +40,8 @@ namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
                 Id = x.Id,
                 PhoneNumber = x.PhoneNumber,
                 Status = x.Status,
-                DateCreated = x.DateCreated
+                DateCreated = x.DateCreated,
+                Roles = _userManager.GetRolesAsync(x).Result.ToList()
             }).ToList();
             var paginationSet = new PagedResult<AppUserViewModelinUserService>()
             {

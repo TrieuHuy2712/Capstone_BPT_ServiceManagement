@@ -38,7 +38,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             _userManager = userManager;
         }
 
-        public async Task<CommandResult<List<CityProvinceViewModel>>> ExecuteAsync(List<CityProvinceViewModel> listAddViewModel)
+        public async Task<CommandResult<CityProvinceViewModel>> ExecuteAsync(CityProvinceViewModel listAddViewModel)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
@@ -51,21 +51,22 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
                     await _cityProvinceRepository.Add(listModel);
                     await _cityProvinceRepository.SaveAsync();
                     await Logging<AddCityProvinceServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(listModel));
-                    return new CommandResult<List<CityProvinceViewModel>>
+                    return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = true,
-                        myModel = listModel.Select(x => new CityProvinceViewModel
+                        myModel = new CityProvinceViewModel()
                         {
-                            Id = x.Id,
-                            City = x.City,
-                            Province = x.Province
-                        }).ToList()
+                            Id = listModel.Id,
+                            City = listModel.City,
+                            Province = listModel.Province,
+                            ImagePath= listModel.ImgPath
+                        }
                     };
                 }
                 else
                 {
                     await Logging<AddCityProvinceServiceCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
-                    return new CommandResult<List<CityProvinceViewModel>>
+                    return new CommandResult<CityProvinceViewModel>
                     {
                         isValid = false,
                         errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
@@ -75,7 +76,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             catch (Exception ex)
             {
                 await Logging<AddCityProvinceServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
-                return new CommandResult<List<CityProvinceViewModel>>
+                return new CommandResult<CityProvinceViewModel>
                 {
                     isValid = false,
                     errorMessage = ex.InnerException.Message.ToString()
@@ -83,14 +84,15 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             }
         }
 
-        private List<CityProvince> MappingCityProvince(List<CityProvinceViewModel> listAddViewModel)
+        private CityProvince MappingCityProvince(CityProvinceViewModel listAddViewModel)
         {
-            return listAddViewModel.Select(x => new CityProvince
+            return new CityProvince()
             {
-                Id = x.Id,
-                City = x.City,
-                Province = x.Province
-            }).ToList();
+                Id = listAddViewModel.Id,
+                City = listAddViewModel.City,
+                ImgPath = listAddViewModel.ImagePath,
+                Province = listAddViewModel.Province
+            };
         }
     }
 }

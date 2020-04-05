@@ -22,14 +22,17 @@ namespace BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategor
                 || x.Description.Contains(keyword));
 
             int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
-
+            if (pageSize != 0)
+            {
+                query = query.Skip((page - 1) * pageSize)
+                   .Take(pageSize);
+            }
             var data = query.Select(x => new CategoryServiceViewModel
             {
                 Id = x.Id,
                 CategoryName = x.CategoryName,
                 Description = x.Description,
+                ImgPath = x.ImgPath
             }).ToList();
 
             var paginationSet = new PagedResult<CategoryServiceViewModel>()

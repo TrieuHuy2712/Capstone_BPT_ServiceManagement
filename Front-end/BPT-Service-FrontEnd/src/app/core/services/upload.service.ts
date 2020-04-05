@@ -6,12 +6,12 @@ import { UtilityService } from './utility.service';
 @Injectable()
 export class UploadService {
   public responseData: any;
-  
+
   constructor(private dataService: DataService, private utilityService: UtilityService) { }
 
   postWithFile(url: string, postData: any, files: File[]) {
     let formData: FormData = new FormData();
-    formData.append('files', files[0], files[0].name);
+    formData.append('postedFile', files[0], files[0].name);
 
     if (postData !== "" && postData !== undefined && postData !== null) {
       for (var property in postData) {
@@ -22,7 +22,7 @@ export class UploadService {
     }
     var returnReponse = new Promise((resolve, reject) => {
       this.dataService.postFile(url, formData).subscribe(
-        res => {
+        (res: any) => {
           this.responseData = res;
           resolve(this.responseData);
         },

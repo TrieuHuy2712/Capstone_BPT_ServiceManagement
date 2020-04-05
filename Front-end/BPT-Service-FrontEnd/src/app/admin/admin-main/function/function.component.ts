@@ -85,7 +85,7 @@ export class FunctionComponent implements OnInit {
   }
   //Load data
   public search() {
-    this._dataService.get("/function/GetAll/admin").subscribe(
+    this._dataService.get("/function/GetAll/"+localStorage.getItem(SystemConstants.const_username)).subscribe(
       (response: any) => {
         console.log(response);
         this._functions = response;
@@ -107,19 +107,15 @@ export class FunctionComponent implements OnInit {
             }
           }
         }
-        console.log(this._functions);
-        if (this._currentUser != "admin") {
           this.loadPermission();
-        }
       },
       error => this._dataService.handleError(error)
     );
   }
   loadPermission() {
-    this._dataService.get("/PermissionManager/GetAllPermission/" +this._currentUser+"/"+this._functionId
+    this._dataService.get("/PermissionManager/GetAllPermission/" +this._functionId
       ).subscribe((response: any) => {
-        this._userPermission = response.result;
-        console.log(response);
+        this._userPermission = response;
       });
   }
 
@@ -130,22 +126,35 @@ export class FunctionComponent implements OnInit {
       if (this.editFlag == false) {
         this._dataService.post("/function/addEntity", this.entity).subscribe(
           (response: any) => {
-            this.search();
-            this.addEditModal.hide();
-            this.notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            if(response.isValid){
+              this.search();
+              this.addEditModal.hide();
+              this.notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+            }else{
+              this.notificationService.printErrorMessage(
+                MessageConstants.CREATED_FAIL_MSG
+              );
+            }
+           
           },
           error => this._dataService.handleError(error)
         );
       } else {
         this._dataService.put("/function/updateEntity", this.entity).subscribe(
           (response: any) => {
-            this.search();
-            this.addEditModal.hide();
-            this.notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-            );
+            if(response.isValid){
+              this.search();
+              this.addEditModal.hide();
+              this.notificationService.printSuccessMessage(
+                MessageConstants.UPDATED_OK_MSG
+              );
+            }else{
+              this.notificationService.printErrorMessage(
+                MessageConstants.UPDATED_FAIL_MSG
+              );
+            }
           },
           error => this._dataService.handleError(error)
         );
@@ -156,7 +165,6 @@ export class FunctionComponent implements OnInit {
   public showEdit(id: string) {
     this._dataService.get("/function/GetById/" + id).subscribe(
       (response: any) => {
-        console.log(response);
         this.entity = response;
         this.editFlag = true;
         this.addEditModal.show();
@@ -170,7 +178,6 @@ export class FunctionComponent implements OnInit {
     this._dataService
       .delete("/function/DeleteFunction", "id", id)
       .subscribe((response: any) => {
-        console.log(response);
         this.notificationService.printSuccessMessage(
           MessageConstants.DELETED_OK_MSG
         );

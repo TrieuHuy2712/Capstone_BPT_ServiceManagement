@@ -65,6 +65,10 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                             FullName = userVm.FullName,
                             Email = userVm.Email,
                             PhoneNumber = userVm.PhoneNumber,
+                            Id = userVm.Id,
+                            Avatar= userVm.Avatar,
+                            DateCreated= user.DateCreated,
+                            UserName= user.UserName,
                             Roles = userVm.Roles.ToList()
                         }
                     };

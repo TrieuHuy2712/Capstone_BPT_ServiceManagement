@@ -258,7 +258,7 @@ namespace BPT_Service.WebAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(x => x
                .AllowAnyOrigin()

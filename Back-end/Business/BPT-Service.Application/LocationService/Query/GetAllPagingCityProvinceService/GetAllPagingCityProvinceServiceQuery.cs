@@ -10,6 +10,7 @@ namespace BPT_Service.Application.LocationService.Query.GetAllPagingCityProvince
     public class GetAllPagingCityProvinceServiceQuery : IGetAllPagingCityProvinceServiceQuery
     {
         private readonly IRepository<CityProvince, int> _cityProvinceRepository;
+
         public GetAllPagingCityProvinceServiceQuery(IRepository<CityProvince, int> cityProvinceRepository)
         {
             _cityProvinceRepository = cityProvinceRepository;
@@ -23,14 +24,17 @@ namespace BPT_Service.Application.LocationService.Query.GetAllPagingCityProvince
                 || x.City.Contains(keyword));
 
             int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+            if (pageSize != 0)
+            {
+                query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            }
 
             var data = query.Select(x => new CityProvinceViewModel
             {
                 Id = x.Id,
                 City = x.City,
-                Province = x.Province
+                Province = x.Province,
+                ImagePath = x.ImgPath
             }).ToList();
 
             var paginationSet = new PagedResult<CityProvinceViewModel>()
