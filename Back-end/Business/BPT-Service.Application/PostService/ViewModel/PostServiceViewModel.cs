@@ -11,7 +11,7 @@ namespace BPT_Service.Application.PostService.ViewModel
         public string ProviderId { get; set; }
         public string UserId { get; set; }
         public int CategoryId { set; get; }
-
+        public string CategoryName { get; set; }
         public string Description { get; set; }
 
         public decimal PriceOfService { get; set; }

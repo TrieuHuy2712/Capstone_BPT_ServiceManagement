@@ -1,3 +1,4 @@
+using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Model.Entities;
@@ -19,13 +20,15 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
         private readonly IRepository<Tag, Guid> _tagRepository;
         private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _tagServiceRepository;
         private readonly IRepository<ServiceImage, int> _imageRepository;
+        private readonly IGetByIDCategoryServiceQuery _getByIDCategoryServiceQuery;
 
         public GetPostServiceByIdQuery(
-            IRepository<Service, Guid> serviceRepository, 
-            UserManager<AppUser> userManager, 
-            IHttpContextAccessor httpContext, 
-            IRepository<Tag, Guid> tagRepository, 
-            IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository, 
+            IRepository<Service, Guid> serviceRepository,
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContext,
+            IRepository<Tag, Guid> tagRepository,
+            IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository,
+            IGetByIDCategoryServiceQuery getByIDCategoryServiceQuery,
             IRepository<ServiceImage, int> imageRepository)
         {
             _serviceRepository = serviceRepository;
@@ -34,6 +37,7 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             _tagRepository = tagRepository;
             _tagServiceRepository = tagServiceRepository;
             _imageRepository = imageRepository;
+            _getByIDCategoryServiceQuery = getByIDCategoryServiceQuery;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
@@ -128,6 +132,7 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                 Path = x.Path
             }).ToList();
             postServiceView.PriceOfService = serv.PriceOfService;
+            postServiceView.CategoryName = _getByIDCategoryServiceQuery.ExecuteAsync(serv.CategoryId).Result.CategoryName;
             postServiceView.ServiceName = serv.ServiceName;
             postServiceView.Status = serv.Status;
             postServiceView.tagofServices = getListTag.Select(x => new TagofServiceViewModel
