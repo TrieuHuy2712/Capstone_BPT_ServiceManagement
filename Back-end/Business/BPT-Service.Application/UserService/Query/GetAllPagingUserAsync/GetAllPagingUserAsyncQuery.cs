@@ -1,5 +1,6 @@
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common.Dtos;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
@@ -18,17 +19,25 @@ namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
 
         public async Task<PagedResult<AppUserViewModelinUserService>> ExecuteAsync(string keyword, int page, int pageSize)
         {
-            var query = _userManager.Users;
+            var query = _userManager.Users.ToList();
             if (!string.IsNullOrEmpty(keyword))
-                query = query.Where(x => x.FullName.Contains(keyword)
-                || x.UserName.Contains(keyword)
-                || x.Email.Contains(keyword));
+            {
+                query = query.Where(x => x.FullName.ToLower().Contains(keyword.ToLower())
+                || LevenshteinDistance.Compute(x.FullName.ToLower(), keyword.ToLower()) <= 3
+                || x.UserName.ToLower().Contains(keyword.ToLower())
+                || LevenshteinDistance.Compute(x.UserName.ToLower(), keyword.ToLower()) <= 3
+                || x.Email.ToLower().Contains(keyword.ToLower())
+                || LevenshteinDistance.Compute(x.Email.ToLower(), keyword.ToLower()) <= 3
+                || x.PhoneNumber.ToLower().Contains(keyword.ToLower())
+                || LevenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
+                ).ToList();
+            }
 
             int totalRow = query.Count();
             if (pageSize != 0)
             {
                 query = query.Skip((page - 1) * pageSize)
-                   .Take(pageSize);
+                   .Take(pageSize).ToList();
             }
 
             var data = query.Select(x => new AppUserViewModelinUserService()

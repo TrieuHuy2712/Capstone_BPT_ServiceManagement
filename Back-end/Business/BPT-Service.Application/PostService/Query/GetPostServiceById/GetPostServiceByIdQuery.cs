@@ -1,12 +1,13 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using BPT_Service.Application.PostService.ViewModel;
+using BPT_Service.Common;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Query.GetPostServiceById
 {
@@ -16,6 +17,7 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContext;
+
         public GetPostServiceByIdQuery(
             IRepository<Service, Guid> serviceRepository,
             UserManager<AppUser> userManager,
@@ -28,24 +30,28 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             _userManager = userManager;
             _httpContext = httpContext;
         }
-        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(Guid idService)
+
+        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
         {
             try
             {
-                var getPermissionForService = await IsOwnService(idService);
-                if (getPermissionForService.isValid)
+                var service = await _serviceRepository.FindByIdAsync(Guid.Parse(idService));
+                if (service != null && service.Status== Model.Enums.Status.Active)
                 {
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = MapViewModel(getPermissionForService.myModel)
+                        myModel = MapViewModel(service)
                     };
                 }
-                return new CommandResult<PostServiceViewModel>
+                else
                 {
-                    isValid = true,
-                    errorMessage = getPermissionForService.errorMessage
-                };
+                    return new CommandResult<PostServiceViewModel>
+                    {
+                        isValid = true,
+                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                    };
+                }
             }
             catch (System.Exception ex)
             {
@@ -57,46 +63,45 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             }
         }
 
-        private async Task<CommandResult<Service>> IsOwnService(Guid idService)
-        {
-            var getCurrentId = _httpContext.HttpContext.User.Identity.Name;
-            var checkOwnProvider = await _providerRepository.FindAllAsync(x => x.UserId == Guid.Parse(getCurrentId));
-            var checkOwnService = await _serviceRepository.FindSingleAsync(x => x.UserServices.ServiceId == idService);
-            foreach (var item in checkOwnProvider)
-            {
-                if (item.Id == checkOwnService.ProviderServices.ProviderId)
-                {
-                    return new CommandResult<Service>
-                    {
-                        isValid = true,
-                        myModel = checkOwnService
-                    };
-                }
-            }
+        //private async Task<CommandResult<Service>> IsOwnService(Guid idService)
+        //{
+        //    var checkOwnProvider = await _providerRepository.FindAllAsync(x => x.UserId == Guid.Parse(getCurrentId));
+        //    var checkOwnService = await _serviceRepository.FindSingleAsync(x => x.UserServices.ServiceId == idService);
+        //    foreach (var item in checkOwnProvider)
+        //    {
+        //        if (item.Id == checkOwnService.ProviderServices.ProviderId)
+        //        {
+        //            return new CommandResult<Service>
+        //            {
+        //                isValid = true,
+        //                myModel = checkOwnService
+        //            };
+        //        }
+        //    }
 
-            if (checkOwnService.UserServices.UserId == Guid.Parse(getCurrentId))
-            {
-                return new CommandResult<Service>
-                {
-                    isValid = true,
-                    myModel = checkOwnService
-                };
-            }
+        //    if (checkOwnService.UserServices.UserId == Guid.Parse(getCurrentId))
+        //    {
+        //        return new CommandResult<Service>
+        //        {
+        //            isValid = true,
+        //            myModel = checkOwnService
+        //        };
+        //    }
 
-            if (checkOwnService == null)
-            {
-                return new CommandResult<Service>
-                {
-                    isValid = false,
-                    errorMessage = "Cannot find service"
-                };
-            }
-            return new CommandResult<Service>
-            {
-                isValid = false,
-                errorMessage = "You don't have permission"
-            };
-        }
+        //    if (checkOwnService == null)
+        //    {
+        //        return new CommandResult<Service>
+        //        {
+        //            isValid = false,
+        //            errorMessage = "Cannot find service"
+        //        };
+        //    }
+        //    return new CommandResult<Service>
+        //    {
+        //        isValid = false,
+        //        errorMessage = "You don't have permission"
+        //    };
+        //}
 
         private PostServiceViewModel MapViewModel(Service serv)
         {

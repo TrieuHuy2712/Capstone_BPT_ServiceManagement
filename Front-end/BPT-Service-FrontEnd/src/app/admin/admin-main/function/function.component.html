@@ -140,7 +140,7 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'status'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <div class="checkbox">
+              <div>
                 <label>
                   <input type="checkbox" [(ngModel)]="entity.status" name="status" #status="ngModel"> {{'active'|translate}}
                 </label>
@@ -192,25 +192,25 @@
                   {{permission.roleName}}
                 </td>
                 <td>
-                  <div class="checkbox">
+                  <div>
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canRead" [name]="permission.roleId"
                         [ngModelOptions]="{standalone: true}" [checked]="permission.canRead"> {{'read'|translate}}
                     </label>
                   </div>
-                  <div class="checkbox">
+                  <div>
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canCreate" [name]="permission.roleId" name="status"
                         [ngModelOptions]="{standalone: true}" [checked]="permission.canCreate"> {{'add'|translate}}
                     </label>
                   </div>
-                  <div class="checkbox">
+                  <div>
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canUpdate" [name]="permission.roleId" name="status"
                         [ngModelOptions]="{standalone: true}" [checked]="permission.canUpdate"> {{'edit'|translate}}
                     </label>
                   </div>
-                  <div class="checkbox">
+                  <div>
                     <label>
                       <input type="checkbox" [(ngModel)]="permission.canDelete" [name]="permission.roleId" name="status"
                         [ngModelOptions]="{standalone: true}" [checked]="permission.canDelete"> {{'delete'|translate}}

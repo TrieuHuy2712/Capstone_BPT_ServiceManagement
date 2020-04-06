@@ -95,7 +95,7 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             await postedFile.CopyToAsync(fileStream);
                         }
-                        returnPath = BaseUrl + directory + "/" + nameImage;
+                        returnPath = BaseUrl + directory + nameImage;
                     }
                     var message1 = string.Format("Image Updated Successfully.");
                     return new JsonResult(returnPath);

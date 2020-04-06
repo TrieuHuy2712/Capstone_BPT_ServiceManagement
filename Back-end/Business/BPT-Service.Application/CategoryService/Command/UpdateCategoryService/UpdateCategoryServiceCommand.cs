@@ -44,12 +44,13 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                 //Check user has permission first
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY", ActionSetting.CanUpdate))
                 {
-                    var CategoryUpdate = await _categoryRepository.FindByIdAsync(userVm.Id);
-                    if (CategoryUpdate != null)
+                    var categoryUpdate = await _categoryRepository.FindByIdAsync(userVm.Id);
+                    if (categoryUpdate != null)
                     {
-                        CategoryUpdate.CategoryName = userVm.CategoryName;
-                        CategoryUpdate.Description = userVm.Description;
-                        _categoryRepository.Update(CategoryUpdate);
+                        categoryUpdate.CategoryName = userVm.CategoryName;
+                        categoryUpdate.Description = userVm.Description;
+                        categoryUpdate.ImgPath = userVm.ImgPath;
+                        _categoryRepository.Update(categoryUpdate);
                         await _categoryRepository.SaveAsync();
                         await Logging<UpdateCategoryServiceCommand>.
                             InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(userVm));

@@ -48,6 +48,8 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                     user.Status = userVm.Status;
                     user.Email = userVm.Email;
                     user.PhoneNumber = userVm.PhoneNumber;
+                    user.Avatar = userVm.Avatar;
+                    user.UserName = userVm.UserName;
                     var userRoles = _userManager.GetRolesAsync(user);
 
                     var selectedRole = userVm.NewRoles.ToArray();

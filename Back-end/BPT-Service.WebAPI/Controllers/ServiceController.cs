@@ -68,7 +68,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("getPostServiceById")]
-        public async Task<IActionResult> GetPostServiceById(Guid idService)
+        public async Task<IActionResult> GetPostServiceById(string idService)
         {
             var model = await _getPostServiceByIdQuery.ExecuteAsync(idService);
             return new OkObjectResult(model);

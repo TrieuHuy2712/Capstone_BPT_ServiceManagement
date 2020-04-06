@@ -144,12 +144,12 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'address'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="text" #address="ngModel" [(ngModel)]="entity.address" name="address" class="form-control">
             </div>
-          </div>
+          </div> -->
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'avatar'|translate}}</label>
             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -159,7 +159,7 @@
             </div>
 
             <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatar">
-              <img [src]="baseFolder+entity.avatar" width="128" />
+              <img [src]="entity.avatar" width="128" />
             </div>
           </div>
           <div class="form-group">

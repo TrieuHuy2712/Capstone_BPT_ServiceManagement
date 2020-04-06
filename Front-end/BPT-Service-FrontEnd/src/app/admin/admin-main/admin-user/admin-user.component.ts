@@ -81,9 +81,9 @@ export class UserComponent implements OnInit {
       )
       .subscribe((response: any) => {
         this.users = response.results;
-        this.pageIndex = response.PageIndex;
-        this.pageSize = response.PageSize;
-        this.totalRow = response.TotalRows;
+        this.pageIndex = response.currentPage;
+        this.pageSize = response.pageSize;
+        this.totalRow = response.rowCount;
         this.loadPermission();
 
       });
@@ -136,7 +136,7 @@ export class UserComponent implements OnInit {
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService
-          .postWithFile("/api/upload/saveImage?type=avatar", null, fi.files)
+          .postWithFile("/UploadImage/saveImage/avatar", null, fi.files)
           .then((imageUrl: string) => {
             this.entity.avatar = imageUrl;
           })
