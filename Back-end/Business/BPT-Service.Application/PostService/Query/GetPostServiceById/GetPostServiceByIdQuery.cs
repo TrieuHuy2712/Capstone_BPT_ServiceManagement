@@ -14,21 +14,26 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
     public class GetPostServiceByIdQuery : IGetPostServiceByIdQuery
     {
         private readonly IRepository<Service, Guid> _serviceRepository;
-        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IRepository<Tag, Guid> _tagRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _tagServiceRepository;
+        private readonly IRepository<ServiceImage, int> _imageRepository;
 
         public GetPostServiceByIdQuery(
-            IRepository<Service, Guid> serviceRepository,
-            UserManager<AppUser> userManager,
-        IRepository<Provider, Guid> providerRepository,
-        IHttpContextAccessor httpContext
-        )
+            IRepository<Service, Guid> serviceRepository, 
+            UserManager<AppUser> userManager, 
+            IHttpContextAccessor httpContext, 
+            IRepository<Tag, Guid> tagRepository, 
+            IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository, 
+            IRepository<ServiceImage, int> imageRepository)
         {
             _serviceRepository = serviceRepository;
-            _providerRepository = providerRepository;
             _userManager = userManager;
             _httpContext = httpContext;
+            _tagRepository = tagRepository;
+            _tagServiceRepository = tagServiceRepository;
+            _imageRepository = imageRepository;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
@@ -38,10 +43,10 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                 var service = await _serviceRepository.FindByIdAsync(Guid.Parse(idService));
                 if (service != null && service.Status== Model.Enums.Status.Active)
                 {
-                    return new CommandResult<PostServiceViewModel>
+                    return new  CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = MapViewModel(service)
+                        myModel = MapViewModel(service).Result
                     };
                 }
                 else
@@ -103,20 +108,31 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
         //    };
         //}
 
-        private PostServiceViewModel MapViewModel(Service serv)
+        private async Task<PostServiceViewModel> MapViewModel(Service serv)
         {
+            var getTag = await _tagRepository.FindAllAsync();
+            var getUserTag = await _tagServiceRepository.FindAllAsync(x => x.ServiceId == serv.Id);
+            var getListTag = (from tag in getTag.ToList()
+                              join serviceTag in getUserTag.ToList()
+                              on tag.Id equals serviceTag.TagId
+                              select new
+                              {
+                                  tag.TagName
+                              }).ToList();
+
+            var getImage = await _imageRepository.FindAllAsync(x=>x.ServiceId==serv.Id);
             PostServiceViewModel postServiceView = new PostServiceViewModel();
             postServiceView.Id = serv.Id.ToString();
-            postServiceView.listImages = serv.ServiceImages.Select(x => new PostServiceImageViewModel
+            postServiceView.listImages = getImage.Select(x => new PostServiceImageViewModel
             {
                 Path = x.Path
             }).ToList();
             postServiceView.PriceOfService = serv.PriceOfService;
             postServiceView.ServiceName = serv.ServiceName;
             postServiceView.Status = serv.Status;
-            postServiceView.tagofServices = serv.TagServices.Select(x => new TagofServiceViewModel
+            postServiceView.tagofServices = getListTag.Select(x => new TagofServiceViewModel
             {
-                TagName = x.Tag.TagName
+                TagName = x.TagName
             }).ToList();
             postServiceView.CategoryId = serv.CategoryId;
             return postServiceView;
