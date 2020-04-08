@@ -1,0 +1,267 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Danh sách các danh mục</h3>
+    </div>
+    <!-- Tìm kiếm danh mục -->
+    <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
+                    placeholder="Gõ tên danh muc...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" (click)="loadData()" type="button">Tìm!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<!-- Xuat cac danh muc -->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <button class="btn btn-success" *ngIf="permission.canCreate" (click)="showAddModal()">Thêm
+                            mới</button>
+                    </li>
+                    <li>
+                        <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+                            <option value="0">All</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </li>
+                    <li>
+                        <span>Trạng thái</span>
+                        <select class="form-control" id="sel1" (change)="filterStatus($event.target.value)">
+                            <option value="5">All</option>
+                            <option value="0">Từ chối</option>
+                            <option value="1">Đã chấp thuận</option>
+                            <option value="2">Đang chờ</option>
+                        </select>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="card-body table-responsive p-0">
+
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Tên provider</th>
+                            <th>Tên người đăng ký</th>
+                            <th>Hình ảnh</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="permission.canRead">
+                        <tr *ngFor="let pro of provider, let i = index">
+                            <td>{{pro.providerName}}</td>
+                            <td>{{pro.userName}}</td>
+                            <td *ngIf="pro.status==1"><span class="badge badge-success">Approved</span></td>
+                            <td *ngIf="pro.status==0"><span class="badge badge-danger">Rejected</span></td>
+                            <td *ngIf="pro.status==2"><span class="badge badge-secondary">Pending</span></td>
+                            <td><img [src]="pro.avatarPath" alt="" width="128"></td>
+                            <td>
+                                <button *ngIf="permission.canUpdate" class="btn btn-primary"
+                                    (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
+                                <button *ngIf="permission.canDelete" class="btn btn-danger"
+                                    (click)="deleteItem(pro.id,i)"><i class="fa fa-trash"></i></button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-12">
+                    <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+                        [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
+                        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Them danh muc moi -->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Thêm/Sửa nhà cung cấp</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+                    (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+                    <div class="form-group row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label">Tên nhà cung cấp</label>
+                            <div>
+                                <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
+                                    minlength="3" name="providerName" class="form-control">
+                                <small
+                                    [hidden]="providerName.valid || (providerName.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label">Tên người đăng ký</label>
+                            <div>
+                                <!-- <input type="hidden" [(ngModel)]="entity.userId" name="userId" /> -->
+                                <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" required
+                                    [typeahead]="state" minlength="3" name="userName" class="form-control"
+                                    autocomplete="off" [disabled]="entity.id!=undefined">
+                                <small [hidden]="userName.valid || (userName.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                                <small [hidden]="!userName.pristine && checkUserName(userName.model)"
+                                    class="text-danger">
+                                    Không tìm thấy tên bạn đã nhập
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>TaxCode</label>
+                            <div>
+                                <input class="form-control" #taxCode="ngModel" required [(ngModel)]="entity.taxCode"
+                                    name="description" rows="3">
+                                <small [hidden]="taxCode.valid || (taxCode.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải mã số thuế
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>Tên tỉnh/thành phố</label>
+                            <div>
+                                <!-- <input type="hidden" [(ngModel)]="entity.cityId" name="cityId" /> -->
+                                <input type="text" #cityName="ngModel" [(ngModel)]="entity.cityName" required
+                                    [typeahead]="locationState" minlength="3" name="cityName" class="form-control"
+                                    autocomplete="off">
+                                <small [hidden]="cityName.valid || (cityName.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                                <small [hidden]="!cityName.pristine && checkLocation(cityName.model)"
+                                    class="text-danger">
+                                    Không tìm thấy tên bạn đã nhập
+                                </small>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>Điện thoại</label>
+                            <div>
+                                <input type="text" #phoneNumber="ngModel" [(ngModel)]="entity.phoneNumber" required
+                                    minlength="3" name="phoneNumber" class="form-control">
+                                <small [hidden]="phoneNumber.valid || (phoneNumber.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>Địa chỉ</label>
+                            <div>
+                                <input type="text" #address="ngModel" [(ngModel)]="entity.address" required
+                                    minlength="3" name="address" class="form-control">
+                                <small [hidden]="address.valid || (address.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea type="text" #description="ngModel" [(ngModel)]="entity.description" required
+                                minlength="3" name="description" class="form-control"></textarea>
+                            <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Bạn phải nhập tên ít nhất 3 ký tự
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="file" #avatarPath name="avatarPath" class="form-control">
+                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+                            <input type="hidden" [(ngModel)]="entity.avatarPath" name="imgPath" />
+                        </div>
+
+                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatarPath">
+                            <img [src]="entity.avatarPath" width="128" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
+                        <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
+                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Approved</span></span>
+                        <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
+                                bỏ</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || !checkUserName(entity.userName) || !checkLocation(entity.cityName)">Cập
+                                nhật</button>
+                            <button type="button" *ngIf="entity.status!=1 || entity.id==undefined" class="btn btn-info"
+                                (click)="approveProvider()">Chấp nhận</button>
+                            <button type="button" *ngIf="entity.status!=0 || entity.id==undefined" class="btn btn-danger"
+                                (click)="showRejectProvider()">Từ chối</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #modalReason="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Lý do</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addReasonForm="ngForm"
+                    (ngSubmit)="rejectProvider()" *ngIf="entity">
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <textarea type="text" #reason="ngModel" [(ngModel)]="entity.reason" required minlength="3"
+                                name="reason" class="form-control"></textarea>
+                            <small [hidden]="reason.valid || (reason.pristine)" class="text-danger">
+                                Bạn phải nhập tên ít nhất 3 ký tự
+                            </small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Cập
+                        nhật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -49,6 +49,12 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             {
                 var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
                 var mappingProvider = await MappingProvider(vm, Guid.Parse(userId), userId);
+                if((await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
+                {
+                    var findUserId = await _userManager.FindByIdAsync(vm.UserId);
+                    await _userManager.AddToRoleAsync(findUserId, "Provider");
+                }
                 await _providerRepository.Add(mappingProvider);
                 await _providerRepository.SaveAsync();
                 vm.Id = mappingProvider.Id.ToString();
@@ -80,7 +86,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
             pro.CityId = vm.CityId;
-            pro.UserId = userId;
+            pro.UserId = vm.UserId==null?userId:Guid.Parse(vm.UserId);
             pro.TaxCode = vm.TaxCode;
             pro.Description = vm.Description;
             pro.DateCreated = DateTime.Now;

@@ -26,6 +26,7 @@ namespace BPT_Service.Application.UserService.Query.GetAllAsync
                 PhoneNumber = x.PhoneNumber,
                 Token = x.Token,
                 UserName = x.UserName,
+                Id= x.Id,
             }).ToListAsync();
         }
     }

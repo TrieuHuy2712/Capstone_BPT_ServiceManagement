@@ -95,6 +95,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {
+                            isValid = false,
                             errorMessage = "You had been a provider"
                         };
                     }
@@ -117,7 +118,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     await LoggingUser<ApproveProviderServiceCommand>.
                     InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been approved");
                     await Logging<ApproveProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(mappingProvider));
+                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, mappingProvider.ProviderName + "has been approved");
 
                     return new CommandResult<ProviderServiceViewModel>
                     {

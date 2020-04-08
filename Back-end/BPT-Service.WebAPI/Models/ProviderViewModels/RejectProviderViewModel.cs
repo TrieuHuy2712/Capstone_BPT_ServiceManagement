@@ -2,8 +2,8 @@
 {
     public class RejectProviderViewModel
     {
-        public string providerId { get; set; }
+        public string ProviderId { get; set; }
         public string UserProvider { get; set; }
-        public string reason { get; set; }
+        public string Reason { get; set; }
     }
 }

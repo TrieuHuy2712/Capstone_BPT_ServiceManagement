@@ -64,6 +64,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
+                   
                     if (mappingProvider == null)
                     {
                         return new CommandResult<ProviderServiceViewModel>
@@ -73,13 +74,13 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                         };
                     }
                     //Check user is Provider
-                    if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
-                    {
-                        return new CommandResult<ProviderServiceViewModel>
-                        {
-                            errorMessage = "You had been a provider"
-                        };
-                    }
+                    //if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                    //{
+                    //    return new CommandResult<ProviderServiceViewModel>
+                    //    {
+                    //        errorMessage = "You had been a provider"
+                    //    };
+                    //}
                     mappingProvider.Status = Status.InActive;
                     _providerRepository.Update(mappingProvider);
                     await _providerRepository.SaveAsync();
@@ -95,7 +96,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                     await LoggingUser<RejectProviderServiceCommand>.
                    InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been rejecte.Please check your email");
                     await Logging<RejectProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(mappingProvider));
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, mappingProvider.ProviderName+"has been rejected");
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = true,

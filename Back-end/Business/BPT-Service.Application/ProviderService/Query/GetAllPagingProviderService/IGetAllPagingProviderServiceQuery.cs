@@ -6,6 +6,6 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
 {
     public interface IGetAllPagingProviderServiceQuery
     {
-         Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize);
+         Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, int filter);
     }
 }

@@ -8,11 +8,9 @@ import { RouterModule } from '@angular/router';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { appRoutes } from './app.routes';
 import { LanguageService } from './core/services/language.service';
-import { TranslatePipe } from './core/common/translate.pipe';
 import { TranslationService } from './core/services/translation.service';
-import { TopbarUserComponent } from './shared/topbar-user/topbar-user.component';
-import { RegisterComponent } from './register/register.component';
-import { AdminComponent } from './admin/admin.component';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -24,7 +22,9 @@ import { AdminComponent } from './admin/admin.component';
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [AuthGuard,  LanguageService,
     TranslationService],

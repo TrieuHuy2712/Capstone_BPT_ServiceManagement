@@ -4,6 +4,7 @@ using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,15 +15,18 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
     {
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<CityProvince, int> _cityRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         public GetAllPagingProviderServiceQuery(IRepository<Provider, Guid> providerRepository,
-            IRepository<CityProvince, int> cityRepository)
+            IRepository<CityProvince, int> cityRepository,
+            UserManager<AppUser> userManager)
         {
             _providerRepository = providerRepository;
             _cityRepository = cityRepository;
+            _userManager = userManager;
         }
 
-        public async Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<ProviderServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, int filter)
         {
             try
             {
@@ -39,8 +43,12 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                     && x.Status == Model.Enums.Status.Active);
 
                 int totalRow = query.Count();
-                query = page == 0 && pageSize == 0 ? query : query.Skip((page - 1) * pageSize)
-                   .Take(pageSize);
+                if (pageSize != 0)
+                {
+                    query = query.Skip((page - 1) * pageSize)
+                  .Take(pageSize);
+                }
+               
                 var getAllLocation = await _cityRepository.FindAllAsync();
                 var data = query.Select(x => new ProviderServiceViewModel
                 {
@@ -73,11 +81,29 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                                ProviderName = x.ProviderName,
                                Status = x.Status,
                                TaxCode = x.TaxCode,
-                               CityName = loc.City,
+                               CityName = loc.City+"_"+loc.Province,
                                ProvinceName = loc.Province,
                                UserId = x.UserId,
-                               AvatarPath = x.AvatarPath
+                               AvatarPath = x.AvatarPath,
+                               UserName = _userManager.FindByIdAsync(x.UserId).Result.UserName,
+                               Reason = ""
                            }).ToList();
+                int filtering = filter;
+                switch (filtering)
+                {
+                    case 1:
+                        map = map.Where(x => x.Status == Model.Enums.Status.Active).ToList();
+                        break;
+                    case 0:
+                        map = map.Where(x => x.Status == Model.Enums.Status.InActive).ToList();
+                        break;
+                    case 2:
+                        map = map.Where(x => x.Status == Model.Enums.Status.Pending).ToList();
+                        break;
+                    default:
+                        map=map;
+                        break;
+                }
 
                 var paginationSet = new PagedResult<ProviderServiceViewModel>()
                 {

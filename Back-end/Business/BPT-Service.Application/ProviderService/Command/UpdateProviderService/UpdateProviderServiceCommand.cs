@@ -64,7 +64,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
                         _providerRepository.Update(mapping);
                         await _providerRepository.SaveAsync();
                         await Logging<UpdateProviderServiceCommand>.
-                           InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mapping));
+                           InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(vm));
                         return new CommandResult<ProviderServiceViewModel>
                         {
                             isValid = true,
@@ -110,7 +110,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = (await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext) ||
                             await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanUpdate)) ?
-                            Status.Active : Status.UpdatePending;
+                            Status.Active : Status.Pending;
             pro.CityId = vm.CityId;
             pro.TaxCode = vm.TaxCode;
             pro.Description = vm.Description;

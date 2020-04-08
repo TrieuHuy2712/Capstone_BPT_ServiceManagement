@@ -14,7 +14,9 @@ export const mainRoutes: Routes = [
       { path: "role", loadChildren: "./role/role.module#RoleModule" },
       { path: "category", loadChildren: "./service-category/service-category.module#ServiceCategoryModule" },
       { path: "tag", loadChildren: "./service-tag/service-tag.module#ServiceTagModule" },
-      { path: "function", loadChildren: "./function/function.module#FunctionModule" }
+      { path: "function", loadChildren: "./function/function.module#FunctionModule" },
+      { path: "provider", loadChildren: "./provider/provider.module#ProviderModule" }
+
     ]
   }
 ];

@@ -24,12 +24,13 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/css/custom.css",
               "node_modules/alertifyjs/build/css/alertify.min.css"
             ],
             "scripts": [
               "node_modules/alertifyjs/build/alertify.min.js",
-              "src/assets/js/custom.js",
+              "src/assets/js/custom.js"
             ]
           },
           "configurations": {
@@ -93,10 +94,10 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           }
         },
         "lint": {
@@ -125,6 +126,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "BPT-ServiceManagement"
 }

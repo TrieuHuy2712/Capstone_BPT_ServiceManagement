@@ -1,0 +1,5 @@
+INFO[2020-04-07 22:59:24]:: RejectProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour provider:Abchas been rejecte.Please check your email
+INFO[2020-04-07 23:00:39]:: RejectProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour provider:Abchas been rejecte.Please check your email
+INFO[2020-04-07 23:06:21]:: RejectProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour provider:Abchas been rejecte.Please check your email
+INFO[2020-04-07 23:07:20]:: RejectProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour provider:Abchas been rejecte.Please check your email
+INFO[2020-04-07 23:11:30]:: ApproveProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour provider:Abchas been approved

@@ -52,9 +52,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetAllPaging")]
-        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize, int filter)
         {
-            var model = await _getAllPagingProviderServiceQuery.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getAllPagingProviderServiceQuery.ExecuteAsync(keyword, page, pageSize, filter);
             return new OkObjectResult(model);
         }
 
@@ -87,16 +87,16 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveProvider")]
-        public async Task<IActionResult> ApproveAProvider([FromBody]RejectProviderViewModel vm)
+        public async Task<IActionResult> ApproveAProvider(ProviderServiceViewModel vm)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.UserProvider, vm.providerId);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.UserId, vm.Id);
             return new OkObjectResult(model);
         }
 
         [HttpPost("RejectProvider")]
-        public async Task<IActionResult> RejectAProvider([FromBody]RejectProviderViewModel vm)
+        public async Task<IActionResult> RejectAProvider(ProviderServiceViewModel vm)
         {
-            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm.providerId, vm.reason);
+            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm.Id, vm.Reason);
             return new OkObjectResult(model);
         }
 
