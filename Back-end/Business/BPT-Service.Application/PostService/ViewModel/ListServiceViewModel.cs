@@ -7,7 +7,7 @@ namespace BPT_Service.Application.PostService.ViewModel
     {
         public Guid Id { get; set; }
         public string CategoryName {get; set;}
-        public Status status { get; set; }
+        public Status Status { get; set; }
         public bool isProvider { get; set; }
         public string Author {get; set;}
         public string ServiceName{get;set;}

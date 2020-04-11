@@ -108,7 +108,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                         }
                         //Write Log
                         await Logging<ApprovePostServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(getCurrentPost));
+                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName+"has been approved");
 
                         await LoggingUser<ApprovePostServiceCommand>.
                     InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been approved");

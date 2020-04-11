@@ -99,7 +99,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                     await _tagServiceRepository.SaveAsync();
                     await _serviceRepository.SaveAsync();
                     await Logging<UpdatePostServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mappingService));
+                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(vm));
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,

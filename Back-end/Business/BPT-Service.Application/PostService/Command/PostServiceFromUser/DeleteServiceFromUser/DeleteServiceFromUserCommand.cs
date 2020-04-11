@@ -65,7 +65,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Delete
                         _postServiceRepository.Remove(findIdService);
                         await _postServiceRepository.SaveAsync();
                         await Logging<DeleteServiceFromUserCommand>.
-                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(findUserService));
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, findIdService.ServiceName+" has been removed");
                         return new CommandResult<PostServiceViewModel>
                         {
                             isValid = true

@@ -5,6 +5,7 @@ import { ProviderComponent } from './provider.component';
 import { PaginationModule, ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 const roleRoutes: Routes = [
   //localhost:4200/main/user
@@ -21,6 +22,7 @@ const roleRoutes: Routes = [
     FormsModule,
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
+    EditorModule,
     RouterModule.forChild(roleRoutes)
   ]
 })

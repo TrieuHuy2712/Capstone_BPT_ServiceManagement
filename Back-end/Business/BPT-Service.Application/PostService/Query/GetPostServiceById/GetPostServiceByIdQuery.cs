@@ -129,7 +129,9 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             postServiceView.Id = serv.Id.ToString();
             postServiceView.listImages = getImage.Select(x => new PostServiceImageViewModel
             {
-                Path = x.Path
+                Path = x.Path,
+                ImageId = x.Id
+                
             }).ToList();
             postServiceView.PriceOfService = serv.PriceOfService;
             postServiceView.CategoryName = _getByIDCategoryServiceQuery.ExecuteAsync(serv.CategoryId).Result.CategoryName;

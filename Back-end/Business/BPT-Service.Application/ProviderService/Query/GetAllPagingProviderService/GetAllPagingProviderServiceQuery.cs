@@ -33,13 +33,13 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                 var query = await _providerRepository.FindAllAsync();
                 if (!string.IsNullOrEmpty(keyword))
                     query = query.Where(x => x.ProviderName.ToLower().Contains(keyword.ToLower())
-                    //|| _levenshteinDistance.Compute(x.ProviderName.ToLower(), keyword.ToLower()) <= 3
+                    || LevenshteinDistance.Compute(x.ProviderName.ToLower(), keyword.ToLower()) <= 3
                     || x.Description.ToLower().Contains(keyword.ToLower())
-                    //|| _levenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
+                    || LevenshteinDistance.Compute(x.Description.ToLower(), keyword.ToLower()) <= 3
                      || x.TaxCode.ToLower().Contains(keyword.ToLower())
-                    //|| _levenshteinDistance.Compute(x.TaxCode.ToLower(), keyword.ToLower()) <= 3
+                    || LevenshteinDistance.Compute(x.TaxCode.ToLower(), keyword.ToLower()) <= 3
                      || x.PhoneNumber.ToLower().Contains(keyword.ToLower())
-                    //|| _levenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
+                    || LevenshteinDistance.Compute(x.PhoneNumber.ToLower(), keyword.ToLower()) <= 3
                     && x.Status == Model.Enums.Status.Active);
 
                 int totalRow = query.Count();

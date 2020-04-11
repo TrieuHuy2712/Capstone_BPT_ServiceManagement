@@ -6,6 +6,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
 {
     public interface IGetAllPagingPostServiceQuery
     {
-          Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage);
+          Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage, int filter);
     }
 }

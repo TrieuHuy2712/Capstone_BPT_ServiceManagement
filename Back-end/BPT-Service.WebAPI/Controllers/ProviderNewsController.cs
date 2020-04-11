@@ -48,14 +48,14 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveNewsProvider")]
-        public async Task<IActionResult> ApproveNewsProvider(int id)
+        public async Task<IActionResult> ApproveNewsProvider(RejectProviderNewsViewModel newsViewModel)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(id);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(newsViewModel.Id);
 
             return new OkObjectResult(model);
         }
 
-        [HttpDelete("DeleteNewsProvider/{id}")]
+        [HttpDelete("DeleteNewsProvider")]
         public async Task<IActionResult> DeleteNewsProvider(int id)
         {
             var model = await _deleteNewsProviderServiceCommand.ExecuteAsync(id);
@@ -72,9 +72,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetAllPagingProviderNews")]
-        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize, bool isAdminPage)
+        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize, bool isAdminPage,int filter)
         {
-            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage);
+            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage, filter);
 
             return new OkObjectResult(model);
         }

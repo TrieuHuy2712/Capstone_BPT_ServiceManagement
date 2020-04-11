@@ -1,3 +1,4 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
 <div class="page-title">
     <div class="title_left">
         <h3>Danh sách các danh mục</h3>
@@ -53,25 +54,25 @@
                     <thead>
                         <tr>
                             <th>Tên provider</th>
-                            <th>Tên người đăng ký</th>
+                            <th>Tiêu đề bài đăng</th>
                             <th>Hình ảnh</th>
                             <th>Trạng thái</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody *ngIf="permission.canRead">
-                        <tr *ngFor="let pro of provider, let i = index">
-                            <td>{{pro.providerName}}</td>
-                            <td>{{pro.userName}}</td>
-                            <td *ngIf="pro.status==1"><span class="badge badge-success">Approved</span></td>
-                            <td *ngIf="pro.status==0"><span class="badge badge-danger">Rejected</span></td>
-                            <td *ngIf="pro.status==2"><span class="badge badge-secondary">Pending</span></td>
-                            <td><img [src]="pro.avatarPath" alt="" width="128"></td>
+                        <tr *ngFor="let ne of news, let i = index">
+                            <td>{{ne.providerName}}</td>
+                            <td>{{ne.title}}</td>
+                            <td><img [src]="ne.imgPath" alt="" width="128"></td>
+                            <td *ngIf="ne.status==1"><span class="badge badge-success">Approved</span></td>
+                            <td *ngIf="ne.status==0"><span class="badge badge-danger">Rejected</span></td>
+                            <td *ngIf="ne.status==2"><span class="badge badge-secondary">Pending</span></td>
                             <td>
                                 <button *ngIf="permission.canUpdate" class="btn btn-primary"
                                     (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
                                 <button *ngIf="permission.canDelete" class="btn btn-danger"
-                                    (click)="deleteItem(pro.id,i)"><i class="fa fa-trash"></i></button>
+                                    (click)="deleteItem(ne.id,i)"><i class="fa fa-trash"></i></button>
 
                             </td>
                         </tr>
@@ -92,7 +93,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pull-left">Thêm/Sửa nhà cung cấp</h4>
+                <h4 class="modal-title pull-left">Thêm/Sửa tin tức</h4>
                 <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -102,97 +103,66 @@
                     (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
                     <div class="form-group row">
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label">Tên nhà cung cấp</label>
+                            <label class="control-label">Tiêu đề bài đăng</label>
                             <div>
                                 <input type="hidden" [(ngModel)]="entity.id" name="id" />
-                                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
-                                    minlength="3" name="providerName" class="form-control">
-                                <small
-                                    [hidden]="providerName.valid || (providerName.pristine && !addEditForm.submitted)"
+                                <input type="text" #title="ngModel" [(ngModel)]="entity.title" required minlength="3"
+                                    name="title" class="form-control">
+                                <small [hidden]="title.valid || (title.pristine && !addEditForm.submitted)"
                                     class="text-danger">
                                     Bạn phải nhập tên ít nhất 3 ký tự
                                 </small>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label">Tên người đăng ký</label>
+                            <label class="control-label">Tên nhà cung cấp</label>
                             <div>
                                 <!-- <input type="hidden" [(ngModel)]="entity.userId" name="userId" /> -->
-                                <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" required
-                                    [typeahead]="state" minlength="3" name="userName" class="form-control"
+                                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
+                                    [typeahead]="state" minlength="3" name="providerName" class="form-control"
                                     autocomplete="off" [disabled]="entity.id!=undefined">
-                                <small [hidden]="userName.valid || (userName.pristine && !addEditForm.submitted)"
+                                <small
+                                    [hidden]="!providerName.invalid || (providerName.pristine && !addEditForm.submitted)"
                                     class="text-danger">
                                     Bạn phải nhập tên ít nhất 3 ký tự
                                 </small>
-                                <small [hidden]="checkUserName(userName)"
+                                <small [hidden]="checkProviderName(providerName)"
                                     class="text-danger">
                                     Không tìm thấy tên bạn đã nhập
                                 </small>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>TaxCode</label>
-                            <div>
-                                <input class="form-control" #taxCode="ngModel" required [(ngModel)]="entity.taxCode"
-                                    name="description" rows="3">
-                                <small [hidden]="taxCode.valid || (taxCode.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải mã số thuế
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Tên tỉnh/thành phố</label>
-                            <div>
-                                <!-- <input type="hidden" [(ngModel)]="entity.cityId" name="cityId" /> -->
-                                <input type="text" #cityName="ngModel" [(ngModel)]="entity.cityName" required
-                                    [typeahead]="locationState" minlength="3" name="cityName" class="form-control"
-                                    autocomplete="off">
-                                <small [hidden]="cityName.valid || (cityName.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                                <small [hidden]="checkLocation(cityName)"
-                                    class="text-danger">
-                                    Không tìm thấy tên bạn đã nhập !
-                                </small>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Điện thoại</label>
-                            <div>
-                                <input type="text" #phoneNumber="ngModel" [(ngModel)]="entity.phoneNumber" required
-                                    minlength="3" name="phoneNumber" class="form-control">
-                                <small [hidden]="phoneNumber.valid || (phoneNumber.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Địa chỉ</label>
-                            <div>
-                                <input type="text" #address="ngModel" [(ngModel)]="entity.address" required
-                                    minlength="3" name="address" class="form-control">
-                                <small [hidden]="address.valid || (address.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                            </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tác giả</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <input class="form-control" #author="ngModel" required [(ngModel)]="entity.author"
+                                name="author" rows="3">
+                            <small [hidden]="author.valid || (author.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Bạn phải nhập tên tác giả
+                            </small>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea type="text" #description="ngModel" [(ngModel)]="entity.description" required
-                                minlength="3" name="description" class="form-control"></textarea>
-                            <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <editor #content="ngModel" [(ngModel)]="entity.content" name="content"
+                                apiKey="ztc2nqv57d595lqblftjrhjfgqax9nsxltybl49jl02zys0x" [init]="{
+                                    height: 500,
+                                    menubar: true,
+                                    plugins: [
+                                      'advlist autolink lists link image charmap print',
+                                      'preview anchor searchreplace visualblocks code',
+                                      'fullscreen insertdatetime media table paste',
+                                      'help wordcount'
+                                    ],
+                                    toolbar:
+                                      'undo redo | formatselect | bold italic | \
+                                      alignleft aligncenter alignright alignjustify | \
+                                      bullist numlist outdent indent | help'
+                                  }"></editor>
+                            <small [hidden]="content.valid || (content.pristine && !addEditForm.submitted)"
                                 class="text-danger">
                                 Bạn phải nhập tên ít nhất 3 ký tự
                             </small>
@@ -201,19 +171,19 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" #avatarPath name="avatarPath" class="form-control">
+                            <input type="file" #imgPath name="imgPath" class="form-control">
                             <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
-                            <input type="hidden" [(ngModel)]="entity.avatarPath" name="imgPath" />
+                            <input type="hidden" [(ngModel)]="entity.imgPath" name="imgPath" />
                         </div>
 
-                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatarPath">
-                            <img [src]="entity.avatarPath" width="128" />
+                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imgPath">
+                            <img [src]="entity.imgPath" width="128" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
                         <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
-                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Approved</span></span>
+                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Rejected</span></span>
                         <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
                     </div>
                     <div class="ln_solid"></div>
@@ -221,13 +191,14 @@
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
                                 bỏ</button>
-                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(entity.userName) || !checkLocation(entity.cityName) && entity.id==undefined)">Cập
-                                nhật</button>
-                            <button type="button" *ngIf="entity.status!=1 || entity.id==undefined" class="btn btn-info"
+                            <button type="submit" class="btn btn-success"
+                                [disabled]="!addEditForm.form.valid || (entity.id==undefined && !checkProviderName(entity.providerName))">Cập nhật</button>
+                                <span *ngIf="entity.id !=undefined">
+                            <button type="button" *ngIf="entity.status!=1" class="btn btn-info"
                                 (click)="approveProvider()">Chấp nhận</button>
-                            <button type="button" *ngIf="entity.status!=0 || entity.id==undefined" class="btn btn-danger"
-                                (click)="showRejectProvider()">Từ chối</button>
-
+                            <button type="button" *ngIf="entity.status!=0"
+                                class="btn btn-danger" (click)="showRejectProvider()">Từ chối</button>
+                                </span>
                         </div>
                     </div>
                 </form>

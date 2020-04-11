@@ -114,7 +114,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                         }
                         //Write Log
                         await Logging<RejectPostServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(getCurrentPost));
+                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName + "has been rejected");
 
                         await LoggingUser<RejectPostServiceCommand>.
                             InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been rejected");

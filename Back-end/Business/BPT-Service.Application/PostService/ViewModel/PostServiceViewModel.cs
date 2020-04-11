@@ -31,6 +31,7 @@ namespace BPT_Service.Application.PostService.ViewModel
 
     public class PostServiceImageViewModel
     {
+        public int ImageId { get; set; }
         public string Path { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }

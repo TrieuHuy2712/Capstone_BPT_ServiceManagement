@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataService } from 'src/app/core/services/data.service';
-import { MessageConstants } from 'src/app/core/common/message.constants';
 import { ModalDirective } from 'ngx-bootstrap';
+import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { UploadService } from 'src/app/core/services/upload.service';
+import { MessageConstants } from 'src/app/core/common/message.constants';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 enum Status {
   InActive = 0,
   Active = 1,
@@ -11,38 +12,34 @@ enum Status {
   UpdatePending= 3
 }
 @Component({
-  selector: 'app-provider',
-  templateUrl: './provider.component.html',
-  styleUrls: ['./provider.component.css']
+  selector: 'app-news',
+  templateUrl: './news.component.html',
 })
-export class ProviderComponent implements OnInit {
+export class NewsComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
   @ViewChild("modalReason", { static: false })
   public modalReason: ModalDirective;
-  @ViewChild('avatarPath', { static: false }) avatarPath;
+  @ViewChild('imgPath', { static: false }) imgPath;
   public pageIndex: number = 1;
   public pageSize: number = 0;
   public pageDisplay: number = 10;
   public defaultStatus:number=5;
   public totalRow: number;
   public filter: string = "";
-  public provider: any[];
+  public news: any[];
+  public reject:any;
   public permission: any;
   public entity: any;
-  public location: any[];
-  public users: any[];
+  public provider: any[];
   public state:any[];
-  public locationState:any[];
-  public reject:any;
-  public functionId: string = "PROVIDER";
+  public functionId: string = "NEWS";
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
-    private _uploadService: UploadService
-  ) {
-
-  }
+    private _uploadService: UploadService,
+    private spinnerService: Ng4LoadingSpinnerService
+  ) { }
 
   ngOnInit() {
     this.permission = {
@@ -52,27 +49,27 @@ export class ProviderComponent implements OnInit {
       canRead: true
     };
     this.loadData();
-    this.getAllLocation();
-    this.getAllUser();
+    this.getAllProvider();
   }
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
-        "/Provider/GetAllPaging?page=" +
+        "/ProviderNews/GetAllPagingProviderNews?page=" +
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
         "&keyword=" +
-        this.filter
-        +"&filter="+
-        this.defaultStatus
+        this.filter+
+        "&isAdminPage=true&filter="+this.defaultStatus
       )
       .subscribe((response: any) => {
-        this.provider = response.results;
+        this.news = response.results;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -93,7 +90,7 @@ export class ProviderComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    let findIdthis = this.provider[id];
+    let findIdthis = this.news[id];
     this.entity = findIdthis;
   }
   showEditModal(id: any) {
@@ -102,11 +99,11 @@ export class ProviderComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
-      let fi = this.avatarPath.nativeElement;
+      let fi = this.imgPath.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/UploadImage/saveImage/category', null, fi.files)
           .then((imageUrl: any) => {
-            this.entity.avatarPath = imageUrl;
+            this.entity.imgPath = imageUrl;
           }).then(() => {
             this.saveData();
           });
@@ -117,41 +114,45 @@ export class ProviderComponent implements OnInit {
     }
   }
   saveData() {
+    this.spinnerService.show();
     if (this.entity.id == undefined) {
-      let getUser= this.users.findIndex(x => x.userName == this.entity.userName);
-      this.entity.userId= this.users[getUser].id;
-      let getCityId= this.location.findIndex(x => x.city+"_"+x.province == this.entity.cityName);
-      this.entity.cityId= this.location[getCityId].id;
-      this._dataService.post("/Provider/RegisterProvider", this.entity).subscribe(
+      let getUser= this.provider.findIndex(x => x.providerName == this.entity.providerName);
+      this.entity.providerId= this.provider[getUser].id;
+      this._dataService.post("/ProviderNews/RegisterNewsProvider", this.entity).subscribe(
         (response: any) => {
           if (response.isValid == true) {
-            this.provider.push(response.myModel);
+            this.news.push(response.myModel);
             this._notificationService.printSuccessMessage(
               MessageConstants.CREATED_OK_MSG
             );
             this.modalAddEdit.hide();
+            this.spinnerService.hide();
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.CREATED_FAIL_MSG
             );
+            this.spinnerService.hide();
           }
         },
         error => this._dataService.handleError(error)
       );
     } else {
-      this._dataService.post("/Provider/UpdateProviderService", this.entity).subscribe(
+      this._dataService.post("/ProviderNews/UpdateNewsProvider", this.entity).subscribe(
         (response: any) => {
           if (response.isValid == true) {
             let getPostition = this.provider.indexOf(x => x.id == this.entity.id);
-            this.provider[getPostition] = response.myModel;
+            this.news[getPostition] = response.myModel;
             this.modalAddEdit.hide();
             this._notificationService.printSuccessMessage(
               MessageConstants.UPDATED_OK_MSG
+              
             );
+            this.spinnerService.hide();
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.UPDATED_FAIL_MSG
             );
+            this.spinnerService.hide();
           }
         },
         error => this._dataService.handleError(error)
@@ -164,48 +165,34 @@ export class ProviderComponent implements OnInit {
       () => this.deleteItemConfirm(idRole,id)
     );
   }
-  deleteItemConfirm(idRole: any,id: any) {
+  deleteItemConfirm(idRole: any,id:any) {
     this._dataService
-      .delete("/Provider/DeleteProvider", "id", idRole)
+      .delete("/ProviderNews/DeleteNewsProvider", "id", idRole)
       .subscribe((response:any) => {
         if(response.isValid){
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );
-        this.provider = this.provider.splice(id,1);    
+          this.news = this.news.splice(id,1);
+        }else{
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
         }
+
       });
   }
   filterChanged(id: any) {
     this.pageSize = id;
     this.loadData()
   }
-  getAllLocation() {
-    this._dataService.get("/LocationManagement/GetAllLocation").subscribe((response: any) => {
-      this.location = response;
-      let allLocation= new Array();
-      this.location.forEach(el=>{
-        allLocation.push(el.city+"_"+el.province);
-      });
-      this.locationState=allLocation;
-    });
-  }
-  getAllUser() {
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
-      this.users = response;
-      let userName= new Array();
-      this.users.forEach(element => {
-        userName.push(element.userName);
-      });
-      this.state= userName;
-    });
-  }
   approveProvider(){
-    this._dataService.post("/Provider/ApproveProvider", this.entity).subscribe(
+    this.spinnerService.show();
+    this._dataService.post("/ProviderNews/ApproveNewsProvider", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
-          let getPostition = this.provider.findIndex(x => x.id == this.entity.id);
-          this.provider[getPostition].status = Status.Active;
+          let getPostition = this.news.findIndex(x => x.id == this.entity.id);
+          this.news[getPostition].status = 1;
           this.modalAddEdit.hide();
           this._notificationService.printSuccessMessage(
             MessageConstants.UPDATED_OK_MSG
@@ -215,16 +202,18 @@ export class ProviderComponent implements OnInit {
             response.errorMessage
           );
         }
+        this.spinnerService.hide();
       },
       error => this._dataService.handleError(error)
     );
   }
   rejectProvider(){
-    this._dataService.post("/Provider/RejectProvider", this.entity).subscribe(
+    this.spinnerService.show();
+    this._dataService.post("/ProviderNews/RejectNewsProvider", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
-          let getPostition = this.provider.findIndex(x => x.id == this.entity.id);
-          this.provider[getPostition].status = Status.InActive;
+          let getPostition = this.news.findIndex(x => x.id == this.entity.id);
+          this.news[getPostition].status = 0;
           this.modalReason.hide();
           this.modalAddEdit.hide();
           this._notificationService.printSuccessMessage(
@@ -235,6 +224,7 @@ export class ProviderComponent implements OnInit {
             response.errorMessage
           );
         }
+        this.spinnerService.hide();
       },
       error => this._dataService.handleError(error)
     );
@@ -247,8 +237,7 @@ export class ProviderComponent implements OnInit {
     this.defaultStatus=id;
     this.loadData();
   }
-
-  checkUserName(userName:any){
+  checkProviderName(userName:any){
     if(userName.pristine){
       return true;
     }
@@ -258,15 +247,14 @@ export class ProviderComponent implements OnInit {
     };
     return true
   }
-  checkLocation(location:any){
-    if(location.pristine){
-      return true;
-    }
-    let locationName= this.locationState.find(x=>x==location.value);
-    if(locationName==null){
-      return false;
-    };
-    return true
+  getAllProvider() {
+    this._dataService.get("/Provider/GetAllPaging?page=1&pageSize=0&keyword=&filter=5").subscribe((response: any) => {
+      this.provider = response.results;
+      let userName= new Array();
+      this.provider.forEach(element => {
+        userName.push(element.providerName);
+      });
+      this.state= userName;
+    });
   }
-
 }

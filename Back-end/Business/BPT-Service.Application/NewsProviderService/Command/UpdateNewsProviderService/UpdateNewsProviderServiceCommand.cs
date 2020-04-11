@@ -61,7 +61,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                         _providerNewsRepository.Update(mappingNewsProvider);
                         await _providerNewsRepository.SaveAsync();
                         await Logging<UpdateNewsProviderServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mappingNewsProvider));
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, mappingNewsProvider.Author+"hase been updated");
                         return new CommandResult<NewsProviderViewModel>
                         {
                             isValid = true,

@@ -64,7 +64,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _newProviderRepository.FindByIdAsync(id);
-                    if (mappingProvider != null)
+                    if (mappingProvider == null)
                     {
                         return new CommandResult<NewsProviderViewModel>
                         {
@@ -93,7 +93,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                     await LoggingUser<RejectNewsProviderServiceCommand>.
                    InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been rejecte.Please check your email");
                     await Logging<RejectNewsProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(map));
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(map.Title + "has been rejecte.Please check your email"));
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,

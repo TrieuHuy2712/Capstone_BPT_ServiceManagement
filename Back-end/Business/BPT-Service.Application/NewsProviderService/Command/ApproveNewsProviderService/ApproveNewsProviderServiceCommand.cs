@@ -65,7 +65,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _newProviderRepository.FindByIdAsync(idNews);
-                    if (mappingProvider != null)
+                    if (mappingProvider == null)
                     {
                         return new CommandResult<NewsProviderViewModel>
                         {
@@ -88,7 +88,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                     await LoggingUser<ApproveNewsProviderServiceCommand>.
                     InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been approved");
                     await Logging<ApproveNewsProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, JsonConvert.SerializeObject(map));
+                        InformationAsync(ActionCommand.COMMAND_APPROVE, userName, userName + "Your news provider:" + map.Title + "has been approved");
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,

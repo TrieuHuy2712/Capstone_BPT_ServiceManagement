@@ -61,9 +61,9 @@ namespace BPT_Service.WebAPI.Controllers
         #region GETAPI
 
         [HttpGet("getAllPagingPostService")]
-        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage)
+        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage,int filter)
         {
-            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage);
+            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage,filter);
             return new OkObjectResult(model);
         }
 

@@ -72,7 +72,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _getUserInformationQuery = getUserInformationQuery;
         }
 
-        public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage)
+        public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage, int filter)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
 
                     return new PagedResult<ListServiceViewModel>
                     {
-                        Results = isAdminPage == true ? listViewModel : listViewModel.Where(x => x.status == Model.Enums.Status.Active).ToList(),
+                        Results = isAdminPage == true ? listViewModel : listViewModel.Where(x => x.Status == Model.Enums.Status.Active).ToList(),
                         CurrentPage = page,
                         RowCount = totalRowSearch,
                         PageSize = pageSize
@@ -123,18 +123,35 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                     CategoryName = getAllCateogry.Where(t => t.Id == x.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
                     Author = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService)
                                 == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService),
-                    status = x.Status,
+                    Status = x.Status,
                     isProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService) == "" ? false : true,
                     AvtService = _getAvtInformationQuery.ExecuteAsync(x.Id, getAvatar),
                     PriceOfService = x.PriceOfService.ToString(),
                     TagList = _getListTagInformationQuery.ExecuteAsync(x.Id, getAllServiceTag, getAllTag).ToString(),
                     ServiceName = x.ServiceName,
-                    Rating = _getServiceRatingQuery.ExecuteAsync(x.Id, allRating)
+                    Rating = _getServiceRatingQuery.ExecuteAsync(x.Id, allRating),
+                    
                 }).OrderByDescending(x => x.Rating).ToList();
+                int filtering = filter;
+                switch (filtering)
+                {
+                    case 1:
+                        data = data.Where(x => x.Status == Model.Enums.Status.Active).ToList();
+                        break;
+                    case 0:
+                        data = data.Where(x => x.Status == Model.Enums.Status.InActive).ToList();
+                        break;
+                    case 2:
+                        data = data.Where(x => x.Status == Model.Enums.Status.Pending).ToList();
+                        break;
+                    default:
+                        data = data;
+                        break;
+                }
 
                 var paginationSet = new PagedResult<ListServiceViewModel>()
                 {
-                    Results = isAdminPage == true ? data : data.Where(x => x.status == Model.Enums.Status.Active).ToList(),
+                    Results = isAdminPage == true ? data : data.Where(x => x.Status == Model.Enums.Status.Active).ToList(),
                     CurrentPage = page,
                     RowCount = totalRow,
                     PageSize = pageSize
@@ -180,7 +197,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                             CategoryName = category.CategoryName,
                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService)
                              == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, services, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService),
-                            status = serv.Status,
+                            Status = serv.Status,
                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService) == "" ? false : true,
                             ServiceName = serv.ServiceName,
                             PriceOfService = serv.PriceOfService.ToString(),

@@ -11,8 +11,6 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { mainRoutes } from './admin-main.routes';
 
-
-
 @NgModule({
   imports: [
     CommonModule,

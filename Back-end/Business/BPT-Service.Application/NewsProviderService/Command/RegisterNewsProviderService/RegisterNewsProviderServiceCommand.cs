@@ -53,12 +53,13 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                    await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanCreate) ||
                    getIsProvider.isValid)
                 {
-                    var mappingProvider = MappingProvider(vm, Guid.Parse(vm.ProviderId));
+                    var mappingProvider = await MappingProvider(vm, Guid.Parse(vm.ProviderId), userId);
                     await _newProviderRepository.Add(mappingProvider);
                     await _newProviderRepository.SaveAsync();
                     vm.Id = mappingProvider.Id;
+                    vm.Status = mappingProvider.Status;
                     await Logging<RegisterNewsProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingProvider));
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,
@@ -89,11 +90,12 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
             }
         }
 
-        private ProviderNew MappingProvider(NewsProviderViewModel vm, Guid providerId)
+        private async Task<ProviderNew> MappingProvider(NewsProviderViewModel vm, Guid providerId, string currentUserContext)
         {
             ProviderNew pro = new ProviderNew();
             pro.Author = vm.Author;
-            pro.Status = Status.Pending;
+            pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
             pro.Author = vm.Author;
             pro.ProviderId = providerId;
             pro.Title = vm.Title;

@@ -58,7 +58,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
                         await _providerNewRepository.SaveAsync();
                         //Write Log
                         await Logging<DeleteNewsProviderServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(getId));
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Has been delete news provider:"+getId.Title+"_"+getId.Author);
                         return new CommandResult<ProviderNew>
                         {
                             isValid = true,
