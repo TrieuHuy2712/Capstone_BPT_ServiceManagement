@@ -76,7 +76,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                     await _tagServiceRepository.Add(newTag);
 
                     //Mapping between ViewModel and Model of Service
-                    var mappingService = MappingService(vm);
+                    var mappingService = await MappingService(vm,userId);
                     await _postServiceRepository.Add(mappingService);
 
                     //Mapping between ViewModel and Model of UserService
@@ -94,7 +94,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                     await _tagServiceRepository.SaveAsync();
                     //Write Log
                     await Logging<RegisterServiceFromUserCommand>.
-                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingService));
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
@@ -125,7 +125,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             }
         }
 
-        private Service MappingService(PostServiceViewModel vm)
+        private async Task<Service> MappingService(PostServiceViewModel vm, string currentUserContext)
         {
             Service sv = new Service();
             sv.CategoryId = vm.CategoryId;
@@ -133,7 +133,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             sv.PriceOfService = vm.PriceOfService;
             sv.Description = vm.Description;
             sv.ServiceName = vm.ServiceName;
-            sv.Status = Status.Pending;
+            sv.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "SERVICE", ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
                 Path = x.Path != null ? x.Path : "",

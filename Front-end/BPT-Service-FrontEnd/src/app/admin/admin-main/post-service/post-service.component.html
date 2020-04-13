@@ -127,7 +127,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
               <label class="control-label">Tác giả</label>
               <div *ngIf="kindOfStyle==1">
-                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
+                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" 
                   [typeahead]="providerState" minlength="3" name="providerName" class="form-control" autocomplete="off"
                   [disabled]="entity.id!=undefined">
                 <small [hidden]="!providerName.invalid || (providerName.pristine && !addEditForm.submitted)"
@@ -139,7 +139,7 @@
                 </small>
               </div>
               <div *ngIf="kindOfStyle==0">
-                <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" required
+                <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" 
                   [typeahead]="userState" minlength="3" name="userName" class="form-control" autocomplete="off"
                   [disabled]="entity.id!=undefined">
                 <small [hidden]="!userName.invalid || (userName.pristine && !addEditForm.submitted)"
@@ -183,11 +183,9 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">Tag</label>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <input type="text" #tagName="ngModel" [(ngModel)]="aTag.tagName" required [typeahead]="tagState"
-                minlength="3" name="tagName" class="form-control" autocomplete="off" [disabled]="entity.id!=undefined" (keyup.enter)="onEnter(tagName.value)">
-              <small [hidden]="tagName.valid || (tagName.pristine && !addEditForm.submitted)" class="text-danger" >
-                Bạn phải nhập tên ít nhất 3 ký tự
-              </small>
+              <input type="text" #tagName="ngModel" ngModel [typeahead]="tagState"
+                name="tagName" class="form-control" autocomplete="off" >
+                <button  type="button" (click)="onEnter(tagName.value)">Thêm tag</button>
             </div>
           </div>
           <div class="form-group">
@@ -229,7 +227,7 @@
 
             <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imgPath">
               <img [src]="entity.imgPath" width="128" /> -->
-              <button (click)="showImageModel()">Thêm hình ảnh</button>
+              <span (click)="showImageModel()" class="btn btn-success" >Thêm hình ảnh</span>
             </div>
           </div>
           <div class="form-group">
@@ -244,7 +242,7 @@
               <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
                 bỏ</button>
               <button type="submit" class="btn btn-success"
-                [disabled]="!addEditForm.form.valid || (entity.id==undefined && !checkProviderName(entity.providerName))">Cập
+                [disabled]="!addEditForm.form.valid ">Cập
                 nhật</button>
               <span *ngIf="entity.id !=undefined">
                 <button type="button" *ngIf="entity.status!=1" class="btn btn-info" (click)="approveProvider()">Chấp
@@ -307,19 +305,19 @@
             <div class="form-group row">
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <label class="control-label">Chọn hình ảnh</label>
-
                   <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar" minlength="3"
                     name="isAvatar">
               </div>
               <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <input type="file" #imgPath name="imgPath" class="form-control" (change)="selectChangeFile($event,i)">
+                  <input type="file" #imgPath name="imgPath" class="form-control" (change)="selectChangeFile($event.target.files,i)">
                   <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
                   <input type="hidden" [(ngModel)]="atag.dataImage" name="imgPath" />
+                  <button type="button" class="btn btn-danger" (click)="removeImage(i)"><i class="fa fa-trash"></i></button>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.dataImage">
-                  <img [src]="atag.dataImage" width="128" />
+                <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.path">
+                  <img [src]="atag.path" width="128" />
                 </div>
               </div>
             </div>

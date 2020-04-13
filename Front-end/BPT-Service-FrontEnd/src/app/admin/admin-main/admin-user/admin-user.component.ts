@@ -14,6 +14,7 @@ import { SystemConstants } from "src/app/core/common/system,constants";
 import { UploadService } from "src/app/core/services/upload.service";
 import { UrlConstants } from "src/app/core/common/url.constants";
 import { UtilityService } from "src/app/core/services/utility.service";
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 declare var moment: any;
 
@@ -54,7 +55,8 @@ export class UserComponent implements OnInit {
     private _utilityService: UtilityService,
     private _uploadService: UploadService,
     public _authenService: AuthenService,
-    private router: Router
+    private router: Router,
+    private spinnerService: Ng4LoadingSpinnerService
   ) { }
 
   ngOnInit() {
@@ -70,6 +72,7 @@ export class UserComponent implements OnInit {
   }
 
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/UserManagement/GetAllPaging?page=" +
@@ -85,7 +88,7 @@ export class UserComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
-
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -132,6 +135,7 @@ export class UserComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       this.entity.NewRoles = this.myRoles;
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
@@ -146,6 +150,7 @@ export class UserComponent implements OnInit {
       } else {
         this.saveData();
       }
+      this.spinnerService.hide();
     }
   }
   public saveData() {
@@ -197,6 +202,7 @@ export class UserComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any, id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/UserManagement/DeleteUser", "id", idRole)
       .subscribe((response: any) => {
@@ -211,6 +217,7 @@ export class UserComponent implements OnInit {
           );
         }
       });
+      this.spinnerService.hide();
   }
   public selectGender(event) {
     this.entity.Gender = event.target.value;

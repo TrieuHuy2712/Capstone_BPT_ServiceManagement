@@ -192,7 +192,7 @@
                             <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
                                 bỏ</button>
                             <button type="submit" class="btn btn-success"
-                                [disabled]="!addEditForm.form.valid || (entity.id==undefined && !checkProviderName(entity.providerName))">Cập nhật</button>
+                                [disabled]="!addEditForm.form.valid || (entity.id==undefined && !checkProviderName(providerName))">Cập nhật</button>
                                 <span *ngIf="entity.id !=undefined">
                             <button type="button" *ngIf="entity.status!=1" class="btn btn-info"
                                 (click)="approveProvider()">Chấp nhận</button>

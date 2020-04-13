@@ -92,10 +92,10 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     }
 
                     await _tagServiceRepository.SaveAsync();
-
+                    vm.Id = mappingService.Id.ToString();
                     //Write Log
                     await Logging<RegisterServiceFromProviderCommand>.
-                        InformationAsync(ActionCommand.COMMAND_ADD,userName,JsonConvert.SerializeObject(mappingService));
+                        InformationAsync(ActionCommand.COMMAND_ADD,userName,JsonConvert.SerializeObject(vm));
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,

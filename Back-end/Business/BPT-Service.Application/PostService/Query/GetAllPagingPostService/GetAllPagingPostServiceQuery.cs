@@ -72,7 +72,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             _getUserInformationQuery = getUserInformationQuery;
         }
 
-        public async Task<PagedResult<ListServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage, int filter)
+        public async Task<PagedResult<PostServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize, bool isAdminPage, int filter)
         {
             try
             {
@@ -92,6 +92,8 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 var getAllTag = await _tagRepository.FindAllAsync();
                 var getAllServiceTag = await _tagServiceRepository.FindAllAsync();
 
+                //var joinTag
+
                 //Get allRating
                 var allRating = await _ratingRepository.FindAllAsync();
 
@@ -104,7 +106,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                     int totalRowSearch = listViewModel.Count();
                     listViewModel = listViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-                    return new PagedResult<ListServiceViewModel>
+                    return new PagedResult<PostServiceViewModel>
                     {
                         Results = isAdminPage == true ? listViewModel : listViewModel.Where(x => x.Status == Model.Enums.Status.Active).ToList(),
                         CurrentPage = page,
@@ -114,24 +116,39 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 }
 
                 int totalRow = query.Count();
-                query = query.Skip((page - 1) * pageSize)
-                   .Take(pageSize);
-
-                var data = query.Where(x => x.Status == Model.Enums.Status.Active).Select(x => new ListServiceViewModel
+                if (pageSize != 0)
                 {
-                    Id = x.Id,
+                    query = query.Skip((page - 1) * pageSize).Take(pageSize);
+                }
+
+
+                var data = query.Select(x => new PostServiceViewModel
+                {
+                    Id = x.Id.ToString(),
                     CategoryName = getAllCateogry.Where(t => t.Id == x.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
                     Author = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService)
                                 == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService),
                     Status = x.Status,
-                    isProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService) == "" ? false : true,
                     AvtService = _getAvtInformationQuery.ExecuteAsync(x.Id, getAvatar),
                     PriceOfService = x.PriceOfService.ToString(),
                     TagList = _getListTagInformationQuery.ExecuteAsync(x.Id, getAllServiceTag, getAllTag).ToString(),
                     ServiceName = x.ServiceName,
+                    Description = x.Description,
+                    CategoryId = x.CategoryId,
                     Rating = _getServiceRatingQuery.ExecuteAsync(x.Id, allRating),
-                    
+                    listImages = _imageRepository.FindAllAsync(t => t.ServiceId == x.Id).Result.Select(z => new PostServiceImageViewModel
+                    {
+                        Path = z.Path,
+                        ImageId = z.Id,
+                        IsAvatar = z.isAvatar
+                    }).ToList(),
+                    tagofServices = JoinTag(getAllTag, getAllServiceTag, x.Id),
+                    IsProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService) == "" ? false : true,
                 }).OrderByDescending(x => x.Rating).ToList();
+                if (isAdminPage == false)
+                {
+                    data = data.Where(x => x.Status == Model.Enums.Status.Active).ToList();
+                }
                 int filtering = filter;
                 switch (filtering)
                 {
@@ -149,7 +166,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                         break;
                 }
 
-                var paginationSet = new PagedResult<ListServiceViewModel>()
+                var paginationSet = new PagedResult<PostServiceViewModel>()
                 {
                     Results = isAdminPage == true ? data : data.Where(x => x.Status == Model.Enums.Status.Active).ToList(),
                     CurrentPage = page,
@@ -161,7 +178,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             }
             catch (System.Exception ex)
             {
-                return new PagedResult<ListServiceViewModel>()
+                return new PagedResult<PostServiceViewModel>()
                 {
                     Results = null,
                     CurrentPage = page,
@@ -171,7 +188,21 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
             }
         }
 
-        private async Task<List<ListServiceViewModel>> MappingTagService(IEnumerable<Service> services, string keyword,
+        private List<TagofServiceViewModel> JoinTag(IEnumerable<Tag> tag, IEnumerable<Model.Entities.ServiceModel.TagService> serviceTag, Guid id)
+        {
+            var data = (from t in tag.ToList()
+                        join sT in serviceTag.ToList()
+                        on t.Id equals sT.TagId
+                        where sT.ServiceId == id
+                        select new TagofServiceViewModel
+                        {
+                            TagName = t.TagName,
+                            isAdd = false
+                        }).ToList();
+            return data;
+        }
+
+        private async Task<List<PostServiceViewModel>> MappingTagService(IEnumerable<Service> services, string keyword,
             IEnumerable<Provider> provider,
             IEnumerable<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService> provideService,
             IEnumerable<Model.Entities.ServiceModel.UserServiceModel.UserService> userService,
@@ -191,14 +222,14 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                                 || (category.CategoryName != null && category.CategoryName.Contains(keyword))
                                 || (serv.ServiceName != null && serv.ServiceName.Contains(keyword))
                                 || (serv.Description != null && serv.Description.Contains(keyword))
-                        select new ListServiceViewModel
+                        select new PostServiceViewModel
                         {
-                            Id = serv.Id,
+                            Id = serv.Id.ToString(),
                             CategoryName = category.CategoryName,
                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService)
                              == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, services, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService),
                             Status = serv.Status,
-                            isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService) == "" ? false : true,
+                            IsProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService) == "" ? false : true,
                             ServiceName = serv.ServiceName,
                             PriceOfService = serv.PriceOfService.ToString(),
                             AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),

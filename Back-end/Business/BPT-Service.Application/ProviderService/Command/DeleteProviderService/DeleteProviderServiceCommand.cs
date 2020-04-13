@@ -53,7 +53,7 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
                         _providerRepository.Remove(newId);
                         await _providerRepository.SaveAsync();
                         await Logging<DeleteProviderServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(getId));
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, getId.ProviderName+"has been deleted");
                         return new CommandResult<Provider>
                         {
                             isValid = true,

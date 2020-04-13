@@ -32613,4 +32613,23 @@ td button{
 .user-manage-content{
     margin-left: 0 !important;
 }
+/* checkbox hot fix */
+
+.checkbox input{
+  -webkit-appearance: checkbox;
+  width: 50px;
+  text-align: center;
+}
+
+.checkbox input {
+  height: 30px;
+  text-align: justify;
+  margin-top: 10px;
+  padding-bottom: 0;
+}
+
+span input{
+  -webkit-appearance: checkbox;
+  width: 20px;
+}
 

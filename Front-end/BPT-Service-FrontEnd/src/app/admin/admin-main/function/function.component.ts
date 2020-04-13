@@ -8,6 +8,7 @@ import { SystemConstants } from 'src/app/core/common/system,constants';
 import { TreeComponent } from "angular-tree-component";
 import { UtilityService } from "src/app/core/services/utility.service";
 import { LanguageService } from 'src/app/core/services/language.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: "app-function",
@@ -38,10 +39,12 @@ export class FunctionComponent implements OnInit {
     private _dataService: DataService,
     private notificationService: NotificationService,
     private utilityService: UtilityService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {}
 
   ngOnInit() {
+
     this._currentLang = this.languageService.getLanguage();
     this._userPermission = {
       canCreate: true,
@@ -85,6 +88,7 @@ export class FunctionComponent implements OnInit {
   }
   //Load data
   public search() {
+    this.spinnerService.show();
     this._dataService.get("/function/GetAll/"+localStorage.getItem(SystemConstants.const_username)).subscribe(
       (response: any) => {
         console.log(response);
@@ -111,6 +115,7 @@ export class FunctionComponent implements OnInit {
       },
       error => this._dataService.handleError(error)
     );
+    this.spinnerService.hide();
   }
   loadPermission() {
     this._dataService.get("/PermissionManager/GetAllPermission/" +this._functionId
@@ -122,6 +127,7 @@ export class FunctionComponent implements OnInit {
   //Save change for modal popup
   public saveChanges(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       this.entity.name = this.entity.name + "%%%" + this.entity.nameVietNamese
       if (this.editFlag == false) {
         this._dataService.post("/function/addEntity", this.entity).subscribe(
@@ -159,6 +165,7 @@ export class FunctionComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       }
+      this.spinnerService.hide();
     }
   }
   //Show edit form
@@ -178,10 +185,15 @@ export class FunctionComponent implements OnInit {
     this._dataService
       .delete("/function/DeleteFunction", "id", id)
       .subscribe((response: any) => {
-        this.notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.search();
+        if(response.isValid==true){
+          this.notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+          this.search();
+        }else{
+          this.notificationService.printErrorMessage(response.errorMessage);
+        }
+        
       });
   }
   //Click button delete turn on confirm

@@ -4,6 +4,7 @@ import { MessageConstants } from 'src/app/core/common/message.constants';
 import { ModalDirective } from 'ngx-bootstrap';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-service-tag',
@@ -24,7 +25,8 @@ export class ServiceTagComponent implements OnInit {
   public functionId: string = "TAG";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService  ) {
+    private _notificationService: NotificationService,  
+    private spinnerService: Ng4LoadingSpinnerService) {
 
   }
 
@@ -39,6 +41,7 @@ export class ServiceTagComponent implements OnInit {
 
   }
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/TagManagement/GetAllPaging?page=" +
@@ -54,6 +57,7 @@ export class ServiceTagComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -84,6 +88,7 @@ export class ServiceTagComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       if (this.entity.id == undefined) {
         this._dataService.post("/TagManagement/AddNewTag", this.entity).subscribe(
           (response: any) => {
@@ -98,6 +103,7 @@ export class ServiceTagComponent implements OnInit {
                 MessageConstants.CREATED_FAIL_MSG
               );
             }
+            
           },
           error => this._dataService.handleError(error)
         );
@@ -120,6 +126,7 @@ export class ServiceTagComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       }
+      this.spinnerService.hide();
     }
   }
   deleteItem(idTag: any, id: any) {
@@ -129,6 +136,7 @@ export class ServiceTagComponent implements OnInit {
     );
   }
   deleteItemConfirm(idTag: any,id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/TagManagement/DeleteTag", "id", idTag)
       .subscribe((response: any) => {
@@ -142,6 +150,7 @@ export class ServiceTagComponent implements OnInit {
             MessageConstants.DELETED_FAIL_MSG
           );
         }
+        this.spinnerService.hide();
       });
   }
   filterChanged(id: any) {

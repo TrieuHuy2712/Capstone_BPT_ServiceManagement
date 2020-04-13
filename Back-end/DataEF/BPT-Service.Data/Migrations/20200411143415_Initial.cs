@@ -208,7 +208,7 @@ namespace BPT_Service.Data.Migrations
                     ServiceName = table.Column<string>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: false),
-                    PriceOfService = table.Column<decimal>(nullable: false),
+                    PriceOfService = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false)

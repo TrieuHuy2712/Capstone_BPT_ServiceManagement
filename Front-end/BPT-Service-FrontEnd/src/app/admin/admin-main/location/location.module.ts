@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { LocationComponent } from './location.component';
@@ -8,6 +8,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { PaginationModule, ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/core/common/SharedModule';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 const roleRoutes: Routes = [
@@ -26,7 +27,12 @@ const roleRoutes: Routes = [
     FormsModule,
     ModalModule.forRoot(),
     RouterModule.forChild(roleRoutes),
-    SharedModule
+    SharedModule,
+    Ng4LoadingSpinnerModule.forRoot()
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA
   ]
 })
 export class LocationModule { }

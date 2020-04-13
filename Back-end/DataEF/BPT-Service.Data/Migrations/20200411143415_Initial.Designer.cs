@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200403162700_Initial")]
+    [Migration("20200411143415_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -406,7 +406,8 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("PriceOfService")
+                    b.Property<string>("PriceOfService")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ServiceName")

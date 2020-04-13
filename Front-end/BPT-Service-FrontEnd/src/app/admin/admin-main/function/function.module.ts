@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FunctionComponent } from './function.component';
 import { Routes, RouterModule } from '@angular/router';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { TreeModule } from 'angular-tree-component';
 import { SharedModule } from 'src/app/core/common/SharedModule';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 const functionRoutes: Routes = [
   //localhost:4200/main/user
@@ -21,7 +22,12 @@ const functionRoutes: Routes = [
     TreeModule,
     FormsModule,
     ModalModule,
-    SharedModule
+    SharedModule,
+    Ng4LoadingSpinnerModule.forRoot()
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA
   ]
 })
 export class FunctionModule { }

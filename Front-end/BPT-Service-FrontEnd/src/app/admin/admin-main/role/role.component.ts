@@ -4,6 +4,7 @@ import { DataService } from "src/app/core/services/data.service";
 import { NotificationService } from "src/app/core/services/notification.service";
 import { MessageConstants } from "src/app/core/common/message.constants";
 import { SystemConstants } from "src/app/core/common/system,constants";
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: "app-role",
   templateUrl: "./role.component.html",
@@ -23,7 +24,8 @@ export class RoleComponent implements OnInit {
   public functionId: string = "ROLE";
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) { }
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class RoleComponent implements OnInit {
   }
 
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/AdminRole/GetAllPaging?page=" +
@@ -52,6 +55,7 @@ export class RoleComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -82,6 +86,7 @@ export class RoleComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       if (this.entity.id === undefined) {
         this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
@@ -120,6 +125,7 @@ export class RoleComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       }
+      this.spinnerService.hide();
     }
   }
   deleteItem(idRole: any, id: any) {
@@ -129,6 +135,7 @@ export class RoleComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any, id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/AdminRole/Delete", "id", idRole)
       .subscribe((response: any) => {
@@ -143,6 +150,7 @@ export class RoleComponent implements OnInit {
           );
         }
       });
+      this.spinnerService.hide();
   }
   filterChanged(id: any) {
     this.pageSize = id;

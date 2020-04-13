@@ -23,7 +23,7 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public string Description { get; set; }
 
         [Required]
-        public decimal PriceOfService { get; set; }
+        public string PriceOfService { get; set; }
 
         [ForeignKey("CategoryId")]
         public virtual Category ServiceCategory { get; set; }
@@ -49,7 +49,7 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public ICollection<ServiceComment> ServiceComments { get; set; }
 
         public Service() { }
-        public Service(string serviceName, string description, decimal priceOfService)
+        public Service(string serviceName, string description, string priceOfService)
         {
             ServiceName = serviceName;
             Description = description;

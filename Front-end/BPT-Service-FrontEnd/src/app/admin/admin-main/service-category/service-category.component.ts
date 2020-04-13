@@ -5,6 +5,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { MessageConstants } from 'src/app/core/common/message.constants';
 import { UploadService } from 'src/app/core/services/upload.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-service-category',
@@ -28,7 +29,8 @@ export class ServiceCategoryComponent implements OnInit {
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {
 
   }
@@ -43,6 +45,7 @@ export class ServiceCategoryComponent implements OnInit {
     this.loadData();
   }
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/CategoryManagement/GetAllPaging?page=" +
@@ -58,6 +61,7 @@ export class ServiceCategoryComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -87,6 +91,7 @@ export class ServiceCategoryComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       let fi = this.imgPath.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/UploadImage/saveImage/category', null, fi.files)
@@ -99,6 +104,7 @@ export class ServiceCategoryComponent implements OnInit {
       else {
         this.saveData();
       }
+      this.spinnerService.hide();
     }
   }
   saveData() {
@@ -146,13 +152,22 @@ export class ServiceCategoryComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any, id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/CategoryManagement/DeleteCategory", "id", idRole)
-      .subscribe((response: Response) => {
-        this._notificationService.printSuccessMessage(
-          MessageConstants.DELETED_OK_MSG
-        );
-        this.loadData();
+      .subscribe((response: any) => {
+        if(response.isValid==true){
+          this._notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+          this.categories.splice(id,1);
+        }else{
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
+        }
+        this.spinnerService.hide();
+
       });
   }
   filterChanged(id: any) {

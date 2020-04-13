@@ -5,6 +5,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { UploadService } from 'src/app/core/services/upload.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { MessageConstants } from 'src/app/core/common/message.constants';
+import { element } from 'protractor';
 enum Status {
   InActive = 0,
   Active = 1,
@@ -12,13 +13,13 @@ enum Status {
   UpdatePending = 3
 }
 export interface TagList {
-  isNew: boolean,
+  isAdd: boolean,
   tagName: string,
 }
 export interface ImageList {
   isAvatar: boolean,
-  imageName: string,
-  dataImage: any;
+  path: string,
+  dataImage: File[];
 }
 @Component({
   selector: 'app-post-service',
@@ -46,6 +47,7 @@ export class PostServiceComponent implements OnInit {
   public reject: any;
   public permission: any;
   public entity: any;
+  public tagName:string="";
   // List get data
   public provider: any[];
   public user: any[];
@@ -80,6 +82,7 @@ export class PostServiceComponent implements OnInit {
       canUpdate: true,
       canRead: true
     };
+    this.tagName="";
     this.loadData();
     this.getAllCategory();
     this.getAllProvider();
@@ -124,41 +127,102 @@ export class PostServiceComponent implements OnInit {
   showAddModal() {
     this.entity = {};
     this.aTag = {
-      isNew: true,
+      isAdd: true,
       tagName: ""
     };
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
+    debugger
     let findIdthis = this.services[id];
     this.entity = findIdthis;
+    this.listTag=[];
+    this.listImage=[];
+    this.listTag = this.entity.tagofServices;
+    this.listImage = this.entity.listImages;
+    if (this.entity.isProvider) {
+      this.kindOfStyle = 1;
+      this.entity.providerName = this.entity.author;
+    } else {
+      this.kindOfStyle = 0;
+      this.entity.userName = this.entity.author;
+    }
   }
   showEditModal(id: any) {
     this.loadRole(id);
     this.modalAddEdit.show();
   }
-  saveChange(valid: boolean) {
+  async saveChange(valid: boolean) {
     if (valid) {
-      let fi = this.imgPath.nativeElement;
-      if (fi.files.length > 0) {
-        this._uploadService.postWithFile('/UploadImage/saveImage/category', null, fi.files)
+      for(const item of this.listImage){
+        await this._uploadService.postWithFile('/UploadImage/saveImage/service', null, item.dataImage)
           .then((imageUrl: any) => {
-            this.entity.imgPath = imageUrl;
-          }).then(() => {
-            this.saveData();
-          });
+            item.path = imageUrl;
+          })
       }
-      else {
-        this.saveData();
-      }
+      this.saveData();
     }
+  }
+
+  saveDataProvider() {
+    this._dataService.post("/Service/registerServiceFromProvider", this.entity).subscribe(
+      (response: any) => {
+        if (response.isValid == true) {
+          this.services.push(response.myModel);
+          this._notificationService.printSuccessMessage(
+            MessageConstants.CREATED_OK_MSG
+          );
+          this.modalAddEdit.hide();
+          this.spinnerService.hide();
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.CREATED_FAIL_MSG
+          );
+          this.spinnerService.hide();
+        }
+      },
+      error => this._dataService.handleError(error));
+  }
+
+  saveDataUser() {
+    this._dataService.post("/Service/registerServiceFromUser", this.entity).subscribe(
+      (response: any) => {
+        if (response.isValid == true) {
+          this.services.push(response.myModel);
+          this._notificationService.printSuccessMessage(
+            MessageConstants.CREATED_OK_MSG
+          );
+          this.modalAddEdit.hide();
+          this.spinnerService.hide();
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.CREATED_FAIL_MSG
+          );
+          this.spinnerService.hide();
+        }
+      },
+      error => this._dataService.handleError(error));
   }
   saveData() {
     this.spinnerService.show();
     if (this.entity.id == undefined) {
-      let getUser = this.provider.findIndex(x => x.providerName == this.entity.providerName);
-      this.entity.providerId = this.provider[getUser].id;
-      this._dataService.post("/ProviderNews/RegisterNewsProvider", this.entity).subscribe(
+      //Assign Id Category
+      this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;
+      //Assign ListImages
+      this.entity.listImages = this.listImage;
+      //Assign Tag
+      this.entity.tagOfServices = this.listTag;
+      if (this.kindOfStyle == 0) {
+        //Assign User ID
+        this.entity.userId = this.user.find(x => x.userName == this.entity.userName).id;
+        this.saveDataUser();
+      } else if (this.kindOfStyle == 1) {
+        //Assign Provider ID
+        this.entity.providerId = this.provider.find(x => x.providerName == this.entity.providerName).id;
+        this.saveDataProvider();
+      }
+    } else {
+      this._dataService.post("/Service/updatePostService", this.entity).subscribe(
         (response: any) => {
           if (response.isValid == true) {
             this.services.push(response.myModel);
@@ -174,29 +238,7 @@ export class PostServiceComponent implements OnInit {
             this.spinnerService.hide();
           }
         },
-        error => this._dataService.handleError(error)
-      );
-    } else {
-      this._dataService.post("/ProviderNews/UpdateNewsProvider", this.entity).subscribe(
-        (response: any) => {
-          if (response.isValid == true) {
-            let getPostition = this.provider.indexOf(x => x.id == this.entity.id);
-            this.services[getPostition] = response.myModel;
-            this.modalAddEdit.hide();
-            this._notificationService.printSuccessMessage(
-              MessageConstants.UPDATED_OK_MSG
-
-            );
-            this.spinnerService.hide();
-          } else {
-            this._notificationService.printErrorMessage(
-              MessageConstants.UPDATED_FAIL_MSG
-            );
-            this.spinnerService.hide();
-          }
-        },
-        error => this._dataService.handleError(error)
-      );
+        error => this._dataService.handleError(error));
     }
   }
   deleteItem(idRole: any, id: any) {
@@ -206,14 +248,16 @@ export class PostServiceComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any, id: any) {
-    this._dataService
-      .delete("/ProviderNews/DeleteNewsProvider", "id", idRole)
+    if(this.kindOfStyle==0){
+      
+      this._dataService
+      .delete("/Service/deleteServiceFromUser", "id", idRole)
       .subscribe((response: any) => {
         if (response.isValid) {
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );
-          this.services = this.services.splice(id, 1);
+          this.services.splice(id, 1);
         } else {
           this._notificationService.printErrorMessage(
             response.errorMessage
@@ -221,6 +265,24 @@ export class PostServiceComponent implements OnInit {
         }
 
       });
+    }else if(this.kindOfStyle==1){
+      this._dataService
+      .delete("/Service/deleteServiceFromUser", "id", idRole)
+      .subscribe((response: any) => {
+        if (response.isValid) {
+          this._notificationService.printSuccessMessage(
+            MessageConstants.DELETED_OK_MSG
+          );
+          this.services.splice(id, 1);
+        } else {
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
+        }
+
+      });
+    }
+    
   }
   filterChanged(id: any) {
     this.pageSize = id;
@@ -277,6 +339,8 @@ export class PostServiceComponent implements OnInit {
     this.defaultStatus = id;
     this.loadData();
   }
+
+  //#region  Check Validation
   checkProviderName(userName: any) {
     if (userName.pristine) {
       return true;
@@ -365,37 +429,48 @@ export class PostServiceComponent implements OnInit {
     }
   }
   onEnter(value: string) {
+    if(value.trim()==""){
+      return
+    }
     var findIsIndex = this.tagState.findIndex(x => x == value);
     if (findIsIndex == -1) {
-      this.aTag.isNew = true;
-      this.aTag.tagName = value;
-
+      let newTag: TagList = {
+        isAdd: true,
+        tagName: value
+      }
+      this.listTag.push(newTag);
     } else {
-      this.aTag.isNew = false;
-      this.aTag.tagName = value;
+      let availableTag: TagList = {
+        isAdd: false,
+        tagName: value
+      }
+      this.listTag.push(availableTag);
     }
-    this.listTag.push(this.aTag);
     this.aTag = {
-      isNew: false,
+      isAdd: false,
       tagName: ""
     }
   }
   removeIndex(index: any) {
     this.listTag.splice(index, 1);
   }
-  showImageModel(){
+  showImageModel() {
     this.modalImage.show();
   }
-  addImage(){
-    let newImage:ImageList= {
+  //#endregion
+  addImage() {
+    let newImage: ImageList = {
       dataImage: null,
-      imageName:"",
-      isAvatar:false
+      path: "",
+      isAvatar: false
     }
     this.listImage.push(newImage);
   }
-  selectChangeFile(event:any, img:number){
-    this.listImage[img].dataImage = event.files;
+  selectChangeFile(event: File[], img: number) {
+    this.listImage[img].dataImage = event;
     console.log(this.listImage);
+  }
+  removeImage(index: any) {
+    this.listImage.splice(index, 1);
   }
 }

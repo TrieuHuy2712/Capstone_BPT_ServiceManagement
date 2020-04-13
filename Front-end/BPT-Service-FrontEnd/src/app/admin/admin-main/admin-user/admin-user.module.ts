@@ -1,5 +1,5 @@
  
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './admin-user.component';
 import { Routes, RouterModule } from '@angular/router';
@@ -12,6 +12,7 @@ import { UploadService } from 'src/app/core/services/upload.service';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { SharedModule } from 'src/app/core/common/SharedModule';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 const userRoutes: Routes = [
   //localhost:4200/main/user
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -27,7 +28,11 @@ const userRoutes: Routes = [
     Daterangepicker,
     ModalModule.forRoot(),
     RouterModule.forChild(userRoutes),
-    SharedModule
+    SharedModule,
+    Ng4LoadingSpinnerModule.forRoot()
+  ],
+  schemas: [
+    
   ],
   declarations: [UserComponent],
   providers: [DataService, NotificationService, UploadService]

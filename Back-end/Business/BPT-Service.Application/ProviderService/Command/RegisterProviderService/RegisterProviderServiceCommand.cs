@@ -59,7 +59,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 await _providerRepository.SaveAsync();
                 vm.Id = mappingProvider.Id.ToString();
                 await Logging<RegisterProviderServiceCommand>.
-                       InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingProvider));
+                       InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,

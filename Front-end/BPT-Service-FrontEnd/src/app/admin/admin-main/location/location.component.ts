@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { UploadService } from 'src/app/core/services/upload.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-location',
@@ -30,7 +31,8 @@ export class LocationComponent implements OnInit {
     private _dataService: DataService,
     private _notificationService: NotificationService,
     private translationService: TranslationService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {
 
   }
@@ -45,6 +47,7 @@ export class LocationComponent implements OnInit {
     this.loadData();
   }
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/LocationManagement/GetAllPaging?page=" +
@@ -60,6 +63,7 @@ export class LocationComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -90,6 +94,7 @@ export class LocationComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       let fi = this.imagePath.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/UploadImage/saveImage/location', null, fi.files)
@@ -102,6 +107,7 @@ export class LocationComponent implements OnInit {
       else {
         this.saveData();
       }
+      this.spinnerService.hide();
     }
   }
   saveData() {
@@ -149,6 +155,7 @@ export class LocationComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any, id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/LocationManagement/DeleteCategory", "id", idRole)
       .subscribe((response: any) => {
@@ -163,6 +170,7 @@ export class LocationComponent implements OnInit {
           );
         }
       });
+      this.spinnerService.hide();
   }
   filterChanged(id: any) {
     this.pageSize = id;

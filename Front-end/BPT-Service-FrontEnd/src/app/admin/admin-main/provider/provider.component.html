@@ -137,7 +137,7 @@
                             <label>TaxCode</label>
                             <div>
                                 <input class="form-control" #taxCode="ngModel" required [(ngModel)]="entity.taxCode"
-                                    name="description" rows="3">
+                                    name="taxCode" rows="3">
                                 <small [hidden]="taxCode.valid || (taxCode.pristine && !addEditForm.submitted)"
                                     class="text-danger">
                                     Bạn phải mã số thuế
@@ -221,11 +221,11 @@
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
                                 bỏ</button>
-                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(entity.userName) || !checkLocation(entity.cityName) && entity.id==undefined)">Cập
+                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(userName) || !checkLocation(cityName) && entity.id==undefined)">Cập
                                 nhật</button>
-                            <button type="button" *ngIf="entity.status!=1 || entity.id==undefined" class="btn btn-info"
+                            <button type="button" *ngIf="entity.status !=1 && entity.id != undefined" class="btn btn-info"
                                 (click)="approveProvider()">Chấp nhận</button>
-                            <button type="button" *ngIf="entity.status!=0 || entity.id==undefined" class="btn btn-danger"
+                            <button type="button" *ngIf="entity.status !=0 && entity.id !=undefined" class="btn btn-danger"
                                 (click)="showRejectProvider()">Từ chối</button>
 
                         </div>

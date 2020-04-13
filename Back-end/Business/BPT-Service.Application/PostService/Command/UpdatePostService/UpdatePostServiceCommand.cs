@@ -15,7 +15,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.UpdatePostService
@@ -30,15 +29,19 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
         private readonly IRepository<Service, Guid> _serviceRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _serviceOfTagRepository;
+        private readonly IRepository<ServiceImage, int> _serviceImageRepository;
 
         public UpdatePostServiceCommand(
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
-            ICheckUserIsProviderQuery checkUserIsProvider, 
-            IGetPermissionActionQuery getPermissionActionQuery, 
-            IHttpContextAccessor httpContext, IRepository<Provider, Guid> providerRepository, 
-            IRepository<Service, Guid> serviceRepository, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProvider,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContext, IRepository<Provider, Guid> providerRepository,
+            IRepository<Service, Guid> serviceRepository,
             IRepository<Tag, Guid> tagServiceRepository,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            IRepository<Model.Entities.ServiceModel.TagService, int> serviceOfTagRepository,
+            IRepository<ServiceImage, int> serviceImageRepository)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProvider = checkUserIsProvider;
@@ -48,6 +51,8 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             _serviceRepository = serviceRepository;
             _tagServiceRepository = tagServiceRepository;
             _userManager = userManager;
+            _serviceOfTagRepository = serviceOfTagRepository;
+            _serviceImageRepository = serviceImageRepository;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -62,8 +67,17 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                     || await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate))
                 {
                     var currentService = getPermissionForService.myModel;
+                    var service = await _serviceRepository.FindByIdAsync(Guid.Parse(vm.Id));
+                    if (service == null)
+                    {
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                        };
+                    }
                     List<Tag> newTag = new List<Tag>();
-                    List<Tag> deleteTag = new List<Tag>();
+                    var tagDelete = await RemoveTag(Guid.Parse(vm.Id), vm.tagofServices);
                     foreach (var item in vm.tagofServices)
                     {
                         if (item.isAdd == true)
@@ -73,18 +87,12 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                                 TagName = item.TagName
                             });
                         }
-                        if (item.isDelete)
-                        {
-                            deleteTag.Add(new Tag
-                            {
-                                Id = Guid.Parse(item.TagId),
-                                TagName = item.TagName
-                            });
-                        }
                     }
+                    var deletImage = await RemoveImage(Guid.Parse(vm.Id), vm.listImages);
+                    _serviceImageRepository.RemoveMultiple(deletImage);
                     await _tagServiceRepository.Add(newTag);
-                    _tagServiceRepository.RemoveMultiple(deleteTag);
-                    var mappingService = MappingService(vm, getPermissionForService.myModel);
+                    _tagServiceRepository.RemoveMultiple(tagDelete);
+                    var mappingService = await MappingService(vm, service, userId);
                     mappingService.TagServices = null;
                     foreach (var tag in vm.tagofServices)
                     {
@@ -167,26 +175,87 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             };
         }
 
-        private Service MappingService(PostServiceViewModel vm, Service sv)
+        private async Task<Service> MappingService(PostServiceViewModel vm, Service sv, string currentUserContext)
         {
             sv.CategoryId = vm.CategoryId;
             sv.DateModified = DateTime.Now;
             sv.PriceOfService = vm.PriceOfService;
             sv.Description = vm.Description;
             sv.ServiceName = vm.ServiceName;
-            sv.Status =  IsOwnService(sv.Id).Result.isValid ? Status.Pending:Status.Active;
+            sv.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "SERVICE", ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
-                Path = x.Path,
+                Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
-                ServiceId = x.ServiceId
             }).ToList();
-            sv.TagServices = vm.tagofServices.Select(x => new Model.Entities.ServiceModel.TagService
+            sv.TagServices = vm.tagofServices.Where(t => t.isDelete == false && t.isAdd == false).Select(x => new Model.Entities.ServiceModel.TagService
             {
-                ServiceId = Guid.Parse(x.ServiceId),
                 TagId = Guid.Parse(x.TagId),
             }).ToList();
             return sv;
+        }
+
+        public async Task<List<Tag>> RemoveTag(Guid id, List<TagofServiceViewModel> listTag)
+        {
+            var userTag = await _serviceOfTagRepository.FindAllAsync(x => x.ServiceId == id);
+            var tag = await _tagServiceRepository.FindAllAsync();
+            var joinTag = (from uT in userTag.ToList()
+                           join t in tag.ToList()
+                           on uT.TagId equals t.Id
+                           select new TagofServiceViewModel
+                           {
+                               TagId = t.Id.ToString(),
+                               TagName = t.TagName,
+                           });
+
+            foreach (var item in joinTag)
+            {
+                int count = 0;
+                foreach (var item2 in listTag)
+                {
+                    if (item.TagName == item2.TagName)
+                    {
+                        count++;
+                    }
+                }
+                if (count != 0)
+                {
+                    item.isDelete = true;
+                }
+            }
+            List<Tag> returnTag = new List<Tag>();
+            foreach (var item in joinTag)
+            {
+                if (item.isDelete)
+                {
+                    var findTag = await _tagServiceRepository.FindSingleAsync(x => x.Id == Guid.Parse(item.TagId));
+                    returnTag.Add(findTag);
+                }
+            }
+            return returnTag;
+        }
+
+        public async Task<List<ServiceImage>> RemoveImage(Guid id, List<PostServiceImageViewModel> listImages)
+        {
+            var findAllImageWithId = await _serviceImageRepository.FindAllAsync(x => x.ServiceId == id);
+            List<ServiceImage> serviceImages = new List<ServiceImage>();
+            foreach (var item in findAllImageWithId)
+            {
+                int count = 0;
+                foreach (var item2 in listImages)
+                {
+                    if (item.Path == item2.Path)
+                    {
+                        count++;
+                    }
+                }
+                if (count == 0)
+                {
+                    serviceImages.Add(item);
+                }
+            }
+            return serviceImages;
         }
     }
 }

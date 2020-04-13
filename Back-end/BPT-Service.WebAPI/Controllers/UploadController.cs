@@ -60,9 +60,9 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             directory = "/UploadedFiles/Avatars/";
                         }
-                        else if (type == "product")
+                        else if (type == "service")
                         {
-                            directory = "/UploadedFiles/Products/";
+                            directory = "/UploadedFiles/Services/";
                         }
                         else if (type == "news")
                         {

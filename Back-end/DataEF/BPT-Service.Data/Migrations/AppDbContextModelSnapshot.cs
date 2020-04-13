@@ -404,7 +404,8 @@ namespace BPT_Service.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("PriceOfService")
+                    b.Property<string>("PriceOfService")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ServiceName")

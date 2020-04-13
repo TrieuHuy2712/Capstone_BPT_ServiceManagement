@@ -25,13 +25,13 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IApprovePostServiceCommand _approvePostServiceCommand;
         private readonly IDeleteServiceFromProviderCommand _deleteServiceFromProviderCommand;
         private readonly IDeleteServiceFromUserCommand _deleteServiceFromUserCommand;
+        private readonly IFilterAllPagingPostServiceQuery _filterAllPagingPostServiceQuery;
         private readonly IGetAllPagingPostServiceQuery _getAllPagingPostServiceQuery;
         private readonly IGetPostServiceByIdQuery _getPostServiceByIdQuery;
         private readonly IRegisterServiceFromProviderCommand _registerServiceFromProviderCommand;
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
-        private readonly IFilterAllPagingPostServiceQuery _filterAllPagingPostServiceQuery;
 
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
@@ -86,16 +86,16 @@ namespace BPT_Service.WebAPI.Controllers
         #region DeleteAPI
 
         [HttpDelete("deleteServiceFromProvider")]
-        public async Task<IActionResult> DeleteServiceFromProvider(string idService)
+        public async Task<IActionResult> DeleteServiceFromProvider(string id)
         {
-            var model = await _deleteServiceFromProviderCommand.ExecuteAsync(idService);
+            var model = await _deleteServiceFromProviderCommand.ExecuteAsync(id);
             return new OkObjectResult(model);
         }
 
         [HttpDelete("deleteServiceFromUser")]
-        public async Task<IActionResult> DeleteServiceFromUser(string idService)
+        public async Task<IActionResult> DeleteServiceFromUser(string id)
         {
-            var model = await _deleteServiceFromUserCommand.ExecuteAsync(idService);
+            var model = await _deleteServiceFromUserCommand.ExecuteAsync(id);
             return new OkObjectResult(model);
         }
 
