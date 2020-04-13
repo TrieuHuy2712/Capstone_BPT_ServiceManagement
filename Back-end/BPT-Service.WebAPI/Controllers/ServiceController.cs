@@ -104,16 +104,16 @@ namespace BPT_Service.WebAPI.Controllers
         #region Post API
 
         [HttpPost("approvePostService")]
-        public async Task<IActionResult> ApprovePostService(string idService)
+        public async Task<IActionResult> ApprovePostService([FromBody]PostServiceViewModel vm)
         {
-            var model = await _approvePostServiceCommand.ExecuteAsync(idService);
+            var model = await _approvePostServiceCommand.ExecuteAsync(vm.Id);
             return new OkObjectResult(model);
         }
 
         [HttpPost("rejectPostService")]
-        public async Task<IActionResult> RejectPostService([FromBody]RejectServiceViewModel vm)
+        public async Task<IActionResult> RejectPostService([FromBody]PostServiceViewModel vm)
         {
-            var model = await _rejectPostServiceCommand.ExecuteAsync(vm.serviceId, vm.reason);
+            var model = await _rejectPostServiceCommand.ExecuteAsync(vm.Id, vm.Reason);
             return new OkObjectResult(model);
         }
 

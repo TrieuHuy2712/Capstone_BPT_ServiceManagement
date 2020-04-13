@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BPT_Service.Application.PostService.Query.Extension.GetUserInformation
 {
     public class GetUserInformationQuery : IGetUserInformationQuery
     {
         private readonly UserManager<AppUser> _userManager;
+
         public GetUserInformationQuery(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
@@ -31,7 +31,7 @@ namespace BPT_Service.Application.PostService.Query.Extension.GetUserInformation
             var getUser = _userManager.FindByIdAsync(findUser.UserId.ToString()).Result;
             if (getUser != null)
             {
-                return getUser.UserName + +'(' + getUser.Email + ')';
+                return getUser.UserName + "(" + getUser.Email + ")";
             }
             return "";
         }

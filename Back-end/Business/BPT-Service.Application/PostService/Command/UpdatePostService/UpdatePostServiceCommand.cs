@@ -25,34 +25,39 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
         private readonly ICheckUserIsProviderQuery _checkUserIsProvider;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _serviceOfTagRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<Service, Guid> _serviceRepository;
+        private readonly IRepository<ServiceImage, int> _serviceImageRepository;
         private readonly IRepository<Tag, Guid> _tagServiceRepository;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _serviceOfTagRepository;
-        private readonly IRepository<ServiceImage, int> _serviceImageRepository;
 
         public UpdatePostServiceCommand(
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             ICheckUserIsProviderQuery checkUserIsProvider,
             IGetPermissionActionQuery getPermissionActionQuery,
-            IHttpContextAccessor httpContext, IRepository<Provider, Guid> providerRepository,
-            IRepository<Service, Guid> serviceRepository,
-            IRepository<Tag, Guid> tagServiceRepository,
-            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContext,
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
             IRepository<Model.Entities.ServiceModel.TagService, int> serviceOfTagRepository,
-            IRepository<ServiceImage, int> serviceImageRepository)
+            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
+            IRepository<Provider, Guid> providerRepository, IRepository<Service, Guid> serviceRepository,
+            IRepository<ServiceImage, int> serviceImageRepository, IRepository<Tag, Guid> tagServiceRepository,
+            UserManager<AppUser> userManager)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProvider = checkUserIsProvider;
             _getPermissionActionQuery = getPermissionActionQuery;
             _httpContext = httpContext;
+            _providerServiceRepository = providerServiceRepository;
+            _serviceOfTagRepository = serviceOfTagRepository;
+            _userServiceRepository = userServiceRepository;
             _providerRepository = providerRepository;
             _serviceRepository = serviceRepository;
+            _serviceImageRepository = serviceImageRepository;
             _tagServiceRepository = tagServiceRepository;
             _userManager = userManager;
-            _serviceOfTagRepository = serviceOfTagRepository;
-            _serviceImageRepository = serviceImageRepository;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -88,23 +93,46 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                             });
                         }
                     }
+                    //Update Image
+                    List<ServiceImage> lstService = new List<ServiceImage>();
+                    foreach (var item in vm.listImages)
+                    {
+                        if (item.ImageId == 0)
+                        {
+                            ServiceImage serviceImage = new ServiceImage()
+                            {
+                                DateCreated = DateTime.Now,
+                                Path = item.Path,
+                                isAvatar = item.IsAvatar,
+                                ServiceId = Guid.Parse(vm.Id)
+                            };
+                            lstService.Add(serviceImage);
+                        }
+                        else
+                        {
+                            var imageId= await _serviceImageRepository.FindByIdAsync(item.ImageId);
+                            if (imageId != null)
+                            {
+                                imageId.isAvatar = item.IsAvatar;
+                                imageId.DateModified = DateTime.Now;
+                                _serviceImageRepository.Update(imageId);
+                            }
+                        }
+                    }
                     var deletImage = await RemoveImage(Guid.Parse(vm.Id), vm.listImages);
                     _serviceImageRepository.RemoveMultiple(deletImage);
                     await _tagServiceRepository.Add(newTag);
                     _tagServiceRepository.RemoveMultiple(tagDelete);
                     var mappingService = await MappingService(vm, service, userId);
                     mappingService.TagServices = null;
-                    foreach (var tag in vm.tagofServices)
+                    foreach (var tag in newTag)
                     {
                         Model.Entities.ServiceModel.TagService mappingTag = new Model.Entities.ServiceModel.TagService();
-                        if (tag.isAdd || !tag.isDelete)
-                        {
-                            mappingTag.TagId = Guid.Parse(tag.TagId);
-                            mappingService.TagServices.Add(mappingTag);
-                        }
+                        mappingTag.TagId = tag.Id;
+                        mappingTag.ServiceId = Guid.Parse(vm.Id);
+                        await _serviceOfTagRepository.Add(mappingTag);
                     }
                     _serviceRepository.Update(mappingService);
-                    await _tagServiceRepository.SaveAsync();
                     await _serviceRepository.SaveAsync();
                     await Logging<UpdatePostServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(vm));
@@ -137,41 +165,37 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
         private async Task<CommandResult<Service>> IsOwnService(Guid idService)
         {
             var getCurrentId = _httpContext.HttpContext.User.Identity.Name;
-            var checkOwnProvider = await _providerRepository.FindAllAsync(x => x.UserId == Guid.Parse(getCurrentId));
-            var checkOwnService = await _serviceRepository.FindSingleAsync(x => x.UserServices.ServiceId == idService);
-            foreach (var item in checkOwnProvider)
+            var userService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == idService && x.UserId == Guid.Parse(getCurrentId));
+            if (userService == null)
             {
-                if (item.Id == checkOwnService.ProviderServices.ProviderId)
+                var checkIsProvider = await _providerRepository.FindSingleAsync(x => x.UserId == Guid.Parse(getCurrentId));
+                if (checkIsProvider == null)
                 {
                     return new CommandResult<Service>
                     {
-                        isValid = true,
-                        myModel = checkOwnService
+                        isValid = false,
+                        errorMessage = "You don't have permission"
                     };
+                }
+                else
+                {
+                    var providerService = _providerServiceRepository.
+                        FindSingleAsync(x => x.ProviderId == checkIsProvider.Id && x.ServiceId == idService);
+                    if (providerService == null)
+                    {
+                        return new CommandResult<Service>
+                        {
+                            isValid = false,
+                            errorMessage = "You don't have permission"
+                        };
+                    }
                 }
             }
 
-            if (checkOwnService.UserServices.UserId == Guid.Parse(getCurrentId))
-            {
-                return new CommandResult<Service>
-                {
-                    isValid = true,
-                    myModel = checkOwnService
-                };
-            }
-
-            if (checkOwnService == null)
-            {
-                return new CommandResult<Service>
-                {
-                    isValid = false,
-                    errorMessage = "Cannot find service"
-                };
-            }
             return new CommandResult<Service>
             {
-                isValid = false,
-                errorMessage = "You don't have permission"
+                isValid = true,
+                errorMessage = "You have permission"
             };
         }
 
@@ -184,11 +208,6 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
             sv.ServiceName = vm.ServiceName;
             sv.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "SERVICE", ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
-            sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
-            {
-                Path = x.Path != null ? x.Path : "",
-                DateCreated = DateTime.Now,
-            }).ToList();
             sv.TagServices = vm.tagofServices.Where(t => t.isDelete == false && t.isAdd == false).Select(x => new Model.Entities.ServiceModel.TagService
             {
                 TagId = Guid.Parse(x.TagId),

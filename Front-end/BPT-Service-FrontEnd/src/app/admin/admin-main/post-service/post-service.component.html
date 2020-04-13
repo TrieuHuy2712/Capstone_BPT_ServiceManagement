@@ -71,7 +71,7 @@
               <td>
                 <button *ngIf="permission.canUpdate" class="btn btn-primary" (click)="showEditModal(i)"><i
                     class="fa fa-pencil-square-o"></i></button>
-                <button *ngIf="permission.canDelete" class="btn btn-danger" (click)="deleteItem(serv.id,i)"><i
+                <button *ngIf="permission.canDelete" class="btn btn-danger" (click)="deleteItem(serv.id,serv.isProvider, i)"><i
                     class="fa fa-trash"></i></button>
               </td>
             </tr>
@@ -299,13 +299,14 @@
         </button>
       </div>
       <div class="modal-body">
+        <span class="text-danger" *ngIf="disableIsAvatar() && entity">Xin vui lòng chọn một hình ảnh làm ảnh đại diện</span>
         <form class="form-horizontal form-label-left" novalidate #addImageForm="ngForm"
           *ngIf="entity">
           <div *ngFor="let atag of listImage, let i = index">
             <div class="form-group row">
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <label class="control-label">Chọn hình ảnh</label>
-                  <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar" minlength="3"
+                  <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar" [disabled]="!disableIsAvatar()"
                     name="isAvatar">
               </div>
               <div class="form-group">

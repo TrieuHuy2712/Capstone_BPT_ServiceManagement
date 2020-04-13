@@ -139,6 +139,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             {
                 Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
+                isAvatar = x.IsAvatar
             }).ToList();
 
             sv.TagServices = vm.tagofServices.Where(x => x.isDelete == false && x.isAdd == false).Select(x => new Model.Entities.ServiceModel.TagService

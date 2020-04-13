@@ -1,0 +1,2 @@
+INFO[2020-04-13 18:49:04]:: ApprovePostServiceCommand:: fd034b39-2a1f-46ac-a223-b45fc42fa588:: admin:: adminYour service:Abaaahas been approved
+INFO[2020-04-13 18:57:27]:: RejectPostServiceCommand:: fd034b39-2a1f-46ac-a223-b45fc42fa588:: admin:: adminYour service:Abaaahas been rejected

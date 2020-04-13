@@ -15,6 +15,7 @@ enum Status {
 export interface TagList {
   isAdd: boolean,
   tagName: string,
+  tagId: string,
 }
 export interface ImageList {
   isAvatar: boolean,
@@ -47,7 +48,7 @@ export class PostServiceComponent implements OnInit {
   public reject: any;
   public permission: any;
   public entity: any;
-  public tagName:string="";
+  public tagName: string = "";
   // List get data
   public provider: any[];
   public user: any[];
@@ -82,13 +83,15 @@ export class PostServiceComponent implements OnInit {
       canUpdate: true,
       canRead: true
     };
-    this.tagName="";
+    this.tagName = "";
     this.loadData();
+
+  }
+  ngAfterViewInit() {
     this.getAllCategory();
     this.getAllProvider();
     this.getAllUser();
     this.getAllTag();
-
   }
   loadData() {
     this.spinnerService.show();
@@ -128,16 +131,16 @@ export class PostServiceComponent implements OnInit {
     this.entity = {};
     this.aTag = {
       isAdd: true,
-      tagName: ""
+      tagName: "",
+      tagId: ""
     };
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    debugger
     let findIdthis = this.services[id];
     this.entity = findIdthis;
-    this.listTag=[];
-    this.listImage=[];
+    this.listTag = [];
+    this.listImage = [];
     this.listTag = this.entity.tagofServices;
     this.listImage = this.entity.listImages;
     if (this.entity.isProvider) {
@@ -153,12 +156,15 @@ export class PostServiceComponent implements OnInit {
     this.modalAddEdit.show();
   }
   async saveChange(valid: boolean) {
+    debugger
     if (valid) {
-      for(const item of this.listImage){
-        await this._uploadService.postWithFile('/UploadImage/saveImage/service', null, item.dataImage)
-          .then((imageUrl: any) => {
-            item.path = imageUrl;
-          })
+      for (const item of this.listImage) {
+        if (item.dataImage != null) {
+          await this._uploadService.postWithFile('/UploadImage/saveImage/service', null, item.dataImage)
+            .then((imageUrl: any) => {
+              item.path = imageUrl;
+            })
+        }
       }
       this.saveData();
     }
@@ -205,13 +211,13 @@ export class PostServiceComponent implements OnInit {
   }
   saveData() {
     this.spinnerService.show();
+    //Assign Id Category
+    this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;
+    //Assign ListImages
+    this.entity.listImages = this.listImage;
+    //Assign Tag
+    this.entity.tagofServices = this.listTag;
     if (this.entity.id == undefined) {
-      //Assign Id Category
-      this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;
-      //Assign ListImages
-      this.entity.listImages = this.listImage;
-      //Assign Tag
-      this.entity.tagOfServices = this.listTag;
       if (this.kindOfStyle == 0) {
         //Assign User ID
         this.entity.userId = this.user.find(x => x.userName == this.entity.userName).id;
@@ -225,7 +231,8 @@ export class PostServiceComponent implements OnInit {
       this._dataService.post("/Service/updatePostService", this.entity).subscribe(
         (response: any) => {
           if (response.isValid == true) {
-            this.services.push(response.myModel);
+            let getPostition = this.services.indexOf(x => x.id == this.entity.id);
+            this.provider[getPostition] = response.myModel;
             this._notificationService.printSuccessMessage(
               MessageConstants.CREATED_OK_MSG
             );
@@ -241,48 +248,50 @@ export class PostServiceComponent implements OnInit {
         error => this._dataService.handleError(error));
     }
   }
-  deleteItem(idRole: any, id: any) {
+  deleteItem(idRole: any, isProvider: any, id: any) {
     this._notificationService.printConfirmationDialog(
       MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemConfirm(idRole, id)
+      () => this.deleteItemConfirm(idRole, isProvider, id)
     );
   }
-  deleteItemConfirm(idRole: any, id: any) {
-    if(this.kindOfStyle==0){
-      
-      this._dataService
-      .delete("/Service/deleteServiceFromUser", "id", idRole)
-      .subscribe((response: any) => {
-        if (response.isValid) {
-          this._notificationService.printSuccessMessage(
-            MessageConstants.DELETED_OK_MSG
-          );
-          this.services.splice(id, 1);
-        } else {
-          this._notificationService.printErrorMessage(
-            response.errorMessage
-          );
-        }
+  deleteItemConfirm(idRole: any, isProvider: any, id: any) {
+    this.spinnerService.show();
+    if (isProvider == false) {
 
-      });
-    }else if(this.kindOfStyle==1){
       this._dataService
-      .delete("/Service/deleteServiceFromUser", "id", idRole)
-      .subscribe((response: any) => {
-        if (response.isValid) {
-          this._notificationService.printSuccessMessage(
-            MessageConstants.DELETED_OK_MSG
-          );
-          this.services.splice(id, 1);
-        } else {
-          this._notificationService.printErrorMessage(
-            response.errorMessage
-          );
-        }
+        .delete("/Service/deleteServiceFromUser", "id", idRole)
+        .subscribe((response: any) => {
+          if (response.isValid) {
+            this._notificationService.printSuccessMessage(
+              MessageConstants.DELETED_OK_MSG
+            );
+            this.services.splice(id, 1);
+          } else {
+            this._notificationService.printErrorMessage(
+              response.errorMessage
+            );
+          }
 
-      });
+        });
+    } else if (isProvider == true) {
+      this._dataService
+        .delete("/Service/deleteServiceFromProvider", "id", idRole)
+        .subscribe((response: any) => {
+          if (response.isValid) {
+            this._notificationService.printSuccessMessage(
+              MessageConstants.DELETED_OK_MSG
+            );
+            this.services.splice(id, 1);
+          } else {
+            this._notificationService.printErrorMessage(
+              response.errorMessage
+            );
+          }
+
+        });
     }
-    
+    this.spinnerService.hide();
+
   }
   filterChanged(id: any) {
     this.pageSize = id;
@@ -290,7 +299,7 @@ export class PostServiceComponent implements OnInit {
   }
   approveProvider() {
     this.spinnerService.show();
-    this._dataService.post("/ProviderNews/ApproveNewsProvider", this.entity).subscribe(
+    this._dataService.post("/Service/approvePostService", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
           let getPostition = this.services.findIndex(x => x.id == this.entity.id);
@@ -311,7 +320,7 @@ export class PostServiceComponent implements OnInit {
   }
   rejectProvider() {
     this.spinnerService.show();
-    this._dataService.post("/ProviderNews/RejectNewsProvider", this.entity).subscribe(
+    this._dataService.post("/Service/rejectPostService", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
           let getPostition = this.services.findIndex(x => x.id == this.entity.id);
@@ -429,27 +438,31 @@ export class PostServiceComponent implements OnInit {
     }
   }
   onEnter(value: string) {
-    if(value.trim()==""){
+    if (value.trim() == "") {
       return
     }
     var findIsIndex = this.tagState.findIndex(x => x == value);
     if (findIsIndex == -1) {
       let newTag: TagList = {
         isAdd: true,
-        tagName: value
+        tagName: value,
+        tagId: null
       }
       this.listTag.push(newTag);
     } else {
       let availableTag: TagList = {
         isAdd: false,
-        tagName: value
+        tagName: value,
+        tagId: this.tag.find(x => x.tagName == value).id
       }
       this.listTag.push(availableTag);
     }
     this.aTag = {
       isAdd: false,
-      tagName: ""
+      tagName: "",
+      tagId: ""
     }
+    console.log(this.listTag);
   }
   removeIndex(index: any) {
     this.listTag.splice(index, 1);
@@ -468,9 +481,15 @@ export class PostServiceComponent implements OnInit {
   }
   selectChangeFile(event: File[], img: number) {
     this.listImage[img].dataImage = event;
-    console.log(this.listImage);
   }
   removeImage(index: any) {
     this.listImage.splice(index, 1);
+  }
+  disableIsAvatar() {
+    let findIsAvatar = this.listImage.findIndex(x => x.isAvatar == true);
+    if (findIsAvatar == -1) {
+      return true;
+    }
+    return false;
   }
 }
