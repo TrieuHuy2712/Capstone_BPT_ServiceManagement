@@ -80,7 +80,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                     await _postServiceRepository.Add(mappingService);
 
                     //Mapping between ViewModel and Model of UserService
-                    var mappingUserService = MappingUserService(mappingService.Id, string.IsNullOrEmpty(vm.UserId)? Guid.Parse(vm.UserId) : Guid.Parse(userId));
+                    var mappingUserService = MappingUserService(mappingService.Id, string.IsNullOrEmpty(vm.UserId)? Guid.Parse(userId) : Guid.Parse(vm.UserId));
                     await _userServiceRepository.Add(mappingUserService);
 
                     //Add new Tag with Id in TagService

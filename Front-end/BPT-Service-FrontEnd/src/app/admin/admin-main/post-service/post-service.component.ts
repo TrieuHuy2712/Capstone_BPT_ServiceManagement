@@ -156,7 +156,6 @@ export class PostServiceComponent implements OnInit {
     this.modalAddEdit.show();
   }
   async saveChange(valid: boolean) {
-    debugger
     if (valid) {
       for (const item of this.listImage) {
         if (item.dataImage != null) {

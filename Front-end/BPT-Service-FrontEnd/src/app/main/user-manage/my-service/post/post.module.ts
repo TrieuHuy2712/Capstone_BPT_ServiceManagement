@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { PaginationModule  } from 'ngx-bootstrap/pagination';
@@ -10,6 +10,10 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { PostComponent } from './post.component';
+import { TypeaheadModule } from 'ngx-bootstrap';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
@@ -20,13 +24,15 @@ const itemRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    PaginationModule,
     FormsModule,
     ModalModule.forRoot(),
+    PaginationModule,
     RouterModule.forChild(itemRoutes),
-    SharedModule,
-    SlickModule.forRoot()
+    TypeaheadModule.forRoot(),
+    EditorModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
+  
   declarations: [PostComponent],
   providers:[DataService,NotificationService, TranslationService]
 })
