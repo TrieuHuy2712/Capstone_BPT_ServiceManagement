@@ -1,5 +1,6 @@
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
+using BPT_Service.Application.AuthenticateService.Query.CheckCanAccessMain;
 using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
 using BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateService;
 using BPT_Service.WebAPI.Models.AccountViewModels;
@@ -49,6 +50,7 @@ namespace BPT_Service.WebAPI.Controllers
             var user = await _resetPasswordCommand.ExecuteAsync(model);
             return new OkObjectResult(user);
         }
+
 
         #endregion Post API
 

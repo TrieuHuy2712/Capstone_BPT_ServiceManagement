@@ -88,7 +88,7 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             Directory.CreateDirectory(_env.WebRootPath + directory);
                         }
-                        var nameImage = type + System.DateTime.Now.ToString("MM_DD_YYYY_h_mm_ss_fffff_tt") + ext;
+                        var nameImage = type + System.DateTime.Now.ToString("MM_dd_yyyy_h_mm_ss_fffff_tt") + ext;
                         string path = Path.Combine(_env.WebRootPath + directory, nameImage);
                         //Userimage myfolder name where i want to save my image
                         using (var fileStream = new FileStream(path, FileMode.Create))

@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { DataService } from "src/app/core/services/data.service";
-import { MessageConstants } from "src/app/core/common/message.constants";
-import { ModalDirective } from "ngx-bootstrap/modal";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataService } from '../../../core/services/data.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { NotificationService } from "src/app/core/services/notification.service";
+import { MessageConstants } from '../../../core/common/message.constants';
+import { ModalDirective } from 'ngx-bootstrap';
+
 @Component({
-  selector: "app-role",
-  templateUrl: "./role.component.html",
-  styleUrls: ["./role.component.css"]
+  selector: 'app-admin-email',
+  templateUrl: './admin-email.component.html',
 })
-export class RoleComponent implements OnInit {
+export class AdminEmailComponent implements OnInit {
+
   @ViewChild("modalAddEdit", { static: false })
   public modalAddEdit: ModalDirective;
   public pageIndex: number = 1;
@@ -17,10 +18,10 @@ export class RoleComponent implements OnInit {
   public pageDisplay: number = 10;
   public totalRow: number;
   public filter: string = "";
-  public roles: any[];
+  public emails: any[];
   public permission: any;
   public entity: any;
-  public functionId: string = "ROLE";
+  public functionId: string = "EMAIL";
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
@@ -36,12 +37,11 @@ export class RoleComponent implements OnInit {
     };
     this.loadData();
   }
-
   loadData() {
     this.spinnerService.show();
     this._dataService
       .get(
-        "/EmailManagement/GetAllPaging?page=" +
+        "/AdminRole/GetAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
@@ -49,7 +49,7 @@ export class RoleComponent implements OnInit {
         this.filter
       )
       .subscribe((response: any) => {
-        this.roles = response.results;
+        this.emails = response.results;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
@@ -76,7 +76,7 @@ export class RoleComponent implements OnInit {
     this.modalAddEdit.show();
   }
   loadRole(id: any) {
-    let findIdthis = this.roles[id];
+    let findIdthis = this.emails[id];
     this.entity = findIdthis;
   }
   showEditModal(id: any) {
@@ -87,10 +87,10 @@ export class RoleComponent implements OnInit {
     if (valid) {
       this.spinnerService.show();
       if (this.entity.id === undefined) {
-        this._dataService.post("/EmailManagement/AddNewEmail", this.entity).subscribe(
+        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
-              this.roles.push(response.myModel);
+              this.emails.push(response.myModel);
               this._notificationService.printSuccessMessage(
                 MessageConstants.CREATED_OK_MSG
               );
@@ -105,11 +105,11 @@ export class RoleComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.post("/EmailManagement/UpdateEmail", this.entity).subscribe(
+        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
-              let getPostition = this.roles.indexOf(x => x.id == this.entity.id);
-              this.roles[getPostition] = response.myModel;
+              let getPostition = this.emails.indexOf(x => x.id == this.entity.id);
+              this.emails[getPostition] = response.myModel;
               this.modalAddEdit.hide();
               this._notificationService.printSuccessMessage(
                 MessageConstants.UPDATED_OK_MSG
@@ -136,10 +136,10 @@ export class RoleComponent implements OnInit {
   deleteItemConfirm(idRole: any, id: any) {
     this.spinnerService.show();
     this._dataService
-      .delete("/EmailManagement/Delete", "id", idRole)
+      .delete("/AdminRole/Delete", "id", idRole)
       .subscribe((response: any) => {
         if (response.isValid == true) {
-          this.roles.splice(id, 1);
+          this.emails.splice(id, 1);
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );

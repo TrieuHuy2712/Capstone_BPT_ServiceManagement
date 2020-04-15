@@ -11,6 +11,7 @@ import { LanguageService } from './core/services/language.service';
 import { TranslationService } from './core/services/translation.service';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthMainGuard } from './core/guards/authMain.guard';
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TypeaheadModule.forRoot(),
     BrowserAnimationsModule
   ],
-  providers: [AuthGuard,  LanguageService,
+  providers: [AuthGuard,  LanguageService,AuthMainGuard,
     TranslationService],
   bootstrap: [AppComponent]
 })

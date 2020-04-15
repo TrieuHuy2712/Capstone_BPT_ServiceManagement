@@ -17,6 +17,7 @@ namespace BPT_Service.Application.AuthenticateService.ViewModel
         public string Email { set; get; }
         public string Password { set; get; }
         public string UserName { set; get; }
+        public string AccessMain { get; set; }
 
         public AppUserViewModel(string address, string avatar, Status status, string token, string expiration, string gender, DateTime dateCreated)
         {

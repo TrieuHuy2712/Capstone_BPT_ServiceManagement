@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
     }
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
       this.socialusers = socialusers;
-      console.log(this.socialusers);
       let loggedUsers = {
         Token :this.socialusers.idToken,
         FullName : this.socialusers.name,
@@ -62,13 +61,12 @@ export class LoginComponent implements OnInit {
         Email : this.socialusers.email,
         Avatar : this.socialusers.image
       };
-      console.log(loggedUsers);
       this.authenService.loginExternal(loggedUsers).subscribe(
         data => {
           this.router.navigate([UrlConstants.HOME]);
         },
         error => {
-          this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
+          this.notificationService.printErrorMessage("No Authenticated");
           this.loading = false;
         }
       );
@@ -81,7 +79,6 @@ export class LoginComponent implements OnInit {
       .login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          console.log(data);
           if (data == null)
             this.notificationService.printErrorMessage(
               "Username or password is incorrect"

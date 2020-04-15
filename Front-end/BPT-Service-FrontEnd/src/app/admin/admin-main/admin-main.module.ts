@@ -10,6 +10,7 @@ import { TopMenuComponent } from '../shared/top-menu/top-menu.component';
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { mainRoutes } from './admin-main.routes';
+import { AdminEmailComponent } from './admin-email/admin-email.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { mainRoutes } from './admin-main.routes';
     AdminHomeModule,
     RouterModule.forChild(mainRoutes)
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
+  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, AdminEmailComponent],
   providers:[UtilityService,AuthenService,TranslationService]
 })
 export class AdminMainModule { }
