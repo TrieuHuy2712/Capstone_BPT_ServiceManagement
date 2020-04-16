@@ -95,10 +95,36 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                     //Write Log
                     await Logging<RegisterServiceFromUserCommand>.
                         InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
+                    var findUserInformation = await _userManager.FindByIdAsync(vm.UserId);
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = vm
+                        myModel = new PostServiceViewModel
+                        {
+                            Id = mappingService.Id.ToString(),
+                            DateCreated = mappingService.DateCreated,
+                            IsProvider = false,
+                            Author = findUserInformation.UserName+"("+findUserInformation.Email+")",
+                            UserId = vm.UserId,
+                            AvtService = mappingService.ServiceImages.Where(x => x.isAvatar == true).FirstOrDefault().Path,
+                            listImages = mappingService.ServiceImages.Select(x => new PostServiceImageViewModel
+                            {
+                                ImageId = x.Id,
+                                IsAvatar = x.isAvatar,
+                                Path = x.Path
+                            }).ToList(),
+                            CategoryId = vm.CategoryId,
+                            CategoryName = vm.CategoryName,
+                            Description = vm.Description,
+                            PriceOfService = vm.PriceOfService,
+                            ServiceName = vm.ServiceName,
+                            Status = mappingService.Status,
+                            tagofServices = mappingService.TagServices.Select(x => new TagofServiceViewModel
+                            {
+                                TagId = x.TagId.ToString(),
+                                TagName = _tagServiceRepository.FindSingleAsync(t => t.Id == x.TagId).Result.TagName
+                            }).ToList(),
+                        }
                     };
                 }
                 else

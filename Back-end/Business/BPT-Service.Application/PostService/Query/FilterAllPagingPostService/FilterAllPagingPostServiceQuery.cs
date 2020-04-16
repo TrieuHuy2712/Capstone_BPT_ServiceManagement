@@ -178,10 +178,10 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          {
                              Id = serv.Id,
                              CategoryName = category.Where(x => x.Id == serv.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
-                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService)
-                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService),
+                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider
+                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider,
                              Status = serv.Status,
-                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService) == "" ? false : true,
+                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider == "" ? false : true,
                              AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),
                              PriceOfService = serv.PriceOfService.ToString(),
                              TagList = _getListTagInformationQuery.ExecuteAsync(serv.Id, getAllServiceTag, getAllTag),
@@ -208,10 +208,10 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          {
                              Id = serv.Id,
                              CategoryName = category.CategoryName,
-                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService)
-                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService),
+                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider
+                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider,
                              Status = serv.Status,
-                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService) == "" ? false : true,
+                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider == "" ? false : true,
                              AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),
                              PriceOfService = serv.PriceOfService.ToString(),
                              TagList = _getListTagInformationQuery.ExecuteAsync(serv.Id, getAllServiceTag, getAllTag),
@@ -244,14 +244,15 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          {
                              Id = serv.Id,
                              CategoryName = getAllCategory.Where(x => x.Id == serv.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
-                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService)
-                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService),
+                             Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider
+                            == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider,
                              Status = serv.Status,
-                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService) == "" ? false : true,
+                             isProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider == "" ? false : true,
                              AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),
                              PriceOfService = serv.PriceOfService.ToString(),
                              TagList = _getListTagInformationQuery.ExecuteAsync(serv.Id, getAllServiceTag, getAllTag),
                              ServiceName = serv.ServiceName,
+                             
                              Rating = _getServiceRatingQuery.ExecuteAsync(serv.Id, allRating)
                          }).OrderByDescending(x=>x.Rating).ToList();
             return query;

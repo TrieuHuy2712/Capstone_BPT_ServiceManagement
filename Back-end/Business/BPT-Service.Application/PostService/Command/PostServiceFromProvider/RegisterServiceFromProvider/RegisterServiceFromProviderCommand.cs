@@ -31,6 +31,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository<Provider, Guid> _providerRepository;
 
         public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
         , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
@@ -39,7 +40,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         ICheckUserIsProviderQuery checkUserIsProvider,
         ICheckUserIsAdminQuery checkUserIsAdminQuery,
         IGetPermissionActionQuery getPermissionActionQuery,
-        UserManager<AppUser> userManager)
+        UserManager<AppUser> userManager,
+        IRepository<Provider, Guid> providerRepository)
         {
             _postServiceRepository = postServiceRepository;
             _providerServiceRepository = providerServiceRepository;
@@ -49,6 +51,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _userManager = userManager;
+            _providerRepository = providerRepository;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -99,7 +102,31 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = vm
+                        myModel = new PostServiceViewModel
+                        {
+                            Id = mappingService.Id.ToString(),
+                            DateCreated = mappingService.DateCreated,
+                            IsProvider = true,
+                            Author = _providerRepository.FindSingleAsync(x=>x.Id == Guid.Parse(vm.ProviderId)).Result.ProviderName,
+                            ProviderId = vm.ProviderId,
+                            AvtService = mappingService.ServiceImages.Where(x=>x.isAvatar==true).FirstOrDefault().Path,
+                            listImages = mappingService.ServiceImages.Select(x=>new PostServiceImageViewModel {
+                                ImageId = x.Id,
+                                IsAvatar = x.isAvatar,
+                                Path = x.Path
+                            }).ToList(),
+                            CategoryId= vm.CategoryId,
+                            CategoryName= vm.CategoryName,
+                            Description= vm.Description,
+                            PriceOfService = vm.PriceOfService,
+                            ServiceName = vm.ServiceName,
+                            Status = mappingService.Status,
+                            tagofServices = mappingService.TagServices.Select(x=>new TagofServiceViewModel
+                            {
+                                TagId = x.TagId.ToString(),
+                                TagName = _tagServiceRepository.FindSingleAsync(t=>t.Id == x.TagId).Result.TagName
+                            }).ToList(), 
+                        }
                     };
                 }
                 else
