@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BPT_Service.Data.Migrations
@@ -6,13 +7,13 @@ namespace BPT_Service.Data.Migrations
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        {                        
             migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -42,7 +43,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -128,7 +129,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
                     ImgPath = table.Column<string>(nullable: true)
@@ -143,7 +144,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     City = table.Column<string>(nullable: true),
                     Province = table.Column<string>(nullable: true),
                     ImgPath = table.Column<string>(nullable: true)
@@ -158,7 +159,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     To = table.Column<string>(nullable: true),
                     Subject = table.Column<string>(nullable: true),
@@ -263,9 +264,9 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<Guid>(nullable: false),
-                    FunctionId = table.Column<string>(maxLength: 128, nullable: false),
+                    FunctionId = table.Column<string>(nullable: false),
                     CanCreate = table.Column<bool>(nullable: false),
                     CanRead = table.Column<bool>(nullable: false),
                     CanUpdate = table.Column<bool>(nullable: false),
@@ -322,7 +323,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ServiceId = table.Column<Guid>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
@@ -350,7 +351,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Path = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
@@ -374,7 +375,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ServiceId = table.Column<Guid>(nullable: false),
                     NumberOfRating = table.Column<int>(nullable: false),
@@ -403,7 +404,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceId = table.Column<Guid>(nullable: false),
                     TagId = table.Column<Guid>(nullable: false)
                 },
@@ -429,7 +430,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false)
                 },
@@ -455,7 +456,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ProviderId = table.Column<Guid>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
@@ -476,7 +477,7 @@ namespace BPT_Service.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -484,7 +485,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
                     Author = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
@@ -510,7 +511,7 @@ namespace BPT_Service.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceId = table.Column<Guid>(nullable: false),
                     ProviderId = table.Column<Guid>(nullable: false)
                 },
@@ -637,6 +638,13 @@ namespace BPT_Service.Data.Migrations
                 name: "IX_UserService_UserId",
                 table: "UserService",
                 column: "UserId");
+                var sp = @"CREATE PROCEDURE [dbo].[DeleteUserRoles]
+ @UserIdDelete varchar(36), @RoleIdDelete varchar(36)
+AS
+BEGIN
+	Delete from AppUserRoles where UserId = @UserIdDelete and RoleId= @RoleIdDelete;
+END";
+            migrationBuilder.Sql(sp);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

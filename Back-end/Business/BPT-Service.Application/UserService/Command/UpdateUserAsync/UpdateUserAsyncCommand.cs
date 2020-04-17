@@ -5,10 +5,12 @@ using BPT_Service.Common;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,17 +23,23 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly RoleManager<AppRole> _roleRepository;
 
         public UpdateUserAsyncCommand(
-            UserManager<AppUser> userManager,
-            IHttpContextAccessor httpContextAccessor,
-            ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            UserManager<AppUser> userManager, 
+            IHttpContextAccessor httpContextAccessor, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            IGetPermissionActionQuery getPermissionActionQuery, 
+            IUserRoleRepository userRoleRepository, 
+            RoleManager<AppRole> roleRepository)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _userRoleRepository = userRoleRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<CommandResult<AppUserViewModelinUserService>> ExecuteAsync(AppUserViewModelinUserService userVm)
@@ -51,11 +59,20 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                     user.Avatar = userVm.Avatar;
                     user.UserName = userVm.UserName;
                     var userRoles = _userManager.GetRolesAsync(user);
-
+                    List<Guid> roleId = new List<Guid>();
+                    foreach (var item in userRoles.Result.ToList())
+                    {
+                        var getId = _roleRepository.FindByNameAsync(item).Result.Id;
+                        roleId.Add(getId);
+                    }
+                    foreach (var item in roleId)
+                    {
+                        _userRoleRepository.DeleteUserRole(user.Id, item);
+                    }
                     var selectedRole = userVm.NewRoles.ToArray();
                     selectedRole = selectedRole ?? new string[] { };
 
-                    await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
+                    //await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
                     var userRoles1 = await _userManager.GetRolesAsync(user);
                     await _userManager.UpdateAsync(user);
                     await Logging<UpdateUserAsyncCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(user));

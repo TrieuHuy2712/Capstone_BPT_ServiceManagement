@@ -1,10 +1,10 @@
-using System;
 using BPT_Service.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace BPT_Service.WebAPI
 {
@@ -13,7 +13,7 @@ namespace BPT_Service.WebAPI
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-            using(var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 

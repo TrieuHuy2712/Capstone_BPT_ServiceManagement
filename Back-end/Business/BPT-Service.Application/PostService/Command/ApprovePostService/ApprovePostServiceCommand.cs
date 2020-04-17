@@ -15,12 +15,10 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.ApprovePostService
@@ -108,7 +106,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                         }
                         //Write Log
                         await Logging<ApprovePostServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName+"has been approved");
+                            InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName + "has been approved");
 
                         await LoggingUser<ApprovePostServiceCommand>.
                     InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been approved");

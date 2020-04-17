@@ -22,7 +22,6 @@ namespace BPT_Service.Model.Entities
         [Required]
         public Guid RoleId { get; set; }
 
-        [StringLength(128)]
         [Required]
         public string FunctionId { get; set; }
 

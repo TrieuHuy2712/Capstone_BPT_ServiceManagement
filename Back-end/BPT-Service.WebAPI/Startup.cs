@@ -116,8 +116,10 @@ using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Support;
 using BPT_Service.Data;
+using BPT_Service.Data.Repositories;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -133,8 +135,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Text;
 
 namespace BPT_Service.WebAPI
@@ -151,12 +151,12 @@ namespace BPT_Service.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage("Data Source=6YLCMH2\\SQLEXPRESS;Initial Catalog=HangFireTutorial;Integrated Security=True"));
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 o => o.MigrationsAssembly("DataEF/BPT-Service.Data")));
-            services.AddControllers().AddNewtonsoftJson(options=> options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
@@ -195,9 +195,6 @@ namespace BPT_Service.WebAPI
                         new List<string>()
                       }
                     });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
             });
             services.AddTransient<DbInitializer>();
             // Configure Identity
@@ -249,10 +246,23 @@ namespace BPT_Service.WebAPI
 
             //Read email config json
             services.Configure<EmailConfigModel>(Configuration.GetSection("EmailConfig"));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    p => p.SetIsOriginAllowed(_ => true).
+                        AllowAnyHeader().
+                        AllowAnyMethod().
+                        AllowCredentials()
+                        );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor, IRecommendService _recommendService)
+        public void Configure(
+            IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            IHttpContextAccessor accessor, 
+            IRecommendService _recommendService)
         {
             if (env.IsDevelopment())
             {
@@ -273,7 +283,7 @@ namespace BPT_Service.WebAPI
             {
                 endpoints.MapControllers();
             });
-            //RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -286,11 +296,12 @@ namespace BPT_Service.WebAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            app.UseCors("CorsPolicy");
+            app.UseDeveloperExceptionPage();
         }
 
         public void ApplicationContext(IServiceCollection services)
         {
-
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
@@ -390,7 +401,6 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetServiceRatingQuery, GetServiceRatingQuery>();
             services.AddScoped<IGetUserInformationQuery, GetUserInformationQuery>();
             services.AddScoped<IGetOwnServiceInformationQuery, GetOwnServiceInformationQuery>();
-            
 
             //NewsProvider
             services.AddScoped<IApproveNewsProviderServiceCommand, ApproveNewsProviderServiceCommand>();
@@ -450,6 +460,9 @@ namespace BPT_Service.WebAPI
 
             //Recommend service
             services.AddScoped<IRecommendService, RecommendService>();
+
+            //Store Procedure
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();

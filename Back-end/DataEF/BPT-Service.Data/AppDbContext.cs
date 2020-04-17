@@ -92,7 +92,7 @@ namespace BPT_Service.Data
                 .AddJsonFile("appsettings.json").Build();
             var builder = new DbContextOptionsBuilder<AppDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlite(connectionString);
+            builder.UseSqlServer(connectionString);
             return new AppDbContext(builder.Options);
         }
     }
