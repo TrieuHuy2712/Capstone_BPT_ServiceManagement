@@ -19,24 +19,28 @@ export class ListOfItemComponent implements OnInit {
   public permission: any;
   public entity: any;
   public functionId: string = "SERVICES";
+  locations: any;
   constructor(
     private _dataService: DataService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
     this.loadData();
+    this.loadDataOfLocation();
+  
   }
   // load data function
   loadData() {
     this._dataService
       .get(
         "/Service/getAllPagingPostService?page=" +
-          this.pageIndex +
-          "&pageSize=" +
-          this.pageSize +
-          "&keyword=" +
-          this.filter
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&keyword=" +
+        this.filter +
+        "&isAdminPage=true&filter=5"
       )
       .subscribe((response: any) => {
         this.services = response.results;
@@ -44,6 +48,19 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         
+      });
+      
+  }
+  // send data
+
+
+  loadDataOfLocation(){
+    this._dataService
+      .get(
+        "/LocationManagement/GetAllLocation"
+      )
+      .subscribe((response: any) => {
+        this.locations = response;
       });
   }
 

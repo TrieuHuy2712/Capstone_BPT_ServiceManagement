@@ -87,14 +87,12 @@ export class PostComponent implements OnInit {
     }
   }
 
-
-
   saveDataUser() {
     debugger;
     this._dataService.post("/Service/registerServiceFromUser", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
-          this.services.push(response.myModel);
+          // this.services.push(response.myModel);
           this._notificationService.printSuccessMessage(
             MessageConstants.CREATED_OK_MSG
           );

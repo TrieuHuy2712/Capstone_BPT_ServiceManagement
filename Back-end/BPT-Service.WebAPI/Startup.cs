@@ -1,6 +1,7 @@
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync;
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
+using BPT_Service.Application.AuthenticateService.Query.CheckCanAccessMain;
 using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
 using BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateService;
 using BPT_Service.Application.CategoryService.Command.AddCategoryService;
@@ -296,11 +297,13 @@ namespace BPT_Service.WebAPI
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpContextAccessor();
+
             //Authenticate service
             services.AddScoped<IResetPasswordAsyncCommand, ResetPasswordAsyncCommand>();
             services.AddScoped<IAuthenticateServiceQuery, AuthenticateServiceQuery>();
             services.AddScoped<IGetAllAuthenticateServiceQuery, GetAllAuthenticateServiceQuery>();
             services.AddScoped<IGetByIdAuthenticateService, GetByIdAuthenticateServiceQuery>();
+            services.AddScoped<ICheckCanAccessMain, CheckCanAccessMain>();
 
             //Category service
             services.AddScoped<IAddCategoryServiceCommand, AddCategoryServiceCommand>();

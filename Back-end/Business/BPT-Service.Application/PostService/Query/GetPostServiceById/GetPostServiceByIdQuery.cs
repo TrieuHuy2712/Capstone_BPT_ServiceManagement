@@ -1,4 +1,6 @@
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
+using BPT_Service.Application.PostService.Query.Extension.GetProviderInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Common;
 using BPT_Service.Model.Entities;
@@ -20,7 +22,12 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
         private readonly IRepository<Tag, Guid> _tagRepository;
         private readonly IRepository<Model.Entities.ServiceModel.TagService, int> _tagServiceRepository;
         private readonly IRepository<ServiceImage, int> _imageRepository;
+        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IGetByIDCategoryServiceQuery _getByIDCategoryServiceQuery;
+        private readonly IGetProviderInformationQuery _getProviderInformationQuery;
+        private readonly IGetUserInformationQuery _getUserInformationQuery;
+        private readonly IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> _userServiceRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
 
         public GetPostServiceByIdQuery(
             IRepository<Service, Guid> serviceRepository,
@@ -28,8 +35,13 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             IHttpContextAccessor httpContext,
             IRepository<Tag, Guid> tagRepository,
             IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository,
+            IRepository<ServiceImage, int> imageRepository,
             IGetByIDCategoryServiceQuery getByIDCategoryServiceQuery,
-            IRepository<ServiceImage, int> imageRepository)
+            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository,
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+            IRepository<Provider, Guid> providerRepository,
+            IGetProviderInformationQuery getProviderInformationQuery,
+            IGetUserInformationQuery getUserInformationQuery)
         {
             _serviceRepository = serviceRepository;
             _userManager = userManager;
@@ -38,6 +50,11 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             _tagServiceRepository = tagServiceRepository;
             _imageRepository = imageRepository;
             _getByIDCategoryServiceQuery = getByIDCategoryServiceQuery;
+            _userServiceRepository = userServiceRepository;
+            _providerServiceRepository = providerServiceRepository;
+            _providerRepository = providerRepository;
+            _getProviderInformationQuery = getProviderInformationQuery;
+            _getUserInformationQuery = getUserInformationQuery;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
@@ -45,13 +62,41 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             try
             {
                 var service = await _serviceRepository.FindByIdAsync(Guid.Parse(idService));
-                if (service != null && service.Status== Model.Enums.Status.Active)
+                if (service != null && service.Status == Model.Enums.Status.Active)
                 {
-                    return new  CommandResult<PostServiceViewModel>
+                    var findUserService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == service.Id);
+                    if (findUserService == null)
                     {
-                        isValid = true,
-                        myModel = MapViewModel(service).Result
-                    };
+                        var findProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == service.Id);
+                        if (findProviderService != null)
+                        {
+                            var findProvider = await _providerRepository.FindSingleAsync(x => x.Id == findProviderService.ProviderId);
+                            return new CommandResult<PostServiceViewModel>
+                            {
+                                isValid = true,
+                                myModel = MapViewModel(service, null, findProvider).Result
+                            };
+                        }
+                        else
+                        {
+                            return new CommandResult<PostServiceViewModel>
+                            {
+                                isValid = true,
+                                myModel = MapViewModel(service, null, null).Result
+                            };
+                        }
+                    }
+                    else
+                    {
+                        var findUser = await _userManager.FindByIdAsync(findUserService.UserId.ToString());
+                        return new CommandResult<PostServiceViewModel>
+                        {
+                            isValid = true,
+                            myModel = MapViewModel(service, findUser, null).Result
+                        };
+                    }
+
+                    
                 }
                 else
                 {
@@ -72,47 +117,8 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             }
         }
 
-        //private async Task<CommandResult<Service>> IsOwnService(Guid idService)
-        //{
-        //    var checkOwnProvider = await _providerRepository.FindAllAsync(x => x.UserId == Guid.Parse(getCurrentId));
-        //    var checkOwnService = await _serviceRepository.FindSingleAsync(x => x.UserServices.ServiceId == idService);
-        //    foreach (var item in checkOwnProvider)
-        //    {
-        //        if (item.Id == checkOwnService.ProviderServices.ProviderId)
-        //        {
-        //            return new CommandResult<Service>
-        //            {
-        //                isValid = true,
-        //                myModel = checkOwnService
-        //            };
-        //        }
-        //    }
-
-        //    if (checkOwnService.UserServices.UserId == Guid.Parse(getCurrentId))
-        //    {
-        //        return new CommandResult<Service>
-        //        {
-        //            isValid = true,
-        //            myModel = checkOwnService
-        //        };
-        //    }
-
-        //    if (checkOwnService == null)
-        //    {
-        //        return new CommandResult<Service>
-        //        {
-        //            isValid = false,
-        //            errorMessage = "Cannot find service"
-        //        };
-        //    }
-        //    return new CommandResult<Service>
-        //    {
-        //        isValid = false,
-        //        errorMessage = "You don't have permission"
-        //    };
-        //}
-
-        private async Task<PostServiceViewModel> MapViewModel(Service serv)
+        private async Task<PostServiceViewModel> MapViewModel(
+            Service serv, AppUser user, Provider provider)
         {
             var getTag = await _tagRepository.FindAllAsync();
             var getUserTag = await _tagServiceRepository.FindAllAsync(x => x.ServiceId == serv.Id);
@@ -124,14 +130,13 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                                   tag.TagName
                               }).ToList();
 
-            var getImage = await _imageRepository.FindAllAsync(x=>x.ServiceId==serv.Id);
+            var getImage = await _imageRepository.FindAllAsync(x => x.ServiceId == serv.Id);
             PostServiceViewModel postServiceView = new PostServiceViewModel();
             postServiceView.Id = serv.Id.ToString();
             postServiceView.listImages = getImage.Select(x => new PostServiceImageViewModel
             {
                 Path = x.Path,
                 ImageId = x.Id
-                
             }).ToList();
             postServiceView.PriceOfService = serv.PriceOfService;
             postServiceView.CategoryName = _getByIDCategoryServiceQuery.ExecuteAsync(serv.CategoryId).Result.CategoryName;
@@ -142,6 +147,10 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                 TagName = x.TagName
             }).ToList();
             postServiceView.CategoryId = serv.CategoryId;
+            postServiceView.Author = user != null ? user.UserName : provider.ProviderName;
+            postServiceView.ProviderId = provider != null ? provider.Id.ToString() : "";
+            postServiceView.UserId = user != null ? user.Id.ToString() : "";
+            postServiceView.IsProvider = provider != null ? true : false;
             return postServiceView;
         }
     }

@@ -24,8 +24,10 @@ namespace BPT_Service.Application.EmailService.Query.GetAllPagingEmailService
                 || x.Subject.Contains(keyword) || x.Message.Contains(keyword) || x.To.Contains(keyword));
 
             int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+            if (pageSize != 0)
+            {
+                query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            }
 
             var data = query.Select(x => new EmailViewModel
             {

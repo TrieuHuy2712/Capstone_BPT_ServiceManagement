@@ -1,167 +1,24 @@
 <!-- main content -->
-<div id="__nuxt">
+<div id="__nuxt" style="margin-left: -250px;">
     <!---->
     <div id="__layout">
         <div class="position-relative h-100 message-mobile layout-default fixed-header"><i class="d-none"></i>
             <div class="wapper">
                 <div class="gallery">
                     <div id="headerSlider" lg-uid="lg0">
-                        <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+                        <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigDetail"
                             (afterChange)="afterChange($event)">
 
-                            <div ngxSlickItem>
+                            <div ngxSlickItem *ngFor="let img of details.listImages">
                                 <!-- slider item -->
                                 <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
+                                    <div class="room-slide is-flex" style="width: 100%; display: inline-block;">
+                                        <img elementtiming="detail-gallery" [src]="img.path" lazy="loaded"></div>
                                 </div>
                                 <!-- end slider item -->
                             </div>
 
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_4_1551762723.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_4_1551762723.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_4_1551762723.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_4_1551762723.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
 
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_8_1551762815.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_8_1551762815.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_8_1551762815.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
-
-                            <div ngxSlickItem>
-                                <!-- slider item -->
-                                <div>
-                                    <div data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                        gallery-img="https://cdn.luxstay.com/rooms/18792/thumbnail/room_18792_7_1551762792.jpg"
-                                        class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery"
-                                            data-src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            src="https://cdn.luxstay.com/rooms/18792/large/room_18792_7_1551762792.jpg"
-                                            lazy="loaded"></div>
-                                </div>
-                                <!-- end slider item -->
-                            </div>
                         </ngx-slick>
                     </div>
                     <div class="gallery__item-bot d-none d-sm-block is-absolute gallery__item-child"><button
@@ -170,8 +27,8 @@
                     <div class="room-id d-block d-sm-none">
                         <div class="room-id__wrapper d-inline-block">
                             <p class="mb--0 p--small-2 bold text-center">
-                                Mã chỗ ở <br>
-                                18792
+                                <span style="color: black !important;">Mã dịch vụ :</span> <br>
+                                {{data}}
                             </p>
                         </div>
                     </div>
@@ -213,8 +70,7 @@
                                                             <div class="title">
                                                                 <div class="row">
                                                                     <div class="col-xs-12 col-sm-10">
-                                                                        <h1 class="mb--12">Dịch vụ cho thuê nhà nguyên
-                                                                            căn Huy Nguyễn</h1>
+                                                                        <h1 class="mb--12">{{details.serviceName}}</h1>
                                                                     </div>
                                                                     <div
                                                                         class="d-none d-sm-block col-lg-2 text-right room-id">
@@ -222,7 +78,7 @@
                                                                             <p
                                                                                 class="mb--0 p--small-2 bold text-center c-primary">
                                                                                 Mã dịch vụ <br>
-                                                                                18792
+                                                                                {{newId.slice(0, 7)}}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -241,8 +97,8 @@
                                                                                 d="M11.92 6c2.87 0 5.218 2.335 5.218 5.205a5.112 5.112 0 0 1-1.055 3.137c-.97 1.252-3.77 3.461-3.882 3.56a.43.43 0 0 1-.282.098.43.43 0 0 1-.281-.098c-.113-.099-2.912-2.308-3.883-3.546a5.182 5.182 0 0 1-1.055-3.15C6.7 8.335 9.05 6 11.92 6zm0 7.203a2.104 2.104 0 0 0 0-4.207 2.104 2.104 0 0 0 0 4.206z">
                                                                             </path>
                                                                         </g>
-                                                                    </svg> <span class="ml--6 bold">Đà Lạt, Lâm
-                                                                        Đồng, Vietnam</span> <a href="#map"
+                                                                    </svg> <span class="ml--6 bold">This is
+                                                                        location</span> <a href="#map"
                                                                         class="ml--12 c-green">Xem bản đồ</a></div>
                                                             </div>
                                                             <div class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
@@ -255,17 +111,10 @@
                                                                             d="M7 17V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v9M8 7V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1m-6 1a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-4 3a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-4 3a1 1 0 0 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-7 3h10a1 1 0 0 1 1 1v1H6v-1a1 1 0 0 1 1-1z">
                                                                         </path>
                                                                     </g>
-                                                                </svg> <span class="ml--6 bold">Căn hộ dịch
-                                                                    vụ</span> <span class="span"> · 160
-                                                                    m<sup>2</sup></span></div>
+                                                                </svg> <span class="ml--6 bold">Mô tả dịch vụ</span>
+                                                                </div>
                                                             <div class="detail__type is-short-intro is-flex"
                                                                 room="[object Object]">
-                                                                <div>
-                                                                    <p class="mb--0"><span>Nguyên căn · </span>
-                                                                        <span>2 phòng tắm · </span> <span>6 giường ·
-                                                                        </span> <span>2 phòng ngủ · </span> <span>10
-                                                                            khách (tối đa 12 khách)</span></p>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="mt--18 slide-default-left slide-item-has-shadow">
@@ -352,7 +201,7 @@
                                                                 <div class="is-flex align-center bg-gray-f2 rounded">
                                                                     <div
                                                                         class="room-sidebar__host py--24 px--12 px--lg--24 w--100">
-                                                                        <a href="/vi/hosts/25874"
+                                                                        <a [routerLink]="[ '/main/viewAboutProvider',details.userId]"
                                                                             class="host-intro is-flex align-center">
                                                                             <div
                                                                                 class="image-box image-box--large image-box--circle">
@@ -362,7 +211,7 @@
                                                                             <div
                                                                                 class="host-intro__name mx--12 mx--md--18">
                                                                                 <p class="mb--6 extra-bold">
-                                                                                    Nguyenngoc Quynh</p>
+                                                                                    {{user.fullName}}</p>
                                                                                 <p
                                                                                     class="p--small-2 semi-bold c-gray-6 mb--0">
                                                                                     Tham gia 11/2018</p>
@@ -379,664 +228,21 @@
                                                                 <div class="is-relative">
                                                                     <div id="short_intro" class="room-des dot show"
                                                                         style="-webkit-box-orient: vertical;">
-                                                                        <p>Nằm không quá xa trung tâm thành phố, chỉ
-                                                                            vài phút đi xe máy, gần các điểm du lịch
-                                                                            như Vườn hoa Thành phố, Quảng Trường Lâm
-                                                                            Viên, Ga xe lửa, Chùa Linh Phước, vườn
-                                                                            hoa Cẩm Tú Cầu, Đồi chè Cầu Đất</p>
-                                                                        <p>Rộng 160m2 với 2 phòng ngủ và 6 giường.
-                                                                        </p>
-                                                                        <p>Khải Quỳnh 3 có 2 phòng ngủ riêng biệt, ở
-                                                                            được 4-6 khách &amp; 1 phòng gác lửng ở
-                                                                            được 6 khách</p>
-                                                                        <p>Ngoài sân vườn có không gian rộng rãi,
-                                                                            khách có thể đi chợ, nấu ăn, tổ chức
-                                                                            tiệc BBQ cho gia đình và bạn bè.</p>
+                                                                        <p>{{details.description}}</p>
+                                                                        
                                                                     </div>
-                                                                    <div id="show_intro" class="room-des">
-                                                                        <p>Nằm không quá xa trung tâm thành phố, chỉ
-                                                                            vài phút đi xe máy, gần các điểm du lịch
-                                                                            như Vườn hoa Thành phố, Quảng Trường Lâm
-                                                                            Viên, Ga xe lửa, Chùa Linh Phước, vườn
-                                                                            hoa Cẩm Tú Cầu, Đồi chè Cầu Đất</p>
-                                                                        <p>Rộng 160m2 với 2 phòng ngủ và 6 giường.
-                                                                        </p>
-                                                                        <p>Khải Quỳnh 3 có 2 phòng ngủ riêng biệt, ở
-                                                                            được 4-6 khách &amp; 1 phòng gác lửng ở
-                                                                            được 6 khách</p>
-                                                                        <p>Ngoài sân vườn có không gian rộng rãi,
-                                                                            khách có thể đi chợ, nấu ăn, tổ chức
-                                                                            tiệc BBQ cho gia đình và bạn bè.</p>
-                                                                    </div> <a class="btn color-i pointer mt--6">Đọc
+                                                                     <a class="btn color-i pointer mt--6">Đọc
                                                                         thêm </a>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="d-block d-sm-none fl-item-stretch mt--12">
-                                                            <div class="c-gray-5 p--small ml--6">
-                                                                <!---->
-                                                                <div class="is-relative">
-                                                                    <div class="room-des dot show"
-                                                                        style="-webkit-box-orient: vertical;">
-                                                                        <p>Nằm không quá xa trung tâm thành phố, chỉ
-                                                                            vài phút đi xe máy, gần các điểm du lịch
-                                                                            như Vườn hoa Thành phố, Quảng Trường Lâm
-                                                                            Viên, Ga xe lửa, Chùa Linh Phước, vườn
-                                                                            hoa Cẩm Tú Cầu, Đồi chè Cầu Đất</p>
-                                                                        <p>Rộng 160m2 với 2 phòng ngủ và 6 giường.
-                                                                        </p>
-                                                                        <p>Khải Quỳnh 3 có 2 phòng ngủ riêng biệt, ở
-                                                                            được 4-6 khách &amp; 1 phòng gác lửng ở
-                                                                            được 6 khách</p>
-                                                                        <p>Ngoài sân vườn có không gian rộng rãi,
-                                                                            khách có thể đi chợ, nấu ăn, tổ chức
-                                                                            tiệc BBQ cho gia đình và bạn bè.</p>
-                                                                    </div>
-                                                                    <div class="room-des">
-                                                                        <p>Nằm không quá xa trung tâm thành phố, chỉ
-                                                                            vài phút đi xe máy, gần các điểm du lịch
-                                                                            như Vườn hoa Thành phố, Quảng Trường Lâm
-                                                                            Viên, Ga xe lửa, Chùa Linh Phước, vườn
-                                                                            hoa Cẩm Tú Cầu, Đồi chè Cầu Đất</p>
-                                                                        <p>Rộng 160m2 với 2 phòng ngủ và 6 giường.
-                                                                        </p>
-                                                                        <p>Khải Quỳnh 3 có 2 phòng ngủ riêng biệt, ở
-                                                                            được 4-6 khách &amp; 1 phòng gác lửng ở
-                                                                            được 6 khách</p>
-                                                                        <p>Ngoài sân vườn có không gian rộng rãi,
-                                                                            khách có thể đi chợ, nấu ăn, tổ chức
-                                                                            tiệc BBQ cho gia đình và bạn bè.</p>
-                                                                    </div> <a class="btn c-primary pointer mt--6">Đọc
-                                                                        thêm
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </section>
                                         </div>
                                         <div id="amenities"></div>
-                                        <div class="title mt--60">
-                                            <h3 class="mb--6">Các thông số dịch vụ</h3> <span>Giới thiệu về các tiện ích
-                                                có liên quan trong dịch vụ</span>
-                                        </div>
-                                        <div class="is-flex amenities">
-                                            <div class="d-none d-sm-flex w--100">
-                                                <div class="fl-item-stretch">
-                                                    <div item="[object Object]">
-                                                        <h4 class="mt--24 mb--0">Tiện ích </h4>
-                                                        <ul class="list list--3 is-flex">
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill="#000" fill-rule="nonzero">
-                                                                        <path pid="0"
-                                                                            d="M23.44 9.04a.502.502 0 0 1-.354-.146A14.9 14.9 0 0 0 12.48 4.5 14.903 14.903 0 0 0 1.873 8.894a.5.5 0 0 1-.707-.707A15.896 15.896 0 0 1 12.48 3.5c4.274 0 8.292 1.665 11.313 4.687a.5.5 0 0 1-.353.853z">
-                                                                        </path>
-                                                                        <path pid="1"
-                                                                            d="M20.612 11.868a.502.502 0 0 1-.354-.146c-4.289-4.288-11.268-4.288-15.557 0a.5.5 0 0 1-.707-.707c4.679-4.679 12.292-4.679 16.971 0a.5.5 0 0 1-.353.853z">
-                                                                        </path>
-                                                                        <path pid="2"
-                                                                            d="M17.783 14.697a.502.502 0 0 1-.354-.146 6.954 6.954 0 0 0-4.95-2.05c-1.87 0-3.627.728-4.95 2.05a.5.5 0 0 1-.707-.707 7.948 7.948 0 0 1 5.657-2.343c2.137 0 4.146.832 5.657 2.343a.5.5 0 0 1-.353.853zM12.48 20.5a2.503 2.503 0 0 1-2.5-2.5c0-1.378 1.122-2.5 2.5-2.5s2.5 1.122 2.5 2.5-1.122 2.5-2.5 2.5zm0-4c-.827 0-1.5.673-1.5 1.5s.673 1.5 1.5 1.5 1.5-.673 1.5-1.5-.673-1.5-1.5-1.5z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>Wifi</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0" fill="#000" fill-rule="nonzero"
-                                                                        d="M15.07 11.21a4.5 4.5 0 1 0 0 6.58c-2.093-1.832-2.093-4.748 0-6.58zm.651.759c-1.628 1.432-1.628 3.63 0 5.062A4.48 4.48 0 0 0 16.5 14.5a4.48 4.48 0 0 0-.779-2.531zM10 1H4.5a.5.5 0 0 0-.5.5V5h6V1zm1 0v4h9V1.5a.5.5 0 0 0-.5-.5H11zM4 6v17h16V6H4zm.5-6h15A1.5 1.5 0 0 1 21 1.5v22a.5.5 0 0 1-.5.5h-17a.5.5 0 0 1-.5-.5v-22A1.5 1.5 0 0 1 4.5 0zM12 20a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zM6 3.5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1H6zM18 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z">
-                                                                    </path>
-                                                                </svg> <span>Máy giặt</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0"
-                                                                        d="M7.381 0c-1.457 0-2.7 1.065-2.7 1.065a.48.48 0 1 0 .6.75S6.438.96 7.381.96c1.226 0 2.28.855 2.28.855l.12.09V3.84H9.211a.48.48 0 0 0-.39.48v2.4h-.48a4.336 4.336 0 0 0-4.32 4.32v2.73a.492.492 0 0 0 0 .285V21.6a2.41 2.41 0 0 0 2.4 2.4h11.52a2.41 2.41 0 0 0 2.4-2.4v-7.59a.488.488 0 0 0 0-.195V11.04a4.336 4.336 0 0 0-4.32-4.32h-.48v-2.4a.48.48 0 0 0-.48-.48h-.48V1.92h.48a.483.483 0 0 0 .422-.238.485.485 0 0 0 0-.484.483.483 0 0 0-.422-.238h-.855a.45.45 0 0 0-.15-.015.422.422 0 0 0-.045.015h-3.645a.45.45 0 0 0-.15-.015.422.422 0 0 0-.045.015h-.06C9.894.786 8.87 0 7.381 0zm3.36 1.92h2.88v1.92h-2.88V1.92zm-.96 2.88h4.8v1.92h-4.8V4.8zm-1.44 2.88h7.68c1.85 0 3.36 1.51 3.36 3.36v2.4h-5.805c.026-.154.045-.319.045-.48a2.888 2.888 0 0 0-2.88-2.88 2.888 2.888 0 0 0-2.88 2.88c0 .161.019.326.045.48H4.981v-2.4c0-1.85 1.51-3.36 3.36-3.36zm2.4 3.36c1.067 0 1.92.853 1.92 1.92s-.853 1.92-1.92 1.92a1.91 1.91 0 0 1-1.74-1.11v-.015l-.015-.03-.015-.015c-.002-.004.002-.011 0-.015l-.015-.015a1.944 1.944 0 0 1-.135-.72c0-1.067.853-1.92 1.92-1.92zm-5.76 3.36h3.27a2.89 2.89 0 0 0 2.49 1.44 2.89 2.89 0 0 0 2.49-1.44h6.15v7.2a1.44 1.44 0 0 1-1.44 1.44H6.421a1.44 1.44 0 0 1-1.44-1.44v-7.2zm10.08 1.44c-1.056 0-1.92.864-1.92 1.92s.864 1.92 1.92 1.92 1.92-.864 1.92-1.92-.864-1.92-1.92-1.92zm0 .96c.536 0 .96.424.96.96s-.424.96-.96.96a.952.952 0 0 1-.96-.96c0-.536.424-.96.96-.96zm-3.84 2.4c-.79 0-1.44.65-1.44 1.44 0 .79.65 1.44 1.44 1.44.79 0 1.44-.65 1.44-1.44 0-.79-.65-1.44-1.44-1.44zm0 .96c.27 0 .48.21.48.48s-.21.48-.48.48-.48-.21-.48-.48.21-.48.48-.48z"
-                                                                        fill="#000" fill-rule="nonzero"></path>
-                                                                </svg> <span>Dầu gội, dầu xả</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0" fill="#000"
-                                                                        d="M0 7.429C0 3.367 1.964 0 4.571 0H19.43C22.036 0 24 3.367 24 7.429c0 4.06-1.964 7.428-4.571 7.428H16v8.572a.571.571 0 0 1-.571.571H.57a.571.571 0 0 1-.57-.571v-16zm14.857 7.428H4.571c-1.394 0-2.604-.963-3.428-2.48v10.48h13.714v-8zm4.572-1.143c1.81 0 3.428-2.772 3.428-6.285 0-3.514-1.617-6.286-3.428-6.286H7.035c1.286 1.323 2.108 3.66 2.108 6.286 0 2.626-.822 4.962-2.108 6.285H19.43zm-14.858 0C6.383 13.714 8 10.942 8 7.43c0-3.514-1.617-6.286-3.429-6.286-1.81 0-3.428 2.772-3.428 6.286 0 3.513 1.617 6.285 3.428 6.285zm0-4c-1.007 0-1.714-1.06-1.714-2.285 0-1.226.707-2.286 1.714-2.286 1.008 0 1.715 1.06 1.715 2.286 0 1.225-.707 2.285-1.715 2.285zm0-1.143c.256 0 .572-.474.572-1.142 0-.669-.316-1.143-.572-1.143-.255 0-.571.474-.571 1.143 0 .668.316 1.142.571 1.142z"
-                                                                        fill-rule="evenodd"></path>
-                                                                </svg> <span>Giấy vệ sinh</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill-rule="evenodd">
-                                                                        <path pid="0"
-                                                                            d="M9.17 18.234a.468.468 0 1 0 0 .937.468.468 0 0 0 0-.937z">
-                                                                        </path>
-                                                                        <path pid="1" fill-rule="nonzero"
-                                                                            d="M21.656 9.082a2.332 2.332 0 0 0-2.096-1.295h-1.844c.828-2.168 1.304-4.71 1.315-7.08a.469.469 0 0 0-.25-.417c-.95-.502-2.017-.346-2.855.418-.672.613-1.508.613-2.18 0-1.03-.94-2.415-.94-3.445 0-.672.613-1.508.613-2.18 0-.846-.771-1.962-.92-2.912-.387a.468.468 0 0 0-.24.412c.015 2.362.49 4.894 1.316 7.054H4.44a2.33 2.33 0 0 0-2.096 1.295C.12 13.625 0 13.62 0 13.88v7.778A2.346 2.346 0 0 0 2.344 24h19.312A2.346 2.346 0 0 0 24 21.657V13.88c0-.263-.13-.277-2.344-4.797zM5.911 1.027C6.446.833 7.01.963 7.49 1.4c1.03.94 2.414.94 3.444 0 .673-.613 1.508-.613 2.18 0 1.03.94 2.415.94 3.445 0 .465-.423 1.01-.559 1.532-.39-.054 2.394-.59 4.94-1.489 7.033-.437 1.02-.948 1.898-1.486 2.555h-.806a26.084 26.084 0 0 0 1.902-4.056.468.468 0 1 0-.88-.321c-.559 1.53-1.377 3.216-2.121 4.377h-.741V6.381a.469.469 0 0 0-.938 0v4.217h-.74c-.745-1.16-1.563-2.847-2.12-4.377a.469.469 0 0 0-.881.32 26.01 26.01 0 0 0 1.9 4.057h-.805C8.349 9.941 7.838 9.063 7.4 8.043c-.895-2.089-1.433-4.629-1.488-7.016zM3.182 9.5a1.4 1.4 0 0 1 1.258-.777h2.236c.317.697.668 1.33 1.04 1.875h-1.34a.469.469 0 1 0 0 .937h11.25a.469.469 0 1 0 0-.937h-1.341c.372-.545.724-1.178 1.04-1.875h2.236a1.4 1.4 0 0 1 1.258.777l1.955 3.909H1.227L3.182 9.5zm19.88 12.156c0 .775-.63 1.406-1.406 1.406H2.344c-.776 0-1.406-.63-1.406-1.406v-7.31h22.125v7.31z">
-                                                                        </path>
-                                                                        <path pid="2" fill-rule="nonzero"
-                                                                            d="M16.702 16.36H7.345a.468.468 0 0 0-.468.468v3.75c0 .259.21.469.468.469h9.357c.258 0 .468-.21.468-.469v-3.75a.468.468 0 0 0-.468-.469zm-.468 3.75H7.813v-2.813h8.42v2.812z">
-                                                                        </path>
-                                                                        <path pid="3"
-                                                                            d="M14.83 18.234h-3.742a.468.468 0 0 0 0 .938h3.742a.468.468 0 0 0 0-.938z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>Giấy ăn</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0"
-                                                                        d="M16.071 6.881c0-.546-.213-1.06-.6-1.447l-1.516-1.517a1.262 1.262 0 0 1-.372-.898V2.75a.804.804 0 0 0 .415-.702V.803A.804.804 0 0 0 13.194 0H9.877a.804.804 0 0 0-.804.803v1.245c0 .302.168.565.415.702v.27c0 .338-.132.657-.372.897L7.6 5.434c-.387.386-.6.9-.6 1.447v7.607c0 .32.124.612.327.83a1.213 1.213 0 0 0 0 1.658 1.213 1.213 0 0 0 0 1.659 1.213 1.213 0 0 0 0 1.659 1.21 1.21 0 0 0-.327.83v.828A2.05 2.05 0 0 0 9.048 24h4.976a2.05 2.05 0 0 0 2.047-2.048v-.829c0-.32-.124-.612-.327-.83a1.213 1.213 0 0 0 0-1.658 1.213 1.213 0 0 0 0-1.659 1.213 1.213 0 0 0 0-1.659 1.21 1.21 0 0 0 .327-.829V6.881zm-8.064 0c0-.339.132-.658.372-.897l1.287-1.517c.387-.387.6-.75.6-1.297v-.168h2.339v.168c0 .547.383 1.05.6 1.297l1.276 1.517c.24.24.524.558.524.897v6.678a.442.442 0 0 1-.441.441H8.218c-.243 0-.211-.198-.211-.44V6.88zm6.995 8.635c0 .339-.19.484-.433.484h-6.16c-.242 0-.405-.157-.405-.484 0-.328.163-.512.406-.512h6.159c.243 0 .433.172.433.512zm-.001 1.957c0 .367-.199.521-.442.521H8.45c-.243 0-.44-.265-.44-.557 0-.291.197-.44.44-.44h6.036c.243 0 .516.108.516.476zm-.009 2.027c0 .37-.195.503-.438.503H8.457c-.243 0-.448-.15-.448-.539 0-.388.271-.467.514-.467h6.03c.244 0 .44.133.44.503zm.013 2.596c0 .7-.803.903-1.503.903H9.28c-.7 0-1.291-.16-1.291-.86v-.701c0-.243.219-.438.462-.438h5.88c.47 0 .674.182.674.478v.618z">
-                                                                    </path>
-                                                                    <path pid="1"
-                                                                        d="M11.536 13.218a2.05 2.05 0 0 0 2.047-2.047c0-.988-1.439-3.121-1.727-3.539a.389.389 0 0 0-.64 0c-.289.418-1.728 2.551-1.728 3.539a2.05 2.05 0 0 0 2.048 2.047zm-.496-3.85c.176-.303.353-.587.497-.811.604.94 1.269 2.15 1.269 2.614 0 .7-.57 1.27-1.27 1.27-.7 0-1.27-.57-1.27-1.27 0-.14.075-.598.774-1.803z">
-                                                                    </path>
-                                                                </svg> <span>Nước khoáng</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill-rule="evenodd">
-                                                                        <path pid="0" fill-rule="nonzero"
-                                                                            d="M22.527 6.497h-.366v-.202c.107-1.298-.245-2.453-.993-3.254a3.18 3.18 0 0 0-2.443-1.024H3.945c-1.376 0-2.496 1.102-2.496 2.457v2.023h-.023C.64 6.497 0 7.127 0 7.901v.359c0 .774.64 1.403 1.426 1.403h.023v10.865c0 1.355 1.12 2.457 2.496 2.457h12.188c1.417 0 2.208-.28 2.646-.934.417-.624.421-1.51.421-2.537h1.757c.675 0 1.204-.67 1.204-1.524V9.663h.366c.787 0 1.426-.63 1.426-1.403V7.9c0-.773-.64-1.403-1.426-1.403zM1.45 8.742h-.023a.487.487 0 0 1-.49-.482V7.9c0-.265.22-.482.49-.482h.023v1.324zM21.225 6.36v.137H19.21c.043-.329.15-.593.314-.77a.773.773 0 0 1 .577-.245c.39 0 .899.276 1.125.878zm-2.96 13.126c0 1.032-.019 1.686-.267 2.058-.162.242-.52.52-1.865.52H3.945c-.86 0-1.56-.69-1.56-1.536V18.05h15.88v1.435zm0-2.356H2.384v-1.98h15.88v1.98zm.572-12.028c-.307.327-.655.949-.573 2.057v7.07H2.384v-.88h4.578a.464.464 0 0 0 .468-.46.465.465 0 0 0-.468-.461H2.385V4.474c0-.847.7-1.536 1.56-1.536h14.803a2.252 2.252 0 0 1 1.731.726c.298.32.513.72.638 1.18A2.001 2.001 0 0 0 20.1 4.56c-.487 0-.935.192-1.263.541zm2.388 12.888c0 .396-.2.603-.268.603H19.2v-8.93h2.025v8.327zm1.793-9.73c0 .266-.22.482-.49.482H19.2V7.418h3.327c.27 0 .49.217.49.483v.359z">
-                                                                        </path>
-                                                                        <path pid="1"
-                                                                            d="M8.428 12.428h-.037a.464.464 0 0 0-.468.46c0 .255.21.461.468.461h.037a.464.464 0 0 0 .468-.46.465.465 0 0 0-.468-.461z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>Khăn tắm</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0"
-                                                                        d="M19.824 1.261L18.105 2.98l-3.273.399-.123.014-.096.068L2.745 12.99l-.014.014-.013.027-1.155 1.141-.303.317 8.25 8.25.317-.303 1.14-1.155.028-.014.014-.013 9.556-11.825.083-.097.014-.137.357-3.3 1.416-1.402.303-.317-2.915-2.915zm0 1.252L21.5 4.176l-.893.894-1.678-1.664.894-.894zm-1.692 1.36h.014l1.98 1.98v.014l-.234 2.324-4.056-4.056 2.296-.261zm-3.286.523l4.785 4.785-9.281 11.482-.027.04-.798.785-7.013-7.013.784-.797.042-.028 11.508-9.254zM12.11 8.824c-.555 0-1.102.235-1.526.66-.394.393-.518.844-.605 1.168-.047.17-.072.298-.138.413-.063.113-.136.23-.206.344-.345.548-.928 1.464-.206 2.186.178.179.399.3.632.344.045.233.164.45.344.632.22.22.52.344.839.344.488 0 .923-.282 1.347-.55.114-.07.23-.143.344-.206.115-.066.242-.091.412-.138.325-.087.776-.211 1.17-.605.905-.906.872-2.195-.07-3.135a2.62 2.62 0 0 0-.398-.33 2.62 2.62 0 0 0-.33-.399c-.47-.469-1.021-.728-1.609-.728zm0 .88c.337 0 .68.158.99.467.138.138.234.286.303.427.14.068.287.163.426.302.603.603.608 1.356.069 1.897-.392.392-.901.32-1.403.605-.455.26-.928.633-1.251.633a.303.303 0 0 1-.22-.082c-.155-.155-.143-.353.055-.55.273-.274.58-.686.825-1.046.093-.137-.028-.288-.165-.288a.148.148 0 0 0-.097.027c-.359.244-.773.552-1.044.825-.109.109-.217.165-.317.165a.332.332 0 0 1-.234-.11c-.287-.287.226-.897.55-1.471.286-.504.214-.999.606-1.389.262-.264.586-.412.907-.412zm-7.92 3.41l-.619.632.317.316.618-.632-.316-.316zm.646.646l-.632.619.316.316.632-.619-.316-.316zm.633.633l-.619.618.316.317.619-.62-.316-.316zm.632.632l-.619.633.317.316.619-.633-.317-.316zm.646.646l-.632.619.316.316.633-.619-.317-.316zm.633.633l-.619.619.316.316.62-.619-.317-.316zm.633.632l-.62.633.317.316.619-.633-.317-.316zm.646.647l-.633.618.316.317.633-.62-.316-.315zm.632.632l-.619.619.317.316.618-.619-.316-.316zm.633.633l-.619.632.316.316.619-.632-.316-.316zm.646.646l-.633.619.317.316.632-.619-.316-.316z"
-                                                                        fill="#000" fill-rule="nonzero"></path>
-                                                                </svg> <span>Kem đánh răng</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill-rule="evenodd">
-                                                                        <path pid="0"
-                                                                            d="M7.2 16.902a2.105 2.105 0 0 1-1.654-.57 1.804 1.804 0 0 1-.351-1.328.393.393 0 0 0-.331-.443.4.4 0 0 0-.458.315 2.576 2.576 0 0 0 .526 1.96c.488.564 1.251.85 2.268.85.22 0 .4-.175.4-.392a.396.396 0 0 0-.4-.392zm2 0h-.4c-.22 0-.4.176-.4.392 0 .217.18.392.4.392h.4c.22 0 .4-.175.4-.392a.396.396 0 0 0-.4-.392zm7.6-5.49c.61-.059 1.215.15 1.654.569.288.381.414.858.351 1.329a.393.393 0 0 0 .395.455.398.398 0 0 0 .394-.328 2.573 2.573 0 0 0-.526-1.959c-.488-.564-1.251-.85-2.268-.85-.22 0-.4.175-.4.392 0 .216.18.392.4.392zm-1.2-.392a.396.396 0 0 0-.4-.393h-.4c-.22 0-.4.176-.4.393 0 .216.18.392.4.392h.4c.22 0 .4-.176.4-.392z">
-                                                                        </path>
-                                                                        <path pid="1" fill-rule="nonzero"
-                                                                            d="M2 9.451c1.104 0 2-.878 2-1.96 0-1.084-.896-1.962-2-1.962S0 6.407 0 7.49c.001 1.083.896 1.96 2 1.961zm0-3.137c.663 0 1.2.526 1.2 1.176 0 .65-.537 1.177-1.2 1.177-.663 0-1.2-.527-1.2-1.177S1.337 6.314 2 6.314zm8.8.392c0 .866.716 1.569 1.6 1.569.884 0 1.6-.703 1.6-1.57 0-.865-.716-1.568-1.6-1.568-.884 0-1.6.703-1.6 1.569zm2.4 0a.792.792 0 0 1-.8.784.792.792 0 0 1-.8-.784c0-.433.358-.784.8-.784.442 0 .8.35.8.784zM4.8 4.745c0 1.516 1.254 2.745 2.8 2.745 1.546 0 2.8-1.229 2.8-2.745S9.146 2 7.6 2c-1.546.002-2.798 1.23-2.8 2.745zm4.8 0c0 1.083-.896 1.96-2 1.96s-2-.877-2-1.96.896-1.96 2-1.96 1.999.878 2 1.96z">
-                                                                        </path>
-                                                                        <path pid="2"
-                                                                            d="M7.197 5.014a.722.722 0 0 1-.017-.54.39.39 0 0 0-.255-.495.402.402 0 0 0-.505.25c-.145.413-.1.867.127 1.243a1.22 1.22 0 0 0 1.053.45c.22 0 .4-.176.4-.393a.396.396 0 0 0-.4-.392.527.527 0 0 1-.403-.123z">
-                                                                        </path>
-                                                                        <path pid="3" fill-rule="nonzero"
-                                                                            d="M21.6 16.118a2.38 2.38 0 0 0-.431.042c.02-.144.03-.29.031-.435v-3.137c-.002-1.948-1.613-3.527-3.6-3.53H6.4c-1.987.003-3.598 1.582-3.6 3.53v3.137c.002 1.949 1.613 3.528 3.6 3.53h6.54a2.397 2.397 0 0 0 2.26 1.569c.349 0 .694-.076 1.008-.224A2.4 2.4 0 0 0 18.4 22a2.4 2.4 0 0 0 2.192-1.4c.314.148.66.224 1.008.224 1.325 0 2.4-1.054 2.4-2.353 0-1.3-1.075-2.353-2.4-2.353zm-8.8 2.353H6.4c-1.546-.002-2.798-1.23-2.8-2.746v-3.137c.002-1.515 1.254-2.743 2.8-2.745h11.2c1.546.002 2.798 1.23 2.8 2.745v3.137c0 .086-.01.17-.018.253a2.409 2.409 0 0 0-2.196-1.028 2.39 2.39 0 0 0-1.978 1.39 2.375 2.375 0 0 0-1.008-.222c-1.325.001-2.399 1.054-2.4 2.353zm8.8 1.568a1.598 1.598 0 0 1-.988-.345.406.406 0 0 0-.387-.059.394.394 0 0 0-.253.294 1.588 1.588 0 0 1-1.57 1.286 1.588 1.588 0 0 1-1.57-1.286.395.395 0 0 0-.253-.294.406.406 0 0 0-.387.059c-.28.223-.63.345-.992.345-.884 0-1.6-.702-1.6-1.568 0-.867.716-1.569 1.6-1.569.36.001.708.123.988.345.11.085.256.107.387.06a.394.394 0 0 0 .253-.295 1.588 1.588 0 0 1 1.57-1.285c.772 0 1.433.54 1.57 1.285a.395.395 0 0 0 .253.294c.13.048.278.026.387-.059.28-.222.63-.344.992-.345.884 0 1.6.702 1.6 1.569 0 .866-.716 1.568-1.6 1.568z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>Xà phòng tắm</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill="none" fill-rule="evenodd">
-                                                                        <path pid="0" d="M0 0h24v24H0z"></path>
-                                                                        <path pid="1" fill="#000" fill-rule="nonzero"
-                                                                            d="M17.571 3.452L6.434 2.07a5.872 5.872 0 0 0-.669-.038C2.586 2.03 0 4.62 0 7.805v.12a5.78 5.78 0 0 0 2.932 5.028l1.54 6.226c.17.689.599 1.27 1.206 1.636a2.639 2.639 0 0 0 2.01.304l.042-.01a2.638 2.638 0 0 0 1.637-1.206 2.639 2.639 0 0 0 .304-2.01l-1.112-4.495 9.012-1.12a.494.494 0 0 0 .434-.49V3.943c0-.25-.186-.46-.434-.49zM8.711 18.13c.107.433.039.88-.191 1.262-.23.381-.595.65-1.027.757l-.043.01c-.432.107-.88.04-1.26-.19a1.656 1.656 0 0 1-.758-1.028l-1.36-5.495a5.737 5.737 0 0 0 2.367.215l1.131-.14 1.14 4.61zm8.305-6.78L6.32 12.68A4.786 4.786 0 0 1 .99 7.925v-.12a4.786 4.786 0 0 1 5.328-4.754L17.016 4.38v6.97z">
-                                                                        </path>
-                                                                        <path pid="2" fill="#000" fill-rule="nonzero"
-                                                                            d="M2.763 7.865a3.293 3.293 0 0 0 3.29 3.29 3.293 3.293 0 0 0 3.288-3.29 3.293 3.293 0 0 0-3.289-3.289 3.293 3.293 0 0 0-3.289 3.29zm5.59 0c0 1.269-1.032 2.3-2.3 2.3a2.303 2.303 0 0 1-2.301-2.3c0-1.268 1.032-2.3 2.3-2.3 1.269 0 2.3 1.032 2.3 2.3z">
-                                                                        </path>
-                                                                        <path pid="3" fill="#000"
-                                                                            d="M19.196 6.305c.288 0 .426.155.688.476.289.356.684.843 1.455.843s1.166-.487 1.455-.843c.262-.321.4-.476.687-.476a.494.494 0 1 0 0-.99c-.77 0-1.166.487-1.455.843-.261.322-.4.477-.687.477-.288 0-.426-.155-.687-.477-.29-.356-.685-.842-1.455-.842a.494.494 0 0 0 0 .989zm4.285 1.998c-.77 0-1.166.486-1.455.842-.261.322-.4.477-.687.477-.288 0-.426-.155-.687-.477-.29-.356-.685-.842-1.455-.842a.494.494 0 1 0 0 .989c.287 0 .425.155.687.476.289.356.684.843 1.455.843s1.166-.487 1.455-.843c.262-.321.4-.476.688-.476a.494.494 0 1 0 0-.99z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>Máy sấy</span></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div item="[object Object]">
-                                                        <h4 class="mt--24 mb--0">Tiện ích bếp</h4>
-                                                        <ul class="list list--3 is-flex">
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill-rule="evenodd" transform="translate(1)">
-                                                                        <path pid="0"
-                                                                            d="M2 0h18a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm1 1a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H3z">
-                                                                        </path>
-                                                                        <path pid="1"
-                                                                            d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14z">
-                                                                        </path>
-                                                                        <rect pid="2" width="5" height="1" x="14" y="21"
-                                                                            rx=".5"></rect>
-                                                                        <rect pid="3" width="2" height="1" x="3" y="21"
-                                                                            rx=".5"></rect>
-                                                                        <rect pid="4" width="2" height="1" x="6" y="21"
-                                                                            rx=".5"></rect>
-                                                                    </g>
-                                                                </svg> <span>Bếp điện</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0" fill="#000" fill-rule="nonzero"
-                                                                        d="M17.5 0A1.5 1.5 0 0 1 19 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 22.5v-21A1.5 1.5 0 0 1 6.5 0h11zM6 13h12V1.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5V13zm0 1v8.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V14H6zm1-6.5a.5.5 0 0 1 1 0v4a.5.5 0 1 1-1 0v-4zm0 8a.5.5 0 1 1 1 0v4a.5.5 0 1 1-1 0v-4zm8.854 6.354a.5.5 0 0 1-.708-.708l1-1a.5.5 0 0 1 .708.708l-1 1zm-3 0a.5.5 0 0 1-.708-.708l4-4a.5.5 0 0 1 .708.708l-4 4z">
-                                                                    </path>
-                                                                </svg> <span>Tủ lạnh</span></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div item="[object Object]">
-                                                        <h4 class="mt--24 mb--0">Tiện ích giải trí</h4>
-                                                        <ul class="list list--3 is-flex">
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <g fill-rule="evenodd">
-                                                                        <path pid="0"
-                                                                            d="M10.568 12.772a.533.533 0 0 0-.396-.642c-.413-.098-1.015-1-.961-1.44a.533.533 0 1 0-1.06-.13c-.118.974.844 2.387 1.775 2.608a.532.532 0 0 0 .642-.396z">
-                                                                        </path>
-                                                                        <path pid="1" fill-rule="nonzero"
-                                                                            d="M18.896 19.245c-.105 0-.209.007-.31.02l-1.422-3.521c.7-.4 1.337-.92 1.889-1.547a8.227 8.227 0 0 0 2.026-5.36.533.533 0 0 0-.533-.534H6.318a.533.533 0 0 0-.533.534c0 .35.024.7.071 1.048H3.554a.533.533 0 1 0 0 1.067h2.52a8.223 8.223 0 0 0 1.737 3.245 7.42 7.42 0 0 0 1.827 1.51l-2.97 7.565a.533.533 0 1 0 .993.39l.675-1.718h8.139C16.637 23.104 17.66 24 18.896 24c1.348 0 2.445-1.067 2.445-2.378 0-1.31-1.097-2.377-2.445-2.377zM8.612 13.493A7.166 7.166 0 0 1 6.873 9.37h13.118a7.166 7.166 0 0 1-1.739 4.123A6.382 6.382 0 0 1 16.303 15l-.013.005a.547.547 0 0 0-.074.038 6.408 6.408 0 0 1-2.784.607c-1.131 0-2.07-.258-2.838-.633a.535.535 0 0 0-.094-.048l-.003-.001a6.392 6.392 0 0 1-1.885-1.476zm1.987 2.685c.88.354 1.836.54 2.833.54.972 0 1.905-.177 2.767-.513l1.38 3.416a2.4 2.4 0 0 0-1.004 1.256h-7.82l1.844-4.699zm8.297 6.755c-.76 0-1.378-.588-1.378-1.31 0-.724.618-1.312 1.378-1.312.76 0 1.378.588 1.378 1.311s-.618 1.311-1.378 1.311z">
-                                                                        </path>
-                                                                        <path pid="2"
-                                                                            d="M9.157 6.596a.533.533 0 1 0 .603.88c1.742-1.196.952-2.481.572-3.099-.42-.682-.598-1.066.267-1.66a.533.533 0 1 0-.604-.88c-1.741 1.197-.951 2.482-.571 3.099.419.683.598 1.066-.267 1.66zm7.177 0a.533.533 0 1 0 .604.88c1.741-1.196.951-2.481.572-3.098-.42-.683-.599-1.067.267-1.66a.533.533 0 1 0-.604-.88c-1.742 1.195-.952 2.48-.572 3.098.42.683.598 1.066-.267 1.66zm-3.98 0a.533.533 0 0 0 .604.88c2.226-1.53 1.213-3.178.726-3.97-.603-.983-.876-1.643.42-2.533a.533.533 0 1 0-.603-.88c-2.226 1.529-1.213 3.178-.726 3.97.603.982.876 1.643-.42 2.533z">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg> <span>BBQ</span></li>
-                                                            <li class="mt--12"><svg version="1.1" viewBox="0 0 24 23"
-                                                                    class="svg-icon svg-fill" alt=""
-                                                                    style="width: 24px; height: 24px;">
-                                                                    <path pid="0"
-                                                                        d="M23.486 22.457a.469.469 0 0 0 .377-.745c-.072-.098-1.743-2.364-3.933-4.039V15.86a2.343 2.343 0 0 0 1.872-2.292v-.936a.468.468 0 0 0-.936 0v.936c0 .61-.391 1.13-.936 1.323v-1.323a.468.468 0 0 0-.935 0v3.453c-1.177-.74-2.275-1.114-3.275-1.114-1.152 0-2.41.495-3.743 1.473-1.333-.978-2.59-1.473-3.742-1.473-.154 0-.31.01-.468.027v-2.881a2.343 2.343 0 0 0 1.871-2.292V8.889a.468.468 0 0 0-.936 0v1.872c0 .61-.39 1.13-.935 1.323V8.889a.468.468 0 0 0-.936 0v5.066a1.406 1.406 0 0 1-.936-1.323v-.936a.468.468 0 0 0-.935 0v.936c0 1.13.805 2.075 1.871 2.292v1.208c-.88.271-1.821.788-2.807 1.542v-3.17a.468.468 0 0 0-.936 0v1.323a1.406 1.406 0 0 1-.935-1.324v-.935a.468.468 0 0 0-.936 0v.935c0 1.13.805 2.075 1.871 2.293v1.653a23.375 23.375 0 0 0-2.997 3.263.469.469 0 0 0 .377.745h23.018zm-.968-.936H19.93v-2.646c1.093.926 2.021 1.965 2.588 2.646zm-3.523-3.375v3.375h-9.83c1.477-1.891 4.144-4.678 6.555-4.678.954 0 2.055.438 3.275 1.303zm-10.76-1.303c.892 0 1.893.383 2.98 1.142C9.623 19.34 8.4 20.956 7.992 21.52h-.225v-4.644c.16-.023.316-.034.468-.034zm-1.404.276v4.402H4.024v-2.645c1.003-.85 1.944-1.439 2.807-1.757zm-3.743 2.609v1.793H1.436c.396-.476.97-1.128 1.652-1.793z">
-                                                                    </path>
-                                                                    <path pid="1"
-                                                                        d="M15.72 12.164a3.279 3.279 0 0 0 3.275-3.275 3.279 3.279 0 0 0-3.275-3.274 3.279 3.279 0 0 0-3.275 3.274 3.279 3.279 0 0 0 3.275 3.275zm0-5.614c1.29 0 2.34 1.05 2.34 2.34 0 1.29-1.05 2.339-2.34 2.339-1.29 0-2.34-1.05-2.34-2.34 0-1.29 1.05-2.339 2.34-2.339zM0 4.211c0 .774.63 1.404 1.404 1.404h1.484c.193.544.713.935 1.323.935h2.807c.774 0 1.404-.63 1.404-1.403 0-.774-.63-1.404-1.404-1.404H6.47a1.406 1.406 0 0 0-1.323-.935H1.404c-.774 0-1.403.63-1.403 1.403zm5.615 0c0 .258.21.468.467.468h.936a.468.468 0 0 1 0 .936H4.211a.468.468 0 0 1-.468-.468.468.468 0 0 0-.468-.468h-1.87a.468.468 0 0 1 0-.936h3.742c.258 0 .468.21.468.468zM22.55 0h-3.742c-.61 0-1.13.392-1.324.936h-1.483c-.774 0-1.404.63-1.404 1.404 0 .774.63 1.403 1.404 1.403h3.742c.61 0 1.13-.39 1.324-.935h1.483c.774 0 1.404-.63 1.404-1.404 0-.774-.63-1.403-1.404-1.403zm0 1.872h-1.87a.468.468 0 0 0-.468.468c0 .258-.21.468-.468.468h-3.742a.468.468 0 0 1 0-.936h1.871c.258 0 .468-.21.468-.468s.21-.468.468-.468h3.742a.468.468 0 0 1 0 .936z">
-                                                                    </path>
-                                                                </svg> <span>Cảnh quan đẹp</span></li>
-                                                        </ul>
-                                                    </div> <a class="btn color-i mt--30" role="button">
-                                                        Xem thêm
-                                                    </a>
-                                                </div>
-                                                <div class="room-fw-modal">
-                                                    <!---->
-                                                </div>
-                                            </div>
-                                            <div class="d-block d-sm-none fl-item-stretch mt--24">
-                                                <div role="tablist" aria-multiselectable="true" class="el-collapse">
-                                                    <div class="el-collapse-item is-active" item="[object Object]">
-                                                        <div role="tab" aria-expanded="true"
-                                                            aria-controls="el-collapse-content-1707"
-                                                            aria-describedby="el-collapse-content-1707">
-                                                            <div role="button" id="el-collapse-head-1707" tabindex="0"
-                                                                class="el-collapse-item__header is-active">Tiện ích
-                                                                <i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right is-active"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-labelledby="el-collapse-head-1707"
-                                                            id="el-collapse-content-1707"
-                                                            class="el-collapse-item__wrap">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill="#000" fill-rule="nonzero">
-                                                                                <path pid="0"
-                                                                                    d="M23.44 9.04a.502.502 0 0 1-.354-.146A14.9 14.9 0 0 0 12.48 4.5 14.903 14.903 0 0 0 1.873 8.894a.5.5 0 0 1-.707-.707A15.896 15.896 0 0 1 12.48 3.5c4.274 0 8.292 1.665 11.313 4.687a.5.5 0 0 1-.353.853z">
-                                                                                </path>
-                                                                                <path pid="1"
-                                                                                    d="M20.612 11.868a.502.502 0 0 1-.354-.146c-4.289-4.288-11.268-4.288-15.557 0a.5.5 0 0 1-.707-.707c4.679-4.679 12.292-4.679 16.971 0a.5.5 0 0 1-.353.853z">
-                                                                                </path>
-                                                                                <path pid="2"
-                                                                                    d="M17.783 14.697a.502.502 0 0 1-.354-.146 6.954 6.954 0 0 0-4.95-2.05c-1.87 0-3.627.728-4.95 2.05a.5.5 0 0 1-.707-.707 7.948 7.948 0 0 1 5.657-2.343c2.137 0 4.146.832 5.657 2.343a.5.5 0 0 1-.353.853zM12.48 20.5a2.503 2.503 0 0 1-2.5-2.5c0-1.378 1.122-2.5 2.5-2.5s2.5 1.122 2.5 2.5-1.122 2.5-2.5 2.5zm0-4c-.827 0-1.5.673-1.5 1.5s.673 1.5 1.5 1.5 1.5-.673 1.5-1.5-.673-1.5-1.5-1.5z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Wifi</span>
-                                                                    </div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0" fill="#000"
-                                                                                fill-rule="nonzero"
-                                                                                d="M15.07 11.21a4.5 4.5 0 1 0 0 6.58c-2.093-1.832-2.093-4.748 0-6.58zm.651.759c-1.628 1.432-1.628 3.63 0 5.062A4.48 4.48 0 0 0 16.5 14.5a4.48 4.48 0 0 0-.779-2.531zM10 1H4.5a.5.5 0 0 0-.5.5V5h6V1zm1 0v4h9V1.5a.5.5 0 0 0-.5-.5H11zM4 6v17h16V6H4zm.5-6h15A1.5 1.5 0 0 1 21 1.5v22a.5.5 0 0 1-.5.5h-17a.5.5 0 0 1-.5-.5v-22A1.5 1.5 0 0 1 4.5 0zM12 20a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zM6 3.5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1H6zM18 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-3 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Máy
-                                                                            giặt</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0"
-                                                                                d="M7.381 0c-1.457 0-2.7 1.065-2.7 1.065a.48.48 0 1 0 .6.75S6.438.96 7.381.96c1.226 0 2.28.855 2.28.855l.12.09V3.84H9.211a.48.48 0 0 0-.39.48v2.4h-.48a4.336 4.336 0 0 0-4.32 4.32v2.73a.492.492 0 0 0 0 .285V21.6a2.41 2.41 0 0 0 2.4 2.4h11.52a2.41 2.41 0 0 0 2.4-2.4v-7.59a.488.488 0 0 0 0-.195V11.04a4.336 4.336 0 0 0-4.32-4.32h-.48v-2.4a.48.48 0 0 0-.48-.48h-.48V1.92h.48a.483.483 0 0 0 .422-.238.485.485 0 0 0 0-.484.483.483 0 0 0-.422-.238h-.855a.45.45 0 0 0-.15-.015.422.422 0 0 0-.045.015h-3.645a.45.45 0 0 0-.15-.015.422.422 0 0 0-.045.015h-.06C9.894.786 8.87 0 7.381 0zm3.36 1.92h2.88v1.92h-2.88V1.92zm-.96 2.88h4.8v1.92h-4.8V4.8zm-1.44 2.88h7.68c1.85 0 3.36 1.51 3.36 3.36v2.4h-5.805c.026-.154.045-.319.045-.48a2.888 2.888 0 0 0-2.88-2.88 2.888 2.888 0 0 0-2.88 2.88c0 .161.019.326.045.48H4.981v-2.4c0-1.85 1.51-3.36 3.36-3.36zm2.4 3.36c1.067 0 1.92.853 1.92 1.92s-.853 1.92-1.92 1.92a1.91 1.91 0 0 1-1.74-1.11v-.015l-.015-.03-.015-.015c-.002-.004.002-.011 0-.015l-.015-.015a1.944 1.944 0 0 1-.135-.72c0-1.067.853-1.92 1.92-1.92zm-5.76 3.36h3.27a2.89 2.89 0 0 0 2.49 1.44 2.89 2.89 0 0 0 2.49-1.44h6.15v7.2a1.44 1.44 0 0 1-1.44 1.44H6.421a1.44 1.44 0 0 1-1.44-1.44v-7.2zm10.08 1.44c-1.056 0-1.92.864-1.92 1.92s.864 1.92 1.92 1.92 1.92-.864 1.92-1.92-.864-1.92-1.92-1.92zm0 .96c.536 0 .96.424.96.96s-.424.96-.96.96a.952.952 0 0 1-.96-.96c0-.536.424-.96.96-.96zm-3.84 2.4c-.79 0-1.44.65-1.44 1.44 0 .79.65 1.44 1.44 1.44.79 0 1.44-.65 1.44-1.44 0-.79-.65-1.44-1.44-1.44zm0 .96c.27 0 .48.21.48.48s-.21.48-.48.48-.48-.21-.48-.48.21-.48.48-.48z"
-                                                                                fill="#000" fill-rule="nonzero">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Dầu
-                                                                            gội,
-                                                                            dầu xả</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0" fill="#000"
-                                                                                d="M0 7.429C0 3.367 1.964 0 4.571 0H19.43C22.036 0 24 3.367 24 7.429c0 4.06-1.964 7.428-4.571 7.428H16v8.572a.571.571 0 0 1-.571.571H.57a.571.571 0 0 1-.57-.571v-16zm14.857 7.428H4.571c-1.394 0-2.604-.963-3.428-2.48v10.48h13.714v-8zm4.572-1.143c1.81 0 3.428-2.772 3.428-6.285 0-3.514-1.617-6.286-3.428-6.286H7.035c1.286 1.323 2.108 3.66 2.108 6.286 0 2.626-.822 4.962-2.108 6.285H19.43zm-14.858 0C6.383 13.714 8 10.942 8 7.43c0-3.514-1.617-6.286-3.429-6.286-1.81 0-3.428 2.772-3.428 6.286 0 3.513 1.617 6.285 3.428 6.285zm0-4c-1.007 0-1.714-1.06-1.714-2.285 0-1.226.707-2.286 1.714-2.286 1.008 0 1.715 1.06 1.715 2.286 0 1.225-.707 2.285-1.715 2.285zm0-1.143c.256 0 .572-.474.572-1.142 0-.669-.316-1.143-.572-1.143-.255 0-.571.474-.571 1.143 0 .668.316 1.142.571 1.142z"
-                                                                                fill-rule="evenodd"></path>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Giấy vệ
-                                                                            sinh</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd">
-                                                                                <path pid="0"
-                                                                                    d="M9.17 18.234a.468.468 0 1 0 0 .937.468.468 0 0 0 0-.937z">
-                                                                                </path>
-                                                                                <path pid="1" fill-rule="nonzero"
-                                                                                    d="M21.656 9.082a2.332 2.332 0 0 0-2.096-1.295h-1.844c.828-2.168 1.304-4.71 1.315-7.08a.469.469 0 0 0-.25-.417c-.95-.502-2.017-.346-2.855.418-.672.613-1.508.613-2.18 0-1.03-.94-2.415-.94-3.445 0-.672.613-1.508.613-2.18 0-.846-.771-1.962-.92-2.912-.387a.468.468 0 0 0-.24.412c.015 2.362.49 4.894 1.316 7.054H4.44a2.33 2.33 0 0 0-2.096 1.295C.12 13.625 0 13.62 0 13.88v7.778A2.346 2.346 0 0 0 2.344 24h19.312A2.346 2.346 0 0 0 24 21.657V13.88c0-.263-.13-.277-2.344-4.797zM5.911 1.027C6.446.833 7.01.963 7.49 1.4c1.03.94 2.414.94 3.444 0 .673-.613 1.508-.613 2.18 0 1.03.94 2.415.94 3.445 0 .465-.423 1.01-.559 1.532-.39-.054 2.394-.59 4.94-1.489 7.033-.437 1.02-.948 1.898-1.486 2.555h-.806a26.084 26.084 0 0 0 1.902-4.056.468.468 0 1 0-.88-.321c-.559 1.53-1.377 3.216-2.121 4.377h-.741V6.381a.469.469 0 0 0-.938 0v4.217h-.74c-.745-1.16-1.563-2.847-2.12-4.377a.469.469 0 0 0-.881.32 26.01 26.01 0 0 0 1.9 4.057h-.805C8.349 9.941 7.838 9.063 7.4 8.043c-.895-2.089-1.433-4.629-1.488-7.016zM3.182 9.5a1.4 1.4 0 0 1 1.258-.777h2.236c.317.697.668 1.33 1.04 1.875h-1.34a.469.469 0 1 0 0 .937h11.25a.469.469 0 1 0 0-.937h-1.341c.372-.545.724-1.178 1.04-1.875h2.236a1.4 1.4 0 0 1 1.258.777l1.955 3.909H1.227L3.182 9.5zm19.88 12.156c0 .775-.63 1.406-1.406 1.406H2.344c-.776 0-1.406-.63-1.406-1.406v-7.31h22.125v7.31z">
-                                                                                </path>
-                                                                                <path pid="2" fill-rule="nonzero"
-                                                                                    d="M16.702 16.36H7.345a.468.468 0 0 0-.468.468v3.75c0 .259.21.469.468.469h9.357c.258 0 .468-.21.468-.469v-3.75a.468.468 0 0 0-.468-.469zm-.468 3.75H7.813v-2.813h8.42v2.812z">
-                                                                                </path>
-                                                                                <path pid="3"
-                                                                                    d="M14.83 18.234h-3.742a.468.468 0 0 0 0 .938h3.742a.468.468 0 0 0 0-.938z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Giấy
-                                                                            ăn</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0"
-                                                                                d="M16.071 6.881c0-.546-.213-1.06-.6-1.447l-1.516-1.517a1.262 1.262 0 0 1-.372-.898V2.75a.804.804 0 0 0 .415-.702V.803A.804.804 0 0 0 13.194 0H9.877a.804.804 0 0 0-.804.803v1.245c0 .302.168.565.415.702v.27c0 .338-.132.657-.372.897L7.6 5.434c-.387.386-.6.9-.6 1.447v7.607c0 .32.124.612.327.83a1.213 1.213 0 0 0 0 1.658 1.213 1.213 0 0 0 0 1.659 1.213 1.213 0 0 0 0 1.659 1.21 1.21 0 0 0-.327.83v.828A2.05 2.05 0 0 0 9.048 24h4.976a2.05 2.05 0 0 0 2.047-2.048v-.829c0-.32-.124-.612-.327-.83a1.213 1.213 0 0 0 0-1.658 1.213 1.213 0 0 0 0-1.659 1.213 1.213 0 0 0 0-1.659 1.21 1.21 0 0 0 .327-.829V6.881zm-8.064 0c0-.339.132-.658.372-.897l1.287-1.517c.387-.387.6-.75.6-1.297v-.168h2.339v.168c0 .547.383 1.05.6 1.297l1.276 1.517c.24.24.524.558.524.897v6.678a.442.442 0 0 1-.441.441H8.218c-.243 0-.211-.198-.211-.44V6.88zm6.995 8.635c0 .339-.19.484-.433.484h-6.16c-.242 0-.405-.157-.405-.484 0-.328.163-.512.406-.512h6.159c.243 0 .433.172.433.512zm-.001 1.957c0 .367-.199.521-.442.521H8.45c-.243 0-.44-.265-.44-.557 0-.291.197-.44.44-.44h6.036c.243 0 .516.108.516.476zm-.009 2.027c0 .37-.195.503-.438.503H8.457c-.243 0-.448-.15-.448-.539 0-.388.271-.467.514-.467h6.03c.244 0 .44.133.44.503zm.013 2.596c0 .7-.803.903-1.503.903H9.28c-.7 0-1.291-.16-1.291-.86v-.701c0-.243.219-.438.462-.438h5.88c.47 0 .674.182.674.478v.618z">
-                                                                            </path>
-                                                                            <path pid="1"
-                                                                                d="M11.536 13.218a2.05 2.05 0 0 0 2.047-2.047c0-.988-1.439-3.121-1.727-3.539a.389.389 0 0 0-.64 0c-.289.418-1.728 2.551-1.728 3.539a2.05 2.05 0 0 0 2.048 2.047zm-.496-3.85c.176-.303.353-.587.497-.811.604.94 1.269 2.15 1.269 2.614 0 .7-.57 1.27-1.27 1.27-.7 0-1.27-.57-1.27-1.27 0-.14.075-.598.774-1.803z">
-                                                                            </path>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Nước
-                                                                            khoáng</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd">
-                                                                                <path pid="0" fill-rule="nonzero"
-                                                                                    d="M22.527 6.497h-.366v-.202c.107-1.298-.245-2.453-.993-3.254a3.18 3.18 0 0 0-2.443-1.024H3.945c-1.376 0-2.496 1.102-2.496 2.457v2.023h-.023C.64 6.497 0 7.127 0 7.901v.359c0 .774.64 1.403 1.426 1.403h.023v10.865c0 1.355 1.12 2.457 2.496 2.457h12.188c1.417 0 2.208-.28 2.646-.934.417-.624.421-1.51.421-2.537h1.757c.675 0 1.204-.67 1.204-1.524V9.663h.366c.787 0 1.426-.63 1.426-1.403V7.9c0-.773-.64-1.403-1.426-1.403zM1.45 8.742h-.023a.487.487 0 0 1-.49-.482V7.9c0-.265.22-.482.49-.482h.023v1.324zM21.225 6.36v.137H19.21c.043-.329.15-.593.314-.77a.773.773 0 0 1 .577-.245c.39 0 .899.276 1.125.878zm-2.96 13.126c0 1.032-.019 1.686-.267 2.058-.162.242-.52.52-1.865.52H3.945c-.86 0-1.56-.69-1.56-1.536V18.05h15.88v1.435zm0-2.356H2.384v-1.98h15.88v1.98zm.572-12.028c-.307.327-.655.949-.573 2.057v7.07H2.384v-.88h4.578a.464.464 0 0 0 .468-.46.465.465 0 0 0-.468-.461H2.385V4.474c0-.847.7-1.536 1.56-1.536h14.803a2.252 2.252 0 0 1 1.731.726c.298.32.513.72.638 1.18A2.001 2.001 0 0 0 20.1 4.56c-.487 0-.935.192-1.263.541zm2.388 12.888c0 .396-.2.603-.268.603H19.2v-8.93h2.025v8.327zm1.793-9.73c0 .266-.22.482-.49.482H19.2V7.418h3.327c.27 0 .49.217.49.483v.359z">
-                                                                                </path>
-                                                                                <path pid="1"
-                                                                                    d="M8.428 12.428h-.037a.464.464 0 0 0-.468.46c0 .255.21.461.468.461h.037a.464.464 0 0 0 .468-.46.465.465 0 0 0-.468-.461z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Khăn
-                                                                            tắm</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0"
-                                                                                d="M19.824 1.261L18.105 2.98l-3.273.399-.123.014-.096.068L2.745 12.99l-.014.014-.013.027-1.155 1.141-.303.317 8.25 8.25.317-.303 1.14-1.155.028-.014.014-.013 9.556-11.825.083-.097.014-.137.357-3.3 1.416-1.402.303-.317-2.915-2.915zm0 1.252L21.5 4.176l-.893.894-1.678-1.664.894-.894zm-1.692 1.36h.014l1.98 1.98v.014l-.234 2.324-4.056-4.056 2.296-.261zm-3.286.523l4.785 4.785-9.281 11.482-.027.04-.798.785-7.013-7.013.784-.797.042-.028 11.508-9.254zM12.11 8.824c-.555 0-1.102.235-1.526.66-.394.393-.518.844-.605 1.168-.047.17-.072.298-.138.413-.063.113-.136.23-.206.344-.345.548-.928 1.464-.206 2.186.178.179.399.3.632.344.045.233.164.45.344.632.22.22.52.344.839.344.488 0 .923-.282 1.347-.55.114-.07.23-.143.344-.206.115-.066.242-.091.412-.138.325-.087.776-.211 1.17-.605.905-.906.872-2.195-.07-3.135a2.62 2.62 0 0 0-.398-.33 2.62 2.62 0 0 0-.33-.399c-.47-.469-1.021-.728-1.609-.728zm0 .88c.337 0 .68.158.99.467.138.138.234.286.303.427.14.068.287.163.426.302.603.603.608 1.356.069 1.897-.392.392-.901.32-1.403.605-.455.26-.928.633-1.251.633a.303.303 0 0 1-.22-.082c-.155-.155-.143-.353.055-.55.273-.274.58-.686.825-1.046.093-.137-.028-.288-.165-.288a.148.148 0 0 0-.097.027c-.359.244-.773.552-1.044.825-.109.109-.217.165-.317.165a.332.332 0 0 1-.234-.11c-.287-.287.226-.897.55-1.471.286-.504.214-.999.606-1.389.262-.264.586-.412.907-.412zm-7.92 3.41l-.619.632.317.316.618-.632-.316-.316zm.646.646l-.632.619.316.316.632-.619-.316-.316zm.633.633l-.619.618.316.317.619-.62-.316-.316zm.632.632l-.619.633.317.316.619-.633-.317-.316zm.646.646l-.632.619.316.316.633-.619-.317-.316zm.633.633l-.619.619.316.316.62-.619-.317-.316zm.633.632l-.62.633.317.316.619-.633-.317-.316zm.646.647l-.633.618.316.317.633-.62-.316-.315zm.632.632l-.619.619.317.316.618-.619-.316-.316zm.633.633l-.619.632.316.316.619-.632-.316-.316zm.646.646l-.633.619.317.316.632-.619-.316-.316z"
-                                                                                fill="#000" fill-rule="nonzero">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Kem
-                                                                            đánh
-                                                                            răng</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd">
-                                                                                <path pid="0"
-                                                                                    d="M7.2 16.902a2.105 2.105 0 0 1-1.654-.57 1.804 1.804 0 0 1-.351-1.328.393.393 0 0 0-.331-.443.4.4 0 0 0-.458.315 2.576 2.576 0 0 0 .526 1.96c.488.564 1.251.85 2.268.85.22 0 .4-.175.4-.392a.396.396 0 0 0-.4-.392zm2 0h-.4c-.22 0-.4.176-.4.392 0 .217.18.392.4.392h.4c.22 0 .4-.175.4-.392a.396.396 0 0 0-.4-.392zm7.6-5.49c.61-.059 1.215.15 1.654.569.288.381.414.858.351 1.329a.393.393 0 0 0 .395.455.398.398 0 0 0 .394-.328 2.573 2.573 0 0 0-.526-1.959c-.488-.564-1.251-.85-2.268-.85-.22 0-.4.175-.4.392 0 .216.18.392.4.392zm-1.2-.392a.396.396 0 0 0-.4-.393h-.4c-.22 0-.4.176-.4.393 0 .216.18.392.4.392h.4c.22 0 .4-.176.4-.392z">
-                                                                                </path>
-                                                                                <path pid="1" fill-rule="nonzero"
-                                                                                    d="M2 9.451c1.104 0 2-.878 2-1.96 0-1.084-.896-1.962-2-1.962S0 6.407 0 7.49c.001 1.083.896 1.96 2 1.961zm0-3.137c.663 0 1.2.526 1.2 1.176 0 .65-.537 1.177-1.2 1.177-.663 0-1.2-.527-1.2-1.177S1.337 6.314 2 6.314zm8.8.392c0 .866.716 1.569 1.6 1.569.884 0 1.6-.703 1.6-1.57 0-.865-.716-1.568-1.6-1.568-.884 0-1.6.703-1.6 1.569zm2.4 0a.792.792 0 0 1-.8.784.792.792 0 0 1-.8-.784c0-.433.358-.784.8-.784.442 0 .8.35.8.784zM4.8 4.745c0 1.516 1.254 2.745 2.8 2.745 1.546 0 2.8-1.229 2.8-2.745S9.146 2 7.6 2c-1.546.002-2.798 1.23-2.8 2.745zm4.8 0c0 1.083-.896 1.96-2 1.96s-2-.877-2-1.96.896-1.96 2-1.96 1.999.878 2 1.96z">
-                                                                                </path>
-                                                                                <path pid="2"
-                                                                                    d="M7.197 5.014a.722.722 0 0 1-.017-.54.39.39 0 0 0-.255-.495.402.402 0 0 0-.505.25c-.145.413-.1.867.127 1.243a1.22 1.22 0 0 0 1.053.45c.22 0 .4-.176.4-.393a.396.396 0 0 0-.4-.392.527.527 0 0 1-.403-.123z">
-                                                                                </path>
-                                                                                <path pid="3" fill-rule="nonzero"
-                                                                                    d="M21.6 16.118a2.38 2.38 0 0 0-.431.042c.02-.144.03-.29.031-.435v-3.137c-.002-1.948-1.613-3.527-3.6-3.53H6.4c-1.987.003-3.598 1.582-3.6 3.53v3.137c.002 1.949 1.613 3.528 3.6 3.53h6.54a2.397 2.397 0 0 0 2.26 1.569c.349 0 .694-.076 1.008-.224A2.4 2.4 0 0 0 18.4 22a2.4 2.4 0 0 0 2.192-1.4c.314.148.66.224 1.008.224 1.325 0 2.4-1.054 2.4-2.353 0-1.3-1.075-2.353-2.4-2.353zm-8.8 2.353H6.4c-1.546-.002-2.798-1.23-2.8-2.746v-3.137c.002-1.515 1.254-2.743 2.8-2.745h11.2c1.546.002 2.798 1.23 2.8 2.745v3.137c0 .086-.01.17-.018.253a2.409 2.409 0 0 0-2.196-1.028 2.39 2.39 0 0 0-1.978 1.39 2.375 2.375 0 0 0-1.008-.222c-1.325.001-2.399 1.054-2.4 2.353zm8.8 1.568a1.598 1.598 0 0 1-.988-.345.406.406 0 0 0-.387-.059.394.394 0 0 0-.253.294 1.588 1.588 0 0 1-1.57 1.286 1.588 1.588 0 0 1-1.57-1.286.395.395 0 0 0-.253-.294.406.406 0 0 0-.387.059c-.28.223-.63.345-.992.345-.884 0-1.6-.702-1.6-1.568 0-.867.716-1.569 1.6-1.569.36.001.708.123.988.345.11.085.256.107.387.06a.394.394 0 0 0 .253-.295 1.588 1.588 0 0 1 1.57-1.285c.772 0 1.433.54 1.57 1.285a.395.395 0 0 0 .253.294c.13.048.278.026.387-.059.28-.222.63-.344.992-.345.884 0 1.6.702 1.6 1.569 0 .866-.716 1.568-1.6 1.568z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Xà
-                                                                            phòng
-                                                                            tắm</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill="none" fill-rule="evenodd">
-                                                                                <path pid="0" d="M0 0h24v24H0z">
-                                                                                </path>
-                                                                                <path pid="1" fill="#000"
-                                                                                    fill-rule="nonzero"
-                                                                                    d="M17.571 3.452L6.434 2.07a5.872 5.872 0 0 0-.669-.038C2.586 2.03 0 4.62 0 7.805v.12a5.78 5.78 0 0 0 2.932 5.028l1.54 6.226c.17.689.599 1.27 1.206 1.636a2.639 2.639 0 0 0 2.01.304l.042-.01a2.638 2.638 0 0 0 1.637-1.206 2.639 2.639 0 0 0 .304-2.01l-1.112-4.495 9.012-1.12a.494.494 0 0 0 .434-.49V3.943c0-.25-.186-.46-.434-.49zM8.711 18.13c.107.433.039.88-.191 1.262-.23.381-.595.65-1.027.757l-.043.01c-.432.107-.88.04-1.26-.19a1.656 1.656 0 0 1-.758-1.028l-1.36-5.495a5.737 5.737 0 0 0 2.367.215l1.131-.14 1.14 4.61zm8.305-6.78L6.32 12.68A4.786 4.786 0 0 1 .99 7.925v-.12a4.786 4.786 0 0 1 5.328-4.754L17.016 4.38v6.97z">
-                                                                                </path>
-                                                                                <path pid="2" fill="#000"
-                                                                                    fill-rule="nonzero"
-                                                                                    d="M2.763 7.865a3.293 3.293 0 0 0 3.29 3.29 3.293 3.293 0 0 0 3.288-3.29 3.293 3.293 0 0 0-3.289-3.289 3.293 3.293 0 0 0-3.289 3.29zm5.59 0c0 1.269-1.032 2.3-2.3 2.3a2.303 2.303 0 0 1-2.301-2.3c0-1.268 1.032-2.3 2.3-2.3 1.269 0 2.3 1.032 2.3 2.3z">
-                                                                                </path>
-                                                                                <path pid="3" fill="#000"
-                                                                                    d="M19.196 6.305c.288 0 .426.155.688.476.289.356.684.843 1.455.843s1.166-.487 1.455-.843c.262-.321.4-.476.687-.476a.494.494 0 1 0 0-.99c-.77 0-1.166.487-1.455.843-.261.322-.4.477-.687.477-.288 0-.426-.155-.687-.477-.29-.356-.685-.842-1.455-.842a.494.494 0 0 0 0 .989zm4.285 1.998c-.77 0-1.166.486-1.455.842-.261.322-.4.477-.687.477-.288 0-.426-.155-.687-.477-.29-.356-.685-.842-1.455-.842a.494.494 0 1 0 0 .989c.287 0 .425.155.687.476.289.356.684.843 1.455.843s1.166-.487 1.455-.843c.262-.321.4-.476.688-.476a.494.494 0 1 0 0-.99z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Máy
-                                                                            sấy</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="el-collapse-item" item="[object Object]">
-                                                        <div role="tab" aria-controls="el-collapse-content-8070"
-                                                            aria-describedby="el-collapse-content-8070">
-                                                            <div role="button" id="el-collapse-head-8070" tabindex="0"
-                                                                class="el-collapse-item__header">Tiện
-                                                                ích bếp<i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-hidden="true"
-                                                            aria-labelledby="el-collapse-head-8070"
-                                                            id="el-collapse-content-8070" class="el-collapse-item__wrap"
-                                                            style="display: none;">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd"
-                                                                                transform="translate(1)">
-                                                                                <path pid="0"
-                                                                                    d="M2 0h18a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm1 1a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H3z">
-                                                                                </path>
-                                                                                <path pid="1"
-                                                                                    d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14z">
-                                                                                </path>
-                                                                                <rect pid="2" width="5" height="1"
-                                                                                    x="14" y="21" rx=".5"></rect>
-                                                                                <rect pid="3" width="2" height="1" x="3"
-                                                                                    y="21" rx=".5"></rect>
-                                                                                <rect pid="4" width="2" height="1" x="6"
-                                                                                    y="21" rx=".5"></rect>
-                                                                            </g>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Bếp
-                                                                            điện</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0" fill="#000"
-                                                                                fill-rule="nonzero"
-                                                                                d="M17.5 0A1.5 1.5 0 0 1 19 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 22.5v-21A1.5 1.5 0 0 1 6.5 0h11zM6 13h12V1.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5V13zm0 1v8.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V14H6zm1-6.5a.5.5 0 0 1 1 0v4a.5.5 0 1 1-1 0v-4zm0 8a.5.5 0 1 1 1 0v4a.5.5 0 1 1-1 0v-4zm8.854 6.354a.5.5 0 0 1-.708-.708l1-1a.5.5 0 0 1 .708.708l-1 1zm-3 0a.5.5 0 0 1-.708-.708l4-4a.5.5 0 0 1 .708.708l-4 4z">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Tủ
-                                                                            lạnh</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="el-collapse-item" item="[object Object]">
-                                                        <div role="tab" aria-controls="el-collapse-content-8498"
-                                                            aria-describedby="el-collapse-content-8498">
-                                                            <div role="button" id="el-collapse-head-8498" tabindex="0"
-                                                                class="el-collapse-item__header">Tiện
-                                                                ích giải trí<i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-hidden="true"
-                                                            aria-labelledby="el-collapse-head-8498"
-                                                            id="el-collapse-content-8498" class="el-collapse-item__wrap"
-                                                            style="display: none;">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd">
-                                                                                <path pid="0"
-                                                                                    d="M10.568 12.772a.533.533 0 0 0-.396-.642c-.413-.098-1.015-1-.961-1.44a.533.533 0 1 0-1.06-.13c-.118.974.844 2.387 1.775 2.608a.532.532 0 0 0 .642-.396z">
-                                                                                </path>
-                                                                                <path pid="1" fill-rule="nonzero"
-                                                                                    d="M18.896 19.245c-.105 0-.209.007-.31.02l-1.422-3.521c.7-.4 1.337-.92 1.889-1.547a8.227 8.227 0 0 0 2.026-5.36.533.533 0 0 0-.533-.534H6.318a.533.533 0 0 0-.533.534c0 .35.024.7.071 1.048H3.554a.533.533 0 1 0 0 1.067h2.52a8.223 8.223 0 0 0 1.737 3.245 7.42 7.42 0 0 0 1.827 1.51l-2.97 7.565a.533.533 0 1 0 .993.39l.675-1.718h8.139C16.637 23.104 17.66 24 18.896 24c1.348 0 2.445-1.067 2.445-2.378 0-1.31-1.097-2.377-2.445-2.377zM8.612 13.493A7.166 7.166 0 0 1 6.873 9.37h13.118a7.166 7.166 0 0 1-1.739 4.123A6.382 6.382 0 0 1 16.303 15l-.013.005a.547.547 0 0 0-.074.038 6.408 6.408 0 0 1-2.784.607c-1.131 0-2.07-.258-2.838-.633a.535.535 0 0 0-.094-.048l-.003-.001a6.392 6.392 0 0 1-1.885-1.476zm1.987 2.685c.88.354 1.836.54 2.833.54.972 0 1.905-.177 2.767-.513l1.38 3.416a2.4 2.4 0 0 0-1.004 1.256h-7.82l1.844-4.699zm8.297 6.755c-.76 0-1.378-.588-1.378-1.31 0-.724.618-1.312 1.378-1.312.76 0 1.378.588 1.378 1.311s-.618 1.311-1.378 1.311z">
-                                                                                </path>
-                                                                                <path pid="2"
-                                                                                    d="M9.157 6.596a.533.533 0 1 0 .603.88c1.742-1.196.952-2.481.572-3.099-.42-.682-.598-1.066.267-1.66a.533.533 0 1 0-.604-.88c-1.741 1.197-.951 2.482-.571 3.099.419.683.598 1.066-.267 1.66zm7.177 0a.533.533 0 1 0 .604.88c1.741-1.196.951-2.481.572-3.098-.42-.683-.599-1.067.267-1.66a.533.533 0 1 0-.604-.88c-1.742 1.195-.952 2.48-.572 3.098.42.683.598 1.066-.267 1.66zm-3.98 0a.533.533 0 0 0 .604.88c2.226-1.53 1.213-3.178.726-3.97-.603-.983-.876-1.643.42-2.533a.533.533 0 1 0-.603-.88c-2.226 1.529-1.213 3.178-.726 3.97.603.982.876 1.643-.42 2.533z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">BBQ</span>
-                                                                    </div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 23"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0"
-                                                                                d="M23.486 22.457a.469.469 0 0 0 .377-.745c-.072-.098-1.743-2.364-3.933-4.039V15.86a2.343 2.343 0 0 0 1.872-2.292v-.936a.468.468 0 0 0-.936 0v.936c0 .61-.391 1.13-.936 1.323v-1.323a.468.468 0 0 0-.935 0v3.453c-1.177-.74-2.275-1.114-3.275-1.114-1.152 0-2.41.495-3.743 1.473-1.333-.978-2.59-1.473-3.742-1.473-.154 0-.31.01-.468.027v-2.881a2.343 2.343 0 0 0 1.871-2.292V8.889a.468.468 0 0 0-.936 0v1.872c0 .61-.39 1.13-.935 1.323V8.889a.468.468 0 0 0-.936 0v5.066a1.406 1.406 0 0 1-.936-1.323v-.936a.468.468 0 0 0-.935 0v.936c0 1.13.805 2.075 1.871 2.292v1.208c-.88.271-1.821.788-2.807 1.542v-3.17a.468.468 0 0 0-.936 0v1.323a1.406 1.406 0 0 1-.935-1.324v-.935a.468.468 0 0 0-.936 0v.935c0 1.13.805 2.075 1.871 2.293v1.653a23.375 23.375 0 0 0-2.997 3.263.469.469 0 0 0 .377.745h23.018zm-.968-.936H19.93v-2.646c1.093.926 2.021 1.965 2.588 2.646zm-3.523-3.375v3.375h-9.83c1.477-1.891 4.144-4.678 6.555-4.678.954 0 2.055.438 3.275 1.303zm-10.76-1.303c.892 0 1.893.383 2.98 1.142C9.623 19.34 8.4 20.956 7.992 21.52h-.225v-4.644c.16-.023.316-.034.468-.034zm-1.404.276v4.402H4.024v-2.645c1.003-.85 1.944-1.439 2.807-1.757zm-3.743 2.609v1.793H1.436c.396-.476.97-1.128 1.652-1.793z">
-                                                                            </path>
-                                                                            <path pid="1"
-                                                                                d="M15.72 12.164a3.279 3.279 0 0 0 3.275-3.275 3.279 3.279 0 0 0-3.275-3.274 3.279 3.279 0 0 0-3.275 3.274 3.279 3.279 0 0 0 3.275 3.275zm0-5.614c1.29 0 2.34 1.05 2.34 2.34 0 1.29-1.05 2.339-2.34 2.339-1.29 0-2.34-1.05-2.34-2.34 0-1.29 1.05-2.339 2.34-2.339zM0 4.211c0 .774.63 1.404 1.404 1.404h1.484c.193.544.713.935 1.323.935h2.807c.774 0 1.404-.63 1.404-1.403 0-.774-.63-1.404-1.404-1.404H6.47a1.406 1.406 0 0 0-1.323-.935H1.404c-.774 0-1.403.63-1.403 1.403zm5.615 0c0 .258.21.468.467.468h.936a.468.468 0 0 1 0 .936H4.211a.468.468 0 0 1-.468-.468.468.468 0 0 0-.468-.468h-1.87a.468.468 0 0 1 0-.936h3.742c.258 0 .468.21.468.468zM22.55 0h-3.742c-.61 0-1.13.392-1.324.936h-1.483c-.774 0-1.404.63-1.404 1.404 0 .774.63 1.403 1.404 1.403h3.742c.61 0 1.13-.39 1.324-.935h1.483c.774 0 1.404-.63 1.404-1.404 0-.774-.63-1.403-1.404-1.403zm0 1.872h-1.87a.468.468 0 0 0-.468.468c0 .258-.21.468-.468.468h-3.742a.468.468 0 0 1 0-.936h1.871c.258 0 .468-.21.468-.468s.21-.468.468-.468h3.742a.468.468 0 0 1 0 .936z">
-                                                                            </path>
-                                                                        </svg> <span
-                                                                            class="c-gray-5 p--small ml--6">Cảnh
-                                                                            quan đẹp</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="el-collapse-item" item="[object Object]">
-                                                        <div role="tab" aria-controls="el-collapse-content-676"
-                                                            aria-describedby="el-collapse-content-676">
-                                                            <div role="button" id="el-collapse-head-676" tabindex="0"
-                                                                class="el-collapse-item__header">Tiện
-                                                                ích phòng<i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-hidden="true"
-                                                            aria-labelledby="el-collapse-head-676"
-                                                            id="el-collapse-content-676" class="el-collapse-item__wrap"
-                                                            style="display: none;">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill-rule="evenodd">
-                                                                                <path pid="0" fill-rule="nonzero"
-                                                                                    d="M23.485 13.987H18.2V6.87h.257a.468.468 0 0 0 0-.935h-.264A6.23 6.23 0 0 0 11.977 0 6.23 6.23 0 0 0 5.76 5.936h-.264a.468.468 0 0 0 0 .935h.257v7.116H.468a.468.468 0 0 0-.468.468v9.03c0 .259.21.468.468.468h23.017c.259 0 .468-.21.468-.468v-9.03a.468.468 0 0 0-.468-.468zm-5.286.936h1.941v5.287H18.2v-5.287zM12.444.957a5.294 5.294 0 0 1 4.811 4.979h-1.608a3.708 3.708 0 0 0-3.203-3.203V.957zm0 2.721a2.772 2.772 0 0 1 2.258 2.258h-2.258V3.678zm0 5.543V6.87h3.269l-.89.89a.468.468 0 0 0 .662.662l1.551-1.552h.227v7.116h-4.157l3.266-3.266a.468.468 0 0 0-.662-.661l-3.266 3.265V9.221zm4.82 5.702v5.287h-1.942v-5.287h1.941zm-4.82 0h1.942v5.287h-1.942v-5.287zM11.51.957v1.776a3.708 3.708 0 0 0-3.203 3.203H6.698a5.295 5.295 0 0 1 4.81-4.98zm0 2.721v2.258H9.25a2.772 2.772 0 0 1 2.258-2.258zm-4.82 8.427l1.551-1.552a.468.468 0 0 0-.661-.661l-.89.89v-3.91h4.819v2.155L9.25 11.285a.468.468 0 0 0 .662.661l1.596-1.596v3.637H6.69v-1.882zm4.819 2.818v5.287H9.567v-5.287h1.942zm-4.819 0h1.942v5.287H6.69v-5.287zm-2.877 0h1.941v5.287H3.813v-5.287zm-2.877 0h1.941v5.287H.936v-5.287zm0 8.095v-1.872h22.082v1.872H.936zm22.082-2.808h-1.942v-5.287h1.942v5.287z">
-                                                                                </path>
-                                                                                <path pid="1"
-                                                                                    d="M9.202 9.593a.468.468 0 0 0-.666-.658l-.008.008a.468.468 0 0 0 .666.658l.008-.008zm4.671-.882l-.008.008a.468.468 0 0 0 .661.662l.008-.008a.468.468 0 0 0-.661-.662z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Ban
-                                                                            Công</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="el-collapse-item" item="[object Object]">
-                                                        <div role="tab" aria-controls="el-collapse-content-19"
-                                                            aria-describedby="el-collapse-content-19">
-                                                            <div role="button" id="el-collapse-head-19" tabindex="0"
-                                                                class="el-collapse-item__header">Tiện ích nổi bật<i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-hidden="true"
-                                                            aria-labelledby="el-collapse-head-19"
-                                                            id="el-collapse-content-19" class="el-collapse-item__wrap"
-                                                            style="display: none;">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <g fill="#000" fill-rule="evenodd">
-                                                                                <path pid="0"
-                                                                                    d="M24 13.969c0-.613-.395-1.136-.943-1.328V9.35a.46.46 0 0 0 0-.135v-.01a5.376 5.376 0 0 0-2.236-4.356.703.703 0 0 1-.292-.57V.468A.469.469 0 0 0 20.06 0h-2.002a.469.469 0 0 0-.47.469v3.809c0 .225-.109.438-.292.57a5.368 5.368 0 0 0-1.766 2.168 5.367 5.367 0 0 0-1.767-2.168.704.704 0 0 1-.293-.57V.468A.469.469 0 0 0 13.002 0h-2.003a.469.469 0 0 0-.469.469v3.809c0 .225-.11.438-.292.57A5.367 5.367 0 0 0 8.47 7.016a5.368 5.368 0 0 0-1.767-2.168.704.704 0 0 1-.292-.57V.468A.469.469 0 0 0 5.942 0H3.94a.469.469 0 0 0-.468.469v3.809c0 .225-.11.438-.293.57A5.376 5.376 0 0 0 .944 9.205v3.436A1.409 1.409 0 0 0 0 13.97v3.375c0 .36.136.688.36.937a1.4 1.4 0 0 0-.36.938v3.375C0 23.369.63 24 1.406 24h21.188c.775 0 1.406-.63 1.406-1.406v-3.375a1.4 1.4 0 0 0-.36-.938 1.4 1.4 0 0 0 .36-.937v-3.375zM1.881 9.75h6.121v2.813H1.881V9.75zm7.059 0h6.12v2.813H8.94V9.75zm7.058 0h6.122v2.813h-6.122V9.75zm2.528-5.841V2.43h1.065V3.91h-1.065zM19.591.938v.556h-1.065V.938h1.065zm-1.748 4.671c.268-.192.469-.46.581-.763h1.27c.112.303.312.57.58.763a4.438 4.438 0 0 1 1.828 3.204h-6.086a4.438 4.438 0 0 1 1.827-3.204zm-6.375-1.7V2.43h1.065V3.91h-1.065zM12.533.938v.556h-1.065V.938h1.065zm-1.749 4.671c.269-.192.47-.46.581-.763h1.27c.112.303.313.57.581.763a4.438 4.438 0 0 1 1.827 3.204H8.957a4.438 4.438 0 0 1 1.827-3.204zM4.41 3.91V2.43h1.065V3.91H4.41zM5.474.938v.556H4.41V.938h1.065zM3.726 5.609c.268-.192.469-.46.58-.763h1.27c.113.303.313.57.581.763a4.438 4.438 0 0 1 1.828 3.204H1.899a4.438 4.438 0 0 1 1.827-3.204zm19.336 16.985a.47.47 0 0 1-.468.468H1.406a.47.47 0 0 1-.468-.468v-3.375a.47.47 0 0 1 .468-.469h8.672a.469.469 0 1 0 0-.938H1.406a.47.47 0 0 1-.468-.468v-3.375a.47.47 0 0 1 .468-.469h21.188a.47.47 0 0 1 .468.469v3.375a.47.47 0 0 1-.468.468h-8.672a.469.469 0 1 0 0 .938h8.672a.47.47 0 0 1 .468.469v3.375z"
-                                                                                    fill-rule="nonzero"></path>
-                                                                                <path pid="1"
-                                                                                    d="M19.85 16.108a.492.492 0 0 0 .489-.488.492.492 0 0 0-.488-.488.492.492 0 0 0-.488.488.492.492 0 0 0 .488.488zM3.905 15.132a.491.491 0 0 0-.488.488.49.49 0 0 0 .833.345.491.491 0 0 0-.345-.833zM19.85 20.502a.492.492 0 0 0-.487.488.492.492 0 0 0 .488.488.492.492 0 0 0 .488-.488.492.492 0 0 0-.488-.488zM3.905 20.502a.491.491 0 0 0-.488.488.49.49 0 0 0 .833.345.491.491 0 0 0-.345-.833zM12.04 17.817a.491.491 0 0 0-.487.488.49.49 0 0 0 .488.488.492.492 0 0 0 .345-.833.492.492 0 0 0-.345-.143z">
-                                                                                </path>
-                                                                            </g>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Tủ
-                                                                            đựng
-                                                                            rượu</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="el-collapse-item" item="[object Object]">
-                                                        <div role="tab" aria-controls="el-collapse-content-3159"
-                                                            aria-describedby="el-collapse-content-3159">
-                                                            <div role="button" id="el-collapse-head-3159" tabindex="0"
-                                                                class="el-collapse-item__header">Tiện
-                                                                ích gia đình<i
-                                                                    class="el-collapse-item__arrow el-icon-arrow-right"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div role="tabpanel" aria-hidden="true"
-                                                            aria-labelledby="el-collapse-head-3159"
-                                                            id="el-collapse-content-3159" class="el-collapse-item__wrap"
-                                                            style="display: none;">
-                                                            <div class="el-collapse-item__content">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0" fill="#000"
-                                                                                fill-rule="nonzero"
-                                                                                d="M7 5.416c-1.048.18-2.054.416-3 .703V14h3V5.417zm1-.153V14h3.5V5.004c-1.197.02-2.37.107-3.5.26zm4.5-.259V14H16V5.263a29.966 29.966 0 0 0-3.5-.259zm4.5.412V14h3V6.12a24.728 24.728 0 0 0-3-.704zm4 1.034V14h2V7.304c-.622-.314-1.291-.6-2-.854zm2-.258V4.5a.5.5 0 0 1 1 0v16a.5.5 0 0 1-1 0V18H1v2.5a.5.5 0 1 1-1 0v-16a.5.5 0 1 1 1 0v1.692C3.99 4.792 7.875 4 12 4s8.011.792 11 2.192zM1 7.304V14h2V6.45c-.709.255-1.378.54-2 .854zM1 15v2h22v-2H1z">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Phù
-                                                                            hợp
-                                                                            với trẻ nhỏ</span></div>
-                                                                    <div class="col-xs-6 my--6"><svg version="1.1"
-                                                                            viewBox="0 0 24 24"
-                                                                            class="svg-icon svg-fill" alt=""
-                                                                            style="width: 24px; height: 24px;">
-                                                                            <path pid="0"
-                                                                                d="M20.772 10.386a2.46 2.46 0 0 0 .662-1.655 2.446 2.446 0 0 0-2.44-2.441H5.916A5.916 5.916 0 0 0 0 12.207a5.916 5.916 0 0 0 5.917 5.917H20.07a3.885 3.885 0 0 0 3.89-3.89c.041-1.944-1.366-3.517-3.187-3.848zm-.662 6.91H5.917a5.086 5.086 0 0 1-5.09-5.09 5.086 5.086 0 0 1 5.09-5.089h13.076c.87 0 1.614.704 1.614 1.614 0 .869-.704 1.614-1.614 1.614H5.545c-1.035.083-1.904.993-1.904 2.069a2.05 2.05 0 0 0 2.07 2.069h12.123v-.828H5.752a1.22 1.22 0 0 1-1.242-1.241 1.22 1.22 0 0 1 1.242-1.242H20.11a3.055 3.055 0 0 1 3.062 3.062 3.055 3.055 0 0 1-3.062 3.063z">
-                                                                            </path>
-                                                                        </svg> <span class="c-gray-5 p--small ml--6">Đệm
-                                                                            bổ
-                                                                            sung</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="room-fw-modal">
-                                                    <!---->
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <div id="price"></div>
                                         <div>
                                             <div class="title mt--60 mb--24">
@@ -1046,23 +252,19 @@
                                             <div class="room-price__wrap">
                                                 <div class="is-flex jbetween align-center py--12 px--18"><span
                                                         class="c-gray-3 fl-item-50">Thứ hai - Thứ năm</span> <span
-                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">4,059,000₫</span>
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">{{details.priceOfService}}</span>
                                                 </div>
                                                 <div class="is-flex jbetween align-center py--12 px--18"><span
                                                         class="c-gray-3 fl-item-50">Thứ sáu - Chủ nhật</span> <span
-                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">4,799,999₫</span>
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">{{details.priceOfService  - - details.priceOfService*0.1}}</span>
                                                 </div>
-                                                <div class="is-flex jbetween align-center py--12 px--18"><span
-                                                        class="c-gray-3 fl-item-50">Phí khách tăng thêm</span> <span
-                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">150,000₫
-                                                        (sau 10 khách)</span></div>
+                                                
                                                 <!---->
                                                 <!---->
                                                 <!---->
                                                 <div class="is-flex jbetween align-center py--12 px--18"><span
                                                         class="c-gray-3 fl-item-50">Điều kiện</span> <span
-                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right"> tối thiểu 2
-                                                        đêm</span></div>
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right"> Không</span></div>
                                                 <!---->
                                             </div>
                                         </div>
@@ -1075,26 +277,23 @@
                                             <h3>Điều khoản và quy định về dịch vụ</h3>
                                         </div>
                                         <div>
-                                            <h4 class="mt--24 mb--6">Chính sách hủy phòng</h4>
+                                            <h4 class="mt--24 mb--6">Chính sách hủy dịch vụ</h4>
                                             <div>
                                                 <p><b>Linh hoạt:</b>
-                                                    Miễn phí hủy phòng trong vòng 48h sau khi đặt phòng thành công
-                                                    và trước 1 ngày so với thời gian check-in. Sau đó, hủy phòng
-                                                    trước 1 ngày so với thời gian check-in, được hoàn lại 100% tổng
-                                                    số tiền đã trả (trừ phí dịch vụ).
-                                                    <a href="/vi/cancellation_policy" target="_blank"
+                                                    Nội dung chính sách.
+                                                    <a href="#" target="_blank"
                                                         class="color-i">Chi tiết</a></p>
                                             </div>
-                                            
+
                                             <!---->
                                             <h4 class="mt--24 mb--6">Thời gian hoạt động</h4>
                                             <div class="room-price__wrap">
                                                 <div class="is-flex jbetween align-center py--12 px--18"><span
-                                                        class="c-gray-3 fl-item-50">Nhận phòng</span> <span
+                                                        class="c-gray-3 fl-item-50">Nhận dịch vụ</span> <span
                                                         class="c-gray-3 fl-item-50 pl--12 bold text-right">02:00
                                                         pm</span></div>
                                                 <div class="is-flex jbetween align-center py--12 px--18"><span
-                                                        class="c-gray-3 fl-item-50">Trả phòng</span> <span
+                                                        class="c-gray-3 fl-item-50">Hủy dịch vụ</span> <span
                                                         class="c-gray-3 fl-item-50 pl--12 bold text-right">12:00
                                                         pm</span></div>
                                             </div>
@@ -1102,8 +301,7 @@
                                         <div id="utilities"></div>
                                         <!---->
                                         <p id="map_desc" class="mb--0 pt--24">
-                                            Bạn sẽ nhận được địa chỉ chính xác của chỗ ở sau khi hoàn tất đơn đặt
-                                            phòng.
+                                            Khi nhận thông tin và địa chỉ của khách hàng, chúng tôi sẽ chủ động liên lạc và phục vụ tạn nơi.
                                         </p>
                                         <div class="mt--24 mb--42">
                                             <div class="login-instruction py--24 px--18 rounded ">
@@ -1113,9 +311,9 @@
                                                             Đăng nhập và tận hưởng quyền lợi của Thành viên!
                                                         </h4>
                                                         <p class="c-gray-5 mb--12">
-                                                            Đăng ký thành viên Luxstay, trải nghiệm đột phá - Đặt
-                                                            phòng nhanh hơn, ưu đãi nhiều hơn nữa.
-                                                        </p> <a href="/vi/auth/sign/in?return_url=%2Fvi%2Frooms%2F18792"
+                                                            Đăng ký thành viên, trải nghiệm đột phá - Đặt
+                                                            dịch vụ nhanh hơn, ưu đãi nhiều hơn nữa.
+                                                        </p> <a href="/register"
                                                             class="btn btn--primary rounded btn--xs bold mt--18">Đăng
                                                             nhập ngay</a>
                                                     </div>
@@ -1141,7 +339,8 @@
                                             <div class="is-shadow-box-2">
                                                 <div class="room-sidebar__wrap py--24 px--12 px--lg--18">
                                                     <div class="room-sidebar__pricing">
-                                                        <p class="fadeIn"><span class="extra-bold">3,402,000₫</span>
+                                                        <p class="fadeIn"><span
+                                                                class="extra-bold">{{details.priceOfService}} vnd</span>
                                                             <span class="p--small">/đêm</span> <span
                                                                 class="c-gray-9 ml--6 p--small strike bold">
                                                                 3,780,000₫ </span></p>
@@ -1149,21 +348,14 @@
                                                     <div>
                                                         <div class="">
                                                             <div class="room-discount"><span
-                                                                    class="label label--cool-red">Giảm 10% từ chủ
-                                                                    nhà</span>
+                                                                    class="label label--cool-red">Giảm ngay 0% tới từ
+                                                                    nhà cung cấp</span>
                                                                 <p class="mb--0 mt--6 p--small-2">Giảm
-                                                                    <strong>10%</strong> cho đặt phòng có checkin từ
-                                                                    <strong>29/02</strong> đến
-                                                                    <strong>31/03</strong></p>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="is-relative mt--18">
-                                                        <div class="modal-booking-time is-relative is-flex middle-xs">
-                                                            <span id="checkinSidebar" class="cursor">dd/mm/yyyy</span>
-                                                            <span>đến</span>
-                                                            <span id="checkoutSidebar" class="cursor">dd/mm/yyyy</span>
-                                                        </div>
                                                         <div id="airbnb-style-datepicker-wrapper-hx36b"
                                                             class="asd__wrapper"
                                                             style="display: none; position: absolute; top: 50px; left: 0px; width: 320px; z-index: 100;">
@@ -5285,20 +4477,23 @@
                                                                     d="M12.42 17.158l3.037-6.073a.75.75 0 0 0-.67-1.085H12V7.177a.75.75 0 0 0-1.42-.335l-3.037 6.073A.75.75 0 0 0 8.213 14H11v2.823a.75.75 0 0 0 1.42.335z">
                                                                 </path>
                                                             </g>
-                                                        </svg> <span>Đặt ngay</span></button>
+                                                        </svg> <span style="color: #fff; font-weight: 600;"> Đặt
+                                                            ngay</span></button>
                                                     <div class="mt--18">
                                                         <div class="room-event__wrap"></div>
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="room-sidebar__host py--24 px--12 px--lg--24 w--100"><a
-                                                        href="/vi/hosts/25874" class="host-intro is-flex align-center">
+                                                        [routerLink]="[ '/main/viewAboutProvider',details.userId]"
+                                                        routerLinkActive="active"
+                                                        class="host-intro is-flex align-center">
                                                         <div class="image-box image-box--large image-box--circle">
                                                             <img
                                                                 src="https://cdn.luxstay.com/users/25874/avatar_a4881d54-701a-44f2-9e8b-4d0e1ceaf77f.">
                                                         </div>
                                                         <div class="host-intro__name mx--12 mx--md--18">
-                                                            <p class="mb--6 extra-bold">Nguyenngoc Quynh</p>
+                                                            <p class="mb--6 extra-bold">{{user.fullName}}</p>
                                                             <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia
                                                                 11/2018</p>
                                                         </div>
@@ -5372,8 +4567,6 @@
                                                                     viewBox="0 0 20 20"
                                                                     class="is-instant-book mr--6 svg-icon svg-fill"
                                                                     style="width: 20px; height: 20px;">
-                                                                    <title>Đặt phòng ngay, không cần đợi chủ nhà phê
-                                                                        duyệt</title>
                                                                     <defs>
                                                                         <linearGradient x1="100%" y1="50%" x2="0%"
                                                                             y2="50%" id="svgicon_instant_book_a">
@@ -5666,7 +4859,7 @@
                                 <ul class="booking-nav">
                                     <li data-anchor="general" class="active"><a href="#general">Tổng quan</a></li>
                                     <li data-anchor="amenities" class=""><a href="#amenities">Tiện nghi</a></li>
-                                    <li data-anchor="price" class=""><a href="#price">Giá phòng</a></li>
+                                    <li data-anchor="price" class=""><a href="#price">Giá dịch vụ</a></li>
                                     <li data-anchor="reviews"><a href="#reviews">Đánh giá</a></li>
                                     <li data-anchor="policy" class=""><a href="#policy">Chính sách</a></li>
                                     <li data-anchor="utilities" class=""><a href="#utilities">Tiện ích</a></li>
@@ -5682,8 +4875,8 @@
                         <div class="row mobile-price__intro">
                             <div class="col-xs-6">
                                 <div class="is-flex align-center h--100">
-                                    <p class="mb--0"><span class="extra-bold p--large">3,402,000₫</span> <span
-                                            class="bold p--small">/</span> <span class="p--small">đêm</span></p>
+                                    <p class="mb--0"><span class="extra-bold p--large">{{details.priceOfService}}</span>
+                                        <span class="bold p--small">/</span> <span class="p--small">đêm</span></p>
                                 </div> <span class="c-primary cursor p--small" role="button" style="display: none;">Chi
                                     tiết đặt chỗ</span>
                             </div>

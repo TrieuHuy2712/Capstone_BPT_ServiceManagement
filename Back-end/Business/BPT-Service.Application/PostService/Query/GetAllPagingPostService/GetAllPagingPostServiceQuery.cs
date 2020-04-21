@@ -126,8 +126,8 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 {
                     Id = x.Id.ToString(),
                     CategoryName = getAllCateogry.Where(t => t.Id == x.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
-                    Author = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService)
-                                == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService),
+                    Author = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService).NameProvider
+                                == "" ? _getUserInformationQuery.ExecuteAsync(x.Id, query, userService) : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService).NameProvider,
                     Status = x.Status,
                     AvtService = _getAvtInformationQuery.ExecuteAsync(x.Id, getAvatar),
                     PriceOfService = x.PriceOfService.ToString(),
@@ -143,7 +143,9 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                         IsAvatar = z.isAvatar
                     }).ToList(),
                     tagofServices = JoinTag(getAllTag, getAllServiceTag, x.Id),
-                    IsProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService) == "" ? false : true,
+                    IsProvider = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService).NameProvider == "" ? false : true,
+                    ProviderId = _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService).NameProvider==""
+                                ? "" : _getProviderInformationQuery.ExecuteAsync(x.Id, query, provider, provideService).idProvider,
                 }).OrderByDescending(x => x.Rating).ToList();
                 if (isAdminPage == false)
                 {
@@ -226,15 +228,17 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                         {
                             Id = serv.Id.ToString(),
                             CategoryName = category.CategoryName,
-                            Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService)
-                             == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, services, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService),
+                            Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService).NameProvider
+                             == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, services, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService).NameProvider,
                             Status = serv.Status,
-                            IsProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService) == "" ? false : true,
+                            IsProvider = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService).NameProvider == "" ? false : true,
                             ServiceName = serv.ServiceName,
                             PriceOfService = serv.PriceOfService.ToString(),
                             AvtService = _getAvtInformationQuery.ExecuteAsync(serv.Id, getAvatar),
                             TagList = _getListTagInformationQuery.ExecuteAsync(serv.Id, getAllServiceTag, getAllTag),
-                            Rating = _getServiceRatingQuery.ExecuteAsync(serv.Id, allRating)
+                            Rating = _getServiceRatingQuery.ExecuteAsync(serv.Id, allRating),
+                            ProviderId = _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService).NameProvider == ""
+                                ? "" : _getProviderInformationQuery.ExecuteAsync(serv.Id, services, provider, provideService).idProvider,
                         }).OrderByDescending(x => x.Rating).ToList();
             return data;
         }
