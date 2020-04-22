@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/core/services/data.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  locations: any[];
 
-  constructor() { }
 
-  ngOnInit() {
+  constructor(
+    private _dataService: DataService,
+    private _notificationService: NotificationService,
+  ) { }
+
+  ngOnInit(
+    
+  ) {
+    this.loadDataOfLocation();
+
   }
 
   // slider 1
@@ -41,9 +52,21 @@ export class HomeComponent implements OnInit {
     { img: "../../../assets/images/location_7_.png", description: "DaNang"},
     { img: "../../../assets/images/location_8_.png", description: "HoiAn"}
   ];
-  slideConfig3 = { "slidesToShow": 4, "slidesToScroll": 1, "arrows" : false};
+  slideConfig3 = { "slidesToShow": 4, "slidesToScroll": 1, "arrows": false, "autoplay": false };
 
   afterChange(e) {
     console.log('afterChange');
   }
+
+  loadDataOfLocation(){
+    this._dataService
+      .get(
+        "/LocationManagement/GetAllPaging?page=1&pageSize=20&keyword"
+      )
+      .subscribe((response: any) => {
+        this.locations = response.results;
+      });
+  }
+  sliderConfigPopular = { "slidesToShow": 4, "slidesToScroll": 1, "arrows" : true};
+  
 }
