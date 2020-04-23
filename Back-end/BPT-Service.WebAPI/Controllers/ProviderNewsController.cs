@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
@@ -8,8 +7,10 @@ using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNews
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
+using BPT_Service.WebAPI.Models.ProviderViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -26,6 +27,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterNewsProviderServiceCommand _registerNewsProviderServiceCommand;
         private readonly IRejectNewsProviderServiceCommand _rejectNewsProviderServiceCommand;
         private readonly IUpdateNewsProviderServiceCommand _updateNewsProviderServiceCommand;
+
         public ProviderNewsController(IApproveNewsProviderServiceCommand approveProviderServiceCommand,
         IDeleteNewsProviderServiceCommand deleteNewsProviderServiceCommand,
         IGetAllPagingProviderNewsOfProviderQuery getAllPagingProviderNewsOfProviderQuery,
@@ -46,14 +48,14 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveNewsProvider")]
-        public async Task<IActionResult> ApproveNewsProvider(int id)
+        public async Task<IActionResult> ApproveNewsProvider(RejectProviderNewsViewModel newsViewModel)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(id);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(newsViewModel.Id);
 
             return new OkObjectResult(model);
         }
 
-        [HttpDelete("DeleteNewsProvider/{id}")]
+        [HttpDelete("DeleteNewsProvider")]
         public async Task<IActionResult> DeleteNewsProvider(int id)
         {
             var model = await _deleteNewsProviderServiceCommand.ExecuteAsync(id);
@@ -70,13 +72,12 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetAllPagingProviderNews")]
-        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize, bool isAdminPage,int filter)
         {
-            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getAllPagingProviderNewsServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage, filter);
 
             return new OkObjectResult(model);
         }
-
 
         [HttpGet("GetByIdProviderNewsServiceQuery")]
         public async Task<IActionResult> GetByIdProviderNewsServiceQuery(int id)
@@ -95,9 +96,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("RejectNewsProvider")]
-        public async Task<IActionResult> RejectNewsProvider(NewsProviderViewModel vm)
+        public async Task<IActionResult> RejectNewsProvider([FromBody]RejectProviderNewsViewModel modeling)
         {
-            var model = await _rejectNewsProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectNewsProviderServiceCommand.ExecuteAsync(modeling.Id, modeling.Reason);
             return new OkObjectResult(model);
         }
 

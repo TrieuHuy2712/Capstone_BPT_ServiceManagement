@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -18,10 +18,10 @@ namespace BPT_Service.WebAPI.Controllers
         #endregion
 
         #region GET API
-        [HttpGet("GetAllPermission/{userName}/{functionId}")]
-        public async Task<IActionResult> GetAllPermission(string userName, string functionId)
+        [HttpGet("GetAllPermission/{functionId}")]
+        public async Task<IActionResult> GetAllPermission(string functionId)
         {
-            var model = await _permissionService.ExecuteAsync(userName, functionId);
+            var model = await _permissionService.ExecuteAsync(functionId);
             return new OkObjectResult(model);
         }
         #endregion

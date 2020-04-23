@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
@@ -10,8 +8,10 @@ using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.WebAPI.Models.ProviderViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -29,6 +29,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetByIdProviderServiceQuery _getByIdProviderServiceQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
         private readonly IUpdateProviderServiceCommand _updateProviderServiceCommand;
+
         public ProviderController(IApproveProviderServiceCommand approveProviderServiceCommand,
         IDeleteProviderServiceCommand deleteProviderServiceCommand,
         IRegisterProviderServiceCommand registerProviderServiceCommand,
@@ -51,13 +52,13 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetAllPaging")]
-        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize)
+        public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize, int filter)
         {
-            var model = await _getAllPagingProviderServiceQuery.ExecuteAsync(keyword, page, pageSize);
+            var model = await _getAllPagingProviderServiceQuery.ExecuteAsync(keyword, page, pageSize, filter);
             return new OkObjectResult(model);
         }
 
-        [HttpGet("GetProviderById")]
+        [HttpGet("GetProviderById/{id}")]
         public async Task<IActionResult> GetProviderById(string id)
         {
             var model = await _getByIdProviderServiceQuery.ExecuteAsync(id);
@@ -86,16 +87,16 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("ApproveProvider")]
-        public async Task<IActionResult> ApproveAProvider(string providerId)
+        public async Task<IActionResult> ApproveAProvider(ProviderServiceViewModel vm)
         {
-            var model = await _approveProviderServiceCommand.ExecuteAsync(providerId);
+            var model = await _approveProviderServiceCommand.ExecuteAsync(vm.UserId, vm.Id);
             return new OkObjectResult(model);
         }
 
         [HttpPost("RejectProvider")]
         public async Task<IActionResult> RejectAProvider(ProviderServiceViewModel vm)
         {
-            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm);
+            var model = await _rejectProviderServiceCommand.ExecuteAsync(vm.Id, vm.Reason);
             return new OkObjectResult(model);
         }
 
@@ -107,7 +108,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpPost("UpdateProviderService")]
-        public async Task<IActionResult> UpdateProviderServiceCommand(ProviderServiceViewModel vm)
+        public async Task<IActionResult> UpdateProviderServiceCommand([FromBody]ProviderServiceViewModel vm)
         {
             var model = await _updateProviderServiceCommand.ExecuteAsync(vm);
             return new OkObjectResult(model);

@@ -1,10 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
 using BPT_Service.Application.TagService.Command.AddServiceAsync;
 using BPT_Service.Application.TagService.Command.DeleteServiceAsync;
 using BPT_Service.Application.TagService.Command.UpdateTagServiceAsync;
@@ -12,6 +5,13 @@ using BPT_Service.Application.TagService.Query.GetAllPagingServiceAsync;
 using BPT_Service.Application.TagService.Query.GetAllServiceAsync;
 using BPT_Service.Application.TagService.Query.GetByIDTagServiceAsync;
 using BPT_Service.Application.TagService.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace BPT_Service.WebAPI.Controllers
 {

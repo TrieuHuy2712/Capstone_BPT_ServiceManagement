@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -13,35 +14,41 @@ namespace BPT_Service.WebAPI.Controllers
     public class UploadController : ControllerBase
     {
         //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
-        private const string BaseUrl= "http://localhost:5000";
-        #region  Constructor
-        public UploadController()
-        {
+        private const string BaseUrl = "http://localhost:5000";
 
+        private readonly IWebHostEnvironment _env;
+
+        #region Constructor
+
+        public UploadController(IWebHostEnvironment env)
+        {
+            _env = env;
         }
-        #endregion
+
+        #endregion Constructor
+
         [HttpPost]
         [Route("saveImage/{type}")]
-        public async Task<IActionResult> SaveImage([FromForm(Name = "uploadedFile")] IFormFile postedFile, long userId, string type)
+        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, long userId, string type)
         {
             try
             {
+                string returnPath = "";
                 if (postedFile != null && postedFile.Length > 0)
                 {
                     int MaxContentLength = 1024 * 1024 * 5; //Size = 5 MB
 
-                    IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                    IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".jpeg" };
                     var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                     var extension = ext.ToLower();
                     if (!AllowedFileExtensions.Contains(extension))
                     {
-                        var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
+                        var message = string.Format("Please Upload image of type .jpg,.gif,.png., .jpeg");
 
                         return new ObjectResult(message);
                     }
                     else if (postedFile.Length > MaxContentLength)
                     {
-
                         var message = string.Format("Please Upload a file upto 1 mb.");
 
                         return new ObjectResult(message);
@@ -53,9 +60,9 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             directory = "/UploadedFiles/Avatars/";
                         }
-                        else if (type == "product")
+                        else if (type == "service")
                         {
-                            directory = "/UploadedFiles/Products/";
+                            directory = "/UploadedFiles/Services/";
                         }
                         else if (type == "news")
                         {
@@ -65,24 +72,33 @@ namespace BPT_Service.WebAPI.Controllers
                         {
                             directory = "/UploadedFiles/Banners/";
                         }
+                        else if (type == "location")
+                        {
+                            directory = "/UploadedFiles/Location/";
+                        }
+                        else if (type == "category")
+                        {
+                            directory = "/UploadedFiles/Categories/";
+                        }
                         else
                         {
                             directory = "/UploadedFiles/";
                         }
-                        if (!Directory.Exists((directory)))
+                        if (!Directory.Exists(_env.WebRootPath + directory))
                         {
-                            Directory.CreateDirectory(BaseUrl + "/" + directory);
+                            Directory.CreateDirectory(_env.WebRootPath + directory);
                         }
-
-                        string path = Path.Combine(BaseUrl + "/" + directory, postedFile.FileName);
+                        var nameImage = type + System.DateTime.Now.ToString("MM_dd_yyyy_h_mm_ss_fffff_tt") + ext;
+                        string path = Path.Combine(_env.WebRootPath + directory, nameImage);
                         //Userimage myfolder name where i want to save my image
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             await postedFile.CopyToAsync(fileStream);
                         }
+                        returnPath = BaseUrl + directory + nameImage;
                     }
                     var message1 = string.Format("Image Updated Successfully.");
-                    return new OkObjectResult(message1);
+                    return new JsonResult(returnPath);
                 }
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);
