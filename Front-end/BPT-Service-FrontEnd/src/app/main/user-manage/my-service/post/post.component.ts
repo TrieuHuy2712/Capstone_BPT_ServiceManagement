@@ -49,6 +49,8 @@ export class PostComponent implements OnInit {
   public listImage: ImageList[] = [];
   kindOfStyle: number;
   public cId: any;
+
+  public userInSystem : any[];
   // 
   constructor(
     private _dataService: DataService,
@@ -60,14 +62,15 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     this.entity = {};
     this.tagName="";
+    // get current user
+    this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    console.log("user id "+this.user.fullName);
 
     this.getAllCategory();
     this.getAllTag();
+    this.getAllUser();
 
-    // get current user
-    this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    SystemConstants.const_permission = this.user.username;
-    const uName = localStorage.getItem(SystemConstants.const_username);
+    
   }
 
   selectedCategory(){
@@ -122,7 +125,7 @@ export class PostComponent implements OnInit {
       this.entity.tagOfServices = this.listTag;
       if (true) {
         //Assign User ID
-        this.entity.userId = "";
+        this.entity.userId = this.userInSystem.find(x => x.fullName == this.user.fullName).id;
         this.saveDataUser();
       } 
     } 
@@ -131,7 +134,7 @@ export class PostComponent implements OnInit {
 
   getAllUser() {
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
-      this.user = response;
+      this.userInSystem = response;
     });
   }
 
