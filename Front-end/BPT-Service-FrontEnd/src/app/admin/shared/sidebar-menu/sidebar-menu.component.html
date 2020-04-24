@@ -16,14 +16,14 @@
     <div class="os-content-glue" style="margin: 0px -8px; width: 249px;"></div>
     <div class="os-padding">
       <div class="os-viewport os-viewport-native-scrollbars-invisible" style=" right: 0px; bottom: 0px;">
-        <div class="os-content" style="padding: 0px 8px; height: 100%; width: 100%;">
+        <div class="os-content" style="padding: 0px 8px; height: 100%; width: 100%;" *ngIf="currentUser!= undefined">
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-              <img src="../../../assets/images/sontung.jpg" class="img-circle elevation-2" alt="User Image">
+              <img [src]="currentUser.avatar" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-              <a href="#" class="d-block">{{user.fullName}}</a>
+              <a href="#" class="d-block">{{currentUser.fullName}}</a>
             </div>
           </div>
 
@@ -37,9 +37,8 @@
               <li class="nav-item"><a class="nav-link" href="main/home/index"><i class="fa fa-home"></i> Homepage</a>
               </li>
               <li class="nav-item has-treeview" *ngFor="let item of _functions"><a class="nav-link"><i
-                    class="fas {{item.IconCss}}"></i> {{item.key | titlecase }} <i
-                    class="badge badge-info">3</i><i *ngIf="item.childrenId.length>0"
-                    class="fas fa-angle-left right"></i></a>
+                    class="fas {{item.IconCss}}"></i> {{item.key | titlecase }} <i class="badge badge-info">3</i><i
+                    *ngIf="item.childrenId.length>0" class="fas fa-angle-left right"></i></a>
                 <ul class="nav nav-treeview" style="display: none;">
                   <li class="nav-item" *ngFor="let subItem of item.childrenId"><a class="nav-link"
                       routerLink="{{'/admin/'+subItem.url}}" routerLinkActive="active"><i
@@ -51,8 +50,12 @@
 
               <div class="nav-link">
                 <select (change)="onChange($event.target.value)" class="selecter">
-                  <option value="vn" data-image="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg">Vietnam</option>
-                  <option value="en" data-image="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg">English</option>
+                  <option value="vn"
+                    data-image="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg">Vietnam
+                  </option>
+                  <option value="en"
+                    data-image="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg">
+                    English</option>
                 </select>
               </div>
             </ul>

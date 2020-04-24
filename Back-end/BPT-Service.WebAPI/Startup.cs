@@ -75,9 +75,9 @@ using BPT_Service.Application.PostService.Query.Extension.GetServiceRating;
 using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
-using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
@@ -115,6 +115,7 @@ using BPT_Service.Application.UserService.Command.DeleteUserAsync;
 using BPT_Service.Application.UserService.Command.UpdateUserAsync;
 using BPT_Service.Application.UserService.Query.GetAllAsync;
 using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
+using BPT_Service.Application.UserService.Query.GetByContextUserAsync;
 using BPT_Service.Application.UserService.Query.GetByIdAsync;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -376,6 +377,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingUserAsyncQuery, GetAllPagingUserAsyncQuery>();
             services.AddScoped<IGetAllUserAsyncQuery, GetAllUserAsyncQuery>();
             services.AddScoped<IGetByIdUserAsyncQuery, GetByIdUserAsyncQuery>();
+            services.AddScoped<IGetByContextUserAsync, GetByContextUserAsync>();
 
             //Provider service
             services.AddScoped<IApproveProviderServiceCommand, ApproveProviderServiceCommand>();
@@ -475,7 +477,6 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IDeleteMonthlyLogFiles, DeleteMonthlyLogFiles>();
             services.AddScoped<IGetLogFiles, GetLogFiles>();
             services.AddScoped<IGetLogFromAFile, GetLogFromAFile>();
-
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();

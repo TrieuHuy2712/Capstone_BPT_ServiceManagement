@@ -59,10 +59,10 @@
               <td>{{user.email}}</td>
               <td><img [src]="user.avatar" class="img-responsive" width="128" /></td>
               <td>
-                <button class="btn btn-primary" *ngIf="permission.canUpdate" (click)="showEditModal(i)"><i
-                    class="fa fa-pencil-square-o"></i></button>
-                <button class="btn btn-danger" *ngIf="permission.canDelete " (click)="deleteItem(user.id,i)"><i
-                    class="fa fa-trash"></i></button>
+                <button class="btn btn-primary" *ngIf="permission.canUpdate && user.userName!='admin'"
+                  (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-danger" *ngIf="permission.canDelete && user.userName!='admin'"
+                  (click)="deleteItem(user.id,i)"><i class="fa fa-trash"></i></button>
 
               </td>
             </tr>
@@ -166,8 +166,8 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'role'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="allRoles"
-                [(ngModel)]="myRoles"></ss-multiselect-dropdown>
+              <ss-multiselect-dropdown [ngModelOptions]="{standalone: true}" [options]="allRoles" [(ngModel)]="myRoles">
+              </ss-multiselect-dropdown>
             </div>
           </div>
           <div class="ln_solid"></div>

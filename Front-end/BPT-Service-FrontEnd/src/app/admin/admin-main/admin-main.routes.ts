@@ -18,7 +18,7 @@ export const mainRoutes: Routes = [
       { path: "provider", loadChildren: "./provider/provider.module#ProviderModule" },
       { path: "news", loadChildren: "./news/news.module#NewsModule" },
       { path: "service", loadChildren: "./post-service/post-service.module#PostServiceModule" },
-      { path: "email", loadChildren: "./admin-email/admin-email.module#AdminEmailComponent" },
+      { path: "email", loadChildren: "./admin-email/admin-email.module#AdminEmailModule" },
     ]
   }
 ];

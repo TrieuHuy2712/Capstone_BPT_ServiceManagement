@@ -72,8 +72,8 @@ namespace BPT_Service.Application.UserService.Command.UpdateUserAsync
                     var selectedRole = userVm.NewRoles.ToArray();
                     selectedRole = selectedRole ?? new string[] { };
 
-                    //await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
-                    var userRoles1 = await _userManager.GetRolesAsync(user);
+                    await _userManager.AddToRolesAsync(user, selectedRole.Except(userRoles.Result).ToArray());
+                    //var userRoles1 = await _userManager.GetRolesAsync(user);
                     await _userManager.UpdateAsync(user);
                     await Logging<UpdateUserAsyncCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(user));
                     return new CommandResult<AppUserViewModelinUserService>
