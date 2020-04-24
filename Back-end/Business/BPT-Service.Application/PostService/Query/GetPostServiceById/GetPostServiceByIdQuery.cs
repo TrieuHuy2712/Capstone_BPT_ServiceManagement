@@ -147,11 +147,6 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                 TagName = x.TagName
             }).ToList();
             postServiceView.CategoryId = serv.CategoryId;
-            postServiceView.Author = user != null ? user.UserName : provider.ProviderName;
-            postServiceView.ProviderId = provider != null ? provider.Id.ToString() : "";
-            postServiceView.UserId = user != null ? user.Id.ToString() : "";
-            postServiceView.IsProvider = provider != null ? true : false;
-
             return postServiceView;
         }
     }

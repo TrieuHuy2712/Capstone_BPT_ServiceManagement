@@ -1,53 +1,102 @@
-<!-- <div *ngIf="isCategory" class="row">
+<div *ngIf="isCategory" class="row">
     <div class="col-sm-12">
         <div class="form-group-custom">
             <label>CHỌN DANH MỤC CỦA DỊCH VỤ</label>
-            <select multiple="" class="form-control-custom" value="" >
-              <option (click)=selectedCategory() class="option-cus">Bán chó</option>
-              <option (click)=selectedCategory() class="option-cus">Sơn nhà</option>
-              <option (click)=selectedCategory() class="option-cus">Cho thuê nhà</option>
-              <option (click)=selectedCategory() class="option-cus">Dọn nhà</option>
-              <option (click)=selectedCategory() class="option-cus">Rửa nhà</option>
+            <select multiple="" class="form-control-custom"  (change)="selectOption($event.target.value)">
+                <option *ngFor="let ctg of category" (click)=selectedCategory() class="option-cus" [value]="ctg.id">
+                    {{ctg.categoryName}}</option>
+
             </select>
-          </div>
+        </div>
     </div>
 </div>
 <div *ngIf="!isCategory" class="card card-warning" style="margin: 20px 10px; padding:0;">
-    <div class="card-header" style="background-color: orange;">
+    <div class="card-header" style="background-color: rgb(102, 83, 46);">
         <h2 class="card-title">Điền thông tin về dịch vụ bạn muốn đăng kí ở bảng dưới đây !</h2>
     </div>
+    <!-- /.card-header -->
     <div class="card-body">
-        <form role="form">
+        <form novalidate #addEditForm="ngForm" (ngSubmit)="saveChange(true)">
             <div class="row">
                 <div class="col-sm-12">
-
+                    <!-- text input -->
+                    <label class="control-label control-label col-md-3 col-sm-3 col-xs-12">TÊN DỊCH VỤ</label>
                     <div class="form-group">
-                        <label>TÊN DỊCH VỤ</label>
-                        <input type="text" class="form-control" placeholder="Nhập tên ...">
+                        <input type="text" #serviceName="ngModel" [(ngModel)]="entity.serviceName" required
+                            minlength="3" name="serviceName" class="form-control">
+
                     </div>
                 </div>
             </div>
+            <!-- lưu ý không thêm loại khách thêm dịch vụ, để mặc định là Customer, yep -->
+            <!-- lưu ý không thêm tên khách, để mặc định là Customer, yep -->
             <div class="row">
                 <div class="col-sm-12">
- 
-                    <div class="form-group-cus">
-                        <label>MÔ TẢ DỊCH VỤ</label>
-                        <textarea class="form-control-cus" rows="3" placeholder="Nhập mô tả ..."
-                            style="height: 200px; border-radius: 10px;"></textarea>
+                    <!-- text input -->
+                    <label class="control-label">Chọn giá dịch vụ</label>
+                    <div>
+                        <input type="text" #priceOfService="ngModel" [(ngModel)]="entity.priceOfService" required
+                            minlength="3" name="priceOfService" class="form-control" [disabled]="entity.id!=undefined">
+
                     </div>
                 </div>
             </div>
 
-            input states
+            <!-- input states -->
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="col-form-label" for="inputSuccess">GIÁ DỊCH VỤ</label>
-                        <input type="text" class="form-control is-valid" id="inputSuccess" placeholder="Nhập giá ...">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tag</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <input type="text" #tagName="ngModel" ngModel [typeahead]="tagState" name="tagName"
+                                class="form-control" autocomplete="off">
+                            <button type="button" (click)="onEnter(tagName.value)">Thêm tag</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span *ngFor="let item of listTag,let i =index" style="padding-right:10px">
+                            <button (click)="removeIndex(i)" class="btn btn-success">{{item.tagName}} <span
+                                    class="badge badge-light">X</span></button>
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <editor #description="ngModel" [(ngModel)]="entity.description" name="description"
+                        apiKey="ztc2nqv57d595lqblftjrhjfgqax9nsxltybl49jl02zys0x" [init]="{
+                                        height: 500,
+                                        menubar: true,
+                                        plugins: [
+                                          'advlist autolink lists link image charmap print',
+                                          'preview anchor searchreplace visualblocks code',
+                                          'fullscreen insertdatetime media table paste',
+                                          'help wordcount'
+                                        ],
+                                        toolbar:
+                                          'undo redo | formatselect | bold italic | \
+                                          alignleft aligncenter alignright alignjustify | \
+                                          bullist numlist outdent indent | help'
+                                      }"></editor>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <!-- <input type="file" #imgPath name="imgPath" class="form-control">
+                  <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+                  <input type="hidden" [(ngModel)]="entity.imgPath" name="imgPath" />
+                </div>
+    
+                <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imgPath">
+                  <img [src]="entity.imgPath" width="128" /> -->
+                    <span (click)="showImageModel()" class="btn btn-success">Thêm hình ảnh</span>
+                </div>
+            </div>
+            <!-- <div class="form-group">
                 <label class="col-form-label" for="inputWarning"><i class="far fa-bell"></i> Input with
                     warning</label>
                 <input type="text" class="form-control is-warning" id="inputWarning" placeholder="Enter ...">
@@ -56,25 +105,59 @@
                 <label class="col-form-label" for="inputError"><i class="far fa-times-circle"></i> Input with
                     error</label>
                 <input type="text" class="form-control is-invalid" id="inputError" placeholder="Enter ...">
+            </div> -->
+            <div bsModal #modalImage="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title pull-left">Hình ảnh</h4>
+                            <button type="button" class="close pull-right" (click)="modalImage.hide()"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal form-label-left" novalidate #addImageForm="ngForm"
+                                *ngIf="entity">
+                                <div *ngFor="let atag of listImage, let i = index">
+                                    <div class="form-group row">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="control-label">Chọn hình ảnh</label>
+                                            <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar"
+                                                minlength="3" name="isAvatar">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="file" #imgPath name="imgPath" class="form-control"
+                                                    (change)="selectChangeFile($event.target.files,i)">
+                                                <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png,
+                                                    *.jpg, *.jpeg </p>
+                                                <input type="hidden" [(ngModel)]="atag.dataImage" name="imgPath" />
+                                                <button type="button" class="btn btn-danger" (click)="removeImage(i)"><i
+                                                        class="fa fa-trash"></i></button>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.path">
+                                                <img [src]="atag.path" width="128" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" (click)="addImage()">Thêm hình ảnh</button>
+                                <button type="submit" class="btn btn-success">Cập nhật</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">HÌNH CỦA DỊCH VỤ</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input type="file" #avatar name="avatar" class="form-control" style="border: none;">
-                    <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
-                    <input type="hidden" [(ngModel)]="entity.Avatar" name="avatarUrl" />
-                </div>
-
-                <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.Avatar">
-                    <img [src]="baseFolder+entity.Avatar" width="128" />
-                </div>
-            </div>
             <div class="card">
                 <button type="submit" class="btn btn-info">Đăng kí dịch vụ</button>
-                
-              </div>
+
+            </div>
         </form>
     </div>
-    /.card-body
-</div> -->
+    <!-- /.card-body -->
+</div>

@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   passVal: string = "";
   email: boolean =true;
   emailVal: string = "";
-  registerBtn: boolean =true;
+  registerBtn: boolean =false;
   socialusers = new Socialusers();
 
   constructor(
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
 
   emailValid(event){
     this.emailVal = event.target.value;
-    if(event.target.value.length < 10){
+    if(event.target.value.length < 4){
       this.email = false;
     }
     else{
@@ -119,18 +119,18 @@ export class LoginComponent implements OnInit {
   }
 
   passValid(event){
-    if(event.target.value.length < 8){
+    if(event.target.value.length < 4){
       this.pass = false;
     }
     else{
       this.pass = true;
     }
-    if(event.target.value.length > 8 && this.emailVal.length > 8){
-      this.registerBtn = false;
-    }
-    else{
-      this.registerBtn = true;
-    }
+    // if(event.target.value.length > 4 && this.emailVal.length > 4){
+    //   this.registerBtn = false;
+    // }
+    // else{
+    //   this.registerBtn = true;
+    // }
   }
 
 

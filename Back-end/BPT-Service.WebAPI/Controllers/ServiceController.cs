@@ -8,6 +8,7 @@ using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
+using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.WebAPI.Models.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
+        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
 
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
@@ -43,7 +45,8 @@ namespace BPT_Service.WebAPI.Controllers
             IRegisterServiceFromUserCommand registerServiceFromUserCommand,
             IRejectPostServiceCommand rejectPostServiceCommand,
             IUpdatePostServiceCommand updatePostServiceCommand,
-            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery
+            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
+            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
         )
         {
             _approvePostServiceCommand = approvePostServiceCommand;
@@ -64,6 +67,13 @@ namespace BPT_Service.WebAPI.Controllers
         public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage,int filter)
         {
             var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage,filter);
+            return new OkObjectResult(model);
+        }
+
+        [HttpGet("getAllPostUserServiceByUserId")]
+        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
+        {
+            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
             return new OkObjectResult(model);
         }
 

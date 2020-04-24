@@ -59,7 +59,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new ObjectResult(model);
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("GetById")]
         public async Task<IActionResult> GetById(string id)
         {
             var model = await _getByIdUserService.ExcecuteAsync(id);
