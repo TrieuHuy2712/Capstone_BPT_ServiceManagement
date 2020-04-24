@@ -23,14 +23,16 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
         public async Task<List<ListServiceViewModel>> ExecuteAsync(string idUser)
         {
             var findByUserId = await _userServiceRepository.FindAllAsync(x => x.UserId == Guid.Parse(idUser));
+            var getAllService= await _serviceRepository.FindAllAsync();
             if (findByUserId == null)
             {
                 return null;
             }
-            var data = findByUserId.Select(x => new ListServiceViewModel
-            {
-                Id = x.ServiceId
-            }).ToList();
+            var data = from us in findByUserId.ToList()
+                        join serv in getAllService.ToList()
+                        on us.ServiceId  equals serv.Id
+                        select new  
+
 
             
             return data;
