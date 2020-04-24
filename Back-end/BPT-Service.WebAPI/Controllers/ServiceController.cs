@@ -8,7 +8,6 @@ using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
-using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.WebAPI.Models.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +32,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
-        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
+        // private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
 
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
@@ -46,7 +45,7 @@ namespace BPT_Service.WebAPI.Controllers
             IRejectPostServiceCommand rejectPostServiceCommand,
             IUpdatePostServiceCommand updatePostServiceCommand,
             IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
-            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
+            // IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
         )
         {
             _approvePostServiceCommand = approvePostServiceCommand;
@@ -59,7 +58,7 @@ namespace BPT_Service.WebAPI.Controllers
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
             _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
-            _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
+            // _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
         }
 
         #region GETAPI
@@ -71,12 +70,12 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        [HttpGet("getAllPostUserServiceByUserId")]
-        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
-        {
-            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
-            return new OkObjectResult(model);
-        }
+        // [HttpGet("getAllPostUserServiceByUserId")]
+        // public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
+        // {
+        //     var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
+        //     return new OkObjectResult(model);
+        // }
 
         [HttpGet("getPostServiceById")]
         public async Task<IActionResult> GetPostServiceById(string idService)
