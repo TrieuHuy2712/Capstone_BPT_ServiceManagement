@@ -14,10 +14,10 @@ import { SystemConstants } from 'src/app/core/common/system,constants';
   styleUrls: ['./detail-item.component.css']
 })
 export class DetailItemComponent implements OnInit {
-  message: string;
-  newId: string = "";
-  private details: any[];
-  Uid:string = "";
+  
+  public newId: string = "";
+  public details: any;
+  public Uid:string = "";
   public user: LoggedInUser;
   
 
@@ -30,6 +30,7 @@ export class DetailItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.details = {};
     this.newId = this.route.snapshot.paramMap.get("id");
     console.log("ket qua ne "+this.newId);
     this.loadData();

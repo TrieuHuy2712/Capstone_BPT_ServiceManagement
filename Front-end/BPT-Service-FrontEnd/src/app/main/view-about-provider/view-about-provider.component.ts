@@ -10,7 +10,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 })
 export class ViewAboutProviderComponent implements OnInit {
   userId:string;
-  private user: any;
+  public user: any;
 
 
   constructor(
