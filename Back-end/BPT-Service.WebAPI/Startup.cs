@@ -74,6 +74,7 @@ using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
+using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
@@ -383,6 +384,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRejectPostServiceCommand, RejectPostServiceCommand>();
             services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
             services.AddScoped<IGetPostUserServiceByUserIdQuery, GetPostUserServiceByUserIdQuery>();
+            services.AddScoped<IGetAllPostUserServiceByUserIdQuery, GetAllPostUserServiceByUserIdQuery>();
             //Extension
             services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
             services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
