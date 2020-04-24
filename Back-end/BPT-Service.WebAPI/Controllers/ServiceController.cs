@@ -7,6 +7,7 @@ using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
 using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.WebAPI.Models.ServiceViewModels;
@@ -32,7 +33,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
-        // private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
+        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
 
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
@@ -44,8 +45,8 @@ namespace BPT_Service.WebAPI.Controllers
             IRegisterServiceFromUserCommand registerServiceFromUserCommand,
             IRejectPostServiceCommand rejectPostServiceCommand,
             IUpdatePostServiceCommand updatePostServiceCommand,
-            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery
-            // IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
+            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
+            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
         )
         {
             _approvePostServiceCommand = approvePostServiceCommand;
