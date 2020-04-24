@@ -96,7 +96,7 @@ namespace BPT_Service.Common.Logging
 
                 using (StreamWriter fs = File.AppendText(string.Format(path + fileName, datetime.ToString(DateFormat.DateFormatStandard))))
                 {
-                    var logContent = logType + "[" + datetime.ToString(DateFormat.DateTimeFormat) + "]:: " + typeof(T).Name + ":: " + string.Join("||", message);
+                    var logContent = logType + "[" + datetime.ToString(DateFormat.DateTimeFormat) + "]:: " + typeof(T).Name + ":: " + string.Join("||", message) + "[ENDLOG]";
                     await fs.WriteLineAsync(logContent);
                 }
             }

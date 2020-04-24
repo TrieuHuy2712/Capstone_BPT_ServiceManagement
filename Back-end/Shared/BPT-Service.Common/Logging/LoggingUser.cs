@@ -30,13 +30,14 @@ namespace BPT_Service.Common.Logging
         {
             try
             {
+                var newPath = path + userNotification + "/";
                 DateTime datetime = DateTime.Now;
-                if (!Directory.Exists(path))
+                if (!Directory.Exists(newPath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(newPath);
                 }
 
-                using (StreamWriter fs = File.AppendText(string.Format(path + fileName, datetime.ToString(DateFormat.DateFormatStandard))))
+                using (StreamWriter fs = File.AppendText(string.Format(newPath + fileName, datetime.ToString(DateFormat.DateFormatStandard))))
                 {
                     var logContent = logType + "[" + datetime.ToString(DateFormat.DateTimeFormat) + "]:: " + typeof(T).Name + ":: " + userNotification + ":: " + userName + ":: " + string.Join("||", message);
                     await fs.WriteLineAsync(logContent);

@@ -44,6 +44,9 @@ using BPT_Service.Application.LocationService.Command.UpdateCityProvinceService;
 using BPT_Service.Application.LocationService.Query.GetAllCityProvinceService;
 using BPT_Service.Application.LocationService.Query.GetAllPagingCityProvinceService;
 using BPT_Service.Application.LocationService.Query.GetByIdCityProvinceService;
+using BPT_Service.Application.LoggingService.Command.DeleteMonthlyLogFiles;
+using BPT_Service.Application.LoggingService.Query.GetLogFiles;
+using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
@@ -259,10 +262,11 @@ namespace BPT_Service.WebAPI
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IWebHostEnvironment env, 
-            IHttpContextAccessor accessor, 
-            IRecommendService _recommendService)
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IHttpContextAccessor accessor,
+            IRecommendService _recommendService,
+            IDeleteMonthlyLogFiles _deleteMonthlyLogFiles)
         {
             if (env.IsDevelopment())
             {
@@ -284,6 +288,7 @@ namespace BPT_Service.WebAPI
                 endpoints.MapControllers();
             });
             RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _deleteMonthlyLogFiles.Execute(), Cron.Daily);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -463,6 +468,12 @@ namespace BPT_Service.WebAPI
 
             //Store Procedure
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+            //Logging
+            services.AddScoped<IDeleteMonthlyLogFiles, DeleteMonthlyLogFiles>();
+            services.AddScoped<IGetLogFiles, GetLogFiles>();
+            services.AddScoped<IGetLogFromAFile, GetLogFromAFile>();
+
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
