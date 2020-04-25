@@ -6,5 +6,6 @@ namespace BPT_Service.Application.LoggingService.ViewModel
     {
         public List<LogModel> Logs { get; set; }
         public string Types { get; set; }
+        public int NumberNotification { get; set; }
     }
 }

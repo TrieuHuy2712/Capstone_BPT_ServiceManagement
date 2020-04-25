@@ -12,6 +12,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -34,16 +35,20 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private readonly IOptions<EmailConfigModel> _config;
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly RoleManager<AppRole> _roleRepository;
 
         public RejectProviderServiceCommand(
-            ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            ICheckUserIsProviderQuery checkUserIsProviderQuery,
-            IGetAllEmailServiceQuery getAllEmailServiceQuery,
-            IGetPermissionActionQuery getPermissionActionQuery,
-            IHttpContextAccessor httpContextAccessor,
-            IOptions<EmailConfigModel> config,
-            IRepository<Provider, Guid> providerRepository,
-            UserManager<AppUser> userRepository)
+            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            ICheckUserIsProviderQuery checkUserIsProviderQuery, 
+            IGetAllEmailServiceQuery getAllEmailServiceQuery, 
+            IGetPermissionActionQuery getPermissionActionQuery, 
+            IHttpContextAccessor httpContextAccessor, 
+            IOptions<EmailConfigModel> config, 
+            IRepository<Provider, Guid> providerRepository, 
+            UserManager<AppUser> userRepository, 
+            IUserRoleRepository userRoleRepository, 
+            RoleManager<AppRole> roleRepository)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
@@ -53,6 +58,8 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
             _config = config;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
+            _userRoleRepository = userRoleRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
@@ -74,13 +81,11 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                         };
                     }
                     //Check user is Provider
-                    //if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
-                    //{
-                    //    return new CommandResult<ProviderServiceViewModel>
-                    //    {
-                    //        errorMessage = "You had been a provider"
-                    //    };
-                    //}
+                    if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                    {
+                        var providerRole = await _roleRepository.FindByNameAsync("Provider");
+                        _userRoleRepository.DeleteUserRole(mappingProvider.UserId, providerRole.Id);
+                    }
                     mappingProvider.Status = Status.InActive;
                     _providerRepository.Update(mappingProvider);
                     await _providerRepository.SaveAsync();

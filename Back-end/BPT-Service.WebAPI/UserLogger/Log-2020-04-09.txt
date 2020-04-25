@@ -1,8 +1,0 @@
-INFO[2020-04-09 11:48:53]:: RejectNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been rejecte.Please check your email
-INFO[2020-04-09 12:01:35]:: ApproveNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been approved
-INFO[2020-04-09 12:03:30]:: RejectNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been rejecte.Please check your email
-INFO[2020-04-09 12:10:52]:: ApproveNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been approved
-INFO[2020-04-09 12:31:34]:: RejectNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been rejecte.Please check your email
-INFO[2020-04-09 12:36:19]:: RejectNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been rejecte.Please check your email
-INFO[2020-04-09 12:38:39]:: ApproveNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been approved
-INFO[2020-04-09 12:39:01]:: RejectNewsProviderServiceCommand:: 9c43f9ff-7090-440c-89bd-a82a0ee29726:: admin:: adminYour news provider:Abc xyzhas been rejecte.Please check your email

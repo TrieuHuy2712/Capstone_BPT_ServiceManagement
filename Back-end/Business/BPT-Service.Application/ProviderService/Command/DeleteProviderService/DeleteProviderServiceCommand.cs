@@ -6,6 +6,7 @@ using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
@@ -17,23 +18,29 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
 {
     public class DeleteProviderServiceCommand : IDeleteProviderServiceCommand
     {
-        private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly RoleManager<AppRole> _roleRepository;
         private readonly UserManager<AppUser> _userManager;
 
         public DeleteProviderServiceCommand(
-            IRepository<Provider, Guid> providerRepository,
-            IHttpContextAccessor httpContextAccessor,
-            IGetPermissionActionQuery getPermissionActionQuery,
-            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
+            IGetPermissionActionQuery getPermissionActionQuery, 
+            IHttpContextAccessor httpContextAccessor, 
+            IRepository<Provider, Guid> providerRepository, 
+            IUserRoleRepository userRoleRepository, 
+            RoleManager<AppRole> roleRepository, 
             UserManager<AppUser> userManager)
         {
-            _providerRepository = providerRepository;
-            _httpContextAccessor = httpContextAccessor;
-            _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _httpContextAccessor = httpContextAccessor;
+            _providerRepository = providerRepository;
+            _userRoleRepository = userRoleRepository;
+            _roleRepository = roleRepository;
             _userManager = userManager;
         }
 
@@ -50,6 +57,9 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
                     if (getId != null)
                     {
                         //Remove Provider Role
+                        var providerId = await _roleRepository.FindByNameAsync("Provider");
+                        _userRoleRepository.DeleteUserRole(getId.UserId, providerId.Id);
+                        //End remove provider Role
                         _providerRepository.Remove(newId);
                         await _providerRepository.SaveAsync();
                         await Logging<DeleteProviderServiceCommand>.

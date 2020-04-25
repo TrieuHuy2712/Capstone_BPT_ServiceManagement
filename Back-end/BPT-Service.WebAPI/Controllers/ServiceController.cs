@@ -59,7 +59,7 @@ namespace BPT_Service.WebAPI.Controllers
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
             _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
-            // _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
+            _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
         }
 
         #region GETAPI

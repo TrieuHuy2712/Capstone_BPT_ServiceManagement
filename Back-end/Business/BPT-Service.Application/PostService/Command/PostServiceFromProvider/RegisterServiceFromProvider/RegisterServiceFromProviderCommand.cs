@@ -1,9 +1,11 @@
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
-using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -12,11 +14,13 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider
@@ -32,26 +36,32 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly UserManager<AppUser> _userManager;
         private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
+        private readonly IOptions<EmailConfigModel> _config;
 
-        public RegisterServiceFromProviderCommand(IRepository<Service, Guid> postServiceRepository
-        , IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
-        IRepository<Tag, Guid> tagServiceRepository,
-        IHttpContextAccessor httpContextAccessor,
-        ICheckUserIsProviderQuery checkUserIsProvider,
-        ICheckUserIsAdminQuery checkUserIsAdminQuery,
-        IGetPermissionActionQuery getPermissionActionQuery,
-        UserManager<AppUser> userManager,
-        IRepository<Provider, Guid> providerRepository)
+        public RegisterServiceFromProviderCommand(
+            IRepository<Service, Guid> postServiceRepository,
+            IRepository<Tag, Guid> tagServiceRepository,
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository,
+            IHttpContextAccessor httpContextAccessor,
+            ICheckUserIsProviderQuery checkUserIsProvider,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            UserManager<AppUser> userManager, IRepository<Provider, Guid> providerRepository,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IOptions<EmailConfigModel> config)
         {
             _postServiceRepository = postServiceRepository;
+            _tagServiceRepository = tagServiceRepository;
             _providerServiceRepository = providerServiceRepository;
             _httpContextAccessor = httpContextAccessor;
-            _tagServiceRepository = tagServiceRepository;
             _checkUserIsProvider = checkUserIsProvider;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
             _userManager = userManager;
             _providerRepository = providerRepository;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
+            _config = config;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -98,7 +108,22 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     vm.Id = mappingService.Id.ToString();
                     //Write Log
                     await Logging<RegisterServiceFromProviderCommand>.
-                        InformationAsync(ActionCommand.COMMAND_ADD,userName,JsonConvert.SerializeObject(vm));
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
+
+                    //Send mail for user
+                    if ((await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
+                    {
+                        var findUserId = await _userManager.FindByIdAsync(vm.UserId);
+                        //Set content for email
+                        var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                        var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
+                        getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUserId.Email);
+
+                        ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                        getFirstEmail.Message, _userManager.FindByIdAsync(userId).Result.Email).Wait();
+                    }
+                    //End send mail for user
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
@@ -107,25 +132,26 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                             Id = mappingService.Id.ToString(),
                             DateCreated = mappingService.DateCreated,
                             IsProvider = true,
-                            Author = _providerRepository.FindSingleAsync(x=>x.Id == Guid.Parse(vm.ProviderId)).Result.ProviderName,
+                            Author = _providerRepository.FindSingleAsync(x => x.Id == Guid.Parse(vm.ProviderId)).Result.ProviderName,
                             ProviderId = vm.ProviderId,
-                            AvtService = mappingService.ServiceImages.Where(x=>x.isAvatar==true).FirstOrDefault().Path,
-                            listImages = mappingService.ServiceImages.Select(x=>new PostServiceImageViewModel {
+                            AvtService = mappingService.ServiceImages.Where(x => x.isAvatar == true).FirstOrDefault().Path,
+                            listImages = mappingService.ServiceImages.Select(x => new PostServiceImageViewModel
+                            {
                                 ImageId = x.Id,
                                 IsAvatar = x.isAvatar,
                                 Path = x.Path
                             }).ToList(),
-                            CategoryId= vm.CategoryId,
-                            CategoryName= vm.CategoryName,
-                            Description= vm.Description,
+                            CategoryId = vm.CategoryId,
+                            CategoryName = vm.CategoryName,
+                            Description = vm.Description,
                             PriceOfService = vm.PriceOfService,
                             ServiceName = vm.ServiceName,
                             Status = mappingService.Status,
-                            tagofServices = mappingService.TagServices.Select(x=>new TagofServiceViewModel
+                            tagofServices = mappingService.TagServices.Select(x => new TagofServiceViewModel
                             {
                                 TagId = x.TagId.ToString(),
-                                TagName = _tagServiceRepository.FindSingleAsync(t=>t.Id == x.TagId).Result.TagName
-                            }).ToList(), 
+                                TagName = _tagServiceRepository.FindSingleAsync(t => t.Id == x.TagId).Result.TagName
+                            }).ToList(),
                         }
                     };
                 }
@@ -181,6 +207,17 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             providerService.ProviderId = idProvider;
             providerService.ServiceId = serviceId;
             return providerService;
+        }
+        private async Task ContentEmail(string apiKey, string subject1, string message, string email)
+        {
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress(_config.Value.FromUserEmail, _config.Value.FullUserName);
+            var subject = subject1;
+            var to = new EmailAddress(email);
+            var plainTextContent = message;
+            var htmlContent = "<strong>" + message + "</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
         }
     }
 }

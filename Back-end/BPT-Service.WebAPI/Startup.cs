@@ -55,6 +55,9 @@ using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderServ
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
 using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
 using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification;
+using BPT_Service.Application.NotificationService.NotificationAdmin.AutoRealTimeNotification;
+using BPT_Service.Application.NotificationService.NotificationAdmin.GetNotificationHasRead;
 using BPT_Service.Application.PermissionService.Query.CheckOwnService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
@@ -268,7 +271,8 @@ namespace BPT_Service.WebAPI
             IWebHostEnvironment env,
             IHttpContextAccessor accessor,
             IRecommendService _recommendService,
-            IDeleteMonthlyLogFiles _deleteMonthlyLogFiles)
+            IDeleteMonthlyLogFiles _deleteMonthlyLogFiles,
+            IAutoGetNotification _autoGetNotification)
         {
             if (env.IsDevelopment())
             {
@@ -291,6 +295,7 @@ namespace BPT_Service.WebAPI
             });
             RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => _deleteMonthlyLogFiles.Execute(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _autoGetNotification.Execute(), Cron.Minutely);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -477,6 +482,12 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IDeleteMonthlyLogFiles, DeleteMonthlyLogFiles>();
             services.AddScoped<IGetLogFiles, GetLogFiles>();
             services.AddScoped<IGetLogFromAFile, GetLogFromAFile>();
+
+            //Notification
+            services.AddScoped<IAutoGetNotification, AutoGetNotification>();
+            services.AddScoped<IAutoRealTimeNotification, AutoRealTimeNotification>();
+            services.AddScoped<IGetNotificationHasRead, GetNotificationHasRead>();
+
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
