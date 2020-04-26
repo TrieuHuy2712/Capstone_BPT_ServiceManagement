@@ -10,6 +10,9 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { ViewComponent } from './view.component';
+import { TypeaheadModule } from 'ngx-bootstrap';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
@@ -25,7 +28,12 @@ const itemRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(itemRoutes),
     SharedModule,
-    SlickModule.forRoot()
+    SlickModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    EditorModule,
+    Ng4LoadingSpinnerModule.forRoot()
+
+
   ],
   declarations: [ViewComponent],
   providers:[DataService,NotificationService, TranslationService]

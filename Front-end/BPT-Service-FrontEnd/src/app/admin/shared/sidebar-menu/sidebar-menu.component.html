@@ -29,17 +29,17 @@
 
           <!-- Sidebar Menu -->
           <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
               <!-- test in this row -->
 
               <li class="nav-item"><a class="nav-link" href="main/home/index"><i class="fa fa-home"></i> Homepage</a>
               </li>
-              <li class="nav-item has-treeview" *ngFor="let item of _functions"><a class="nav-link"><i
-                    class="fas {{item.IconCss}}"></i> {{item.key | titlecase }} <i class="badge badge-info">3</i><i
-                    *ngIf="item.childrenId.length>0" class="fas fa-angle-left right"></i></a>
-                <ul class="nav nav-treeview" style="display: none;">
+              <li class="nav-item has-treeview menu-open"  *ngFor="let item of _functions"><a class="nav-link"><i
+                    class="fas {{item.IconCss}}"></i> {{item.key | titlecase }} <i class="badge badge-info">{{_functions.length}}</i><i
+                    class="fas fa-angle-left right"></i></a>
+                <ul class="nav nav-treeview">
                   <li class="nav-item" *ngFor="let subItem of item.childrenId"><a class="nav-link"
                       routerLink="{{'/admin/'+subItem.url}}" routerLinkActive="active"><i
                         class="far fa-circle nav-icon"></i>{{subItem.name}}</a></li>
