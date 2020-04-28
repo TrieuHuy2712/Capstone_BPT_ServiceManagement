@@ -1,6 +1,7 @@
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -51,7 +52,7 @@ namespace BPT_Service.Application.ProviderService.Command.DeleteProviderService
             try
             {
                 var newId = Guid.Parse(id);
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanDelete))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanDelete))
                 {
                     var getId = await _providerRepository.FindByIdAsync(newId);
                     if (getId != null)

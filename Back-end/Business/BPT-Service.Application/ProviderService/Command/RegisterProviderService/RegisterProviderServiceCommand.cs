@@ -3,6 +3,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -84,7 +85,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 await _providerRepository.Add(mappingProvider);
 
                 await _providerRepository.SaveAsync();
-                if ((await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanCreate)
+                if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanCreate)
                     || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                 {
                     var findUserId = await _userManager.FindByIdAsync(vm.UserId);
@@ -128,7 +129,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
         {
             Provider pro = new Provider();
             pro.PhoneNumber = vm.PhoneNumber;
-            pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanCreate)
+            pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.PROVIDER, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.WaitingApprove : Status.Pending;
             pro.CityId = vm.CityId;
             pro.UserId = vm.UserId == null ? userId : Guid.Parse(vm.UserId);

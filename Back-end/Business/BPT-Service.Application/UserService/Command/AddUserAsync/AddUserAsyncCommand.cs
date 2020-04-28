@@ -2,6 +2,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -41,7 +42,7 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                    await _getPermissionActionQuery.ExecuteAsync(userId, "USER", ActionSetting.CanCreate))
+                    await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.USER, ActionSetting.CanCreate))
                 {
                     var user = new AppUser()
                     {

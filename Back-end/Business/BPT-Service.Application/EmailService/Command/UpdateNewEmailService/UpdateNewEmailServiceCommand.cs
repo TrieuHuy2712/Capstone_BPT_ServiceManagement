@@ -2,6 +2,7 @@
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -41,7 +42,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "EMAIL", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.EMAIL, ActionSetting.CanUpdate))
                 {
                     var checkId = await _emailRepository.FindByIdAsync(emailViewModel.Id);
                     if (checkId == null)

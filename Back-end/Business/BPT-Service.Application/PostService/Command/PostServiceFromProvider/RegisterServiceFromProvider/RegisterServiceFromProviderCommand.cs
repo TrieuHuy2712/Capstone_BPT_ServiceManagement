@@ -4,6 +4,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -71,7 +72,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             try
             {
                 var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(userId);
-                if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
+                if (await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
                     //Add new tag when isAdd equal true
@@ -111,7 +112,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                         InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
 
                     //Send mail for user
-                    if ((await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate)
+                    if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                     {
                         var findUserId = await _userManager.FindByIdAsync(vm.UserId);

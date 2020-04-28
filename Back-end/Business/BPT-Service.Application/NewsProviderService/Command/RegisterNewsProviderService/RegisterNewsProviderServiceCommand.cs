@@ -3,6 +3,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -50,7 +51,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
             {
                 var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                   await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanCreate) ||
+                   await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.NEWS, ActionSetting.CanCreate) ||
                    getIsProvider.isValid)
                 {
                     var mappingProvider = await MappingProvider(vm, Guid.Parse(vm.ProviderId), userId);
@@ -94,7 +95,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
         {
             ProviderNew pro = new ProviderNew();
             pro.Author = vm.Author;
-            pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanCreate)
+            pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.NEWS, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
             pro.Author = vm.Author;
             pro.ProviderId = providerId;

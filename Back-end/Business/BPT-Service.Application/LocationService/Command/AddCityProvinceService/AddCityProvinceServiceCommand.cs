@@ -2,6 +2,7 @@
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -44,7 +45,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {//Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "LOCATION", ActionSetting.CanCreate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.LOCATION, ActionSetting.CanCreate))
                 {
                     //Check User Has Permission Create
                     var listModel = MappingCityProvince(listAddViewModel);

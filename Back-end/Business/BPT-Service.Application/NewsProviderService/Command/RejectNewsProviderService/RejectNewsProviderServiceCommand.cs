@@ -3,6 +3,7 @@ using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -61,7 +62,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.NEWS, ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _newProviderRepository.FindByIdAsync(id);
                     if (mappingProvider == null)

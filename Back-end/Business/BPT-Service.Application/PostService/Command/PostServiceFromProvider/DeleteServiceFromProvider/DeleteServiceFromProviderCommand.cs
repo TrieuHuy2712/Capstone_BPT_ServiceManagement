@@ -3,6 +3,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -62,7 +63,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
                     var findProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == findIdService.Id);
                     //Check permission can delete
                     if (findProviderService != null ||
-                        await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanDelete) ||
+                        await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanDelete) ||
                         await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                         findProviderService.ProviderId == Guid.Parse(checkUserIsProvider.myModel.Id.ToString()))
                     {

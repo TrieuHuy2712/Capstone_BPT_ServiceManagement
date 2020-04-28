@@ -2,6 +2,7 @@ using BPT_Service.Application.CategoryService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -41,7 +42,7 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;            
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY", ActionSetting.CanCreate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanCreate))
                 {
                     var mappingCate = mappingCategory(userVm);
                     await _categoryRepository.Add(mappingCate);

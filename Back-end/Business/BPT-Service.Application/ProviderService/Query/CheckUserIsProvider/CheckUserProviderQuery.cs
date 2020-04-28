@@ -1,4 +1,5 @@
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
@@ -52,7 +53,7 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
                 var getRoleOfUser = await _userManager.GetRolesAsync(getUser);
                 foreach (var item in getRoleOfUser)
                 {
-                    if (item == "Provider")
+                    if (item == ConstantRoles.Provider)
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {

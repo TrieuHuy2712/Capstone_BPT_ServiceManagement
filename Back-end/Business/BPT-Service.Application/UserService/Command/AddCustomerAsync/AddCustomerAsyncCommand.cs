@@ -1,4 +1,5 @@
 using BPT_Service.Application.UserService.ViewModel;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -55,7 +56,7 @@ namespace BPT_Service.Application.UserService.Command.AddCustomerAsync
                         Status = Status.Active
                     }, userVm.Password);
                     var newUser = await _userManager.FindByNameAsync(userVm.UserName);
-                    await _userManager.AddToRoleAsync(user, "Customer");
+                    await _userManager.AddToRoleAsync(user, ConstantRoles.Customer);
                     await Logging<AddCustomerAsyncCommand>.
                         InformationAsync(ActionCommand.COMMAND_ADD, userVm.UserName, "New Account:" + userVm.UserName);
                     return new CommandResult<AppUserViewModelinUserService>

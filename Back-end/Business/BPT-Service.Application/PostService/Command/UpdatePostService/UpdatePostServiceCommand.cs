@@ -3,6 +3,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -69,7 +70,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                 var getPermissionForService = await IsOwnService(Guid.Parse(vm.Id));
 
                 if (getPermissionForService.isValid || await _checkUserIsAdminQuery.ExecuteAsync(userId)
-                    || await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate))
+                    || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanUpdate))
                 {
                     var currentService = getPermissionForService.myModel;
                     var service = await _serviceRepository.FindByIdAsync(Guid.Parse(vm.Id));

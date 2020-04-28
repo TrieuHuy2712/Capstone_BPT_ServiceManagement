@@ -4,6 +4,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -69,7 +70,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             try
             {
                 //var checkUserIsAdmin = await _checkUserIsAdminQuery.ExecuteAsync(userId);
-                if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
+                if (await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
                     //Add new tag when isAdd equal true
@@ -108,7 +109,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                         InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
                     var findUserInformation = await _userManager.FindByIdAsync(vm.UserId);
                     //Send mail for user if admin
-                    if ((await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate)
+                    if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                     {
                         //Set content for email

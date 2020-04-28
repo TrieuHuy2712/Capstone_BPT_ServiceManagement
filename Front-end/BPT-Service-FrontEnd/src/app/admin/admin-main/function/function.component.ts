@@ -56,7 +56,6 @@ export class FunctionComponent implements OnInit {
   }
   public showPermission(id: any) {
     this._dataService.get("/AdminRole/getAllPermission/" + id).subscribe((response: any[]) => {
-        console.log(response);
         this.functionId = id;
         this._permission = response;
         this.permissionModal.show();
@@ -72,7 +71,6 @@ export class FunctionComponent implements OnInit {
       };
       this._dataService.post("/AdminRole/SavePermission", data).subscribe(
         (response: any) => {
-          console.log(response);
           this.notificationService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
           this.permissionModal.hide();
         },
@@ -91,7 +89,6 @@ export class FunctionComponent implements OnInit {
     this.spinnerService.show();
     this._dataService.get("/function/GetAll/"+localStorage.getItem(SystemConstants.const_username)).subscribe(
       (response: any) => {
-        console.log(response);
         this._functions = response;
         this._functionHierachy = this._functions[0].childrenId;
         this._functions = this._functions.filter(x => x.key != null);
@@ -102,7 +99,6 @@ export class FunctionComponent implements OnInit {
               if (
                 this._functionHierachy[index].id == this._functions[index1].key
               ) {
-                console.log(this._functionHierachy[index].id);
                 count++;
               }
             }

@@ -2,6 +2,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -51,7 +52,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.DeleteNewsProvider
                     var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                     //Check permission
                     if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                        await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanDelete) ||
+                        await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.NEWS, ActionSetting.CanDelete) ||
                         (checkUserIsProvider.isValid && checkUserIsProvider.myModel.Id == getId.ProviderId.ToString()))
                     {
                         _providerNewRepository.Remove(getId.Id);

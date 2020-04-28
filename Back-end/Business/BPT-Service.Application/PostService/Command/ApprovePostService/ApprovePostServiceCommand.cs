@@ -4,6 +4,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
 using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -71,7 +72,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
             try
             {
                 //Check permission approve
-                if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanUpdate) ||
+                if (await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanUpdate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
                     //Check have current post

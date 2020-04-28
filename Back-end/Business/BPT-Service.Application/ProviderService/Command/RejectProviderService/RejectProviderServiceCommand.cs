@@ -4,6 +4,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -67,7 +68,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
 
@@ -82,7 +83,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                     //Check user is Provider
                     if (_checkUserIsProviderQuery.ExecuteAsync(userId).Result.isValid == true)
                     {
-                        var providerRole = await _roleRepository.FindByNameAsync("Provider");
+                        var providerRole = await _roleRepository.FindByNameAsync(ConstantRoles.Provider);
                         _userRoleRepository.DeleteUserRole(mappingProvider.UserId, providerRole.Id);
                     }
                     mappingProvider.Status = Status.InActive;

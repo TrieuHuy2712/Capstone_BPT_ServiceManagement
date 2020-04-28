@@ -3,6 +3,7 @@ using BPT_Service.Application.EmailService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -45,7 +46,7 @@ namespace BPT_Service.Application.EmailService.Command.AddNewEmailService
             try
             {
                 //Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "EMAIL", ActionSetting.CanCreate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.EMAIL, ActionSetting.CanCreate))
                 {
                     var mappingEmail = MappingEmail(emailVIewModel);
                     await _emailRepository.Add(mappingEmail);

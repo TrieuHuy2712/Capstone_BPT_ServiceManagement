@@ -6,6 +6,7 @@ using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -75,7 +76,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId,"PROVIDER", ActionSetting.CanUpdate))
+                if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate))
                 {
                     var getUserService = await _getPostUserServiceByUserIdQuery.ExecuteAsync(userProvider);
                     if (getUserService != null)

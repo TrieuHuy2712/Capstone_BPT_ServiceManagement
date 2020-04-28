@@ -3,6 +3,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -54,7 +55,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                 {
                     var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                     if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                       await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate) ||
+                       await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.NEWS, ActionSetting.CanUpdate) ||
                        (getIsProvider.isValid && getIsProvider.myModel.Id == findProviderNew.ProviderId.ToString()))
                     {
                         var mappingNewsProvider = await MappingProvider(findProviderNew, vm, userId);
@@ -106,7 +107,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
         {
             pro.Author = vm.Author;
             pro.Status = (await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext) ||
-                            await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanUpdate)) ?
+                            await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.NEWS, ActionSetting.CanUpdate)) ?
                             Status.Active : Status.UpdatePending;
             pro.Author = vm.Author;
             pro.ProviderId = Guid.Parse(vm.ProviderId);
