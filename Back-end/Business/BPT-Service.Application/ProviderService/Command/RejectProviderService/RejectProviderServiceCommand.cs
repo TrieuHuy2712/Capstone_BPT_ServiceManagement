@@ -16,7 +16,6 @@ using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -39,15 +38,15 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private readonly RoleManager<AppRole> _roleRepository;
 
         public RejectProviderServiceCommand(
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
-            ICheckUserIsProviderQuery checkUserIsProviderQuery, 
-            IGetAllEmailServiceQuery getAllEmailServiceQuery, 
-            IGetPermissionActionQuery getPermissionActionQuery, 
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<EmailConfigModel> config, 
-            IRepository<Provider, Guid> providerRepository, 
-            UserManager<AppUser> userRepository, 
-            IUserRoleRepository userRoleRepository, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> config,
+            IRepository<Provider, Guid> providerRepository,
+            UserManager<AppUser> userRepository,
+            IUserRoleRepository userRoleRepository,
             RoleManager<AppRole> roleRepository)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
@@ -71,7 +70,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
-                   
+
                     if (mappingProvider == null)
                     {
                         return new CommandResult<ProviderServiceViewModel>
@@ -96,12 +95,12 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Reject_Provider).FirstOrDefault();
                     getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email).Replace(EmailKey.ReasonKey, reason);
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                    getFirstEmail.Message, mappingProvider.AppUser.Email).Wait();
+                                    getFirstEmail.Message, userMail.Email).Wait();
 
                     await LoggingUser<RejectProviderServiceCommand>.
                    InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been rejecte.Please check your email");
                     await Logging<RejectProviderServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, mappingProvider.ProviderName+"has been rejected");
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, mappingProvider.ProviderName + "has been rejected");
                     return new CommandResult<ProviderServiceViewModel>
                     {
                         isValid = true,

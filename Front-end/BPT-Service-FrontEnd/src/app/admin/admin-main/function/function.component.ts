@@ -47,10 +47,10 @@ export class FunctionComponent implements OnInit {
 
     this._currentLang = this.languageService.getLanguage();
     this._userPermission = {
-      canCreate: true,
-      canDelete: true,
-      canUpdate: true,
-      canRead: true
+      canCreate: false,
+      canDelete: false,
+      canUpdate: false,
+      canRead: false
     };
     this.search();
   }

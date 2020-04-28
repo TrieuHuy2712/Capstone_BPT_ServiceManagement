@@ -53,7 +53,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
                         functionDb.Id = function.Id;
                         functionDb.Name = function.Name;
                         functionDb.ParentId = function.ParentId;
-                        functionDb.SortOrder = function.SortOrder;
                         functionDb.Status = function.Status;
                         functionDb.URL = function.URL;
                         _functionRepository.Update(functionDb);

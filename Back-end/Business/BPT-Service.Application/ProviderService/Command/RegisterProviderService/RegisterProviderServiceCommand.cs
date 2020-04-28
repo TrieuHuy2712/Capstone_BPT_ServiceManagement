@@ -7,12 +7,14 @@ using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid;
@@ -33,6 +35,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
         private readonly UserManager<AppUser> _userManager;
         private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IOptions<EmailConfigModel> _config;
+        private readonly IConfiguration _configuration;
 
         public RegisterProviderServiceCommand(
             IRepository<Provider, Guid> providerRepository,
@@ -42,7 +45,8 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             ICheckUserIsProviderQuery checkUserIsProviderQuery,
             UserManager<AppUser> userManager,
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
-            IOptions<EmailConfigModel> config)
+            IOptions<EmailConfigModel> config,
+            IConfiguration configuration)
         {
             _providerRepository = providerRepository;
             _httpContextAccessor = httpContextAccessor;
@@ -52,6 +56,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             _userManager = userManager;
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _config = config;
+            _configuration = configuration;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
@@ -62,22 +67,40 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             {
                 var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 var mappingProvider = await MappingProvider(vm, Guid.Parse(userId), userId);
+
+                var userEmail = "";
+                if (vm.UserId == null)
+                {
+                    var findUser = await _userManager.FindByIdAsync(userId);
+                    userEmail = findUser.Email;
+                }
+                else
+                {
+                    var findUser = await _userManager.FindByIdAsync(vm.UserId);
+                    userEmail = findUser.Email;
+                }
+                mappingProvider.OTPConfirm = RandomCodeSupport.RandomString(6);
+
+                await _providerRepository.Add(mappingProvider);
+
+                await _providerRepository.SaveAsync();
                 if ((await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanCreate)
-                || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
+                    || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                 {
                     var findUserId = await _userManager.FindByIdAsync(vm.UserId);
                     await _userManager.AddToRoleAsync(findUserId, "Provider");
 
                     //Set content for email
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider") +
+                         mappingProvider.OTPConfirm + '_' + mappingProvider.Id;
+
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();
-                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUserId.Email);
+                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userEmail).Replace(EmailKey.ConfirmLink, generateCode);
 
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                    getFirstEmail.Message, _userManager.FindByIdAsync(userId).Result.Email).Wait();
+                                    getFirstEmail.Message, findUserId.Email).Wait();
                 }
-                await _providerRepository.Add(mappingProvider);
-                await _providerRepository.SaveAsync();
                 vm.Id = mappingProvider.Id.ToString();
                 vm.Status = mappingProvider.Status;
                 await Logging<RegisterProviderServiceCommand>.
@@ -106,7 +129,7 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             Provider pro = new Provider();
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanCreate)
-                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
+                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.WaitingApprove : Status.Pending;
             pro.CityId = vm.CityId;
             pro.UserId = vm.UserId == null ? userId : Guid.Parse(vm.UserId);
             pro.TaxCode = vm.TaxCode;

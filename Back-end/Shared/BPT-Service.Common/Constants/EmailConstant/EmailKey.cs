@@ -8,5 +8,6 @@
         public const string ServiceNameKey = "#Service";
         public const string NewNameKey = "#TitleNews";
         public const string PasswordKey = "#Password";
+        public const string ConfirmLink = "#ConfirmLink";
     }
 }

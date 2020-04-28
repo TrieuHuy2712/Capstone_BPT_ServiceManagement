@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BPT_Service.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200417043500_Initial")]
+    [Migration("20200428105551_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,9 +201,6 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -275,6 +272,9 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OTPConfirm")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")

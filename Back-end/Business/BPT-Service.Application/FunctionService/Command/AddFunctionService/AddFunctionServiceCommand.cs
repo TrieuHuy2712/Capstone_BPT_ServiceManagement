@@ -58,7 +58,6 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                             Id = mappingFunction.Id,
                             Name = mappingFunction.Name,
                             ParentId = mappingFunction.ParentId,
-                            SortOrder = mappingFunction.SortOrder,
                             Status = mappingFunction.Status,
                             URL = mappingFunction.URL
                         }
@@ -93,7 +92,6 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             newfunction.IconCss = function.IconCss;
             newfunction.Name = function.Name;
             newfunction.ParentId = function.ParentId;
-            newfunction.SortOrder = function.SortOrder;
             newfunction.Status = function.Status;
             newfunction.URL = function.URL;
             return newfunction;

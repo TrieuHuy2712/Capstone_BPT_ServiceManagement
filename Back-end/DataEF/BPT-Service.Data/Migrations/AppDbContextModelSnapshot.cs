@@ -199,9 +199,6 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -273,6 +270,9 @@ namespace BPT_Service.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OTPConfirm")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")

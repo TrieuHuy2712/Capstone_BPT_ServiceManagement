@@ -57,7 +57,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                         var sibling = await _functionRepository.FindAllAsync(x => items.ContainsKey(x.Id));
                         foreach (var child in sibling)
                         {
-                            child.SortOrder = items[child.Id];
                             _functionRepository.Update(child);
                         }
                         await _functionRepository.SaveAsync();
@@ -72,7 +71,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                                 Id = category.Id,
                                 Name = category.Name,
                                 ParentId = category.ParentId,
-                                SortOrder = category.SortOrder,
                                 Status = category.Status,
                                 URL = category.URL
                             }

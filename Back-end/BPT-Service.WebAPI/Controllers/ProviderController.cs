@@ -1,4 +1,5 @@
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
+using BPT_Service.Application.ProviderService.Command.ConfirmProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
 using BPT_Service.Application.ProviderService.Command.RejectProviderService;
@@ -29,6 +30,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetByIdProviderServiceQuery _getByIdProviderServiceQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
         private readonly IUpdateProviderServiceCommand _updateProviderServiceCommand;
+        private readonly IConfirmProviderService _confirmProviderService;
 
         public ProviderController(IApproveProviderServiceCommand approveProviderServiceCommand,
         IDeleteProviderServiceCommand deleteProviderServiceCommand,
@@ -38,7 +40,8 @@ namespace BPT_Service.WebAPI.Controllers
         IGetAllProviderofUserServiceQuery getAllProviderofUserServiceQuery,
         IGetByIdProviderServiceQuery getByIdProviderServiceQuery,
         IUpdateProviderServiceCommand updateProviderServiceCommand,
-        ICheckUserIsProviderQuery checkUserIsProviderQuery)
+        ICheckUserIsProviderQuery checkUserIsProviderQuery,
+        IConfirmProviderService confirmProviderService)
         {
             _approveProviderServiceCommand = approveProviderServiceCommand;
             _deleteProviderServiceCommand = deleteProviderServiceCommand;
@@ -49,12 +52,21 @@ namespace BPT_Service.WebAPI.Controllers
             _getByIdProviderServiceQuery = getByIdProviderServiceQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
             _updateProviderServiceCommand = updateProviderServiceCommand;
+            _confirmProviderService = confirmProviderService;
         }
 
         [HttpGet("GetAllPaging")]
         public async Task<IActionResult> GetAllPaging(string keyword, int page, int pageSize, int filter)
         {
             var model = await _getAllPagingProviderServiceQuery.ExecuteAsync(keyword, page, pageSize, filter);
+            return new OkObjectResult(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ConfirmProvider/{codeConfirm}")]
+        public async Task<IActionResult> GetAllPaging(string codeConfirm)
+        {
+            var model = await _confirmProviderService.ExecuteAsync(codeConfirm);
             return new OkObjectResult(model);
         }
 

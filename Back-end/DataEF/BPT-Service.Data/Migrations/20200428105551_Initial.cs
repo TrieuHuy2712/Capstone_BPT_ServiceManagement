@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BPT_Service.Data.Migrations
@@ -7,7 +6,7 @@ namespace BPT_Service.Data.Migrations
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {                        
+        {
             migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 columns: table => new
@@ -179,7 +178,6 @@ namespace BPT_Service.Data.Migrations
                     URL = table.Column<string>(maxLength: 250, nullable: false),
                     ParentId = table.Column<string>(maxLength: 128, nullable: true),
                     IconCss = table.Column<string>(nullable: true),
-                    SortOrder = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -240,7 +238,8 @@ namespace BPT_Service.Data.Migrations
                     Status = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     AvartarPath = table.Column<string>(nullable: true),
-                    DateModified = table.Column<DateTime>(nullable: false)
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    OTPConfirm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -477,7 +476,7 @@ namespace BPT_Service.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
