@@ -48,7 +48,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
+                var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                    await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanCreate) ||
                    getIsProvider.isValid)

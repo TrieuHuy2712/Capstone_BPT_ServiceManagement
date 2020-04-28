@@ -1,4 +1,5 @@
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
@@ -26,12 +27,19 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
             _providerRepository = providerRepository;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync()
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userId)
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 var getProvider = await _providerRepository.FindSingleAsync(x => x.UserId == Guid.Parse(userId));
+                if (getProvider == null)
+                {
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Cannot find your provider"
+                    };
+                }
                 var getUser = await _userManager.FindByIdAsync(userId);
                 if (getUser == null)
                 {
@@ -64,6 +72,8 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
             }
             catch (System.Exception ex)
             {
+                await Logging<CheckUserProviderQuery>.
+                       ErrorAsync(ex.Message.ToString());
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

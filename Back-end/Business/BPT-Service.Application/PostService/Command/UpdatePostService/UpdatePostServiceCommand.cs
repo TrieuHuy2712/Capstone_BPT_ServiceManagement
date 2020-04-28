@@ -110,7 +110,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                         }
                         else
                         {
-                            var imageId= await _serviceImageRepository.FindByIdAsync(item.ImageId);
+                            var imageId = await _serviceImageRepository.FindByIdAsync(item.ImageId);
                             if (imageId != null)
                             {
                                 imageId.isAvatar = item.IsAvatar;
@@ -132,6 +132,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                         mappingTag.ServiceId = Guid.Parse(vm.Id);
                         await _serviceOfTagRepository.Add(mappingTag);
                     }
+
                     _serviceRepository.Update(mappingService);
                     await _serviceRepository.SaveAsync();
                     await Logging<UpdatePostServiceCommand>.
@@ -139,7 +140,32 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                     return new CommandResult<PostServiceViewModel>
                     {
                         isValid = true,
-                        myModel = vm,
+                        myModel = new PostServiceViewModel
+                        {
+                            Id = mappingService.Id.ToString(),
+                            DateCreated = mappingService.DateCreated,
+                            IsProvider = true,
+                            Author = vm.Author,
+                            ProviderId = vm.ProviderId,
+                            AvtService = mappingService.ServiceImages.Where(x => x.isAvatar == true).FirstOrDefault().Path,
+                            listImages = mappingService.ServiceImages.Select(x => new PostServiceImageViewModel
+                            {
+                                ImageId = x.Id,
+                                IsAvatar = x.isAvatar,
+                                Path = x.Path
+                            }).ToList(),
+                            CategoryId = vm.CategoryId,
+                            CategoryName = vm.CategoryName,
+                            Description = vm.Description,
+                            PriceOfService = vm.PriceOfService,
+                            ServiceName = vm.ServiceName,
+                            Status = mappingService.Status,
+                            tagofServices = mappingService.TagServices.Select(x => new TagofServiceViewModel
+                            {
+                                TagId = x.TagId.ToString(),
+                                TagName = _tagServiceRepository.FindSingleAsync(t => t.Id == x.TagId).Result.TagName
+                            }).ToList(),
+                        }
                     };
                 }
                 await Logging<UpdatePostServiceCommand>.

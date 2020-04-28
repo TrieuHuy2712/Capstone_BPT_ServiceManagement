@@ -101,9 +101,9 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("CheckUserIsProvider")]
-        public async Task<IActionResult> CheckUserIsProvider()
+        public async Task<IActionResult> CheckUserIsProvider(string userId)
         {
-            var model = await _checkUserIsProviderQuery.ExecuteAsync();
+            var model = await _checkUserIsProviderQuery.ExecuteAsync(userId);
             return new OkObjectResult(model);
         }
 

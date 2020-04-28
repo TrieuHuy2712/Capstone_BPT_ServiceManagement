@@ -57,7 +57,7 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             _getUserInformationQuery = getUserInformationQuery;
         }
 
-        public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
+        public async Task<PostServiceViewModel> ExecuteAsync(string idService)
         {
             try
             {
@@ -71,55 +71,39 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                         if (findProviderService != null)
                         {
                             var findProvider = await _providerRepository.FindSingleAsync(x => x.Id == findProviderService.ProviderId);
-                            return new CommandResult<PostServiceViewModel>
-                            {
-                                isValid = true,
-                                myModel = MapViewModel(service, null, findProvider).Result
-                            };
+                            return MapViewModel(service, null, findProvider).Result;
                         }
                         else
                         {
-                            return new CommandResult<PostServiceViewModel>
-                            {
-                                isValid = true,
-                                myModel = MapViewModel(service, null, null).Result
-                            };
+                            return MapViewModel(service, null, null).Result;
                         }
                     }
                     else
                     {
                         var findUser = await _userManager.FindByIdAsync(findUserService.UserId.ToString());
-                        return new CommandResult<PostServiceViewModel>
-                        {
-                            isValid = true,
-                            myModel = MapViewModel(service, findUser, null).Result
-                        };
+                        return MapViewModel(service, findUser, null).Result;
                     }
-
-                    
                 }
                 else
                 {
-                    return new CommandResult<PostServiceViewModel>
-                    {
-                        isValid = true,
-                        errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
-                    };
+                    return null;
                 }
             }
             catch (System.Exception ex)
             {
-                return new CommandResult<PostServiceViewModel>
-                {
-                    isValid = true,
-                    errorMessage = ex.InnerException.ToString()
-                };
+                return null;
             }
         }
 
         private async Task<PostServiceViewModel> MapViewModel(
             Service serv, AppUser user, Provider provider)
         {
+            var query = await _serviceRepository.FindAllAsync();
+            var providerService = await _providerServiceRepository.FindAllAsync();
+            var userService = await _userServiceRepository.FindAllAsync();
+            var providers = await _providerRepository.FindAllAsync();
+
+
             var getTag = await _tagRepository.FindAllAsync();
             var getUserTag = await _tagServiceRepository.FindAllAsync(x => x.ServiceId == serv.Id);
             var getListTag = (from tag in getTag.ToList()
@@ -146,7 +130,13 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
             {
                 TagName = x.TagName
             }).ToList();
+            postServiceView.Description = serv.Description;
+            postServiceView.ProviderId = provider.Id.ToString();
             postServiceView.CategoryId = serv.CategoryId;
+            postServiceView.Author =
+                _getProviderInformationQuery.ExecuteAsync(serv.Id, query, providers, providerService).NameProvider
+                               == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, query, userService) :
+                               _getProviderInformationQuery.ExecuteAsync(serv.Id, query, providers, providerService).NameProvider;
             return postServiceView;
         }
     }

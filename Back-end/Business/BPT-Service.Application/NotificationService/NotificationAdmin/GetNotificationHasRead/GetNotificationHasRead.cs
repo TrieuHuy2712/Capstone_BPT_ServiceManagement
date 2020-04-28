@@ -43,5 +43,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.GetNotif
             content += LogNotification;
             File.WriteAllText(fileName, content);
         }
+
+
     }
 }

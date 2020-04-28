@@ -70,9 +70,9 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var checkUserIsAdmin = await _checkUserIsProvider.ExecuteAsync();
+                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(userId);
                 if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
-                    await _checkUserIsAdminQuery.ExecuteAsync(userId) || checkUserIsAdmin.isValid)
+                    await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
                     //Add new tag when isAdd equal true
                     List<Tag> newTag = new List<Tag>();

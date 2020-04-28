@@ -91,7 +91,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                         };
                     }
                     //Check user is Provider
-                    if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                    if (_checkUserIsProviderQuery.ExecuteAsync(userId).Result.isValid == true)
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {

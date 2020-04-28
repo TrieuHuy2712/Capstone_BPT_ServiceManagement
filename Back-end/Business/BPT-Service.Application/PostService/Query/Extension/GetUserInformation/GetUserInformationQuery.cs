@@ -35,5 +35,7 @@ namespace BPT_Service.Application.PostService.Query.Extension.GetUserInformation
             }
             return "";
         }
+
+
     }
 }

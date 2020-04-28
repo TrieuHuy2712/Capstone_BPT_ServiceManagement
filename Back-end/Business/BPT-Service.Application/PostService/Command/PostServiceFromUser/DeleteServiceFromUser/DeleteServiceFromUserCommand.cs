@@ -51,7 +51,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Delete
             try
             {
                 var findIdService = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
-                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync();
+                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(userId);
                 if (findIdService != null)
                 {
                     var findUserService = await _userServiceRepository.FindSingleAsync(x => x.ServiceId == findIdService.Id);

@@ -68,7 +68,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var checkUserIsAdmin = await _checkUserIsProvider.ExecuteAsync();
+                //var checkUserIsAdmin = await _checkUserIsAdminQuery.ExecuteAsync(userId);
                 if (await _getPermissionActionQuery.ExecuteAsync(userId, "SERVICE", ActionSetting.CanCreate) ||
                     await _checkUserIsAdminQuery.ExecuteAsync(userId))
                 {
@@ -91,7 +91,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                     await _postServiceRepository.Add(mappingService);
 
                     //Mapping between ViewModel and Model of UserService
-                    var mappingUserService = MappingUserService(mappingService.Id, string.IsNullOrEmpty(vm.UserId) ? Guid.Parse(vm.UserId) : Guid.Parse(userId));
+                    var mappingUserService = MappingUserService(mappingService.Id, !string.IsNullOrEmpty(vm.UserId) ? Guid.Parse(vm.UserId) : Guid.Parse(userId));
                     await _userServiceRepository.Add(mappingUserService);
 
                     //Add new Tag with Id in TagService

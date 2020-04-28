@@ -52,7 +52,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                 var findProviderNew = await _providerNewsRepository.FindByIdAsync(vm.Id);
                 if (findProviderNew != null)
                 {
-                    var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
+                    var getIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                     if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
                        await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate) ||
                        (getIsProvider.isValid && getIsProvider.myModel.Id == findProviderNew.ProviderId.ToString()))

@@ -56,7 +56,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.De
             {
                 //Get Id Service and Check it has permission by checkUserIsProvider
                 var findIdService = await _postServiceRepository.FindByIdAsync(Guid.Parse(idService));
-                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync();
+                var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(userId);
                 if (findIdService != null)
                 {
                     var findProviderService = await _providerServiceRepository.FindSingleAsync(x => x.ServiceId == findIdService.Id);

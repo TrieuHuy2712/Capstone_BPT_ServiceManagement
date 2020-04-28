@@ -52,7 +52,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var checkIsProvider = await _checkUserIsProviderQuery.ExecuteAsync();
+                var checkIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 var getProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
                 if (getProvider != null)
                 {

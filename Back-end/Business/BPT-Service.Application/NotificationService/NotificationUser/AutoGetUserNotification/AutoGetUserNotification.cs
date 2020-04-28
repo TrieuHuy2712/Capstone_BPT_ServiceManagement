@@ -1,44 +1,39 @@
-﻿using BPT_Service.Application.LoggingService.Query.GetLogFiles;
-using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
-using BPT_Service.Application.LoggingService.ViewModel;
+﻿using BPT_Service.Application.LoggingService.ViewModel;
 using BPT_Service.Common.Logging;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification
+namespace BPT_Service.Application.NotificationService.NotificationUser.AutoGetUserNotification
 {
-    public class AutoGetNotification : IAutoGetNotification
+    public class AutoGetUserNotification : IAutoGetUserNotification
     {
-        //Declare const
-        private const string path = "./Logger";
+        private const string path = "./UserLogger/";
 
         private const string LogNotification = "[ENDNOTIFICATION]\r\n";
         private const string LogSpliter = "[ENDLOG]\r\n";
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private readonly IGetLogFromAFile _getLogFromAFile;
-        private readonly IGetLogFiles _getLogFiles;
-
-        public AutoGetNotification(IGetLogFromAFile getLogFromAFile, IGetLogFiles getLogFiles)
+        public AutoGetUserNotification(IHttpContextAccessor httpContextAccessor)
         {
-            _getLogFromAFile = getLogFromAFile;
-            _getLogFiles = getLogFiles;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public LogTypeViewModel Execute()
         {
             try
             {
+                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
                 LogTypeViewModel logTypeViewModel = new LogTypeViewModel();
-                var getListFile = _getLogFiles.Execute();
+                var getListFile = GetAllFile(userId);
 
                 if (getListFile.Count > 0)
                 {
                     foreach (var item in getListFile)
                     {
-                        var readFile = GetLogs(item);
+                        var readFile = GetLogs(item, userId);
                         if (readFile != null)
                         {
                             logTypeViewModel.Logs.AddRange(readFile);
@@ -49,18 +44,17 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetN
                     return logTypeViewModel;
                 }
                 return null;
-                
             }
             catch (Exception ex)
             {
-                Logging<AutoGetNotification>.ErrorAsync(ex.Message.ToString());
+                Logging<AutoGetUserNotification>.ErrorAsync(ex.Message.ToString());
                 return null;
             }
         }
 
-        private List<LogModel> GetLogs(string date)
+        private List<LogModel> GetLogs(string date, string userId)
         {
-            string fileName = $"{path}/Log-{date}.txt";
+            string fileName = $"{path}/{userId}/Log-{date}.txt";
             string content = File.ReadAllText(fileName);
 
             List<string> logsNotification = content.Split(LogNotification).ToList();
@@ -87,6 +81,15 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetN
             }
             models.Reverse();
             return models;
+        }
+
+        public List<string> GetAllFile(string userid)
+        {
+            //Get Date only from file name without extension
+            List<string> model = new DirectoryInfo(path + "/" + userid + "/").GetFiles().
+                Select(x => Path.GetFileNameWithoutExtension(x.Name).Substring(4)).ToList();
+            model.Reverse();
+            return model;
         }
     }
 }

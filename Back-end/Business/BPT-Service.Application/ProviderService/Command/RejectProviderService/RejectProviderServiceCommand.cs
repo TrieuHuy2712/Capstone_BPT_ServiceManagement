@@ -81,7 +81,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                         };
                     }
                     //Check user is Provider
-                    if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                    if (_checkUserIsProviderQuery.ExecuteAsync(userId).Result.isValid == true)
                     {
                         var providerRole = await _roleRepository.FindByNameAsync("Provider");
                         _userRoleRepository.DeleteUserRole(mappingProvider.UserId, providerRole.Id);
