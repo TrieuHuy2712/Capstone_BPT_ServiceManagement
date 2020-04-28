@@ -29,7 +29,7 @@ export class ListOfItemComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadDataOfLocation();
-  
+    
   }
   // load data function
   loadData() {

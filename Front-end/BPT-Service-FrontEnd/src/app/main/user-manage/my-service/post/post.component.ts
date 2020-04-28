@@ -99,12 +99,10 @@ export class PostComponent implements OnInit {
           this._notificationService.printSuccessMessage(
             MessageConstants.CREATED_OK_MSG
           );
-          this.spinnerService.hide();
         } else {
           this._notificationService.printErrorMessage(
             MessageConstants.CREATED_FAIL_MSG
           );
-          this.spinnerService.hide();
         }
       },
       error => this._dataService.handleError(error));
@@ -115,7 +113,6 @@ export class PostComponent implements OnInit {
   }
 
   saveData() {
-    this.spinnerService.show();
     if (this.entity.id == undefined) {
       //Assign Id Category
       // this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;

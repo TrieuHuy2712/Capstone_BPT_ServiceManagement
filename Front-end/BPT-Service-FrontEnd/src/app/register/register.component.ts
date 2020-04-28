@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataService } from '../core/services/data.service';
+import { NotificationService } from '../core/services/notification.service';
+import { UtilityService } from '../core/services/utility.service';
+import { UploadService } from '../core/services/upload.service';
+import { AuthenService } from '../core/services/authen.service';
+import { Router } from '@angular/router';
+import { MessageConstants } from '../core/common/message.constants';
 
 @Component({
   selector: 'app-register',
@@ -6,75 +13,80 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  email: boolean = true;
-  name: boolean = true;
-  fullName: boolean = true;
-  pass: boolean = true;
-  passnd: boolean = true;
-  emailVal: string = "";
-  nameVal: string = "";
-  fullNameVal: string = "";
-  passVal: string = "";
-  passndVal: string = "";
-  registerBtn: boolean = true;
-  constructor() { }
+  @ViewChild("avatar", { static: false }) avatar;
+  // 
+
+  public users: any[];
+  public entity: any;
+  public roles: any[];
+  public dateOptions: any = {
+    locale: { format: "DD/MM/YYYY" },
+    alwaysShowCalendars: false,
+    singleDatePicker: true
+  };
+  allRoles: any[];
+  
+  
+  constructor(
+    private _dataService: DataService,
+    private _notificationService: NotificationService,
+    private _utilityService: UtilityService,
+    private _uploadService: UploadService,
+    public _authenService: AuthenService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    
+
+    this.loadData();
+    this.loadRoles();
+    this.entity = {};
   }
 
-  emailValid(event) {
-    this.emailVal = event.target.value;
-    if (event.target.value.length < 8) {
-      this.email = false;
-    }
-    else {
-      this.email = true;
-    }
+  loadData() {
+    this._dataService
+      .get(
+        "/UserManagement/GetAllPaging?keyword=&page=1&pageSize=20"
+      )
+      .subscribe((response: any) => {
+        this.users = response.results;
+      });
+      
   }
 
-  nameValid(event) {
-    this.nameVal = event.target.value;
-    if (event.target.value.length < 8) {
-      this.name = false;
-    }
-    else {
-      this.name = true;
+  loadRoles() {
+    this._dataService.get("/AdminRole/GetAllPaging?page=1&pageSize=20&keyword=Customer").subscribe((response: any) => {
+      this.roles = response.results;
+      
+    });
+    console.log("ket qua ");
+  }
+  //
+  saveChange(valid: boolean) {
+    if (valid) {
+      
+        this.saveData();
+      
     }
   }
-
-  fullNameValid(event) {
-    this.fullNameVal = event.target.value;
-    if (event.target.value.length < 8) {
-      this.fullName = false;
-    }
-    else {
-      this.fullName = true;
-    }
-  }
-
-  passValid(event) {
-    this.passVal = event.target.value;
-    if (event.target.value.length < 8) {
-      this.pass = false;
-    }
-    else {
-      this.pass = true;
-    }
-  }
-
-  passndValid(event) {
-    this.passndVal = event.target.value;
-    if (event.target.value.length < 8) {
-      this.passnd = false;
-    }
-    else {
-      this.passnd = true;
-    }
-    if (event.target.value.length > 8 && this.emailVal.length > 8 && this.nameVal.length > 8 && this.fullNameVal.length > 8 && this.passVal.length > 8) {
-      this.registerBtn = false;
-    }
-    else {
-      this.registerBtn = true;
-    }
+  //  
+  public saveData() {
+    if (this.entity.id == undefined) {
+      this._dataService
+        .post("/UserManagement/CreateNewuser", this.entity)
+        .subscribe(
+          (response: any) => {
+            if (response.isValid == true) {
+              this.users.push(response.myModel);
+              
+              this._notificationService.printSuccessMessage(
+                MessageConstants.CREATED_OK_MSG
+              );
+            } 
+          },
+          error => this._dataService.handleError(error)
+        );
+    } 
   }
 }
