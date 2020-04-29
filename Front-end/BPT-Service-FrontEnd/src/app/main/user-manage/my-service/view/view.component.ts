@@ -80,6 +80,10 @@ export class ViewComponent implements OnInit {
   public functionId: string = "";
   spinnerService: any;
 
+  public reject: any;
+  public defaultStatus: number = 5;
+
+
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
@@ -411,6 +415,71 @@ export class ViewComponent implements OnInit {
           }
 
         });
+    }
+  }
+
+  removeIndex(index: any) {
+    this.listTag.splice(index, 1);
+  }
+
+  
+
+  approveProvider() {
+    this.spinnerService.show();
+    this._dataService.post("/Service/approvePostService", this.entity).subscribe(
+      (response: any) => {
+        if (response.isValid == true) {
+          let getPostition = this.services.findIndex(x => x.id == this.entity.id);
+          this.services[getPostition].status = 1;
+          this.modalAddEdit.hide();
+          this._notificationService.printSuccessMessage(
+            MessageConstants.UPDATED_OK_MSG
+          );
+        } else {
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
+        }
+        this.spinnerService.hide();
+      },
+      error => this._dataService.handleError(error)
+    );
+  }
+  rejectProvider() {
+    this.spinnerService.show();
+    this._dataService.post("/Service/rejectPostService", this.entity).subscribe(
+      (response: any) => {
+        if (response.isValid == true) {
+          let getPostition = this.services.findIndex(x => x.id == this.entity.id);
+          this.services[getPostition].status = 0;
+          this.modalReason.hide();
+          this.modalAddEdit.hide();
+          this._notificationService.printSuccessMessage(
+            MessageConstants.UPDATED_OK_MSG
+          );
+        } else {
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
+        }
+        this.spinnerService.hide();
+      },
+      error => this._dataService.handleError(error)
+    );
+  }
+  showRejectProvider() {
+    this.modalReason.show();
+    this.reject = [];
+  }
+  filterStatus(id: any) {
+    this.defaultStatus = id;
+    this.loadData();
+  }
+  filterUserService(style: any) {
+    if (style == 0) {
+      this.kindOfStyle = 0;
+    } else {
+      this.kindOfStyle = 1;
     }
   }
 }
