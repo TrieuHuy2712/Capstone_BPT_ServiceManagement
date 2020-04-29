@@ -19,6 +19,7 @@ export class ListOfItemComponent implements OnInit {
   public permission: any;
   public entity: any;
   public functionId: string = "SERVICES";
+  public indexOfServices: number;
   locations: any;
   constructor(
     private _dataService: DataService,
@@ -28,7 +29,7 @@ export class ListOfItemComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadDataOfLocation();
-  
+    
   }
   // load data function
   loadData() {
@@ -47,6 +48,7 @@ export class ListOfItemComponent implements OnInit {
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
+        this.indexOfServices = this.services.length;
         
       });
       
@@ -61,6 +63,7 @@ export class ListOfItemComponent implements OnInit {
       )
       .subscribe((response: any) => {
         this.locations = response;
+
       });
   }
 

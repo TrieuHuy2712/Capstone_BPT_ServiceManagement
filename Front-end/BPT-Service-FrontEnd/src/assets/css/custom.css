@@ -28,6 +28,34 @@ body {
   color: white;
 }
 
+.btn-in-image01{
+  display: none !important;
+}
+
+.btn-in-image02{
+  display: none !important;
+}
+
+
+.img-in-view:hover .btn-in-image01 {
+  display: inline-block !important;
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  opacity: 1;
+}
+
+.img-in-view:hover .btn-in-image02{
+  display: inline-block !important;
+  position: absolute;
+  top: 30%;
+  left: 60%;
+  opacity: 1;
+}
+
+.img-in-view:hover{
+  opacity: 0.6;
+}
 
 .search-button:hover {
   background-color: black;

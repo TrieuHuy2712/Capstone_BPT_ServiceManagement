@@ -209,6 +209,7 @@ export class PostServiceComponent implements OnInit {
       error => this._dataService.handleError(error));
   }
   saveData() {
+    debugger;
     this.spinnerService.show();
     //Assign Id Category
     this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;

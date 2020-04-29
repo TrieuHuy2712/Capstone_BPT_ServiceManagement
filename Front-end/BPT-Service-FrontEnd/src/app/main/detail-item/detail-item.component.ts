@@ -16,7 +16,7 @@ import { SystemConstants } from 'src/app/core/common/system,constants';
 export class DetailItemComponent implements OnInit {
   
   public newId: string = "";
-  public details: any;
+  public details: any=[];
   public Uid:string = "";
   public user: LoggedInUser;
   
@@ -30,14 +30,11 @@ export class DetailItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.details = {};
-    this.newId = this.route.snapshot.paramMap.get("id");
-    console.log("ket qua ne "+this.newId);
-    this.loadData();
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    SystemConstants.const_permission = this.user.username;
-    
+    this.loadData();
   }
+
+  
   sliderConfigDetail = { "slidesToShow": 2.5, "slidesToScroll": 1, "arrows": true, "autoplay":true, "autoplaySpeed": 500 };
   afterChange(e) {
     console.log('afterChange');
@@ -45,14 +42,13 @@ export class DetailItemComponent implements OnInit {
 
   // load data
   loadData() {
-
-    this._dataService
-      .get(
-        "/Service/getPostServiceById?idService="+this.newId          
-      )
+    this.newId = this.route.snapshot.paramMap.get("id");
+    this._dataService.get("/Service/getPostServiceById?idService="+this.newId)
       .subscribe((response: any) => {
-        this.details = response.myModel;
-        this.Uid = response.myModel.userId;
+        this.details = response;
+        this.Uid = response.userId;
+        this.details.userId="df516b56-04cc-41a8-c63c-08d7e6c2695a";
+
       });
   }
 }
