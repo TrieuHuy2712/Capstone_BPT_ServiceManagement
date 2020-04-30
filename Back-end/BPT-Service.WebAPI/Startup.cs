@@ -48,6 +48,7 @@ using BPT_Service.Application.LoggingService.Command.DeleteMonthlyLogFiles;
 using BPT_Service.Application.LoggingService.Query.GetLogFiles;
 using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.ConfirmNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
@@ -67,6 +68,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
 using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.ConfirmPostService;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
@@ -411,6 +413,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
             services.AddScoped<IGetPostUserServiceByUserIdQuery, GetPostUserServiceByUserIdQuery>();
             services.AddScoped<IGetAllPostUserServiceByUserIdQuery, GetAllPostUserServiceByUserIdQuery>();
+            services.AddScoped<IConfirmPostService, ConfirmPostService>();
             //Extension
             services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
             services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
@@ -428,6 +431,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRegisterNewsProviderServiceCommand, RegisterNewsProviderServiceCommand>();
             services.AddScoped<IRejectNewsProviderServiceCommand, RejectNewsProviderServiceCommand>();
             services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
+            services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
 
             //Location Service
             services.AddScoped<IAddCityProvinceServiceCommand, AddCityProvinceServiceCommand>();
@@ -435,7 +439,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllCityProvinceServiceQuery, GetAllCityProvinceServiceQuery>();
             services.AddScoped<IGetAllPagingCityProvinceServiceQuery, GetAllPagingCityProvinceServiceQuery>();
             services.AddScoped<IGetByIdCityProvinceServiceQuery, GetByIdCityProvinceServiceQuery>();
-            services.AddScoped<IUpdateCityProvinceServiceCommand, UpdateCityProvinceServiceCommand>();
+            services.AddScoped<IConfirmNewsProviderService, ConfirmNewsProviderService>();
 
             //Comment service
             services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();

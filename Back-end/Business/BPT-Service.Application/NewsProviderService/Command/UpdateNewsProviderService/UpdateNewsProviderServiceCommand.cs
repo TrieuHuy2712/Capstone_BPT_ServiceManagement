@@ -1,20 +1,27 @@
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common;
 using BPT_Service.Common.Constants;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
+using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Security.Claims;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService
@@ -27,6 +34,10 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
+        private readonly IConfiguration _configuration;
+        private readonly IOptions<EmailConfigModel> _config;
+        private readonly IRepository<Provider, Guid> _providerRepository;
 
         public UpdateNewsProviderServiceCommand(
             IRepository<ProviderNew, int> providerNewsRepository,
@@ -34,7 +45,9 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
             IGetPermissionActionQuery getPermissionActionQuery,
             ICheckUserIsProviderQuery checkUserIsProviderQuery,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IConfiguration configuration, IOptions<EmailConfigModel> config)
         {
             _providerNewsRepository = providerNewsRepository;
             _httpContext = httpContext;
@@ -42,6 +55,9 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             _getPermissionActionQuery = getPermissionActionQuery;
             _checkUserIsProviderQuery = checkUserIsProviderQuery;
             _userManager = userManager;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
+            _configuration = configuration;
+            _config = config;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
@@ -62,7 +78,21 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                         _providerNewsRepository.Update(mappingNewsProvider);
                         await _providerNewsRepository.SaveAsync();
                         await Logging<UpdateNewsProviderServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, mappingNewsProvider.Author+"had been updated");
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, mappingNewsProvider.Author + "had been updated");
+                        //Get Provider Information
+                        var providerInformation = await _providerRepository.FindByIdAsync(Guid.Parse(vm.ProviderId));
+                        var findUser = await _userManager.FindByIdAsync(providerInformation.UserId.ToString());
+                        //Set content for email
+                        var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider") +
+                             mappingNewsProvider.CodeConfirm + '_' + mappingNewsProvider.Id;
+
+                        var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
+                        getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUser.Email).
+                            Replace(EmailKey.ConfirmLink, generateCode);
+
+                        ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                        getFirstEmail.Message, findUser.Email).Wait();
                         return new CommandResult<NewsProviderViewModel>
                         {
                             isValid = true,
@@ -108,7 +138,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             pro.Author = vm.Author;
             pro.Status = (await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext) ||
                             await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.NEWS, ActionSetting.CanUpdate)) ?
-                            Status.Active : Status.UpdatePending;
+                            Status.WaitingApprove : Status.Pending;
             pro.Author = vm.Author;
             pro.ProviderId = Guid.Parse(vm.ProviderId);
             pro.Title = vm.Title;
@@ -116,6 +146,18 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             pro.DateModified = DateTime.Now;
             pro.ImgPath = vm.ImgPath;
             return pro;
+        }
+
+        private async Task ContentEmail(string apiKey, string subject1, string message, string email)
+        {
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress(_config.Value.FromUserEmail, _config.Value.FullUserName);
+            var subject = subject1;
+            var to = new EmailAddress(email);
+            var plainTextContent = message;
+            var htmlContent = "<strong>" + message + "</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
         }
     }
 }

@@ -39,16 +39,12 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (addComment.ParentId == "")
-                {
-                    addComment.ParentId = Guid.Empty.ToString();
-                }
                 var comment = new ServiceComment
                 {
                     ContentOfRating = addComment.ContentOfRating,
                     UserId = Guid.Parse(addComment.UserId),
                     ServiceId = Guid.Parse(addComment.ServiceId),
-                    ParentId = Guid.Parse(addComment.ParentId)
+                    ParentId = String.IsNullOrEmpty(addComment.ParentId) ? Guid.Empty : Guid.Parse(addComment.ParentId)
                 };
 
                 await _commentRepository.Add(comment);
@@ -56,7 +52,7 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
                 var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(addComment.ServiceId);
                 await LoggingUser<AddCommentServiceAsyncCommand>.
                     InformationAsync(getOwnerService, userName, addComment.ContentOfRating);
-                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(comment));
+                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(addComment));
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = true,

@@ -19,6 +19,7 @@ export const mainRoutes: Routes = [
       { path: "news", loadChildren: "./news/news.module#NewsModule" },
       { path: "service", loadChildren: "./post-service/post-service.module#PostServiceModule" },
       { path: "email", loadChildren: "./admin-email/admin-email.module#AdminEmailModule" },
+      { path: "logging", loadChildren: "./logging/logging.module#LoggingModule" },
     ]
   }
 ];

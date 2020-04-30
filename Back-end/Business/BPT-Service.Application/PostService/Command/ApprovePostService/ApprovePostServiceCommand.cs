@@ -15,6 +15,7 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -37,6 +38,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
         private readonly IRepository<Service, Guid> _postServiceRepository;
         private readonly UserManager<AppUser> _userRepository;
         private readonly IGetOwnServiceInformationQuery _getUserInformatinQuery;
+        private readonly IConfiguration _configuration;
 
         public ApprovePostServiceCommand(
              IGetAllEmailServiceQuery getAllEmailServiceQuery,
@@ -49,7 +51,8 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
              IRepository<Service, Guid> postServiceRepository,
              UserManager<AppUser> userRepository,
              ICheckUserIsAdminQuery checkUserIsAdminQuery,
-             IGetOwnServiceInformationQuery getUserInformatinQuery
+             IGetOwnServiceInformationQuery getUserInformatinQuery,
+             IConfiguration configuration
              )
         {
             _getUserInformatinQuery = getUserInformatinQuery;
@@ -63,6 +66,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
             _userRepository = userRepository;
             _userServiceRepository = userServiceRepository;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _configuration = configuration;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(string idService)
@@ -80,7 +84,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                     if (getCurrentPost != null)
                     {
                         var getUserId = await _getUserInformatinQuery.ExecuteAsync(idService);
-                        getCurrentPost.Status = Status.Active;
+                        getCurrentPost.Status = Status.WaitingApprove;
                         _postServiceRepository.Update(getCurrentPost);
                         await _postServiceRepository.SaveAsync();
 
@@ -91,7 +95,14 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                             //Get All email
                             var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                             var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
-                            getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName).Replace(EmailKey.UserNameKey, findEmailUser);
+
+                            var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                                getCurrentPost.codeConfirm + '_' + getCurrentPost.Id;
+
+                            getFirstEmail.Message = getFirstEmail.Message.
+                                Replace(EmailKey.ServiceNameKey, getCurrentPost.ServiceName).
+                                Replace(EmailKey.UserNameKey, findEmailUser).
+                                Replace(EmailKey.ConfirmLink, generateCode);
                             ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
                                             getFirstEmail.Message, findEmailUser).Wait();
                         }

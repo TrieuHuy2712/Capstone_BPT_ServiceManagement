@@ -89,7 +89,19 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                     || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                 {
                     var findUserId = await _userManager.FindByIdAsync(vm.UserId);
-                    await _userManager.AddToRoleAsync(findUserId, "Provider");
+                    var getAllRole =  await _userManager.GetRolesAsync(findUserId);
+                    var flagProvider = 0;
+                    foreach (var item in getAllRole)
+                    {
+                        if(item == ConstantRoles.Provider)
+                        {
+                            flagProvider++;
+                        }
+                    }
+                    if (flagProvider == 0)
+                    {
+                        await _userManager.AddToRoleAsync(findUserId, ConstantRoles.Provider);
+                    }
 
                     //Set content for email
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();

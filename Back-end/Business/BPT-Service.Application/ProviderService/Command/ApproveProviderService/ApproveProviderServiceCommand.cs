@@ -118,7 +118,9 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 
                     var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider") +
                         mappingProvider.OTPConfirm + '_' + mappingProvider.Id;
-                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email).Replace(EmailKey.ConfirmLink, generateCode);
+                    getFirstEmail.Message = getFirstEmail.Message.
+                        Replace(EmailKey.UserNameKey, userMail.Email).
+                        Replace(EmailKey.ConfirmLink, generateCode);
 
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, userMail.Email).Wait();

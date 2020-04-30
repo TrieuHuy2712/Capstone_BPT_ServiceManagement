@@ -22,7 +22,8 @@ namespace BPT_Service.Application.ProviderService.Command.ConfirmProviderService
                 var splitSecretId = secretId.Split("_");
                 var confirmCode = splitSecretId[0];
                 var providerId = splitSecretId[1];
-                var getInformation = await _providerRepostiroy.FindSingleAsync(x => x.Id == Guid.Parse(providerId) && x.OTPConfirm == confirmCode);
+                var getInformation = await _providerRepostiroy.FindSingleAsync(x => x.Id == Guid.Parse(providerId) 
+                && x.Status == Model.Enums.Status.WaitingApprove && x.OTPConfirm == confirmCode);
                 if (getInformation != null)
                 {
                     getInformation.Status = Model.Enums.Status.Active;

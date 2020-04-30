@@ -9,12 +9,14 @@ using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid;
@@ -38,6 +40,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
         private readonly UserManager<AppUser> _userManager;
         private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IOptions<EmailConfigModel> _config;
+        private readonly IConfiguration _configuration;
 
         public RegisterServiceFromUserCommand(
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
@@ -49,7 +52,8 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             IRepository<Tag, Guid> tagServiceRepository,
             UserManager<AppUser> userManager,
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
-            IOptions<EmailConfigModel> config)
+            IOptions<EmailConfigModel> config,
+             IConfiguration configuration)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _checkUserIsProvider = checkUserIsProvider;
@@ -61,6 +65,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             _userManager = userManager;
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _config = config;
+            _configuration = configuration;
         }
 
         public async Task<CommandResult<PostServiceViewModel>> ExecuteAsync(PostServiceViewModel vm)
@@ -113,12 +118,19 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                 || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                     {
                         //Set content for email
+                        //Generate code
+                        //Create Generate code
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                         mappingService.codeConfirm + '_' + mappingService.Id;
+
                         var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
                         var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
-                        getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUserInformation.Email);
+                        getFirstEmail.Message = getFirstEmail.Message.
+                            Replace(EmailKey.UserNameKey, findUserInformation.Email).
+                            Replace(EmailKey.ConfirmLink, generateCode); ;
 
                         ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                        getFirstEmail.Message, _userManager.FindByIdAsync(userId).Result.Email).Wait();
+                                        getFirstEmail.Message, _userManager.FindByIdAsync(!string.IsNullOrEmpty(vm.UserId) ? vm.UserId : userId).Result.Email).Wait();
                     }
                     //End send mail for user
                     return new CommandResult<PostServiceViewModel>
@@ -184,8 +196,9 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
             sv.PriceOfService = vm.PriceOfService;
             sv.Description = vm.Description;
             sv.ServiceName = vm.ServiceName;
-            sv.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "SERVICE", ActionSetting.CanCreate)
-                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.Active : Status.Pending;
+            sv.codeConfirm = RandomCodeSupport.RandomString(6);
+            sv.Status = (await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.SERVICE, ActionSetting.CanCreate)
+                || await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext)) ? Status.WaitingApprove : Status.Pending;
             sv.ServiceImages = vm.listImages.Select(x => new ServiceImage
             {
                 Path = x.Path != null ? x.Path : "",

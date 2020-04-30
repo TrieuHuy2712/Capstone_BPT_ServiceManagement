@@ -39,7 +39,7 @@ namespace BPT_Service.Application.LoggingService.Query.GetLogFromAFile
                 model.Statement = log.Split("::")[1];
                 model.Message = logMessage;
                 model.Action = splitLog[2];
-                model.UserAction = splitLog[4];
+                model.UserAction = splitLog[3];
                 models.Add(model);
             }
             models.Reverse();

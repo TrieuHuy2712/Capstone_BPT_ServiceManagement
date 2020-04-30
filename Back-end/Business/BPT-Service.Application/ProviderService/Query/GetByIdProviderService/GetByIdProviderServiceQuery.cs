@@ -3,6 +3,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -13,14 +14,18 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRepository<CityProvince, int> _locationRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public GetByIdProviderServiceQuery(IRepository<Provider, Guid> providerRepository,
-        IHttpContextAccessor httpContextAccessor,
-        IRepository<CityProvince, int> locationRepository)
+        public GetByIdProviderServiceQuery(
+            IRepository<Provider, Guid> providerRepository, 
+            IHttpContextAccessor httpContextAccessor, 
+            IRepository<CityProvince, int> locationRepository, 
+            UserManager<AppUser> userManager)
         {
             _providerRepository = providerRepository;
             _httpContextAccessor = httpContextAccessor;
             _locationRepository = locationRepository;
+            _userManager = userManager;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string id)
@@ -55,7 +60,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
                         myModel = null
                     };
                 }
-                var mappingProvider = MappingProvider(getPro, location);
+                var mappingProvider = await MappingProvider(getPro, location);
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = true,
@@ -72,8 +77,9 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             }
         }
 
-        private ProviderServiceViewModel MappingProvider(Provider vm, CityProvince cityProvince)
+        private async Task<ProviderServiceViewModel> MappingProvider(Provider vm, CityProvince cityProvince)
         {
+            var findUserId = await _userManager.FindByIdAsync(vm.UserId.ToString());
             ProviderServiceViewModel pro =  new ProviderServiceViewModel();
             pro.Id = vm.Id.ToString();
             pro.PhoneNumber = vm.PhoneNumber;
@@ -88,6 +94,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
             pro.CityName = cityProvince.City;
             pro.ProvinceName = cityProvince.Province;
             pro.AvatarPath = vm.AvartarPath;
+            pro.ProviderEmail = findUserId.Email;
             return pro;
         }
     }
