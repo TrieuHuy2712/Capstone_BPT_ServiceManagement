@@ -45,6 +45,23 @@ body {
   opacity: 1;
 }
 
+.pl--12{
+  padding-left: 12px;
+}
+
+.unfollow-button{
+  background: linear-gradient(#e66465, #9198e5);
+  height: 40px;
+}
+
+.provider_place{
+  padding: 10px 10px;
+}
+
+.room-sidebar__wrap{
+  padding-right: 18px;
+}
+
 .img-in-view:hover .btn-in-image02{
   display: inline-block !important;
   position: absolute;

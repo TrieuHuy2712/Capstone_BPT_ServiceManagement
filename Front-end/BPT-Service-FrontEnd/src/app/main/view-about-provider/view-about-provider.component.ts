@@ -33,7 +33,7 @@ export class ViewAboutProviderComponent implements OnInit {
       )
       .subscribe((response: any) => {
         this.user = response;
-        
+        console.log(this.user);
       });
   }
 

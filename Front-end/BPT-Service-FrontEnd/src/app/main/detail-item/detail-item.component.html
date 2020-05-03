@@ -283,7 +283,8 @@
                                                 <h3 _ngcontent-kvx-c5="">Đánh giá</h3>
                                             </div>
                                             <div _ngcontent-kvx-c5="" class="mt--24">
-                                                <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
+                                                <input class="form-control form-control-sm" type="text"
+                                                    placeholder="Type a comment">
                                                 <div _ngcontent-kvx-c5="" class="review mt--24" data-v-730e0d8f=""
                                                     numchars="150">
                                                     <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
@@ -364,7 +365,7 @@
                                                             nghỉ ngơi thật tốt.</p>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div _ngcontent-kvx-c5="" class="mt--24"><a _ngcontent-kvx-c5=""
                                                         class="btn color-i semi-bold" role="button">Xem tất cả 5 đánh
                                                         giá</a></div>
@@ -501,52 +502,56 @@
                                                                 </div>
                                                             </span></div>
                                                     </div>
-                                                    <!----> <button id="addtocart-btn" data-value="18792"
+                                                    <!----> <button id="addtocart-btn" *ngIf="isFollowed" (click) = "followAService()"
                                                         class="btn btn-grad--primary px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
-                                                            style="color: #fff; font-weight: 600;"> Theo
-                                                            dõi</span></button>
+                                                            style="color: #fff; font-weight: 600;">Theo dõi</span></button>
+                                                            <button id="addtocart-btn" *ngIf="!isFollowed" (click) = "unFollowAService()"
+                                                        class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
+                                                            style="color: #fff; font-weight: 600;">Đã theo dõi</span></button>
                                                     <div class="mt--18">
                                                         <div class="room-event__wrap"></div>
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                <div class="room-sidebar__host py--24 px--12 px--lg--24 w--100"><a
-                                                        [routerLink]="[ '/main/viewAboutProvider',details.userId]"
-                                                        routerLinkActive="active"
-                                                        class="host-intro is-flex align-center">
-                                                        <div class="image-box image-box--large image-box--circle">
-                                                            <img
-                                                                src="https://cdn.luxstay.com/users/25874/avatar_a4881d54-701a-44f2-9e8b-4d0e1ceaf77f.">
+                                                <div class="provider_place">
+                                                    <div class="room-sidebar__host py--24 px--12 px--lg--24 w--100"><a
+                                                            [routerLink]="[ '/main/viewAboutProvider',details.userId]"
+                                                            routerLinkActive="active"
+                                                            class="host-intro is-flex align-center">
+                                                            <div class="image-box image-box--large image-box--circle">
+                                                                <img [src]="user.avatar">
+                                                            </div>
+                                                            <div class="host-intro__name mx--12 mx--md--18 pl--12">
+                                                                <p class="mb--6 extra-bold">{{user.fullName}}</p>
+                                                                <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia
+                                                                    11/2018</p>
+                                                            </div>
+                                                            <!---->
+                                                        </a></div>
+                                                    <div class="pb--24 px--12 px--lg--24">
+                                                        <div
+                                                            class="rounded bg-gray-f p--12 is-flex align-center jbetween">
+                                                            <p class="mb--0 p--small-2 c-gray-3">
+                                                                Gọi <a href="tel:18006586" class="extra-bold">18006586
+                                                                    (miễn phí)</a> để được hỗ trợ 24/7
+                                                            </p> <svg version="1.1" viewBox="0 0 19 16"
+                                                                class="svg-icon svg-fill"
+                                                                style="width: 16px; height: 16px;">
+                                                                <g fill="none" fill-rule="evenodd"
+                                                                    transform="translate(1 1)">
+                                                                    <path pid="0" stroke="#666" stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M17 10c0 1.043-.846 2-1.889 2H3.778l-2.051 2.171A1 1 0 0 1 0 13.485V1.889A1.89 1.89 0 0 1 1.889 0H15.11A1.89 1.89 0 0 1 17 1.889V10z">
+                                                                    </path>
+                                                                    <circle pid="1" cx="5" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                    <circle pid="2" cx="9" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                    <circle pid="3" cx="13" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                </g>
+                                                            </svg>
                                                         </div>
-                                                        <div class="host-intro__name mx--12 mx--md--18">
-                                                            <p class="mb--6 extra-bold">{{user.fullName}}</p>
-                                                            <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia
-                                                                11/2018</p>
-                                                        </div>
-                                                        <!---->
-                                                    </a></div>
-                                                <div class="pb--24 px--12 px--lg--24">
-                                                    <div class="rounded bg-gray-f p--12 is-flex align-center jbetween">
-                                                        <p class="mb--0 p--small-2 c-gray-3">
-                                                            Gọi <a href="tel:18006586" class="extra-bold">18006586
-                                                                (miễn phí)</a> để được hỗ trợ 24/7
-                                                        </p> <svg version="1.1" viewBox="0 0 19 16"
-                                                            class="svg-icon svg-fill"
-                                                            style="width: 16px; height: 16px;">
-                                                            <g fill="none" fill-rule="evenodd"
-                                                                transform="translate(1 1)">
-                                                                <path pid="0" stroke="#666" stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="M17 10c0 1.043-.846 2-1.889 2H3.778l-2.051 2.171A1 1 0 0 1 0 13.485V1.889A1.89 1.89 0 0 1 1.889 0H15.11A1.89 1.89 0 0 1 17 1.889V10z">
-                                                                </path>
-                                                                <circle pid="1" cx="5" cy="6" r="1" fill="#D8D8D8">
-                                                                </circle>
-                                                                <circle pid="2" cx="9" cy="6" r="1" fill="#D8D8D8">
-                                                                </circle>
-                                                                <circle pid="3" cx="13" cy="6" r="1" fill="#D8D8D8">
-                                                                </circle>
-                                                            </g>
-                                                        </svg>
                                                     </div>
                                                 </div>
                                             </div>
