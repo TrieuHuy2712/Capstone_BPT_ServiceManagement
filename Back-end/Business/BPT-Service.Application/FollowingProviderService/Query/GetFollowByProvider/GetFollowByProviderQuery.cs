@@ -2,6 +2,8 @@
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,9 @@ namespace BPT_Service.Application.FollowingProviderService.Query.GetFollowByProv
 {
     public class GetFollowByProviderQuery : IGetFollowByProviderQuery
     {
-        private readonly IRepository<AppUser, Guid> _userRepository;
+        private readonly UserManager<AppUser> _userRepository;
         private readonly IRepository<ProviderFollowing, int> _providerFollowingRepository;
-        public GetFollowByProviderQuery(IRepository<AppUser, Guid> userRepository,
+        public GetFollowByProviderQuery(UserManager<AppUser> userRepository,
             IRepository<ProviderFollowing, int> providerFollowingRepository)
         {
             _userRepository = userRepository;
@@ -24,7 +26,7 @@ namespace BPT_Service.Application.FollowingProviderService.Query.GetFollowByProv
         public async Task<List<UserFollowingByProviderViewModel>> ExecuteAsync(string providerId)
         {
             var getAllProviderFollowing = await _providerFollowingRepository.FindAllAsync(x=>x.ProviderId == Guid.Parse(providerId));
-            var getAllUser = await _userRepository.FindAllAsync();
+            var getAllUser = await _userRepository.Users.ToListAsync();
             var query = (from follow in getAllProviderFollowing.ToList()
                          join user in getAllUser.ToList()
                          on follow.UserId equals user.Id

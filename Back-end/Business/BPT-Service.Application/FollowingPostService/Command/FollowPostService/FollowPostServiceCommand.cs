@@ -48,7 +48,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
                     x.ServiceId == Guid.Parse(serviceFollowingViewModel.ServiceId) &&
                     x.UserId == Guid.Parse(serviceFollowingViewModel.UserId));
                 var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(serviceFollowingViewModel.ServiceId);
-                if (checkUserHasFollow == null)
+                if (checkUserHasFollow != null)
                 {
                     await Logging<FollowPostServiceCommand>.ErrorAsync(ActionCommand.COMMAND_ADD, userName, "You had follow this service");
                     return new CommandResult<ServiceFollowingViewModel>
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
                 await _serviceFollowingRepository.SaveAsync();
                 await LoggingUser<FollowPostServiceCommand>.
                     InformationAsync(getOwnerService, userName, userName + " had follow" + postService.ServiceName);
-                await Logging<FollowPostServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(data));
+                await Logging<FollowPostServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(serviceFollowingViewModel));
                 return new CommandResult<ServiceFollowingViewModel>
                 {
                     isValid = true,

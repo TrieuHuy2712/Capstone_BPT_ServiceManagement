@@ -2,6 +2,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.TagService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -43,7 +44,7 @@ namespace BPT_Service.Application.TagService.Command.UpdateTagServiceAsync
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                    await _getPermissionActionQuery.ExecuteAsync(userId, "TAG", ActionSetting.CanUpdate))
+                    await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.TAG, ActionSetting.CanUpdate))
                 {
                     var TagUpdate = await _tagRepository.FindByIdAsync(Guid.Parse(userVm.Id));
                     if (TagUpdate != null)

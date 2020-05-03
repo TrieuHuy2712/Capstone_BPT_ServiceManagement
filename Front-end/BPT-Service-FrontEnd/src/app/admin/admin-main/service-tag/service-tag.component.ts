@@ -32,10 +32,10 @@ export class ServiceTagComponent implements OnInit {
 
   ngOnInit() {
     this.permission = {
-      canCreate: true,
-      canDelete: true,
-      canUpdate: true,
-      canRead: true
+      canCreate: false,
+      canDelete: false,
+      canUpdate: false,
+      canRead: false
     };
     this.loadData();
 

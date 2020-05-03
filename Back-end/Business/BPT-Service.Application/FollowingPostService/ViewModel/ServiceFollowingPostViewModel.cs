@@ -12,5 +12,6 @@ namespace BPT_Service.Application.FollowingPostService.ViewModel
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public string UserName { get; set; }
+        public string AvtService { get; set; }
     }
 }

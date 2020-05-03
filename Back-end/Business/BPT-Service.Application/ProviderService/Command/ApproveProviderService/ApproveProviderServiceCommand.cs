@@ -6,16 +6,19 @@ using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
+using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid;
@@ -39,6 +42,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
         private readonly IOptions<EmailConfigModel> _config;
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly IConfiguration _configuration;
 
         public ApproveProviderServiceCommand(
             IHttpContextAccessor httpContextAccessor,
@@ -50,7 +54,8 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             IGetPostUserServiceByUserIdQuery getPostUserServiceByUserIdQuery,
             IDeleteServiceFromUserCommand deleteServiceFromUserCommand,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _providerRepository = providerRepository;
@@ -62,6 +67,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             _deleteServiceFromUserCommand = deleteServiceFromUserCommand;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _configuration = configuration;
         }
 
         public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userProvider, string providerId)
@@ -70,7 +76,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId,"PROVIDER", ActionSetting.CanUpdate))
+                if(await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate))
                 {
                     var getUserService = await _getPostUserServiceByUserIdQuery.ExecuteAsync(userProvider);
                     if (getUserService != null)
@@ -91,7 +97,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                         };
                     }
                     //Check user is Provider
-                    if (_checkUserIsProviderQuery.ExecuteAsync().Result.isValid == true)
+                    if (_checkUserIsProviderQuery.ExecuteAsync(userId).Result.isValid == true)
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {
@@ -99,7 +105,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                             errorMessage = "You had been a provider"
                         };
                     }
-                    mappingProvider.Status = Status.Active;
+                    mappingProvider.Status = Status.WaitingApprove;
                     _providerRepository.Update(mappingProvider);
                     var findUserId = await _userRepository.FindByIdAsync(userId);
                     await _userRepository.AddToRoleAsync(findUserId, "Provider");
@@ -109,10 +115,15 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     //Set content for email
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();
-                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email);
+
+                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider").Value +
+                        mappingProvider.OTPConfirm + '_' + mappingProvider.Id;
+                    getFirstEmail.Message = getFirstEmail.Message.
+                        Replace(EmailKey.UserNameKey, userMail.Email).
+                        Replace(EmailKey.ConfirmLink, generateCode);
 
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                    getFirstEmail.Message, _userRepository.FindByIdAsync(userId).Result.Email).Wait();
+                                    getFirstEmail.Message, userMail.Email).Wait();
 
                     //Write log
                     await LoggingUser<ApproveProviderServiceCommand>.

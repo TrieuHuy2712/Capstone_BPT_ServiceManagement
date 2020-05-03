@@ -21,7 +21,6 @@ declare var moment: any;
 @Component({
   selector: "app-user",
   templateUrl: "./admin-user.component.html",
-  styleUrls: ["./admin-user.component.css"]
 })
 export class UserComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
@@ -62,10 +61,10 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.currentUser = SystemConstants.CURRENT_USER;
     this.permission = {
-      canCreate: true,
-      canDelete: true,
-      canUpdate: true,
-      canRead: true
+      canCreate: false,
+      canDelete: false,
+      canUpdate: false,
+      canRead: false
     };
     this.loadRoles();
     this.loadData();

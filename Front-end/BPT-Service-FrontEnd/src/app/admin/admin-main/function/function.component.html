@@ -104,20 +104,9 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'link'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #url="ngModel" [(ngModel)]="entity.url" required name="url" class="form-control" />
+              <input type="text" #url="ngModel" [(ngModel)]="entity.url" required name="url" class="form-control" [disabled]="entity"/>
               <small [hidden]="url.valid || (url.pristine && !addEditForm.submitted)" class="text-danger">
                 {{'linkWarning'|translate}}
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'order'|translate}}</label>
-            <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="number" #displayOrder="ngModel" [(ngModel)]="entity.sortOrder" required name="displayOrder"
-                class="form-control" />
-              <small [hidden]="displayOrder.valid || (displayOrder.pristine && !addEditForm.submitted)"
-                class="text-danger">
-                {{'orderWarning'|translate}}
               </small>
             </div>
           </div>

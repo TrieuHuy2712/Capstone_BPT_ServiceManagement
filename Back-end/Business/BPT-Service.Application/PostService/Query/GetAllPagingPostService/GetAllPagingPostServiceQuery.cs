@@ -199,7 +199,8 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                         select new TagofServiceViewModel
                         {
                             TagName = t.TagName,
-                            isAdd = false
+                            isAdd = false,
+                            TagId = t.Id.ToString()
                         }).ToList();
             return data;
         }

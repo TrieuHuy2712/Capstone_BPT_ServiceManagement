@@ -1,3 +1,0 @@
-INFO[2020-04-13 18:49:04]:: ApprovePostServiceCommand:: fd034b39-2a1f-46ac-a223-b45fc42fa588:: admin:: adminYour service:Abaaahas been approved
-INFO[2020-04-13 18:57:27]:: RejectPostServiceCommand:: fd034b39-2a1f-46ac-a223-b45fc42fa588:: admin:: adminYour service:Abaaahas been rejected
-INFO[2020-04-13 23:27:20]:: RejectPostServiceCommand:: e3c55e99-7798-40e2-9d46-d2aa8c8a9dbb:: admin:: adminYour service:Alibabahas been rejected

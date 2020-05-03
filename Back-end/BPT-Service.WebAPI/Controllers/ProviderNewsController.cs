@@ -1,4 +1,5 @@
 using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.ConfirmNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
 using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
@@ -27,6 +28,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IRegisterNewsProviderServiceCommand _registerNewsProviderServiceCommand;
         private readonly IRejectNewsProviderServiceCommand _rejectNewsProviderServiceCommand;
         private readonly IUpdateNewsProviderServiceCommand _updateNewsProviderServiceCommand;
+        private readonly IConfirmNewsProviderService _confirmNewsProviderServiceCommand;
 
         public ProviderNewsController(IApproveNewsProviderServiceCommand approveProviderServiceCommand,
         IDeleteNewsProviderServiceCommand deleteNewsProviderServiceCommand,
@@ -35,7 +37,8 @@ namespace BPT_Service.WebAPI.Controllers
         IGetByIdProviderNewsServiceQuery getByIdProviderNewsServiceQuery,
         IRegisterNewsProviderServiceCommand registerNewsProviderServiceCommand,
         IRejectNewsProviderServiceCommand rejectNewsProviderServiceCommand,
-        IUpdateNewsProviderServiceCommand updateNewsProviderServiceCommand)
+        IUpdateNewsProviderServiceCommand updateNewsProviderServiceCommand,
+        IConfirmNewsProviderService confirmNewsProviderServiceCommand)
         {
             _approveProviderServiceCommand = approveProviderServiceCommand;
             _deleteNewsProviderServiceCommand = deleteNewsProviderServiceCommand;
@@ -45,12 +48,22 @@ namespace BPT_Service.WebAPI.Controllers
             _registerNewsProviderServiceCommand = registerNewsProviderServiceCommand;
             _rejectNewsProviderServiceCommand = rejectNewsProviderServiceCommand;
             _updateNewsProviderServiceCommand = updateNewsProviderServiceCommand;
+            _confirmNewsProviderServiceCommand = confirmNewsProviderServiceCommand;
         }
 
         [HttpPost("ApproveNewsProvider")]
         public async Task<IActionResult> ApproveNewsProvider(RejectProviderNewsViewModel newsViewModel)
         {
             var model = await _approveProviderServiceCommand.ExecuteAsync(newsViewModel.Id);
+
+            return new OkObjectResult(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ConfirmNewsProvider/{idCode}")]
+        public async Task<IActionResult> ConfirmNewsProvider(string idCode)
+        {
+            var model = await _confirmNewsProviderServiceCommand.ExecuteAsync(idCode);
 
             return new OkObjectResult(model);
         }

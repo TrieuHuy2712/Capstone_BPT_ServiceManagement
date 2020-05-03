@@ -16,13 +16,13 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
 {
     public class DeleteCommentServiceAsyncCommand : IDeleteCommentServiceAsyncCommand
     {
-        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        private readonly IRepository<ServiceComment, int> _commentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
         private readonly UserManager<AppUser> _userManager;
 
         public DeleteCommentServiceAsyncCommand(
-            IRepository<ServiceComment, Guid> commentRepository,
+            IRepository<ServiceComment, int> commentRepository,
             IHttpContextAccessor httpContextAccessor,
             IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
             UserManager<AppUser> userManager)
@@ -33,7 +33,7 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
             _userManager = userManager;
         }
 
-        public async Task<CommandResult<CommentViewModel>> ExecuteAsync(Guid id)
+        public async Task<CommandResult<CommentViewModel>> ExecuteAsync(int id)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
@@ -52,7 +52,7 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
                         isValid = true,
                         myModel = new CommentViewModel
                         {
-                            Id = commentDel.Id.ToString(),
+                            Id = commentDel.Id,
                         }
                     };
                 }

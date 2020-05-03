@@ -41,7 +41,7 @@ namespace BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser
         public async Task<PagedResult<ListRatingByServiceViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
         {
             var getUserId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync();
+            var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(getUserId);
             if (!checkUserIsProvider.isValid)
             {
                 return new PagedResult<ListRatingByServiceViewModel>()

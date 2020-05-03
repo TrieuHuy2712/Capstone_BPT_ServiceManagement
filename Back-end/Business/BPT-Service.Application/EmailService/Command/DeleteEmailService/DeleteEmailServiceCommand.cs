@@ -1,6 +1,7 @@
 ﻿using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -42,7 +43,7 @@ namespace BPT_Service.Application.EmailService.Command.DeleteEmailService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "EMAIL", ActionSetting.CanDelete))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.EMAIL, ActionSetting.CanDelete))
                 {
                     var idEmail = await _emailRepository.FindByIdAsync(id);
                     if (idEmail == null)

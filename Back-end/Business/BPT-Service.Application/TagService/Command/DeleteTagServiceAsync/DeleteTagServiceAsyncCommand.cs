@@ -5,6 +5,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.TagService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -44,7 +45,7 @@ namespace BPT_Service.Application.TagService.Command.DeleteServiceAsync
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                    await _getPermissionActionQuery.ExecuteAsync(userId, "ROLE", ActionSetting.CanDelete))
+                    await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.TAG, ActionSetting.CanDelete))
                 {
                     var TagDel = await _tagRepository.FindByIdAsync(id);
                     if (TagDel != null)

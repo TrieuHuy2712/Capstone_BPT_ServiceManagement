@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BPT_Service.Data.Migrations
@@ -7,7 +6,7 @@ namespace BPT_Service.Data.Migrations
     public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {                        
+        {
             migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 columns: table => new
@@ -179,7 +178,6 @@ namespace BPT_Service.Data.Migrations
                     URL = table.Column<string>(maxLength: 250, nullable: false),
                     ParentId = table.Column<string>(maxLength: 128, nullable: true),
                     IconCss = table.Column<string>(nullable: true),
-                    SortOrder = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -212,7 +210,8 @@ namespace BPT_Service.Data.Migrations
                     PriceOfService = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    codeConfirm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,7 +239,8 @@ namespace BPT_Service.Data.Migrations
                     Status = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     AvartarPath = table.Column<string>(nullable: true),
-                    DateModified = table.Column<DateTime>(nullable: false)
+                    DateModified = table.Column<DateTime>(nullable: false),
+                    OTPConfirm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,10 +293,11 @@ namespace BPT_Service.Data.Migrations
                 name: "ServiceComment",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ServiceId = table.Column<Guid>(nullable: false),
-                    ParentId = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
                     ContentOfRating = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false)
@@ -477,7 +478,7 @@ namespace BPT_Service.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,6 +494,7 @@ namespace BPT_Service.Data.Migrations
                     DateModified = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     ImgPath = table.Column<string>(nullable: true),
+                    CodeConfirm = table.Column<string>(nullable: true),
                     ProviderId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -638,7 +640,8 @@ namespace BPT_Service.Data.Migrations
                 name: "IX_UserService_UserId",
                 table: "UserService",
                 column: "UserId");
-                var sp = @"CREATE PROCEDURE [dbo].[DeleteUserRoles]
+                //Store Procedure
+var sp = @"CREATE PROCEDURE [dbo].[DeleteUserRoles]
  @UserIdDelete varchar(36), @RoleIdDelete varchar(36)
 AS
 BEGIN

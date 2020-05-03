@@ -2,6 +2,7 @@ using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.UserService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -39,7 +40,7 @@ namespace BPT_Service.Application.UserService.Command.DeleteUserAsync
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                    await _getPermissionActionQuery.ExecuteAsync(userId, "USER", ActionSetting.CanDelete))
+                    await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.USER, ActionSetting.CanDelete))
                 {
                     var user = await _userManager.FindByIdAsync(id);
                     if (user != null)

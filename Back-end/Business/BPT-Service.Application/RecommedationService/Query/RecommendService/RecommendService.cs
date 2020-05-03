@@ -125,7 +125,7 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendService
                             else
                             {
                                 var resultProvider = await _getPostServiceByIdQuery.ExecuteAsync(detail.Information);
-                                recommendService.PostServiceViewModel.Add(resultProvider.myModel);
+                                recommendService.PostServiceViewModel.Add(resultProvider);
                             }
                         }
                         listRecommendService.Add(recommendService);

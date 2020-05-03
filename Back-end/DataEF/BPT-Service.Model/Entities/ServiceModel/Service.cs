@@ -33,6 +33,7 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public DateTime DateModified { get; set; }
 
         public Status Status { get; set; }
+        public string codeConfirm { get; set; }
 
         public virtual ProviderService ProviderServices { get; set; }
 

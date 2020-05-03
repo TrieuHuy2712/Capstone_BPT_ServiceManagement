@@ -2,6 +2,7 @@ using BPT_Service.Application.FunctionService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -43,7 +44,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
             try
             {
                 //Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "FUNCTION", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.FUNCTION, ActionSetting.CanUpdate))
                 {
                     var functionDb = await _functionRepository.FindByIdAsync(function.Id);
 
@@ -53,7 +54,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
                         functionDb.Id = function.Id;
                         functionDb.Name = function.Name;
                         functionDb.ParentId = function.ParentId;
-                        functionDb.SortOrder = function.SortOrder;
                         functionDb.Status = function.Status;
                         functionDb.URL = function.URL;
                         _functionRepository.Update(functionDb);

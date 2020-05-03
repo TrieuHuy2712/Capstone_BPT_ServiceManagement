@@ -2,6 +2,7 @@ using BPT_Service.Application.FunctionService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -44,7 +45,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
             try
             {
                 //Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "FUNCTION", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.FUNCTION, ActionSetting.CanUpdate))
                 {
                     //Update parent id for source
                     var category = await _functionRepository.FindByIdAsync(sourceId);
@@ -57,7 +58,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                         var sibling = await _functionRepository.FindAllAsync(x => items.ContainsKey(x.Id));
                         foreach (var child in sibling)
                         {
-                            child.SortOrder = items[child.Id];
                             _functionRepository.Update(child);
                         }
                         await _functionRepository.SaveAsync();
@@ -72,7 +72,6 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                                 Id = category.Id,
                                 Name = category.Name,
                                 ParentId = category.ParentId,
-                                SortOrder = category.SortOrder,
                                 Status = category.Status,
                                 URL = category.URL
                             }

@@ -3,6 +3,7 @@ using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -14,6 +15,7 @@ using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SendGrid;
@@ -35,6 +37,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
         private readonly UserManager<AppUser> _userRepository;
         private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
         private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IConfiguration _configuration;
 
         public ApproveNewsProviderServiceCommand(
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
@@ -44,7 +47,8 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             IRepository<ProviderNew, int> newProviderRepository,
             UserManager<AppUser> userRepository,
             ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery)
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IConfiguration configuration)
         {
             _configEmail = configEmail;
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
@@ -54,6 +58,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             _userRepository = userRepository;
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
             _getPermissionActionQuery = getPermissionActionQuery;
+            _configuration = configuration;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(int idNews)
@@ -62,7 +67,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
             var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {//Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "NEWS", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.NEWS, ActionSetting.CanUpdate))
                 {
                     var mappingProvider = await _newProviderRepository.FindByIdAsync(idNews);
                     if (mappingProvider == null)
@@ -82,7 +87,13 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                     //Set content for email
                     var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                     var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
-                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, getEmail.UserName).Replace(EmailKey.NewNameKey, mappingProvider.Title);
+                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider").Value +
+                       mappingProvider.CodeConfirm + '_' + mappingProvider.Id;
+                    getFirstEmail.Message = getFirstEmail.Message.
+                        Replace(EmailKey.UserNameKey, getEmail.UserName).
+                        Replace(EmailKey.NewNameKey, mappingProvider.Title).
+                        Replace(EmailKey.ConfirmLink, generateCode); ;
+                        
                     ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, getEmail.Email).Wait();
                     await LoggingUser<ApproveNewsProviderServiceCommand>.
@@ -119,7 +130,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
 
         private ProviderNew MappingNewProvider(ProviderNew proNew)
         {
-            proNew.Status = Status.Active;
+            proNew.Status = Status.WaitingApprove;
             return proNew;
         }
 

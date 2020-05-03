@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BPT_Service.Application.RoleService.ViewModel;
+using BPT_Service.Common.Constants;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,9 @@ namespace BPT_Service.Application.RoleService.Query.GetAllPermission
         public async Task<List<PermissionViewModel>> ExecuteAsync(string functionId)
         {
             List<PermissionViewModel> permissions = new List<PermissionViewModel>();
-            var roles = await _roleManager.Roles.Where(x => x.Name != "Admin").ToListAsync();
+            var roles = await _roleManager.Roles.Where(x => x.Name != ConstantRoles.Admin 
+            || x.Name != ConstantRoles.Provider
+            || x.Name != ConstantRoles.Customer).ToListAsync();
             var getPermission = await _permissionRepository.FindAllAsync();
             var listPermission = await _permissionRepository.FindAllAsync(x => x.FunctionId == functionId);
             if (listPermission.Count() == 0)

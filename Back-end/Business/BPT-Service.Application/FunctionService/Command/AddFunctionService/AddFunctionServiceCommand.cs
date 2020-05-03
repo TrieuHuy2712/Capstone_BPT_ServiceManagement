@@ -2,6 +2,7 @@ using BPT_Service.Application.FunctionService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -43,7 +44,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             try
             {
                 //Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "FUNCTION", ActionSetting.CanCreate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.FUNCTION, ActionSetting.CanCreate))
                 {
                     var mappingFunction = MappingFunction(function);
                     await _functionRepository.Add(mappingFunction);
@@ -58,7 +59,6 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                             Id = mappingFunction.Id,
                             Name = mappingFunction.Name,
                             ParentId = mappingFunction.ParentId,
-                            SortOrder = mappingFunction.SortOrder,
                             Status = mappingFunction.Status,
                             URL = mappingFunction.URL
                         }
@@ -93,7 +93,6 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             newfunction.IconCss = function.IconCss;
             newfunction.Name = function.Name;
             newfunction.ParentId = function.ParentId;
-            newfunction.SortOrder = function.SortOrder;
             newfunction.Status = function.Status;
             newfunction.URL = function.URL;
             return newfunction;

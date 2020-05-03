@@ -1,4 +1,5 @@
 using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.ConfirmPostService;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
@@ -24,57 +25,68 @@ namespace BPT_Service.WebAPI.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IApprovePostServiceCommand _approvePostServiceCommand;
+        private readonly IConfirmPostService _confirmPostService;
         private readonly IDeleteServiceFromProviderCommand _deleteServiceFromProviderCommand;
         private readonly IDeleteServiceFromUserCommand _deleteServiceFromUserCommand;
         private readonly IFilterAllPagingPostServiceQuery _filterAllPagingPostServiceQuery;
         private readonly IGetAllPagingPostServiceQuery _getAllPagingPostServiceQuery;
+        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
         private readonly IGetPostServiceByIdQuery _getPostServiceByIdQuery;
         private readonly IRegisterServiceFromProviderCommand _registerServiceFromProviderCommand;
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
-        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
 
         public ServiceController(
-            IApprovePostServiceCommand approvePostServiceCommand,
-            IDeleteServiceFromProviderCommand deleteServiceFromProviderCommand,
-            IDeleteServiceFromUserCommand deleteServiceFromUserCommand,
-            IGetAllPagingPostServiceQuery getAllPagingPostServiceQuery,
-            IGetPostServiceByIdQuery getPostServiceByIdQuery,
-            IRegisterServiceFromProviderCommand registerServiceFromProviderCommand,
-            IRegisterServiceFromUserCommand registerServiceFromUserCommand,
-            IRejectPostServiceCommand rejectPostServiceCommand,
-            IUpdatePostServiceCommand updatePostServiceCommand,
-            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
-            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
-        )
+            IApprovePostServiceCommand approvePostServiceCommand, 
+            IConfirmPostService confirmPostService, 
+            IDeleteServiceFromProviderCommand deleteServiceFromProviderCommand, 
+            IDeleteServiceFromUserCommand deleteServiceFromUserCommand, 
+            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery, 
+            IGetAllPagingPostServiceQuery getAllPagingPostServiceQuery, 
+            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery, 
+            IGetPostServiceByIdQuery getPostServiceByIdQuery, 
+            IRegisterServiceFromProviderCommand registerServiceFromProviderCommand, 
+            IRegisterServiceFromUserCommand registerServiceFromUserCommand, 
+            IRejectPostServiceCommand rejectPostServiceCommand, 
+            IUpdatePostServiceCommand updatePostServiceCommand)
         {
             _approvePostServiceCommand = approvePostServiceCommand;
+            _confirmPostService = confirmPostService;
             _deleteServiceFromProviderCommand = deleteServiceFromProviderCommand;
             _deleteServiceFromUserCommand = deleteServiceFromUserCommand;
+            _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
             _getAllPagingPostServiceQuery = getAllPagingPostServiceQuery;
+            _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
             _getPostServiceByIdQuery = getPostServiceByIdQuery;
             _registerServiceFromProviderCommand = registerServiceFromProviderCommand;
             _registerServiceFromUserCommand = registerServiceFromUserCommand;
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
-            _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
-            // _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
         }
+
 
         #region GETAPI
 
         [HttpGet("getAllPagingPostService")]
-        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage,int filter)
+        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage, int filter)
         {
-            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage,filter);
+            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage, filter);
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("getAllPostUserServiceByUserId")]
         public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
         {
             var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
+            return new OkObjectResult(model);
+        }
+
+        [HttpGet("confirmPostService/{codeOTP}")]
+        public async Task<IActionResult> ConfirmPostService(string codeOTP)
+        {
+            var model = await _confirmPostService.ExecuteAsync(codeOTP);
             return new OkObjectResult(model);
         }
 

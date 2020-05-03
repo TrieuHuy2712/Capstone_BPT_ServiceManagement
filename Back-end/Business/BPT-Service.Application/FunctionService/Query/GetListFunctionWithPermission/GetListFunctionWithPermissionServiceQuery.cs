@@ -65,7 +65,6 @@ namespace BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermi
                                            IconCss = f.IconCss,
                                            Name = f.Name,
                                            ParentId = f.ParentId,
-                                           SortOrder = f.SortOrder,
                                            Status = f.Status,
                                            URL = f.URL,
                                        }).ToList();

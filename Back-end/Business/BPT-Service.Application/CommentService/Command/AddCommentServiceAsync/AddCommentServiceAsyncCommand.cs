@@ -16,13 +16,13 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
 {
     public class AddCommentServiceAsyncCommand : IAddCommentServiceAsyncCommand
     {
-        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        private readonly IRepository<ServiceComment, int> _commentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
         private readonly UserManager<AppUser> _userManager;
 
         public AddCommentServiceAsyncCommand(
-            IRepository<ServiceComment, Guid> commentRepository,
+            IRepository<ServiceComment, int> commentRepository,
             IHttpContextAccessor httpContextAccessor,
             IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
             UserManager<AppUser> userManager)
@@ -39,16 +39,12 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (addComment.ParentId == "")
-                {
-                    addComment.ParentId = Guid.Empty.ToString();
-                }
                 var comment = new ServiceComment
                 {
                     ContentOfRating = addComment.ContentOfRating,
                     UserId = Guid.Parse(addComment.UserId),
                     ServiceId = Guid.Parse(addComment.ServiceId),
-                    ParentId = Guid.Parse(addComment.ParentId)
+                    ParentId = addComment.ParentId
                 };
 
                 await _commentRepository.Add(comment);
@@ -56,15 +52,15 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
                 var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(addComment.ServiceId);
                 await LoggingUser<AddCommentServiceAsyncCommand>.
                     InformationAsync(getOwnerService, userName, addComment.ContentOfRating);
-                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(comment));
+                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(addComment));
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = true,
                     myModel = new CommentViewModel
                     {
                         ContentOfRating = comment.ContentOfRating,
-                        Id = comment.Id.ToString(),
-                        ParentId = comment.ParentId.ToString(),
+                        Id = comment.Id,
+                        ParentId = comment.ParentId,
                         ServiceId = comment.ServiceId.ToString(),
                         UserId = comment.UserId.ToString()
                     }

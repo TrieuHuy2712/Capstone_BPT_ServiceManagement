@@ -2,6 +2,7 @@ using BPT_Service.Application.CategoryService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -42,7 +43,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
             try
             {
                 //Check user has permission first
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY", ActionSetting.CanUpdate))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanUpdate))
                 {
                     var categoryUpdate = await _categoryRepository.FindByIdAsync(userVm.Id);
                     if (categoryUpdate != null)

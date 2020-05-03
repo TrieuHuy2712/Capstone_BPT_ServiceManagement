@@ -2,6 +2,7 @@ using BPT_Service.Application.CategoryService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
@@ -40,7 +41,7 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, "CATEGORY", ActionSetting.CanDelete))
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanDelete))
                 {
                     var categoryDel = await _categoryRepository.FindByIdAsync(id);
                     if (categoryDel != null)

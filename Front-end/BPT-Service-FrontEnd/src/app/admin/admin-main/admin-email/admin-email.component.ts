@@ -30,10 +30,10 @@ export class AdminEmailComponent implements OnInit {
 
   ngOnInit() {
     this.permission = {
-      canCreate: true,
-      canDelete: true,
-      canUpdate: true,
-      canRead: true
+      canCreate: false,
+      canDelete: false,
+      canUpdate: false,
+      canRead: false
     };
     this.loadData();
   }
@@ -41,7 +41,7 @@ export class AdminEmailComponent implements OnInit {
     this.spinnerService.show();
     this._dataService
       .get(
-        "/AdminRole/GetAllPaging?page=" +
+        "/EmailManagement/GetAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
@@ -87,7 +87,7 @@ export class AdminEmailComponent implements OnInit {
     if (valid) {
       this.spinnerService.show();
       if (this.entity.id === undefined) {
-        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
+        this._dataService.post("/EmailManagement/AddNewEmail", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
               this.emails.push(response.myModel);
@@ -105,7 +105,7 @@ export class AdminEmailComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
+        this._dataService.post("/EmailManagement/UpdateEmail", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
               let getPostition = this.emails.indexOf(x => x.id == this.entity.id);
@@ -136,7 +136,7 @@ export class AdminEmailComponent implements OnInit {
   deleteItemConfirm(idRole: any, id: any) {
     this.spinnerService.show();
     this._dataService
-      .delete("/AdminRole/Delete", "id", idRole)
+      .delete("/EmailManagement/DeleteEmail", "id", idRole)
       .subscribe((response: any) => {
         if (response.isValid == true) {
           this.emails.splice(id, 1);

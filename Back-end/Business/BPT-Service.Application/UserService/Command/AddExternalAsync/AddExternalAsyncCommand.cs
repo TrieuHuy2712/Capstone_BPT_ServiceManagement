@@ -1,5 +1,6 @@
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.UserService.ViewModel;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -63,7 +64,7 @@ namespace BPT_Service.Application.UserService.Command.AddExternalAsync
                     {
                         var appUser = await _userManager.FindByNameAsync(user.UserName);
                         if (appUser != null)
-                            await _userManager.AddToRoleAsync(appUser, "Customer");
+                            await _userManager.AddToRoleAsync(appUser, ConstantRoles.Customer);
                         //Set content for email
                         var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                         var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Reject_News).FirstOrDefault();
