@@ -7,12 +7,12 @@ using BPT_Service.Model.Interfaces;
 namespace BPT_Service.Model.Entities.ServiceModel
 {
     [Table("ServiceComment")]
-    public class ServiceComment : DomainEntity<Guid>
+    public class ServiceComment : DomainEntity<int>
     {
         public Guid UserId { get; set; }
         public Guid ServiceId { get; set; }
 
-        public Guid ParentId { get; set; }
+        public int ParentId { get; set; }
 
         public string ContentOfRating { get; set; }
 

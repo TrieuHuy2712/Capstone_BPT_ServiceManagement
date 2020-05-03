@@ -7,6 +7,6 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
 {
     public interface IDeleteCommentServiceAsyncCommand
     {
-        Task<CommandResult<CommentViewModel>> ExecuteAsync(Guid id);
+        Task<CommandResult<CommentViewModel>> ExecuteAsync(int id);
     }
 }

@@ -16,13 +16,13 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
 {
     public class UpdateCommentServiceAsyncCommand : IUpdateCommentServiceAsyncCommand
     {
-        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        private readonly IRepository<ServiceComment, int> _commentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
         private readonly UserManager<AppUser> _userManager;
 
         public UpdateCommentServiceAsyncCommand(
-            IRepository<ServiceComment, Guid> commentRepository,
+            IRepository<ServiceComment, int> commentRepository,
             IHttpContextAccessor httpContextAccessor,
             IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
             UserManager<AppUser> userManager)
@@ -39,10 +39,9 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var CommentUpdate = await _commentRepository.FindByIdAsync(Guid.Parse(commentserviceVm.Id));
+                var CommentUpdate = await _commentRepository.FindByIdAsync(commentserviceVm.Id);
                 if (CommentUpdate != null)
                 {
-                    CommentUpdate.Id = Guid.Parse(commentserviceVm.Id);
                     CommentUpdate.ContentOfRating = commentserviceVm.ContentOfRating;
                     CommentUpdate.UserId = Guid.Parse(commentserviceVm.UserId);
                     CommentUpdate.ServiceId = Guid.Parse(commentserviceVm.ServiceId);
@@ -56,7 +55,7 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
                         isValid = true,
                         myModel = new CommentViewModel
                         {
-                            Id = CommentUpdate.Id.ToString(),
+                            Id = CommentUpdate.Id,
                             UserId = CommentUpdate.UserId.ToString(),
                             ServiceId = CommentUpdate.ServiceId.ToString(),
                             ContentOfRating = CommentUpdate.ContentOfRating

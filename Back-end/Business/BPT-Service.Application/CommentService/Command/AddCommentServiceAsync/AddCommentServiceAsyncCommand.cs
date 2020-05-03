@@ -16,13 +16,13 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
 {
     public class AddCommentServiceAsyncCommand : IAddCommentServiceAsyncCommand
     {
-        private readonly IRepository<ServiceComment, Guid> _commentRepository;
+        private readonly IRepository<ServiceComment, int> _commentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetOwnServiceInformationQuery _getOwnServiceInformationQuery;
         private readonly UserManager<AppUser> _userManager;
 
         public AddCommentServiceAsyncCommand(
-            IRepository<ServiceComment, Guid> commentRepository,
+            IRepository<ServiceComment, int> commentRepository,
             IHttpContextAccessor httpContextAccessor,
             IGetOwnServiceInformationQuery getOwnServiceInformationQuery,
             UserManager<AppUser> userManager)
@@ -44,7 +44,7 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
                     ContentOfRating = addComment.ContentOfRating,
                     UserId = Guid.Parse(addComment.UserId),
                     ServiceId = Guid.Parse(addComment.ServiceId),
-                    ParentId = String.IsNullOrEmpty(addComment.ParentId) ? Guid.Empty : Guid.Parse(addComment.ParentId)
+                    ParentId = addComment.ParentId
                 };
 
                 await _commentRepository.Add(comment);
@@ -59,8 +59,8 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
                     myModel = new CommentViewModel
                     {
                         ContentOfRating = comment.ContentOfRating,
-                        Id = comment.Id.ToString(),
-                        ParentId = comment.ParentId.ToString(),
+                        Id = comment.Id,
+                        ParentId = comment.ParentId,
                         ServiceId = comment.ServiceId.ToString(),
                         UserId = comment.UserId.ToString()
                     }

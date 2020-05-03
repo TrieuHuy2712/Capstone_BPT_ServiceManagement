@@ -76,7 +76,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region DELETE API
         [HttpDelete("DeleteComment")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
             {

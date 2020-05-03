@@ -22,14 +22,14 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
 
             var data = IDProvider.Select(x => new CommentViewModel
             {
-                Id = x.Id.ToString(),
+                Id = x.Id,
                 UserId = x.UserId.ToString(),
-                ParentId = x.ParentId.ToString(),
+                ParentId = x.ParentId,
                 ContentOfRating = x.ContentOfRating,
                 ServiceId = x.ServiceId.ToString(),
             }).ToList();
 
-            var parentComment = data.Where(x=>x.ParentId == Guid.Empty.ToString()).ToList();
+            var parentComment = data.Where(x=>x.ParentId == 0).ToList();
 
             foreach (var item in parentComment)
             {

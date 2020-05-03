@@ -210,7 +210,8 @@ namespace BPT_Service.Data.Migrations
                     PriceOfService = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    codeConfirm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,10 +293,11 @@ namespace BPT_Service.Data.Migrations
                 name: "ServiceComment",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(nullable: false),
                     ServiceId = table.Column<Guid>(nullable: false),
-                    ParentId = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
                     ContentOfRating = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: false)
@@ -492,6 +494,7 @@ namespace BPT_Service.Data.Migrations
                     DateModified = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     ImgPath = table.Column<string>(nullable: true),
+                    CodeConfirm = table.Column<string>(nullable: true),
                     ProviderId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -637,7 +640,8 @@ namespace BPT_Service.Data.Migrations
                 name: "IX_UserService_UserId",
                 table: "UserService",
                 column: "UserId");
-                var sp = @"CREATE PROCEDURE [dbo].[DeleteUserRoles]
+                //Store Procedure
+var sp = @"CREATE PROCEDURE [dbo].[DeleteUserRoles]
  @UserIdDelete varchar(36), @RoleIdDelete varchar(36)
 AS
 BEGIN
