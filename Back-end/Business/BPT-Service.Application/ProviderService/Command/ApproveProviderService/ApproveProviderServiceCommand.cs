@@ -116,7 +116,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();
 
-                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider") +
+                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider").Value +
                         mappingProvider.OTPConfirm + '_' + mappingProvider.Id;
                     getFirstEmail.Message = getFirstEmail.Message.
                         Replace(EmailKey.UserNameKey, userMail.Email).

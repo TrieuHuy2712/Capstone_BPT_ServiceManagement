@@ -127,7 +127,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     {
                         var findUserId = await _userManager.FindByIdAsync(vm.UserId);
                         //Create Generate code
-                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                          mappingService.codeConfirm + '_' + mappingService.Id;
                         //Set content for email
                         var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();

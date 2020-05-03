@@ -120,7 +120,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromUser.Regist
                         //Set content for email
                         //Generate code
                         //Create Generate code
-                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                          mappingService.codeConfirm + '_' + mappingService.Id;
 
                         var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();

@@ -163,7 +163,7 @@ namespace BPT_Service.Application.PostService.Command.UpdatePostService
                         var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                         var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
 
-                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                             mappingService.codeConfirm + '_' + mappingService.Id;
 
                         getFirstEmail.Message = getFirstEmail.Message.

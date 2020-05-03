@@ -85,7 +85,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
 
                             //Set content for email
                             var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
-                            var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider") +
+                            var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider").Value +
                                  mapping.OTPConfirm + '_' + mapping.Id;
 
                             var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();

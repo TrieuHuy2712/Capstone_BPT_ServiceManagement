@@ -96,7 +96,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                             var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                             var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_Service).FirstOrDefault();
 
-                            var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService") +
+                            var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                                 getCurrentPost.codeConfirm + '_' + getCurrentPost.Id;
 
                             getFirstEmail.Message = getFirstEmail.Message.

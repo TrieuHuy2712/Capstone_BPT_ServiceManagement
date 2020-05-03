@@ -84,7 +84,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
                         var findUser = await _userManager.FindByIdAsync(providerInformation.UserId.ToString());
                         //Set content for email
                         var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
-                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider") +
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider").Value +
                              mappingNewsProvider.CodeConfirm + '_' + mappingNewsProvider.Id;
 
                         var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();

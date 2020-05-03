@@ -87,7 +87,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                     //Set content for email
                     var getAllEmail = await _getAllEmailServiceQuery.ExecuteAsync();
                     var getFirstEmail = getAllEmail.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
-                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider") +
+                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider").Value +
                        mappingProvider.CodeConfirm + '_' + mappingProvider.Id;
                     getFirstEmail.Message = getFirstEmail.Message.
                         Replace(EmailKey.UserNameKey, getEmail.UserName).

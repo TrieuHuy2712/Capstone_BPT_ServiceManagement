@@ -59,7 +59,8 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        [HttpPost("ConfirmNewsProvider")]
+        [AllowAnonymous]
+        [HttpGet("ConfirmNewsProvider/{idCode}")]
         public async Task<IActionResult> ConfirmNewsProvider(string idCode)
         {
             var model = await _confirmNewsProviderServiceCommand.ExecuteAsync(idCode);

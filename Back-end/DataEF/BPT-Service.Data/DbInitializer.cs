@@ -141,7 +141,7 @@ namespace BPT_Service.Data
                     {
                         Subject="Approve Provider Request",
                         Name ="Approve_Provider",
-                        Message= "Dear #UserName </br> Your provider has been accepted."
+                        Message= "Dear #UserName </br> Your provider has been accepted. Please <a href='#ConfirmLink'>Click here</a> to approve."
                     },
                     new Email()
                     {
@@ -154,7 +154,7 @@ namespace BPT_Service.Data
                     {
                         Subject="Approve Service Request",
                         Name ="Approve_Service",
-                        Message= "Dear #UserName </br> Your provider has been accepted."
+                        Message= "Dear #UserName </br> Your provider has been accepted. Please <a href='#ConfirmLink'>Click here</a> to approve."
                     },
                     new Email()
                     {
@@ -167,7 +167,7 @@ namespace BPT_Service.Data
                     {
                         Subject="Approve News of your Provider Request",
                         Name ="Approve_News",
-                        Message= "Dear #UserName </br> Your #TitleNews news has been accepted.<br> "
+                        Message= "Dear #UserName </br> Your #TitleNews news has been accepted.<br>.Please <a href='#ConfirmLink'>Click here</a> to approve."
                     },
                     new Email()
                     {
