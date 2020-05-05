@@ -78,6 +78,7 @@ export class ServiceCategoryComponent implements OnInit {
     this.loadData();
   }
   showAddModal() {
+    this.imgPath.nativeElement.value = "";
     this.entity = {};
     this.modalAddEdit.show();
   }

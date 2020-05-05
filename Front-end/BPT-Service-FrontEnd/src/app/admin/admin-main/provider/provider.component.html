@@ -66,6 +66,8 @@
                             <td *ngIf="pro.status==1"><span class="badge badge-success">Approved</span></td>
                             <td *ngIf="pro.status==0"><span class="badge badge-danger">Rejected</span></td>
                             <td *ngIf="pro.status==2"><span class="badge badge-secondary">Pending</span></td>
+                            <td *ngIf="pro.status==4"><span class="badge badge-secondary">Update Pending</span></td>
+                            <td *ngIf="pro.status==4"><span class="badge badge-secondary">Waiting UserApprove</span></td>
                             <td><img [src]="pro.avatarPath" alt="" width="128"></td>
                             <td>
                                 <button *ngIf="permission.canUpdate" class="btn btn-primary"
@@ -213,8 +215,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
                         <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
-                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Approved</span></span>
+                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Rejected</span></span>
                         <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
+                        <span *ngIf="entity.status==4"><span class="badge badge-secondary">Waiting User Approve</span></span>
+                        <span *ngIf="entity.status==3"><span class="badge badge-secondary">Update Waiting</span></span>
                     </div>
                     <div class="ln_solid"></div>
                     <div class="form-group">

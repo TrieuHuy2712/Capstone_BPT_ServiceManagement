@@ -1,4 +1,5 @@
-﻿using BPT_Service.Common.Logging;
+﻿using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using System;
@@ -31,12 +32,12 @@ namespace BPT_Service.Application.NewsProviderService.Command.ConfirmNewsProvide
                     await Logging<ConfirmNewsProviderService>.InformationAsync("Confirmed from " + getInformation.Title);
                     return true;
                 }
-                await Logging<ConfirmNewsProviderService>.ErrorAsync("Cannot find your Id");
+                await Logging<ConfirmNewsProviderService>.WarningAsync(ActionCommand.COMMAND_NOTIFICATION,"System","Cannot find your Id");
                 return false;
             }
             catch (Exception ex)
             {
-                await Logging<ConfirmNewsProviderService>.ErrorAsync(ex.Message.ToString());
+                await Logging<ConfirmNewsProviderService>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
                 return false;
             }
         }

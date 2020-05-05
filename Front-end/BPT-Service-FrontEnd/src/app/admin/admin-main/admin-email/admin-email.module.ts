@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/core/common/SharedModule';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { AdminEmailComponent } from './admin-email.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 const roleRoutes: Routes = [
   //localhost:4200/main/user
@@ -31,6 +32,7 @@ const roleRoutes: Routes = [
     SharedModule,
     NgbModule,
     Ng4LoadingSpinnerModule.forRoot(),
+    EditorModule,
     TypeaheadModule.forRoot(),
   ],
   schemas: [

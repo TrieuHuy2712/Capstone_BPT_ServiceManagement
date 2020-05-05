@@ -1,6 +1,7 @@
 ﻿using BPT_Service.Application.LoggingService.Query.GetLogFiles;
 using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
 using BPT_Service.Application.LoggingService.ViewModel;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetN
             }
             catch (Exception ex)
             {
-                Logging<AutoGetNotification>.ErrorAsync(ex.Message.ToString());
+                Logging<AutoGetNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION,"System","Has error");
                 return null;
             }
         }

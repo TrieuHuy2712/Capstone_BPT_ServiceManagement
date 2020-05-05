@@ -1,4 +1,5 @@
 ﻿using BPT_Service.Application.LoggingService.ViewModel;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -47,7 +48,7 @@ namespace BPT_Service.Application.NotificationService.NotificationUser.AutoGetUs
             }
             catch (Exception ex)
             {
-                Logging<AutoGetUserNotification>.ErrorAsync(ex.Message.ToString());
+                Logging<AutoGetUserNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
                 return null;
             }
         }

@@ -42,6 +42,15 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;            
             try
             {
+                //Check category has available
+                var availableCategory = _categoryRepository.FindSingleAsync(x => x.CategoryName.ToLower() == userVm.CategoryName.ToLower());
+                if (availableCategory == null) {
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Category Name has available"
+                    };
+                }
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanCreate))
                 {
                     var mappingCate = mappingCategory(userVm);

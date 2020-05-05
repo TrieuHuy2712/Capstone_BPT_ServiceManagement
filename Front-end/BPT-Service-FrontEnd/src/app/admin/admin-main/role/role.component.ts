@@ -41,7 +41,7 @@ export class RoleComponent implements OnInit {
     this.spinnerService.show();
     this._dataService
       .get(
-        "/EmailManagement/GetAllPaging?page=" +
+        "/AdminRole/GetAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
@@ -87,7 +87,7 @@ export class RoleComponent implements OnInit {
     if (valid) {
       this.spinnerService.show();
       if (this.entity.id === undefined) {
-        this._dataService.post("/EmailManagement/AddNewEmail", this.entity).subscribe(
+        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
               this.roles.push(response.myModel);
@@ -100,12 +100,13 @@ export class RoleComponent implements OnInit {
                 MessageConstants.CREATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
 
           },
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.post("/EmailManagement/UpdateEmail", this.entity).subscribe(
+        this._dataService.post("/AdminRole/SaveEntity", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
               let getPostition = this.roles.indexOf(x => x.id == this.entity.id);
@@ -119,12 +120,13 @@ export class RoleComponent implements OnInit {
                 MessageConstants.UPDATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
 
           },
           error => this._dataService.handleError(error)
         );
       }
-      this.spinnerService.hide();
+      
     }
   }
   deleteItem(idRole: any, id: any) {
@@ -136,7 +138,7 @@ export class RoleComponent implements OnInit {
   deleteItemConfirm(idRole: any, id: any) {
     this.spinnerService.show();
     this._dataService
-      .delete("/EmailManagement/Delete", "id", idRole)
+      .delete("/AdminRole/Delete", "id", idRole)
       .subscribe((response: any) => {
         if (response.isValid == true) {
           this.roles.splice(id, 1);

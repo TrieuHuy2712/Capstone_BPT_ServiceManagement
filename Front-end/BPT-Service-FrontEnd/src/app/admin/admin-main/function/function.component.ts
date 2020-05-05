@@ -124,7 +124,7 @@ export class FunctionComponent implements OnInit {
   public saveChanges(valid: boolean) {
     if (valid) {
       this.spinnerService.show();
-      this.entity.name = this.entity.name + "%%%" + this.entity.nameVietNamese
+      this.entity.name = this.entity.name
       if (this.editFlag == false) {
         this._dataService.post("/function/addEntity", this.entity).subscribe(
           (response: any) => {

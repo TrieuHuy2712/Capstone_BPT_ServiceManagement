@@ -52,14 +52,14 @@ namespace BPT_Service.Application.ProviderService.Query.GetByIdProviderService
                         errorMessage = "Cannot find your location"
                     };
                 }
-                if (getPro.UserId != Guid.Parse(userId))
-                {
-                    return new CommandResult<ProviderServiceViewModel>
-                    {
-                        isValid = false,
-                        myModel = null
-                    };
-                }
+                //if (getPro.UserId != Guid.Parse(userId))
+                //{
+                //    return new CommandResult<ProviderServiceViewModel>
+                //    {
+                //        isValid = false,
+                //        myModel = null
+                //    };
+                //}
                 var mappingProvider = await MappingProvider(getPro, location);
                 return new CommandResult<ProviderServiceViewModel>
                 {

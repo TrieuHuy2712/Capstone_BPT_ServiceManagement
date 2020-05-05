@@ -66,6 +66,16 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
             try
             {
+                //Check category has available
+                var availableCategory = _providerRepository.FindSingleAsync(x => x.ProviderName.ToLower() == vm.ProviderName.ToLower());
+                if (availableCategory == null)
+                {
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "Provider Name has available"
+                    };
+                }
                 var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 var mappingProvider = await MappingProvider(vm, Guid.Parse(userId), userId);
 

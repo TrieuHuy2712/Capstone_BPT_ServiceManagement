@@ -172,7 +172,7 @@ export class ProviderComponent implements OnInit {
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );
-        this.provider = this.provider.splice(id,1);    
+        this.provider.splice(id,1);    
         }
       });
   }

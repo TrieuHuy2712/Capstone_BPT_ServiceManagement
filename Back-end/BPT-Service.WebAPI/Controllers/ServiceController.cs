@@ -75,7 +75,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        [AllowAnonymous]
+
         [HttpGet("getAllPostUserServiceByUserId")]
         public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
         {
@@ -83,7 +83,8 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        [HttpGet("confirmPostService/{codeOTP}")]
+        [AllowAnonymous]
+        [HttpGet("confirmService/{codeOTP}")]
         public async Task<IActionResult> ConfirmPostService(string codeOTP)
         {
             var model = await _confirmPostService.ExecuteAsync(codeOTP);

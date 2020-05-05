@@ -1,4 +1,5 @@
-﻿using BPT_Service.Common.Logging;
+﻿using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using System;
@@ -29,15 +30,15 @@ namespace BPT_Service.Application.PostService.Command.ConfirmPostService
                     getInformation.Status = Model.Enums.Status.Active;
                     _serviceRepostiroy.Update(getInformation);
                     await _serviceRepostiroy.SaveAsync();
-                    await Logging<ConfirmPostService>.InformationAsync("Confirmed from " + getInformation.ServiceName);
+                    await Logging<ConfirmPostService>.InformationAsync(ActionCommand.COMMAND_CONFIRM, providerId, "Confirmed from " + getInformation.ServiceName);
                     return true;
                 }
-                await Logging<ConfirmPostService>.ErrorAsync("Cannot find your Id");
+                await Logging<ConfirmPostService>.WarningAsync(ActionCommand.COMMAND_CONFIRM, providerId, "Cannot find your Id");
                 return false;
             }
             catch (Exception ex)
             {
-                await Logging<ConfirmPostService>.ErrorAsync(ex.Message.ToString());
+                await Logging<ConfirmPostService>.ErrorAsync(ex, ActionCommand.COMMAND_CONFIRM, "None", "Had error");
                 return false;
             }
         }
