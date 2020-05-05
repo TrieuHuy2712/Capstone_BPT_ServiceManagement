@@ -6,12 +6,13 @@
             <div class="wapper">
                 <div class="gallery">
                     <div id="headerSlider" lg-uid="lg0">
-                        <ngx-slick class="carousel" #slickModal="slick-modal" (afterChange)="afterChange($event)">
+                        <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigDetail"
+                            (afterChange)="afterChange($event)">
 
                             <div ngxSlickItem *ngFor="let img of details.listImages">
                                 <div>
                                     <div class="room-slide is-flex" style="width: 100%; display: inline-block;">
-                                        <img elementtiming="detail-gallery" [src]="img.path" lazy="loaded"></div>
+                                        <img elementtiming="detail-gallery" [src]="img.path"></div>
                                 </div>
                             </div>
 
@@ -41,24 +42,18 @@
                                     <div class="detail-left">
                                         <div id="general"></div>
                                         <div class="section">
-                                            <div class="breadcrumbs middle-xs d-none d-sm-flex"><a href="/vi/"
-                                                    class="nuxt-link-active">Trang chủ</a> <i
+                                            <div class="breadcrumbs middle-xs d-none d-sm-flex"><a
+                                                    href="/main/home/index" class="nuxt-link-active">Trang chủ</a> <i
                                                     class="fas fa-chevron-right"></i> <span class="is-flex middle-xs"><a
-                                                        href="/vi/vietnam" class="">
+                                                        href="#" class="">
                                                         Vietnam
                                                     </a> <i class="fas fa-chevron-right"></i></span><span
-                                                    class="is-flex middle-xs"><a href="/vi/vietnam/lam-dong" class="">
-                                                        Lam Dong
+                                                    class="is-flex middle-xs"><a href="#" class="">
+                                                        {{locations[0].province}}
                                                     </a> <i class="fas fa-chevron-right"></i></span><span
-                                                    class="is-flex middle-xs"><a href="/vi/vietnam/lam-dong/da-lat"
-                                                        class="">
-                                                        Da Lat
-                                                    </a> <i class="fas fa-chevron-right"></i></span><span
-                                                    class="is-flex middle-xs"><a
-                                                        href="/vi/vietnam/lam-dong/da-lat/phuong-11" class="">
-                                                        Phuong 11
-                                                    </a>
-                                                    <!----></span></div>
+                                                    class="is-flex middle-xs"><a href="#" class="">
+                                                        {{locations[0].city}}
+                                                    </a> <i class="fas fa-chevron-right"></i></span></div>
                                             <div class="pt--30 pt--sm--0"></div>
                                             <section>
                                                 <div class="row">
@@ -114,85 +109,7 @@
                                                                 room="[object Object]">
                                                             </div>
                                                         </div>
-                                                        <div class="mt--18 slide-default-left slide-item-has-shadow">
-                                                            <div class="slick-initialized slick-slider">
-                                                                <div class="slick-list draggable">
-                                                                    <div class="slick-track"
-                                                                        style="opacity: 1; width: 331px; transform: translate3d(0px, 0px, 0px);">
-                                                                        <div class="slick-slide slick-current slick-active"
-                                                                            data-slick-index="0" aria-hidden="false"
-                                                                            style="width: 331px;">
-                                                                            <div>
-                                                                                <div class="fadeIn"
-                                                                                    style="width: 100%; display: inline-block;">
-                                                                                    <div class="discount start-xs">
-                                                                                        <div
-                                                                                            class="discount__title is-flex jbetween">
-                                                                                            <p class="mb--0 bold">
-                                                                                                FLASH SALE
-                                                                                            </p>
-                                                                                            <div class="countdown bold">
-                                                                                                <span
-                                                                                                    class="dd">24</span>
-                                                                                                ngày
-                                                                                                <span
-                                                                                                    class="hh">07</span>:
-                                                                                                <span
-                                                                                                    class="mm">17</span>:
-                                                                                                <span
-                                                                                                    class="ss">38</span>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="discount__content">
-                                                                                            <div
-                                                                                                class="discount__description">
-                                                                                                <div
-                                                                                                    class="discount__detail pr--6">
-                                                                                                    Giảm giá
-                                                                                                    <strong>
-                                                                                                        <font
-                                                                                                            color="#FF0037">
-                                                                                                            280000đ
-                                                                                                        </font>
-                                                                                                    </strong> - Mã:
-                                                                                                    <strong
-                                                                                                        style="color: #FF0037;">
-                                                                                                        <font
-                                                                                                            color="#FF0037">
-                                                                                                            MAR3
-                                                                                                        </font>
-                                                                                                    </strong><br>Ngày
-                                                                                                    check-in:
-                                                                                                    <strong>Không
-                                                                                                        giới
-                                                                                                        hạn</strong>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="copy-txt mt--6">
-                                                                                                    <svg version="1.1"
-                                                                                                        viewBox="-66 0 569 569.286"
-                                                                                                        class="cursor svg-icon svg-fill"
-                                                                                                        style="width: 24px; height: 24px;">
-                                                                                                        <path pid="0"
-                                                                                                            d="M.11 66.383v493.133A9.484 9.484 0 0 0 9.593 569H369.96c5.234 0 9.48-4.246 9.48-9.484V161.219c0-.211-.101-.39-.12-.598a8.942 8.942 0 0 0-.485-2.437c-.106-.305-.18-.598-.313-.895a9.387 9.387 0 0 0-1.898-2.777L281.793 59.68a9.198 9.198 0 0 0-2.79-1.899 8.56 8.56 0 0 0-.87-.312 9.399 9.399 0 0 0-2.457-.492c-.16.027-.348-.075-.547-.075H9.594c-5.239 0-9.485 4.243-9.485 9.48zm346.956 85.351H284.61V89.277zM19.074 75.867h246.57v85.352c0 5.234 4.247 9.48 9.481 9.48h85.352v379.336H19.074zm0 0">
-                                                                                                        </path>
-                                                                                                        <path pid="1"
-                                                                                                            d="M398.41 493.133v18.965h28.45c5.238 0 9.484-4.243 9.484-9.48V9.483A9.484 9.484 0 0 0 426.859 0H66.492a9.484 9.484 0 0 0-9.484 9.484v28.45h18.969v-18.97h341.398v474.169zm0 0">
-                                                                                                        </path>
-                                                                                                        <path pid="2"
-                                                                                                            d="M75.977 189.668h227.597v18.965H75.977zm0 0M75.977 132.766h75.867v18.968H75.977zm0 0M75.977 246.566H227.71v18.97H75.977zm0 0M246.676 246.566h56.898v18.97h-56.898zm0 0M75.977 303.465h227.597v18.969H75.977zm0 0M75.977 417.266h227.597v18.968H75.977zm0 0M161.324 360.367h142.25v18.965h-142.25zm0 0M75.977 360.367h66.382v18.965H75.977zm0 0M75.977 474.168h37.933v18.965H75.977zm0 0M132.875 474.168h170.7v18.965h-170.7zm0 0">
-                                                                                                        </path>
-                                                                                                    </svg></div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="row d-md-none">
                                                             <div class="col-sm-6 col-xs-12 mt--30">
                                                                 <div class="is-flex align-center bg-gray-f2 rounded">
@@ -219,7 +136,7 @@
                                                             </div>
                                                         </div>
                                                         <!---->
-                                                        <div class="d-none d-sm-flex w--100 amenities">
+                                                        <div class="d-none d-sm-flex amenities">
                                                             <div class="detail__intro">
                                                                 <!---->
                                                                 <div class="is-relative">
@@ -228,8 +145,7 @@
                                                                         <p>{{details.description}}</p>
 
                                                                     </div>
-                                                                    <a class="btn color-i pointer mt--6">Đọc
-                                                                        thêm </a>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -284,9 +200,9 @@
                                             </div>
                                             <div _ngcontent-kvx-c5="" class="mt--24">
                                                 <input class="form-control form-control-sm" type="text"
-                                                    placeholder="Type a comment">
-                                                <div _ngcontent-kvx-c5="" class="review mt--24" data-v-730e0d8f=""
-                                                    numchars="150">
+                                                    placeholder="Type a comment"
+                                                    (keyup.enter)="postAComment($event.target.value)">
+                                                <div _ngcontent-kvx-c5="" class="review mt--24" *ngFor="let item of testComment">
                                                     <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
                                                         data-v-730e0d8f="">
                                                         <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
@@ -297,60 +213,10 @@
                                                             <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
                                                                 data-v-730e0d8f="">
                                                                 <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
-                                                                    data-v-730e0d8f=""> Nguyễn Hoài Nam · <div
+                                                                    data-v-730e0d8f="">{{item.userId}} <div
                                                                         _ngcontent-kvx-c5=""
                                                                         class="d-inline-block pl--6" data-v-730e0d8f="">
-                                                                        <svg _ngcontent-kvx-c5=""
-                                                                            class="mr--3 svg-icon svg-fill"
-                                                                            data-v-730e0d8f=""
-                                                                            style="width: 16px; height: 16px;"
-                                                                            version="1.1" viewBox="0 0 14 14">
-                                                                            <path _ngcontent-kvx-c5=""
-                                                                                _fill-rule="evenodd"
-                                                                                d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
-                                                                                fill="#ffb025" pid="0" stroke="none">
-                                                                            </path>
-                                                                        </svg><svg _ngcontent-kvx-c5=""
-                                                                            class="mr--3 svg-icon svg-fill"
-                                                                            data-v-730e0d8f=""
-                                                                            style="width: 16px; height: 16px;"
-                                                                            version="1.1" viewBox="0 0 14 14">
-                                                                            <path _ngcontent-kvx-c5=""
-                                                                                _fill-rule="evenodd"
-                                                                                d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
-                                                                                fill="#ffb025" pid="0" stroke="none">
-                                                                            </path>
-                                                                        </svg><svg _ngcontent-kvx-c5=""
-                                                                            class="mr--3 svg-icon svg-fill"
-                                                                            data-v-730e0d8f=""
-                                                                            style="width: 16px; height: 16px;"
-                                                                            version="1.1" viewBox="0 0 14 14">
-                                                                            <path _ngcontent-kvx-c5=""
-                                                                                _fill-rule="evenodd"
-                                                                                d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
-                                                                                fill="#ffb025" pid="0" stroke="none">
-                                                                            </path>
-                                                                        </svg><svg _ngcontent-kvx-c5=""
-                                                                            class="mr--3 svg-icon svg-fill"
-                                                                            data-v-730e0d8f=""
-                                                                            style="width: 16px; height: 16px;"
-                                                                            version="1.1" viewBox="0 0 14 14">
-                                                                            <path _ngcontent-kvx-c5=""
-                                                                                _fill-rule="evenodd"
-                                                                                d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
-                                                                                fill="#ffb025" pid="0" stroke="none">
-                                                                            </path>
-                                                                        </svg><svg _ngcontent-kvx-c5=""
-                                                                            class="mr--3 svg-icon svg-fill"
-                                                                            data-v-730e0d8f=""
-                                                                            style="width: 16px; height: 16px;"
-                                                                            version="1.1" viewBox="0 0 14 14">
-                                                                            <path _ngcontent-kvx-c5=""
-                                                                                _fill-rule="evenodd"
-                                                                                d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
-                                                                                fill="#ffb025" pid="0" stroke="none">
-                                                                            </path>
-                                                                        </svg></div>
+                                                                        <i class="fas fa-star"></i></div>
                                                                 </h5><span _ngcontent-kvx-c5="" class="caption"
                                                                     data-v-730e0d8f="">2 months</span>
                                                             </div>
@@ -359,10 +225,7 @@
                                                     <div _ngcontent-kvx-c5="" class="review__content"
                                                         data-v-730e0d8f="">
                                                         <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
-                                                            data-v-730e0d8f="">Rất thích sự nhiệt tình hiếu khách của cô
-                                                            bé chủ ở đây và những người khác. Cô bé luôn hỗ trợ và tạo
-                                                            điều kiện thuận lợi cho khách. Cảm ơn đã cho anh một chỗ
-                                                            nghỉ ngơi thật tốt.</p>
+                                                            data-v-730e0d8f="">{{item.contentOfRating}}</p>
                                                     </div>
                                                 </div>
 
@@ -502,12 +365,16 @@
                                                                 </div>
                                                             </span></div>
                                                     </div>
-                                                    <!----> <button id="addtocart-btn" *ngIf="isFollowed" (click) = "followAService()"
+                                                    <!----> <button id="addtocart-btn" *ngIf="isFollowed"
+                                                        (click)="followAService()"
                                                         class="btn btn-grad--primary px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
-                                                            style="color: #fff; font-weight: 600;">Theo dõi</span></button>
-                                                            <button id="addtocart-btn" *ngIf="!isFollowed" (click) = "unFollowAService()"
+                                                            style="color: #fff; font-weight: 600;">Theo
+                                                            dõi</span></button>
+                                                    <button id="addtocart-btn" *ngIf="!isFollowed"
+                                                        (click)="unFollowAService()"
                                                         class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
-                                                            style="color: #fff; font-weight: 600;">Đã theo dõi</span></button>
+                                                            style="color: #fff; font-weight: 600;">Đã theo
+                                                            dõi</span></button>
                                                     <div class="mt--18">
                                                         <div class="room-event__wrap"></div>
                                                     </div>

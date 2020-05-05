@@ -9,6 +9,8 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 })
 export class HomeComponent implements OnInit {
   locations: any[];
+  public category: any[];
+
 
 
   constructor(
@@ -20,7 +22,7 @@ export class HomeComponent implements OnInit {
     
   ) {
     this.loadDataOfLocation();
-
+    this.getAllCategory();
   }
 
   // slider 1
@@ -38,7 +40,7 @@ export class HomeComponent implements OnInit {
     { img: "../../../assets/images/introduce-2.jpg", tit1: "Dịch vụ sơn", tit2: "Sơn nhà đón tết nào bà con ơi !" },
     { img: "../../../assets/images/introduce-3.jpg", tit1: "Chuyển nhà", tit2:"Chuyển nhà đón tài lộc nào cả nhà" }
   ];
-  slideConfig2 = { "slidesToShow": 3, "slidesToScroll": 1, "arrows": false, "autoplay": false};
+  slideConfig2 = { "slidesToShow": 3, "slidesToScroll": 1, "arrows": true, "autoplay": false};
 
   //  location slider
 
@@ -69,4 +71,12 @@ export class HomeComponent implements OnInit {
   }
   sliderConfigPopular = { "slidesToShow": 4, "slidesToScroll": 1, "arrows" : true};
   
+//  get all category
+  getAllCategory() {
+    this._dataService.get("/CategoryManagement/GetAllCategory").subscribe((response: any) => {
+      this.category = response;
+      
+      });
+  }
+
 }

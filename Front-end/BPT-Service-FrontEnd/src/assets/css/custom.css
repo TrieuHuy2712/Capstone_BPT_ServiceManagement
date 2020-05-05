@@ -1421,7 +1421,6 @@ section {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 300px;
 }
 
 .room-des.dot:before {

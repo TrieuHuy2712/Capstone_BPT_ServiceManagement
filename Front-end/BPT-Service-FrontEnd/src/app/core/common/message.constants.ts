@@ -10,4 +10,10 @@ export class MessageConstants {
     public static CREATED_FAIL_MSG = "Thêm mới không thành công";
     public static UPDATED_FAIL_MSG = "Cập nhật không thành công";
     public static DELETED_FAIL_MSG = "Xóa không thành công";
+    public static FOLLOW_OK_MSG = "Bạn đã theo dõi dịch vụ này ! :3";
+    public static FOLLOW_FAIL_MSG = "Theo dõi dịch vụ không thành công ! :(";
+    public static UNFOLLOW_OK_MSG = "Bạn đã bỏ theo dõi dịch vụ này ! :(";
+    public static UNFOLLOW_FAIL_MSG = "Bỏ theo dõi dịch vụ không thành công ! :3";
+    public static COMMENT_OK_MSG = "Thêm comment thành công";
+    public static COMMENT_FAIL_MSG = " thêm comment thất bại";
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SystemConstants } from 'src/app/core/common/system,constants';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-list-of-item',
@@ -16,32 +17,37 @@ export class ListOfItemComponent implements OnInit {
   public totalRow: number;
   public filter: string = "";
   public services: any[];
+  public services2: any[];
+
   public permission: any;
   public entity: any;
   public functionId: string = "SERVICES";
   public indexOfServices: number;
   locations: any;
+  public newId:any;
   constructor(
+    private route: ActivatedRoute,
     private _dataService: DataService,
     private _notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
-    this.loadData();
-    this.loadDataOfLocation();
+    this.newId = this.route.snapshot.paramMap.get("id");
     
+    this.loadData();
+    this.loadCategoryData();
+    this.loadDataOfLocation();
   }
   // load data function
   loadData() {
     this._dataService
       .get(
-        "/Service/getAllPagingPostService?page=" +
+        "/Service/getFilterAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
-        "&keyword=" +
-        this.filter +
-        "&isAdminPage=true&filter=5"
+        "&typeFilter=Location"+
+        "&filterName="+this.newId
       )
       .subscribe((response: any) => {
         this.services = response.results;
@@ -49,6 +55,28 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.indexOfServices = this.services.length;
+        
+      });
+      
+  }
+
+  loadCategoryData() {
+    this._dataService
+      .get(
+        "/Service/getFilterAllPaging?page=" +
+        this.pageIndex +
+        "&pageSize=" +
+        this.pageSize +
+        "&typeFilter=Category"+
+        "&filterName="+this.newId
+      )
+      .subscribe((response: any) => {
+        this.services2 = response.results;
+        this.pageIndex = response.currentPage;
+        this.pageSize = response.pageSize;
+        this.totalRow = response.rowCount;
+        this.indexOfServices = this.services2.length;
+        console.log(this.services2);
         
       });
       
@@ -74,4 +102,6 @@ export class ListOfItemComponent implements OnInit {
     console.log('afterChange');
   }
   // end load slide
+
+
 }

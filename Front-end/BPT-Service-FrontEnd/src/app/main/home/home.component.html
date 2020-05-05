@@ -17,10 +17,12 @@
           <div class="introduce-content">
             <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig2"
               (afterChange)="afterChange($event)">
-              <div ngxSlickItem *ngFor="let slide2 of slides2" class="outside">
-                <img src="{{slide2.img}}" alt="slider image" class="intro-img-2">
-                <p class="title-1"><strong>{{slide2.tit1}}</strong></p>
-                <p class="title-2">{{slide2.tit2}}</p>
+              <div ngxSlickItem *ngFor="let item of category" class="outside">
+                <a [routerLink]="[ '/main/listOfItem',item.categoryName]">
+                  <img [src]="item.imgPath" alt="slider image" class="intro-img-2">
+                <p class="title-1"><strong>{{item.categoryName}}</strong></p>
+                </a>
+                
               </div>
             </ngx-slick>
           </div>
@@ -61,7 +63,7 @@
         <div ngxSlickItem *ngFor="let item of locations">
           <!-- 1st -->
           <div class="outside-1" alt=slider>
-            <div><a href="" tabindex="0" style="width: 100%; display: inline-block;">
+            <div><a [routerLink]="[ '/main/listOfItem',item.city]" tabindex="0" style="width: 100%; display: inline-block;">
                 <div class="outside-1">
                   <img [src]="item.imagePath" class="intro-img">
 
@@ -74,110 +76,6 @@
       </ngx-slick>
     </div>
 
-    <div class="body-part-1">
-      <div class="row">
-        <div class="title mb--18 col-xl-12">
-          <h2 class="extra-bold p--giant">Bóng hồng "chill" thả ga!</h2>
-          <p>Khám phá ngay top chỗ ở đẹp, giá cực tốt dành tặng cho hội chị em trong tháng 3 này.</p>
-        </div>
-
-        <!-- slide slick -->
-        <div class="destination-wrap col-sm-12 " style="width: 100%;" id="discount-display" alt="slider">
-          <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig3"
-            (afterChange)="afterChange($event)">
-            <div ngxSlickItem>
-              <div><a href="/vi/homestay/explore/deal-hot-cho-bong-hong-476" class="article is-relative"
-                  style="width: 100%; display: inline-block;" tabindex="0"><span
-                    class="is-block bg-img bg-img--85 radius-xs" data-src="img/apartment_13_1583116049.jpg"
-                    lazy="loaded" style="background-image: url(&quot;img/apartment_13_1583116049.jpg&quot;);"></span>
-                  <div class="article__content">
-                    <div class="article__title bold">Deal hot cho Bóng hồng
-                    </div> <span class="article__excerpt">
-                      <p><span style="color: rgb(21, 27, 38);">Nhập</span><strong style="color: rgb(21, 27, 38);">
-                          CHI8E3
-                          |
-                          -80.000đ </strong><span style="color: rgb(21, 27, 38);">cho tất
-                          cả các
-                          chỗ ở trong Bộ sưu tập này!</span></p>
-                    </span>
-                  </div>
-                </a></div>
-            </div>
-
-            <div ngxSlickItem>
-              <div><a href="/vi/homestay/explore/chi-em-thich-song-ao-477" class="article is-relative"
-                  style="width: 100%; display: inline-block;" tabindex="0"><span
-                    class="is-block bg-img bg-img--85 radius-xs" data-src="../img/apartment_14_1583116112.jpg"
-                    lazy="loaded"
-                    style="background-image: url(&quot;https://cdn.luxstay.com/home/apartment/apartment_14_1583116112.jpg&quot;);"></span>
-                  <div class="article__content">
-                    <div class="article__title bold">Chị em thích "sống ảo</div>
-                    <span class="article__excerpt">
-                      <p>Nhập <strong style="color: rgb(21, 27, 38);">CHILL |
-                          -10%</strong><span style="color: rgb(21, 27, 38);"> tối đa
-                          120.000đ
-                          cho các chỗ ở trong Bộ sưu tập này!</span></p>
-                    </span>
-                  </div>
-                </a></div>
-            </div>
-
-            <div ngxSlickItem>
-              <div><a href="/vi/homestay/explore/thu-gian-voi-be-boi-bbq-478" class="article is-relative"
-                  style="width: 100%; display: inline-block;" tabindex="0"><span
-                    class="is-block bg-img bg-img--85 radius-xs"
-                    data-src="https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg" lazy="loaded"
-                    style="background-image: url(&quot;https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg&quot;);"></span>
-                  <div class="article__content">
-                    <div class="article__title bold">Thư giãn với Bể bơi &amp;
-                      BBQ</div> <span class="article__excerpt">
-                      <p>Nhập <strong style="color: rgb(21, 27, 38);">CHILL |
-                          -10% </strong><span style="color: rgb(21, 27, 38);">tối đa
-                          120.000đ
-                          cho các chỗ ở trong Bộ sưu tập này!</span></p>
-                    </span>
-                  </div>
-                </a></div>
-            </div>
-
-            <div ngxSlickItem>
-              <div><a href="/vi/homestay/explore/thu-gian-voi-be-boi-bbq-478" class="article is-relative"
-                  style="width: 100%; display: inline-block;" tabindex="0"><span
-                    class="is-block bg-img bg-img--85 radius-xs"
-                    data-src="https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg" lazy="loaded"
-                    style="background-image: url(&quot;https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg&quot;);"></span>
-                  <div class="article__content">
-                    <div class="article__title bold">Thư giãn với Bể bơi &amp;
-                      BBQ</div> <span class="article__excerpt">
-                      <p>Nhập <strong style="color: rgb(21, 27, 38);">CHILL |
-                          -10% </strong><span style="color: rgb(21, 27, 38);">tối đa
-                          120.000đ
-                          cho các chỗ ở trong Bộ sưu tập này!</span></p>
-                    </span>
-                  </div>
-                </a></div>
-            </div>
-
-            <div ngxSlickItem>
-              <div><a href="/vi/homestay/explore/thu-gian-voi-be-boi-bbq-478" class="article is-relative"
-                  style="width: 100%; display: inline-block;" tabindex="0"><span
-                    class="is-block bg-img bg-img--85 radius-xs"
-                    data-src="https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg" lazy="loaded"
-                    style="background-image: url(&quot;https://cdn.luxstay.com/home/apartment/apartment_15_1583116208.jpg&quot;);"></span>
-                  <div class="article__content">
-                    <div class="article__title bold">Thư giãn với Bể bơi &amp;
-                      BBQ</div> <span class="article__excerpt">
-                      <p>Nhập <strong style="color: rgb(21, 27, 38);">CHILL |
-                          -10% </strong><span style="color: rgb(21, 27, 38);">tối đa
-                          120.000đ
-                          cho các chỗ ở trong Bộ sưu tập này!</span></p>
-                    </span>
-                  </div>
-                </a></div>
-            </div>
-          </ngx-slick>
-        </div>
-      </div>
-    </div>
+    <h3 style="margin-top: 100px;">Thông tin quản cáo, News, ....</h3>
   </div>
 </div>

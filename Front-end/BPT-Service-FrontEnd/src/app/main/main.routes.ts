@@ -11,7 +11,7 @@ export const mainRoutes: Routes = [
       { path: "home", loadChildren: "./home/home.module#HomeModule" },
       { path: "user", loadChildren: "./user/user.module#UserModule" },
       {
-        path: "listOfItem", loadChildren: "./list-of-item/list-of-item.module#ListOfItemModule"
+        path: "listOfItem/:id", loadChildren: "./list-of-item/list-of-item.module#ListOfItemModule"
       },
 
       {
