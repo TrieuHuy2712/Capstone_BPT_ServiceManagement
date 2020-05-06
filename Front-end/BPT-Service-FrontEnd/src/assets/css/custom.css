@@ -1502,7 +1502,22 @@ a:hover {
   }
 }
 
+.child-comment{
+  margin-left: 30px;
+  border-left: 2px solid orangered;
+}
+.child-comment img{
+  width: 30px;
+  height: 30px;
+}
 
+.child-comment div{
+  margin-left: 5px;
+}
+
+.review__content_child{
+  margin-left: 10px;
+}
 
 .mt--24 {
   margin-top: 24px !important;

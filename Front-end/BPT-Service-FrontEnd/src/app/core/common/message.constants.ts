@@ -16,4 +16,7 @@ export class MessageConstants {
     public static UNFOLLOW_FAIL_MSG = "Bỏ theo dõi dịch vụ không thành công ! :3";
     public static COMMENT_OK_MSG = "Thêm comment thành công";
     public static COMMENT_FAIL_MSG = " thêm comment thất bại";
+    public static CONFIRM_DELETE_COMMENT_MSG = "Bạn có chắc muốn xóa bình luận này ?";
+    public static COMMENT_DEL_OK_MSG = "Xóa comment thành công";
+    public static COMMENT_DEL_FAIL_MSG = " Xóa comment thất bại";
 }

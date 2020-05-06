@@ -120,7 +120,7 @@
                                                                             <div
                                                                                 class="image-box image-box--large image-box--circle">
                                                                                 <img
-                                                                                    src="https://cdn.luxstay.com/users/25874/avatar_a4881d54-701a-44f2-9e8b-4d0e1ceaf77f.">
+                                                                                    [src]=""user.avatar>
                                                                             </div>
                                                                             <div
                                                                                 class="host-intro__name mx--12 mx--md--18">
@@ -208,30 +208,59 @@
                                                         <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
                                                             data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
                                                                 class="review__avatar" data-v-730e0d8f="" height="48"
-                                                                src="https://lh3.googleusercontent.com/a-/AAuE7mBh_6YoVhsJvIEs8oGE8MLGV4wxzkLvWNEnA09gRg"
+                                                                [src]="item.avatarPath"
                                                                 width="48">
                                                             <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
                                                                 data-v-730e0d8f="">
                                                                 <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
-                                                                    data-v-730e0d8f="">{{item.userId}} <div
+                                                                    data-v-730e0d8f="">{{item.userName}} <div
                                                                         _ngcontent-kvx-c5=""
                                                                         class="d-inline-block pl--6" data-v-730e0d8f="">
-                                                                        <i class="fas fa-star"></i></div>
+                                                                        </div>
                                                                 </h5><span _ngcontent-kvx-c5="" class="caption"
-                                                                    data-v-730e0d8f="">2 months</span>
+                                                                    data-v-730e0d8f="">Wenesday, May 6, 2020</span>
                                                             </div>
+                                                            <button style="margin-left: 50px;" (click) = "deleteComment(item.id)"><i class="fas fa-trash-alt"></i></button>
                                                         </div>
                                                     </div>
                                                     <div _ngcontent-kvx-c5="" class="review__content"
                                                         data-v-730e0d8f="">
                                                         <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
                                                             data-v-730e0d8f="">{{item.contentOfRating}}</p>
+                                                            
                                                     </div>
+                                                    
+                                                    <!-- child comment -->
+                                                    <!-- <div _ngcontent-kvx-c5="" class="child-comment mt--24" *ngFor="let i of child_comment">
+                                                        <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
+                                                            data-v-730e0d8f="">
+                                                            <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
+                                                                data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
+                                                                    class="review__avatar" data-v-730e0d8f="" height="48"
+                                                                    [src]="i.avatarPath"
+                                                                    width="48">
+                                                                <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
+                                                                    data-v-730e0d8f="">
+                                                                    <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
+                                                                        data-v-730e0d8f="">{{i.userName}} <div
+                                                                            _ngcontent-kvx-c5=""
+                                                                            class="d-inline-block pl--6" data-v-730e0d8f="">
+                                                                            <i class="fas fa-star"></i></div>
+                                                                    </h5><span _ngcontent-kvx-c5="" class="caption"
+                                                                        data-v-730e0d8f="">Wenesday, May 6, 2020</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div _ngcontent-kvx-c5="" class="review__content_child"
+                                                            data-v-730e0d8f="">
+                                                            <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
+                                                                data-v-730e0d8f="">{{i.contentOfRating}}</p>
+                                                        </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <div _ngcontent-kvx-c5="" class="mt--24"><a _ngcontent-kvx-c5=""
-                                                        class="btn color-i semi-bold" role="button">Xem tất cả 5 đánh
-                                                        giá</a></div>
+                                                        class="btn color-i semi-bold" role="button">Xem tất cả bình luận</a></div>
                                                 <div _ngcontent-kvx-c5="" class="room-fw-modal"></div>
                                             </div>
                                         </div>

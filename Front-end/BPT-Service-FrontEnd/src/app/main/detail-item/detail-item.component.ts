@@ -35,6 +35,7 @@ export class DetailItemComponent implements OnInit {
   public commentEntity: any;
   public comments: any[];
   public testComment: any[];
+  public child_comment: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -201,11 +202,38 @@ export class DetailItemComponent implements OnInit {
       .subscribe((response: any) => {
         this.testComment = response;
         this.testComment.reverse();
-
+        for(let x = 0; x < response.length; x++){
+          if(response[x] != null){
+            this.child_comment.push(response.listVm);
+          }
+        }
+        console.log(this.child_comment);
       });
   }
 
 
-  // compare function
+  // delete comment
+  deleteComment(id: any) {
+    this._notificationService.printConfirmationDialog(
+      MessageConstants.CONFIRM_DELETE_COMMENT_MSG,
+      () => this.deleteCommentConfirm(id)
+    );
+  }
+  deleteCommentConfirm( id: any) {
+    this._dataService
+      .delete("/CommentManagement/DeleteComment","id",id)
+      .subscribe((response: any) => {
+        if (response.isValid == true) {
+          this._notificationService.printSuccessMessage(
+            MessageConstants.COMMENT_DEL_OK_MSG
+          );
+          this.loadDataOfComment();
+        } else {
+          this._notificationService.printErrorMessage(
+            MessageConstants.COMMENT_DEL_FAIL_MSG
+          );
+        }
+      });
+  }
   
 }
