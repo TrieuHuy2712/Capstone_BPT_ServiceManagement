@@ -78,7 +78,9 @@ export class ServiceCategoryComponent implements OnInit {
     this.loadData();
   }
   showAddModal() {
-    this.imgPath.nativeElement.value = "";
+    if(this.imgPath != undefined){
+      this.imgPath.nativeElement.value = "";
+    }
     this.entity = {};
     this.modalAddEdit.show();
   }
@@ -87,6 +89,9 @@ export class ServiceCategoryComponent implements OnInit {
     this.entity = findIdthis;
   }
   showEditModal(id: any) {
+    if(this.imgPath != undefined){
+      this.imgPath.nativeElement.value = "";
+    }
     this.loadRole(id);
     this.modalAddEdit.show();
   }
