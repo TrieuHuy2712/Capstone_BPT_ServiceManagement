@@ -45,6 +45,23 @@ body {
   opacity: 1;
 }
 
+.pl--12{
+  padding-left: 12px;
+}
+
+.unfollow-button{
+  background: linear-gradient(#e66465, #9198e5);
+  height: 40px;
+}
+
+.provider_place{
+  padding: 10px 10px;
+}
+
+.room-sidebar__wrap{
+  padding-right: 18px;
+}
+
 .img-in-view:hover .btn-in-image02{
   display: inline-block !important;
   position: absolute;
@@ -1404,7 +1421,6 @@ section {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 300px;
 }
 
 .room-des.dot:before {
@@ -1486,7 +1502,22 @@ a:hover {
   }
 }
 
+.child-comment{
+  margin-left: 30px;
+  border-left: 2px solid orangered;
+}
+.child-comment img{
+  width: 30px;
+  height: 30px;
+}
 
+.child-comment div{
+  margin-left: 5px;
+}
+
+.review__content_child{
+  margin-left: 10px;
+}
 
 .mt--24 {
   margin-top: 24px !important;

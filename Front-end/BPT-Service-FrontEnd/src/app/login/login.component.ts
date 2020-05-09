@@ -95,7 +95,11 @@ export class LoginComponent implements OnInit {
             this.notificationService.printErrorMessage(
               "You was blocked out in 5 minutes"
             );
-          } else {
+          }
+          else if(data.fullName == "Administrator"){
+            this.router.navigate([UrlConstants.ADMINHOME]);
+          }
+          else {
             this.router.navigate([UrlConstants.HOME]);
           }
           // if(data == null)

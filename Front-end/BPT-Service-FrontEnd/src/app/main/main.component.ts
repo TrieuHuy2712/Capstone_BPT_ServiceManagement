@@ -36,6 +36,10 @@ export class MainComponent implements OnInit {
     || this.currentURL == "http://localhost:4200/main/userManage/myService/view/index") {
       this.isSidebar = true;
     }
+    // else if(this.currentURL.includes("/main/detailItem")){
+    //   this.isSidebar = false;
+    // }
+    
   }
   logout() {
     localStorage.removeItem(SystemConstants.CURRENT_USER);
