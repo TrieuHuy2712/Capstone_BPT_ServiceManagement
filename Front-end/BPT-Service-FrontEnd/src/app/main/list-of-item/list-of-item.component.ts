@@ -18,6 +18,7 @@ export class ListOfItemComponent implements OnInit {
   public filter: string = "";
   public services: any[];
   public services2: any[];
+  public services3: any[];
 
   public permission: any;
   public entity: any;
@@ -104,4 +105,20 @@ export class ListOfItemComponent implements OnInit {
   // end load slide
 
 
+  // loading data by searching 
+  loadDataBySearching() {
+    this._dataService
+      .get(
+        "Service/getAllPagingPostService?isAdminPage=true&filter=5&keyword="+this.newId
+      )
+      .subscribe((response: any) => {
+        this.services3 = response.results;
+        this.pageIndex = response.currentPage;
+        this.pageSize = response.pageSize;
+        this.totalRow = response.rowCount;
+        this.indexOfServices = this.services.length;
+        
+      });
+      
+  }
 }

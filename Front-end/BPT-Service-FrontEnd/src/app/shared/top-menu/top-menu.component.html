@@ -7,8 +7,8 @@
           </a>
           <!-- search bar -->
           <form class="form-inline my-2 my-lg-0 " style="margin-left: 20px;">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit">Search</button>
+              <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa" aria-label="Search" (keyup)="dataSearchBinding($event.target.value)">
+              <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit"><a [routerLink]="['/main/listOfItem', searchData]">Tìm kiếm</a></button>
           </form>
           <!-- menu when responsive -->
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
@@ -17,26 +17,16 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
               <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                      <a href="/main/userManage/userProfile/index" class="nav-link active">Manage</a>
+                      <a href="/main/userManage/userProfile/index" class="nav-link active">Quản lý</a>
                   </li>
                   <li class="nav-item">
                       <a href="/register" class="nav-link">Đăng kí</a>
                   </li>
-                  <li class="nav-item">
-                      <a href="/login" class="nav-link">Đăng nhập</a>
+                  <li class="nav-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a (click)="logout()" class="nav-link">Xin chào {{user.fullName}}</a>
+                      
                   </li>
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Ngôn ngữ
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown"
-                          style="background-color: rgba(82, 64, 120);">
-                          <a class="dropdown-item" href="#">Tiếng việt</a>
-                          <a class="dropdown-item" href="#">Tiếng Anh</a>
-                          <a class="dropdown-item" href="#">Tiếng Khựa</a>
-                      </div>
-                  </li>
+                  
               </ul>
           </div>
       </div>

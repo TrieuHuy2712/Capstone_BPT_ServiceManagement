@@ -76,6 +76,39 @@
       </ngx-slick>
     </div>
 
+    <!-- news -->
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Bản tin ngày hôm nay !</h2>
+    <div class="row">
+      <div *ngFor="let item of news" class="col-md-3">
+
+          <div class="c-product-card--grid">
+              <div class="promo is-relative"><a>
+                      <div class="promo__image">
+                          <div class="promo__image-wrap"><img 
+                                  class="w--100"
+                                  [src]="item.imgPath"
+                                  lazy="loaded">
+                              <!---->
+                          </div>
+                      </div>
+                  </a>
+                  <!---->
+                  <div class="promo__content">
+                      <div class="is-relative"><a  class=""
+                              target="_blank" id="room-item" data-value="23052">
+                              <div class="promo__title extra-bold"
+                                  style="-webkit-box-orient: vertical;">
+                                  {{item.title}}
+                              </div>
+                          </a>
+                          <div class="promo__description my--6 text-lowercase">
+                              {{item.author}}</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
     <h3 style="margin-top: 100px;">Thông tin quản cáo, News, ....</h3>
   </div>
 </div>
