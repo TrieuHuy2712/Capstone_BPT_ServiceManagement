@@ -1,5 +1,6 @@
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common.Constants;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
@@ -32,15 +33,6 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
         {
             try
             {
-                var getProvider = await _providerRepository.FindSingleAsync(x => x.UserId == Guid.Parse(userId));
-                if (getProvider == null)
-                {
-                    return new CommandResult<ProviderServiceViewModel>
-                    {
-                        isValid = false,
-                        errorMessage = "Cannot find your provider"
-                    };
-                }
                 var getUser = await _userManager.FindByIdAsync(userId);
                 if (getUser == null)
                 {
@@ -60,7 +52,7 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
                             isValid = true,
                             myModel = new ProviderServiceViewModel()
                             {
-                                Id = getProvider.Id.ToString()
+                                Id = getUser.Id.ToString()
                             }
                         };
                     }
@@ -74,7 +66,7 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
             catch (System.Exception ex)
             {
                 await Logging<CheckUserProviderQuery>.
-                       ErrorAsync(ex.Message.ToString());
+                       ErrorAsync(ex, ActionCommand.COMMAND_APPROVE, "System", "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,

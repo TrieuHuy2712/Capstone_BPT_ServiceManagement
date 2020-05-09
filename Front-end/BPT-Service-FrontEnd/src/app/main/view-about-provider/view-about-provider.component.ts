@@ -9,9 +9,9 @@ import { NotificationService } from 'src/app/core/services/notification.service'
   styleUrls: ['./view-about-provider.component.css']
 })
 export class ViewAboutProviderComponent implements OnInit {
-  userId:string;
+  userId: string;
   public user: any;
-
+  public isFollowed: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,7 +21,7 @@ export class ViewAboutProviderComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get("id");
-    console.log("ket qua ne "+this.userId);
+    console.log("ket qua ne " + this.userId);
     this.loadData();
   }
 
@@ -29,12 +29,19 @@ export class ViewAboutProviderComponent implements OnInit {
 
     this._dataService
       .get(
-        "/UserManagement/getById?id="+this.userId          
+        "/UserManagement/getById?id=" + this.userId
       )
       .subscribe((response: any) => {
         this.user = response;
         console.log(this.user);
       });
   }
+  followAService() {
+
+  }
+  unFollowAService(){
+    
+  }
+
 
 }

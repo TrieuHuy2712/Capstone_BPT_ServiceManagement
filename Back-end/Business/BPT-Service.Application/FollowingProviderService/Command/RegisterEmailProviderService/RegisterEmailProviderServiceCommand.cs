@@ -37,14 +37,14 @@ namespace BPT_Service.Application.FollowingProviderService.Command.RegisterEmail
         public async Task<CommandResult<FollowingProviderServiceViewModel>> ExecuteAsync(int idRegister)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var findIdRegister = await _providerFollowingRepository.FindByIdAsync(idRegister);
                 if (findIdRegister == null)
                 {
                     await Logging<RegisterEmailProviderServiceCommand>
-                        .ErrorAsync(ActionCommand.COMMAND_UPDATE, userName, "Cannot find your following");
+                        .ErrorAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, "Cannot find your following");
                     return new CommandResult<FollowingProviderServiceViewModel>
                     {
                         isValid = false,
@@ -55,7 +55,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.RegisterEmail
                 if (getProvider == null)
                 {
                     await Logging<RegisterEmailProviderServiceCommand>.
-                       ErrorAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                       ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<FollowingProviderServiceViewModel>
                     {
                         isValid = false,
@@ -73,8 +73,8 @@ namespace BPT_Service.Application.FollowingProviderService.Command.RegisterEmail
                 _providerFollowingRepository.Update(findIdRegister);
                 await _providerFollowingRepository.SaveAsync();
                 await LoggingUser<RegisterEmailProviderServiceCommand>.
-                   InformationAsync(getProvider.UserId.ToString(), userName, userName + " had follow your provider");
-                await Logging<RegisterEmailProviderServiceCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(findIdRegister));
+                   InformationAsync(getProvider.UserId.ToString(), userName.UserName, userName.UserName + " had follow your provider");
+                await Logging<RegisterEmailProviderServiceCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, JsonConvert.SerializeObject(findIdRegister));
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = true,
@@ -89,7 +89,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.RegisterEmail
             }
             catch (Exception ex)
             {
-                await Logging<RegisterEmailProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
+                await Logging<RegisterEmailProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error");
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = false,

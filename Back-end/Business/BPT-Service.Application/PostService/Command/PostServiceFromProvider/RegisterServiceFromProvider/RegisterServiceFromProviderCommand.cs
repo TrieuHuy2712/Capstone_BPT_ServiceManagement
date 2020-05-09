@@ -125,7 +125,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                     {
-                        var findUserId = await _userManager.FindByIdAsync(vm.UserId);
+                        var findUserId = await _userManager.FindByIdAsync(GetProvider(vm.ProviderId).Result.UserId.ToString());
                         //Create Generate code
                         var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                          mappingService.codeConfirm + '_' + mappingService.Id;
@@ -137,7 +137,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                             Replace(EmailKey.ConfirmLink, generateCode);
 
                         ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                        getFirstEmail.Message, _getByIdProviderServiceQuery.ExecuteAsync(vm.ProviderId).Result.myModel.ProviderEmail).Wait();
+                                        getFirstEmail.Message, findUserId.Email).Wait();
                     }
                     //End send mail for user
                     return new CommandResult<PostServiceViewModel>
@@ -211,6 +211,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             {
                 Path = x.Path != null ? x.Path : "",
                 DateCreated = DateTime.Now,
+                isAvatar = x.IsAvatar
             }).ToList();
 
             sv.TagServices = vm.tagofServices.Where(x => x.isDelete == false && x.isAdd == false).Select(x => new Model.Entities.ServiceModel.TagService
@@ -237,6 +238,12 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             var htmlContent = "<strong>" + message + "</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
+        }
+
+        private async Task<Provider> GetProvider(string idProvider)
+        {
+            var getProvider = await _providerRepository.FindByIdAsync(Guid.Parse(idProvider));
+            return getProvider;
         }
     }
 }

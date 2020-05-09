@@ -12,3 +12,11 @@ BEGIN
 	Delete from AppUserRoles where UserId = @UserIdDelete and RoleId= @RoleIdDelete;
 END";
             migrationBuilder.Sql(sp);
+
+//Get listEmail by Role
+
+select distinct users.Email from dbo.AppUsers users
+inner join dbo.AppUserRoles userRoles
+on users.Id = userRoles.UserId
+inner join dbo.AppRoles roles
+on userRoles.RoleId = roles.Id

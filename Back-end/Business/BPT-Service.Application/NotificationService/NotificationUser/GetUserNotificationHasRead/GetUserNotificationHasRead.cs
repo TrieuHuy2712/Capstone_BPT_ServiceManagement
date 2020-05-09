@@ -1,4 +1,5 @@
-﻿using BPT_Service.Common.Logging;
+﻿using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace BPT_Service.Application.NotificationService.NotificationUser.GetUserNo
             }
             catch (Exception ex)
             {
-                Logging<GetUserNotificationHasRead>.ErrorAsync();
+                Logging<GetUserNotificationHasRead>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
             }
         }
 

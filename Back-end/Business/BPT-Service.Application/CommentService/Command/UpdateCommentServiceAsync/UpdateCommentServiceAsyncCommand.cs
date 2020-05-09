@@ -36,7 +36,7 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(CommentViewModel commentserviceVm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var CommentUpdate = await _commentRepository.FindByIdAsync(commentserviceVm.Id);
@@ -48,8 +48,8 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
                     var getUserService = await _getOwnServiceInformationQuery.ExecuteAsync(CommentUpdate.ServiceId.ToString());
                     _commentRepository.Update(CommentUpdate);
                     await _commentRepository.SaveAsync();
-                    await LoggingUser<UpdateCommentServiceAsyncCommand>.InformationAsync(getUserService, userName, CommentUpdate.ContentOfRating);
-                    await Logging<UpdateCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName, userName + " updated " + CommentUpdate.ContentOfRating);
+                    await LoggingUser<UpdateCommentServiceAsyncCommand>.InformationAsync(getUserService, userName.UserName, CommentUpdate.ContentOfRating);
+                    await Logging<UpdateCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, userName.UserName + " updated " + CommentUpdate.ContentOfRating);
                     return new CommandResult<CommentViewModel>
                     {
                         isValid = true,
@@ -64,7 +64,7 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
                 }
                 else
                 {
-                    await Logging<UpdateCommentServiceAsyncCommand>.ErrorAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                    await Logging<UpdateCommentServiceAsyncCommand>.ErrorAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<CommentViewModel>
                     {
                         isValid = false,
@@ -74,7 +74,7 @@ namespace BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsy
             }
             catch (System.Exception ex)
             {
-                await Logging<UpdateCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
+                await Logging<UpdateCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error");
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = false,

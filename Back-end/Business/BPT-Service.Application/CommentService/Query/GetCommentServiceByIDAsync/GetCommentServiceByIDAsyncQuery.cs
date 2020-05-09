@@ -6,16 +6,21 @@ using BPT_Service.Application.CommentService.ViewModel;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync
 {
     public class GetCommentServiceByIDAsyncQuery : IGetCommentServiceByIDAsyncQuery
     {
-        private readonly IRepository<ServiceComment, Guid> _commentRepository;
-        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, Guid> commentRepository){
+        private readonly IRepository<ServiceComment, int> _commentRepository;
+        private readonly UserManager<AppUser> _userManager;
+
+        public GetCommentServiceByIDAsyncQuery(IRepository<ServiceComment, int> commentRepository, UserManager<AppUser> userManager)
+        {
             _commentRepository = commentRepository;
+            _userManager = userManager;
         }
-        
+
         public async Task<List<CommentViewModel>> ExecuteAsync(string id)
         {
             var IDProvider = await _commentRepository.FindAllAsync(x=>x.ServiceId==Guid.Parse(id));
@@ -27,6 +32,9 @@ namespace BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsyn
                 ParentId = x.ParentId,
                 ContentOfRating = x.ContentOfRating,
                 ServiceId = x.ServiceId.ToString(),
+                AvatarPath = _userManager.FindByIdAsync(x.UserId.ToString()).Result.Avatar,
+                DateCreated = x.DateCreated,
+                UserName = _userManager.FindByIdAsync(x.UserId.ToString()).Result.UserName
             }).ToList();
 
             var parentComment = data.Where(x=>x.ParentId == 0).ToList();

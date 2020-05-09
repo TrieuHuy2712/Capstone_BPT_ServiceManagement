@@ -104,8 +104,10 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                 {
                     var listViewModel = await MappingTagService(query, keyword, provider, provideService, userService, getAvatar, getAllTag, getAllServiceTag, allRating);
                     int totalRowSearch = listViewModel.Count();
-                    listViewModel = listViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
+                    if (pageSize != 0)
+                    {
+                        listViewModel = listViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    }
                     return new PagedResult<PostServiceViewModel>
                     {
                         Results = isAdminPage == true ? listViewModel : listViewModel.Where(x => x.Status == Model.Enums.Status.Active).ToList(),

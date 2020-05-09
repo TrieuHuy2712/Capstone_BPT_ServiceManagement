@@ -81,6 +81,7 @@ export class AdminEmailComponent implements OnInit {
   }
   showEditModal(id: any) {
     this.loadRole(id);
+    console.log(this.entity);
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {

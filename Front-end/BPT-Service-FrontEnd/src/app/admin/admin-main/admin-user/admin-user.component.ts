@@ -149,7 +149,6 @@ export class UserComponent implements OnInit {
       } else {
         this.saveData();
       }
-      this.spinnerService.hide();
     }
   }
   public saveData() {
@@ -164,10 +163,12 @@ export class UserComponent implements OnInit {
               this._notificationService.printSuccessMessage(
                 MessageConstants.CREATED_OK_MSG
               );
+              this.spinnerService.hide();
             } else {
               this._notificationService.printErrorMessage(
                 MessageConstants.CREATED_FAIL_MSG
               );
+              this.spinnerService.hide();
             }
           },
           error => this._dataService.handleError(error)
@@ -210,13 +211,15 @@ export class UserComponent implements OnInit {
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );
+          this.spinnerService.hide();
         } else {
           this._notificationService.printErrorMessage(
             MessageConstants.DELETED_FAIL_MSG
           );
+          this.spinnerService.hide();
         }
       });
-      this.spinnerService.hide();
+      
   }
   public selectGender(event) {
     this.entity.Gender = event.target.value;

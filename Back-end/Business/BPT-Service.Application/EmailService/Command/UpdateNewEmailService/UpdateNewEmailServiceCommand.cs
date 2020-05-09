@@ -39,7 +39,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
         public async Task<CommandResult<Email>> ExecuteAsync(EmailViewModel emailViewModel)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.EMAIL, ActionSetting.CanUpdate))
@@ -47,7 +47,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
                     var checkId = await _emailRepository.FindByIdAsync(emailViewModel.Id);
                     if (checkId == null)
                     {
-                        await Logging<UpdateNewEmailServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                        await Logging<UpdateNewEmailServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<Email>
                         {
                             isValid = false,
@@ -58,7 +58,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
                     _emailRepository.Update(mappingEmail);
                     await _emailRepository.SaveAsync();
                     await Logging<UpdateNewEmailServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(mappingEmail));
+                        InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, JsonConvert.SerializeObject(mappingEmail));
                     return new CommandResult<Email>
                     {
                         isValid = true,
@@ -68,7 +68,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
                 else
                 {
                     await Logging<UpdateNewEmailServiceCommand>.
-                        WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                        WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<Email>
                     {
                         isValid = false,
@@ -79,7 +79,7 @@ namespace BPT_Service.Application.EmailService.Command.UpdateNewEmailService
             catch (Exception ex)
             {
                 await Logging<UpdateNewEmailServiceCommand>.
-                       ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
+                       ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error");
                 return new CommandResult<Email>
                 {
                     isValid = false,

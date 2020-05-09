@@ -88,7 +88,7 @@
                 <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
                     (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="hidden" [(ngModel)]="entity.id" name="id" />
                             <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3"
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">To</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" #to="ngModel" [(ngModel)]="entity.to" required minlength="3" name="to"
                                 class="form-control">
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'nameOfGroup'|translate}}</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <input type="text" #subject="ngModel" [(ngModel)]="entity.subject" required minlength="3"
                                 name="subject" class="form-control">
@@ -121,23 +121,23 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'description'|translate}} </label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                             <editor #message="ngModel" [(ngModel)]="entity.message" name="message"
                                 apiKey="ztc2nqv57d595lqblftjrhjfgqax9nsxltybl49jl02zys0x" [init]="{
-                    height: 500,
-                    menubar: true,
-                    plugins: [
-                      'advlist autolink lists link image charmap print',
-                      'preview anchor searchreplace visualblocks code',
-                      'fullscreen insertdatetime media table paste',
-                      'help wordcount'
-                    ],
-                    toolbar:
-                      'undo redo | formatselect | bold italic | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | help'
-                  }"></editor>
+                                    height: 500,
+                                    menubar: true,
+                                    plugins: [
+                                      'advlist autolink lists link image charmap print',
+                                      'preview anchor searchreplace visualblocks code',
+                                      'fullscreen insertdatetime media table paste',
+                                      'help wordcount'
+                                    ],
+                                    toolbar:
+                                      'undo redo | formatselect | bold italic | \
+                                      alignleft aligncenter alignright alignjustify | \
+                                      bullist numlist outdent indent | help'
+                                  }"></editor>
                             <small [hidden]="message.valid || (message.pristine && !addEditForm.submitted)"
                                 class="text-danger">
                                 Bạn phải nhập tên ít nhất 3 ký tự

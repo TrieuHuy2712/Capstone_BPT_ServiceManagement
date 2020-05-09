@@ -40,7 +40,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -59,7 +59,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
                         _functionRepository.Update(functionDb);
                         await _functionRepository.SaveAsync();
                         await Logging<UpdateFunctionServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(functionDb));
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, JsonConvert.SerializeObject(functionDb));
                         return new CommandResult<FunctionViewModelinFunctionService>
                         {
                             isValid = true,
@@ -67,7 +67,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
                         };
                     }
                     await Logging<UpdateFunctionServiceCommand>
-                        .WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                        .WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -77,7 +77,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
                 else
                 {
                     await Logging<UpdateFunctionServiceCommand>
-                        .WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                        .WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -87,7 +87,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateFunctionService
             }
             catch (System.Exception ex)
             {
-                await Logging<UpdateFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                await Logging<UpdateFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,

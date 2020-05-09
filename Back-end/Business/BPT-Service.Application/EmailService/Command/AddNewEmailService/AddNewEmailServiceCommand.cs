@@ -42,7 +42,7 @@ namespace BPT_Service.Application.EmailService.Command.AddNewEmailService
         {
 
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -52,7 +52,7 @@ namespace BPT_Service.Application.EmailService.Command.AddNewEmailService
                     await _emailRepository.Add(mappingEmail);
                     await _emailRepository.SaveAsync();
                     await Logging<AddNewEmailServiceCommand>.
-                       InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingEmail));
+                       InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(mappingEmail));
                     return new CommandResult<Email>
                     {
                         isValid = true,
@@ -62,7 +62,7 @@ namespace BPT_Service.Application.EmailService.Command.AddNewEmailService
                 else
                 {
                     await Logging<AddNewEmailServiceCommand>.
-                        WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
+                        WarningAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<Email>
                     {
                         isValid = false,
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.EmailService.Command.AddNewEmailService
             }
             catch (Exception ex)
             {
-                await Logging<AddNewEmailServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "You have error");
+                await Logging<AddNewEmailServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "You have error");
                 return new CommandResult<Email>
                 {
                     isValid = false,

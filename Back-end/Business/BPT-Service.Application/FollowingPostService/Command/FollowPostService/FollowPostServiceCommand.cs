@@ -41,7 +41,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
         public async Task<CommandResult<ServiceFollowingViewModel>> ExecuteAsync(ServiceFollowingViewModel serviceFollowingViewModel)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var checkUserHasFollow = await _serviceFollowingRepository.FindSingleAsync(x =>
@@ -50,7 +50,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
                 var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(serviceFollowingViewModel.ServiceId);
                 if (checkUserHasFollow != null)
                 {
-                    await Logging<FollowPostServiceCommand>.ErrorAsync(ActionCommand.COMMAND_ADD, userName, "You had follow this service");
+                    await Logging<FollowPostServiceCommand>.ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, "You had follow this service");
                     return new CommandResult<ServiceFollowingViewModel>
                     {
                         isValid = false,
@@ -60,7 +60,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
                 var postService = await _serviceRepository.FindByIdAsync(Guid.Parse(serviceFollowingViewModel.ServiceId));
                 if (postService == null)
                 {
-                    await Logging<FollowPostServiceCommand>.ErrorAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                    await Logging<FollowPostServiceCommand>.ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<ServiceFollowingViewModel>
                     {
                         isValid = false,
@@ -71,8 +71,8 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
                 await _serviceFollowingRepository.Add(data);
                 await _serviceFollowingRepository.SaveAsync();
                 await LoggingUser<FollowPostServiceCommand>.
-                    InformationAsync(getOwnerService, userName, userName + " had follow" + postService.ServiceName);
-                await Logging<FollowPostServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(serviceFollowingViewModel));
+                    InformationAsync(getOwnerService, userName.UserName, userName.UserName + " had follow" + postService.ServiceName);
+                await Logging<FollowPostServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(serviceFollowingViewModel));
                 return new CommandResult<ServiceFollowingViewModel>
                 {
                     isValid = true,
@@ -81,7 +81,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.FollowPostService
             }
             catch (Exception ex)
             {
-                await Logging<FollowPostServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
+                await Logging<FollowPostServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "Has error");
                 return new CommandResult<ServiceFollowingViewModel>
                 {
                     isValid = false,

@@ -11,5 +11,7 @@ namespace BPT_Service.Common.Helpers
         public const string COMMAND_DELETE = "DELETE";
         public const string COMMAND_APPROVE = "APPROVE";
         public const string COMMAND_REJECT = "REJECT";
+        public const string COMMAND_CONFIRM = "CONFIRM";
+        public const string COMMAND_NOTIFICATION = "NOTIFICATION";
     }
 }

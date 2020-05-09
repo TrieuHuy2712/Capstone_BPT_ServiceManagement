@@ -20,6 +20,7 @@ using BPT_Service.Application.EmailService.Command.UpdateNewEmailService;
 using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.EmailService.Query.GetAllPagingEmailService;
 using BPT_Service.Application.EmailService.Query.GetEmailByIdService;
+using BPT_Service.Application.EmailService.Query.GetListEmailService;
 using BPT_Service.Application.FollowingPostService.Command.FollowPostService;
 using BPT_Service.Application.FollowingPostService.Command.UnFollowPostService;
 using BPT_Service.Application.FollowingPostService.Query.GetFollowByPost;
@@ -440,6 +441,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingCityProvinceServiceQuery, GetAllPagingCityProvinceServiceQuery>();
             services.AddScoped<IGetByIdCityProvinceServiceQuery, GetByIdCityProvinceServiceQuery>();
             services.AddScoped<IConfirmNewsProviderService, ConfirmNewsProviderService>();
+            services.AddScoped<IUpdateCityProvinceServiceCommand, UpdateCityProvinceServiceCommand>();
 
             //Comment service
             services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
@@ -471,6 +473,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllEmailServiceQuery, GetAllEmailServiceQuery>();
             services.AddScoped<IGetAllPagingEmailServiceQuery, GetAllPagingEmailServiceQuery>();
             services.AddScoped<IGetEmailByIdService, GetEmailByIdService>();
+            services.AddScoped<IGetListEmailService, GetListEmailService>();
 
             //Rating service
             services.AddScoped<IAddUpdateRatingServiceCommand, AddUpdateRatingServiceCommand>();

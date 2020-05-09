@@ -131,7 +131,9 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                 TagName = x.TagName
             }).ToList();
             postServiceView.Description = serv.Description;
-            postServiceView.ProviderId = provider.Id.ToString();
+            postServiceView.ProviderId = _getProviderInformationQuery.ExecuteAsync(serv.Id, query, providers, providerService).idProvider
+                               == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, query, userService) :
+                               _getProviderInformationQuery.ExecuteAsync(serv.Id, query, providers, providerService).idProvider;
             postServiceView.CategoryId = serv.CategoryId;
             postServiceView.Author =
                 _getProviderInformationQuery.ExecuteAsync(serv.Id, query, providers, providerService).NameProvider

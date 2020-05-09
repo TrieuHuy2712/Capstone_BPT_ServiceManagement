@@ -1,4 +1,5 @@
 ﻿using BPT_Service.Application.LoggingService.Query.GetLogFiles;
+using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Logging;
 using System;
 using System.IO;
@@ -31,7 +32,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.GetNotif
             }
             catch (Exception ex)
             {
-                Logging<GetNotificationHasRead>.ErrorAsync();
+                Logging<GetNotificationHasRead>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
             }
         }
 
