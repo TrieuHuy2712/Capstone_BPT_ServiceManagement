@@ -41,7 +41,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(string sourceId, string targetId, Dictionary<string, int> items)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -62,7 +62,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                         }
                         await _functionRepository.SaveAsync();
                         await Logging<UpdateParentIdServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(sibling));
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, JsonConvert.SerializeObject(sibling));
                         return new CommandResult<FunctionViewModelinFunctionService>
                         {
                             isValid = true,
@@ -77,7 +77,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                             }
                         };
                     }
-                    await Logging<UpdateParentIdServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                    await Logging<UpdateParentIdServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -86,7 +86,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
                 }
                 else
                 {
-                    await Logging<UpdateParentIdServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                    await Logging<UpdateParentIdServiceCommand>.WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -96,7 +96,7 @@ namespace BPT_Service.Application.FunctionService.Command.UpdateParentId
             }
             catch (System.Exception ex)
             {
-                await Logging<UpdateParentIdServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
+                await Logging<UpdateParentIdServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error");
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,

@@ -36,7 +36,7 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(int id)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var commentDel = await _commentRepository.FindByIdAsync(id);
@@ -45,8 +45,8 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
                     var getUserService = await _getOwnServiceInformationQuery.ExecuteAsync(commentDel.ServiceId.ToString());
                     _commentRepository.Remove(commentDel);
                     await _commentRepository.SaveAsync();
-                    await LoggingUser<DeleteCommentServiceAsyncCommand>.InformationAsync(getUserService, userName, commentDel.ContentOfRating);
-                    await Logging<DeleteCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName, userName + " deleted " + commentDel.ContentOfRating);
+                    await LoggingUser<DeleteCommentServiceAsyncCommand>.InformationAsync(getUserService, userName.UserName, commentDel.ContentOfRating);
+                    await Logging<DeleteCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, userName.UserName + " deleted " + commentDel.ContentOfRating);
                     return new CommandResult<CommentViewModel>
                     {
                         isValid = true,
@@ -58,7 +58,7 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
                 }
                 else
                 {
-                    await Logging<DeleteCommentServiceAsyncCommand>.ErrorAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                    await Logging<DeleteCommentServiceAsyncCommand>.ErrorAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<CommentViewModel>
                     {
                         isValid = false,
@@ -68,7 +68,7 @@ namespace BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsy
             }
             catch (System.Exception ex)
             {
-                await Logging<DeleteCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
+                await Logging<DeleteCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName.UserName, "Has error");
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = true,

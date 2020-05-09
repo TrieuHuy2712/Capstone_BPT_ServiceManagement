@@ -38,7 +38,7 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(int id)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanDelete))
@@ -55,7 +55,7 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
                             Id = categoryDel.Id
                         };
                         await Logging<DeleteCategoryServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(myModelReturn));
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, JsonConvert.SerializeObject(myModelReturn));
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = true,
@@ -65,7 +65,7 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
                     else
                     {
                         await Logging<DeleteCategoryServiceCommand>
-                            .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                            .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = false,
@@ -76,7 +76,7 @@ namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
                 else
                 {
                     await Logging<DeleteCategoryServiceCommand>
-                           .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
+                           .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,

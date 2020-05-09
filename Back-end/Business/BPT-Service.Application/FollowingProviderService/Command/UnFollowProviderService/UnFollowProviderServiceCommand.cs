@@ -32,7 +32,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProvi
         public async Task<CommandResult<FollowingProviderServiceViewModel>> ExecuteAsync(FollowingProviderServiceViewModel vm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var checkUserHasBeenFollow = await _providerFollowingRepository.FindAllAsync(x =>
@@ -41,7 +41,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProvi
 
                 if (checkUserHasBeenFollow.Count() == 0)
                 {
-                    await Logging<UnFollowProviderServiceCommand>.ErrorAsync(ActionCommand.COMMAND_DELETE, userName, "You has not register this service");
+                    await Logging<UnFollowProviderServiceCommand>.ErrorAsync(ActionCommand.COMMAND_DELETE, userName.UserName, "You has not register this service");
                     return new CommandResult<FollowingProviderServiceViewModel>
                     {
                         isValid = false,
@@ -51,7 +51,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProvi
                 _providerFollowingRepository.RemoveMultiple(checkUserHasBeenFollow.ToList());
                 await _providerFollowingRepository.SaveAsync();
                 await Logging<UnFollowProviderServiceCommand>.
-                    InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Unfollow Service:" + JsonConvert.SerializeObject(vm));
+                    InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, "Unfollow Service:" + JsonConvert.SerializeObject(vm));
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = true,
@@ -60,7 +60,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.UnFollowProvi
             }
             catch (Exception ex)
             {
-                await Logging<UnFollowProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
+                await Logging<UnFollowProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName.UserName, "Has error");
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = false,

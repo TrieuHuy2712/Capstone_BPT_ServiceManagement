@@ -33,7 +33,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.UnFollowPostServi
         public async Task<CommandResult<ServiceFollowingViewModel>> ExecuteAsync(ServiceFollowingViewModel model)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var checkUserHasFollow = await _serviceFollowingRepository.FindByIdAsync(model.Id);
@@ -41,7 +41,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.UnFollowPostServi
                 if (checkUserHasFollow == null)
                 {
                     await Logging<UnFollowPostServiceCommand>.
-                        ErrorAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                        ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<ServiceFollowingViewModel>
                     {
                         isValid = false,
@@ -51,7 +51,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.UnFollowPostServi
                 _serviceFollowingRepository.Remove(checkUserHasFollow);
                 await _serviceFollowingRepository.SaveAsync();
                 await Logging<UnFollowPostServiceCommand>
-                    .InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(checkUserHasFollow));
+                    .InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(checkUserHasFollow));
                 return new CommandResult<ServiceFollowingViewModel>
                 {
                     isValid = true,
@@ -60,7 +60,7 @@ namespace BPT_Service.Application.FollowingPostService.Command.UnFollowPostServi
             }
             catch (Exception ex)
             {
-                await Logging<UnFollowPostServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error");
+                await Logging<UnFollowPostServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error");
                 return new CommandResult<ServiceFollowingViewModel>
                 {
                     isValid = false,

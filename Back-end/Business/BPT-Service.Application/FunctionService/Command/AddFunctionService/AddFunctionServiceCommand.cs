@@ -40,7 +40,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
         public async Task<CommandResult<FunctionViewModelinFunctionService>> ExecuteAsync(FunctionViewModelinFunctionService function)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -49,7 +49,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                     var mappingFunction = MappingFunction(function);
                     await _functionRepository.Add(mappingFunction);
                     await _functionRepository.SaveAsync();
-                    await Logging<AddFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(mappingFunction));
+                    await Logging<AddFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(mappingFunction));
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = true,
@@ -67,7 +67,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
                 else
                 {
                     await Logging<AddFunctionServiceCommand>
-                        .WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
+                        .WarningAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -77,7 +77,7 @@ namespace BPT_Service.Application.FunctionService.Command.AddFunctionService
             }
             catch (System.Exception ex)
             {
-                await Logging<AddFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
+                await Logging<AddFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "Has error");
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,

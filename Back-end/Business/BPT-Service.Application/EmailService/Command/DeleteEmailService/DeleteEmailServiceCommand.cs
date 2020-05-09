@@ -40,7 +40,7 @@ namespace BPT_Service.Application.EmailService.Command.DeleteEmailService
         public async Task<CommandResult<Email>> ExecuteAsync(int id)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.EMAIL, ActionSetting.CanDelete))
@@ -49,7 +49,7 @@ namespace BPT_Service.Application.EmailService.Command.DeleteEmailService
                     if (idEmail == null)
                     {
                         await Logging<DeleteEmailServiceCommand>
-                           .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                           .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<Email>
                         {
                             isValid = false,
@@ -59,7 +59,7 @@ namespace BPT_Service.Application.EmailService.Command.DeleteEmailService
                     _emailRepository.Remove(id);
                     await _emailRepository.SaveAsync();
                     await Logging<DeleteEmailServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_DELETE, userName, JsonConvert.SerializeObject(idEmail));
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, JsonConvert.SerializeObject(idEmail));
                     return new CommandResult<Email>
                     {
                         isValid = true,
@@ -69,7 +69,7 @@ namespace BPT_Service.Application.EmailService.Command.DeleteEmailService
                 else
                 {
                     await Logging<DeleteEmailServiceCommand>
-                            .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
+                            .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<Email>
                     {
                         isValid = false,

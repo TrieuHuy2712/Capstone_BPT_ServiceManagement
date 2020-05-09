@@ -37,7 +37,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
         public async Task<CommandResult<FollowingProviderServiceViewModel>> ExecuteAsync(FollowingProviderServiceViewModel vm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var checkUserHasFollowProvider = await _providerFollowingRepository.FindAllAsync(x =>
@@ -45,7 +45,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
                 if (checkUserHasFollowProvider.Count() != 0)
                 {
                     await Logging<FollowProviderServiceCommand>.
-                        ErrorAsync(ActionCommand.COMMAND_ADD, userName, userName + "had follow provider");
+                        ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, userName.UserName + "had follow provider");
                     return new CommandResult<FollowingProviderServiceViewModel>
                     {
                         isValid = false,
@@ -56,7 +56,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
                 if (getProvider == null)
                 {
                     await Logging<FollowProviderServiceCommand>.
-                       ErrorAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                       ErrorAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                     return new CommandResult<FollowingProviderServiceViewModel>
                     {
                         isValid = false,
@@ -67,8 +67,8 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
                 await _providerFollowingRepository.Add(data);
                 await _providerFollowingRepository.SaveAsync();
                 await LoggingUser<FollowProviderServiceCommand>.
-                    InformationAsync(getProvider.UserId.ToString(), userName, userName + " had follow your provider");
-                await Logging<FollowProviderServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(data));
+                    InformationAsync(getProvider.UserId.ToString(), userName.UserName, userName.UserName + " had follow your provider");
+                await Logging<FollowProviderServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(data));
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = true,
@@ -77,7 +77,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
             }
             catch (Exception ex)
             {
-                await Logging<FollowProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error:");
+                await Logging<FollowProviderServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "Has error:");
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {
                     isValid = false,

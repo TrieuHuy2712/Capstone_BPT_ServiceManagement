@@ -36,7 +36,7 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
         public async Task<CommandResult<CommentViewModel>> ExecuteAsync(CommentViewModel addComment)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 var comment = new ServiceComment
@@ -51,8 +51,8 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
                 await _commentRepository.SaveAsync();
                 var getOwnerService = await _getOwnServiceInformationQuery.ExecuteAsync(addComment.ServiceId);
                 await LoggingUser<AddCommentServiceAsyncCommand>.
-                    InformationAsync(getOwnerService, userName, addComment.ContentOfRating);
-                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(addComment));
+                    InformationAsync(getOwnerService, userName.UserName, addComment.ContentOfRating);
+                await Logging<AddCommentServiceAsyncCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(addComment));
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = true,
@@ -68,7 +68,7 @@ namespace BPT_Service.Application.CommentService.Command.AddCommentServiceAsync
             }
             catch (Exception ex)
             {
-                await Logging<AddCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
+                await Logging<AddCommentServiceAsyncCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "Has error");
                 return new CommandResult<CommentViewModel>
                 {
                     isValid = false,

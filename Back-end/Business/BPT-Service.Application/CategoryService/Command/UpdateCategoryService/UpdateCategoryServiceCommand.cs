@@ -39,7 +39,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -54,7 +54,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                         _categoryRepository.Update(categoryUpdate);
                         await _categoryRepository.SaveAsync();
                         await Logging<UpdateCategoryServiceCommand>.
-                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(userVm));
+                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, JsonConvert.SerializeObject(userVm));
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = true,
@@ -64,7 +64,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                     else
                     {
                         await Logging<UpdateCategoryServiceCommand>.
-                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
                         return new CommandResult<CategoryServiceViewModel>
                         {
                             isValid = false,
@@ -76,7 +76,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
                 else
                 {
                     await Logging<UpdateCategoryServiceCommand>.
-                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                          WarningAsync(ActionCommand.COMMAND_UPDATE, userName.UserName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,
@@ -87,7 +87,7 @@ namespace BPT_Service.Application.CategoryService.Command.UpdateCategoryService
             catch (Exception ex)
             {
                 await Logging<UpdateCategoryServiceCommand>.
-                         ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName, "Has error: ");
+                         ErrorAsync(ex, ActionCommand.COMMAND_UPDATE, userName.UserName, "Has error: ");
                 return new CommandResult<CategoryServiceViewModel>
                 {
                     isValid = false,

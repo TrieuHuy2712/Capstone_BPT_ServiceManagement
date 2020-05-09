@@ -41,7 +41,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
         {
 
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check user has permission first
@@ -58,7 +58,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
                     }
                     _functionRepository.Remove(id);
                     await _functionRepository.SaveAsync();
-                    await Logging<DeleteFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName, "Delete " + id);
+                    await Logging<DeleteFunctionServiceCommand>.InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, "Delete " + id);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = true,
@@ -68,7 +68,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
                 else
                 {
                     await Logging<DeleteFunctionServiceCommand>
-                        .WarningAsync(ActionCommand.COMMAND_DELETE, userName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
+                        .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<FunctionViewModelinFunctionService>
                     {
                         isValid = false,
@@ -78,7 +78,7 @@ namespace BPT_Service.Application.FunctionService.Command.DeleteFunctionService
             }
             catch (System.Exception ex)
             {
-                await Logging<DeleteFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName, "Has error");
+                await Logging<DeleteFunctionServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, userName.UserName, "Has error");
                 return new CommandResult<FunctionViewModelinFunctionService>
                 {
                     isValid = false,

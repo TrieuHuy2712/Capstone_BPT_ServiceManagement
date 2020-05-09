@@ -10,7 +10,6 @@ using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
@@ -39,12 +38,13 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-            var userName = _userManager.FindByIdAsync(userId).Result.UserName;            
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
                 //Check category has available
-                var availableCategory = _categoryRepository.FindSingleAsync(x => x.CategoryName.ToLower() == userVm.CategoryName.ToLower());
-                if (availableCategory == null) {
+                var availableCategory = await _categoryRepository.FindSingleAsync(x => x.CategoryName.ToLower() == userVm.CategoryName.ToLower());
+                if (availableCategory != null)
+                {
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,
@@ -68,12 +68,12 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
                         },
                     };
                     await Logging<AddCategoryServiceCommand>.
-                        InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(createReturn.myModel));
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(createReturn.myModel));
                     return createReturn;
                 }
                 else
                 {
-                    await Logging<AddCategoryServiceCommand>.WarningAsync(ActionCommand.COMMAND_ADD,userName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
+                    await Logging<AddCategoryServiceCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,
@@ -83,7 +83,7 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
             }
             catch (System.Exception ex)
             {
-                await Logging<AddCategoryServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "You have error");
+                await Logging<AddCategoryServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "You have error");
                 return new CommandResult<CategoryServiceViewModel>
                 {
                     isValid = false,

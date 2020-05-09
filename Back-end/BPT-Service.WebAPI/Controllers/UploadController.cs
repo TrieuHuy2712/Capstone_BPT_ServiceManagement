@@ -15,7 +15,7 @@ namespace BPT_Service.WebAPI.Controllers
     {
         //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
         //private const string BaseUrl = "http://localhost:5000";
-        private const string BaseUrl = "https://bpt-servicewebapi.azurewebsites.net";
+        private const string BaseUrl = "https://bpt-servicewebapi20200509090056.azurewebsites.net";
         //private const string BaseUrl = $"{Request.Scheme}://{this.Request.Host}";
 
         private readonly IWebHostEnvironment _env;
