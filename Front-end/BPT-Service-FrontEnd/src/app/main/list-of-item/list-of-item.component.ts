@@ -77,7 +77,7 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.indexOfServices = this.services2.length;
-        console.log(this.services2);
+        console.log("fuking thing is here "+this.services2);
         
       });
       

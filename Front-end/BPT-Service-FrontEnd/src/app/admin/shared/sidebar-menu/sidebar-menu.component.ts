@@ -59,7 +59,8 @@ export class SidebarMenuComponent implements OnInit {
             this._functions[1].childrenId[0].name = "Thư điện tử";
             this._functions[1].childrenId[1].name = "Chức năng";
             this._functions[1].childrenId[2].name = "Vị trí";
-            this._functions[1].childrenId[3].name = "Người dùng";
+            this._functions[1].childrenId[3].name = "Vai trò";
+            this._functions[1].childrenId[4].name = "Người dùng";
           });
       }
       if(this.currentUser.avatar == null){
