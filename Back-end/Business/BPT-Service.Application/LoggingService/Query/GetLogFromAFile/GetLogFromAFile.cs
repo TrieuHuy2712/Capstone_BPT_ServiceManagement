@@ -45,14 +45,18 @@ namespace BPT_Service.Application.LoggingService.Query.GetLogFromAFile
             {
                 LogModel model = new LogModel();
                 var splitLog = log.Split("::");
-                model.Type = log.Substring(0, log.IndexOf('['));
-                model.DateTime = log.Substring(log.IndexOf('[') + 1, log.IndexOf(']') - model.Type.Length - 1);
-                string logMessage = splitLog[4].Replace("||", "\n").Trim();
-                model.Statement = log.Split("::")[1];
-                model.Message = logMessage;
-                model.Action = splitLog[2];
-                model.UserAction = splitLog[3];
-                models.Add(model);
+                if(splitLog.Count() >= 5)
+                {
+                    model.Type = log.Substring(0, log.IndexOf('['));
+                    model.DateTime = log.Substring(log.IndexOf('[') + 1, log.IndexOf(']') - model.Type.Length - 1);
+                    string logMessage = splitLog[4].Replace("||", "\n").Trim();
+                    model.Statement = log.Split("::")[1];
+                    model.Message = logMessage;
+                    model.Action = splitLog[2];
+                    model.UserAction = splitLog[3];
+                    models.Add(model);
+                }
+
             }
             models.Reverse();
             return models;

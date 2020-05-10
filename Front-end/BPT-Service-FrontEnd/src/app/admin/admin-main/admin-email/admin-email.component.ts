@@ -81,7 +81,6 @@ export class AdminEmailComponent implements OnInit {
   }
   showEditModal(id: any) {
     this.loadRole(id);
-    console.log(this.entity);
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
@@ -101,12 +100,13 @@ export class AdminEmailComponent implements OnInit {
                 MessageConstants.CREATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
 
           },
           error => this._dataService.handleError(error)
         );
       } else {
-        this._dataService.post("/EmailManagement/UpdateEmail", this.entity).subscribe(
+        this._dataService.put("/EmailManagement/UpdateEmail", this.entity).subscribe(
           (response: any) => {
             if (response.isValid == true) {
               let getPostition = this.emails.indexOf(x => x.id == this.entity.id);
@@ -119,13 +119,13 @@ export class AdminEmailComponent implements OnInit {
               this._notificationService.printErrorMessage(
                 MessageConstants.UPDATED_FAIL_MSG
               );
+              this.spinnerService.hide()
             }
 
           },
           error => this._dataService.handleError(error)
         );
       }
-      this.spinnerService.hide();
     }
   }
   deleteItem(idRole: any, id: any) {
@@ -149,8 +149,8 @@ export class AdminEmailComponent implements OnInit {
             MessageConstants.DELETED_FAIL_MSG
           );
         }
+        this.spinnerService.hide();
       });
-      this.spinnerService.hide();
   }
   filterChanged(id: any) {
     this.pageSize = id;

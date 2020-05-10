@@ -30,7 +30,7 @@ namespace BPT_Service.Application.ProviderService.Command.ConfirmProviderService
                     getInformation.Status = Model.Enums.Status.Active;
                     _providerRepostiroy.Update(getInformation);
                     await _providerRepostiroy.SaveAsync();
-                    await Logging<ConfirmProviderService>.InformationAsync("Confirmed from " + getInformation.ProviderName);
+                    await Logging<ConfirmProviderService>.InformationAsync(ActionCommand.COMMAND_CONFIRM, getInformation.UserId.ToString(), "Confirmed from " + getInformation.ProviderName);
                     return true;
                 }
                 await Logging<ConfirmProviderService>.WarningAsync(ActionCommand.COMMAND_CONFIRM, "System","Cannot find your id");

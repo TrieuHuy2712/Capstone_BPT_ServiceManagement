@@ -10,7 +10,6 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: 'app-service-category',
   templateUrl: './service-category.component.html',
-  styleUrls: ['./service-category.component.css']
 })
 export class ServiceCategoryComponent implements OnInit {
 
@@ -110,7 +109,6 @@ export class ServiceCategoryComponent implements OnInit {
       else {
         this.saveData();
       }
-      this.spinnerService.hide();
     }
   }
   saveData() {
@@ -128,6 +126,7 @@ export class ServiceCategoryComponent implements OnInit {
                 MessageConstants.CREATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
           },
           error => this._dataService.handleError(error)
         );
@@ -146,6 +145,7 @@ export class ServiceCategoryComponent implements OnInit {
                 MessageConstants.UPDATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
           },
           error => this._dataService.handleError(error)
         );

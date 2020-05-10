@@ -23,7 +23,8 @@
       <div class="x_title">
         <ul class="nav navbar-right panel_toolbox">
           <li>
-            <button class="btn btn-success" *ngIf="_userPermission.canCreate" (click)="showAddModal()">{{'add'|translate}}</button>
+            <button class="btn btn-success" *ngIf="_userPermission.canCreate"
+              (click)="showAddModal()">{{'add'|translate}}</button>
           </li>
 
         </ul>
@@ -33,7 +34,8 @@
         <div>
           <div class="menu_section">
             <ul>
-              <li *ngFor="let item of _functions"><div class="function_lv1"><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</div>
+              <li *ngFor="let item of _functions">
+                <div class="function_lv1"><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</div>
                 <button class="btn btn-xs btn-danger" *ngIf="_userPermission.canDelete" (click)="delete(item.key)"><i
                     class="fa fa-trash" aria-hidden="true"></i></button>
                 <ul class="">
@@ -74,8 +76,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'functionId'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
               <input type="hidden" [(ngModel)]="entity.ID" name="id" />
-              <input type="text" #id="ngModel" [(ngModel)]="entity.id" required name="id"
-                class="form-control" />
+              <input type="text" #id="ngModel" [(ngModel)]="entity.id" required name="id" class="form-control" />
               <small [hidden]="id.valid || (id.pristine && !addEditForm.submitted)" class="text-danger">
                 {{'functionIdWarning'|translate}}
               </small>
@@ -104,7 +105,8 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'link'|translate}}</label>
             <div class="col-md-9 col-sm-9 col-xs-12">
-              <input type="text" #url="ngModel" [(ngModel)]="entity.url" required name="url" class="form-control" [disabled]="entity"/>
+              <input type="text" #url="ngModel" [(ngModel)]="entity.url" required name="url" class="form-control"
+                [disabled]="entity.url.trim()!=''|| entity.url != null" />
               <small [hidden]="url.valid || (url.pristine && !addEditForm.submitted)" class="text-danger">
                 {{'linkWarning'|translate}}
               </small>
@@ -132,7 +134,8 @@
             <div class="col-md-9 col-sm-9 col-xs-12">
               <div>
                 <label>
-                  <input type="checkbox" [(ngModel)]="entity.status" name="status" #status="ngModel"> {{'active'|translate}}
+                  <input type="checkbox" [(ngModel)]="entity.status" name="status" #status="ngModel">
+                  {{'active'|translate}}
                 </label>
               </div>
             </div>
@@ -140,8 +143,10 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="addEditModal.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
-              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
+              <button type="button" (click)="addEditModal.hide()"
+                class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success"
+                [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
 
@@ -213,8 +218,10 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-              <button type="button" (click)="permissionModal.hide()" class="btn btn-primary">{{'cancel'|translate}}</button>
-              <button type="submit" class="btn btn-success" [disabled]="!permissionForm.form.valid">{{'update'|translate}}</button>
+              <button type="button" (click)="permissionModal.hide()"
+                class="btn btn-primary">{{'cancel'|translate}}</button>
+              <button type="submit" class="btn btn-success"
+                [disabled]="!permissionForm.form.valid">{{'update'|translate}}</button>
             </div>
           </div>
         </form>

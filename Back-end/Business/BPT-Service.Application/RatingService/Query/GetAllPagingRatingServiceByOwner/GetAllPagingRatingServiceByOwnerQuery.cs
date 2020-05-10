@@ -44,8 +44,10 @@ namespace BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceB
             var query = await _serviceRatingRepository.FindAllAsync(x => x.ServiceId == Guid.Parse(idService));
 
             int totalRow = query.Count();
-            query = query.Skip((page - 1) * pageSize)
-               .Take(pageSize);
+            if (pageSize != 0)
+            {
+                query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            }
 
             var data = query.Select(x => new ServiceRatingViewModel
             {

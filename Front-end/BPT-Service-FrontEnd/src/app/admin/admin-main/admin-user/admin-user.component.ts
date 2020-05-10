@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  IMultiSelectOption,
-  IMultiSelectTexts
-} from "angular-2-dropdown-multiselect";
+  IMultiSelectOption} from "angular-2-dropdown-multiselect";
 
 import { AuthenService } from "src/app/core/services/authen.service";
 import { DataService } from "src/app/core/services/data.service";
@@ -163,13 +161,13 @@ export class UserComponent implements OnInit {
               this._notificationService.printSuccessMessage(
                 MessageConstants.CREATED_OK_MSG
               );
-              this.spinnerService.hide();
             } else {
               this._notificationService.printErrorMessage(
                 MessageConstants.CREATED_FAIL_MSG
               );
-              this.spinnerService.hide();
+              
             }
+            this.spinnerService.hide();
           },
           error => this._dataService.handleError(error)
         );
@@ -190,6 +188,7 @@ export class UserComponent implements OnInit {
                 MessageConstants.UPDATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
           },
           error => this._dataService.handleError(error)
         );
@@ -211,13 +210,12 @@ export class UserComponent implements OnInit {
           this._notificationService.printSuccessMessage(
             MessageConstants.DELETED_OK_MSG
           );
-          this.spinnerService.hide();
         } else {
           this._notificationService.printErrorMessage(
             MessageConstants.DELETED_FAIL_MSG
           );
-          this.spinnerService.hide();
         }
+        this.spinnerService.hide();
       });
       
   }

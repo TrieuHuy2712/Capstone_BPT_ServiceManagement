@@ -54,7 +54,9 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
                             errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
                         };
                     }
-                    MappingCityProvince(vm, getId);
+                    getId.City = vm.City;
+                    getId.Province = vm.Province;
+                    getId.ImgPath = vm.ImgPath;
                     _cityProvinceRepository.Update(getId);
                     await _cityProvinceRepository.SaveAsync();
                     await Logging<UpdateCityProvinceServiceCommand>.
@@ -87,10 +89,5 @@ namespace BPT_Service.Application.LocationService.Command.UpdateCityProvinceServ
             }
         }
 
-        private void MappingCityProvince(CityProvinceViewModel cityProvinceVM, CityProvince cityProvince)
-        {
-            cityProvinceVM.City = cityProvince.City;
-            cityProvinceVM.Province = cityProvince.Province;
-        }
     }
 }
