@@ -34,7 +34,7 @@ namespace BPT_Service.Application.LocationService.Query.GetAllPagingCityProvince
                 Id = x.Id,
                 City = x.City,
                 Province = x.Province,
-                ImagePath = x.ImgPath
+                ImgPath = x.ImgPath
             }).ToList();
 
             var paginationSet = new PagedResult<CityProvinceViewModel>()

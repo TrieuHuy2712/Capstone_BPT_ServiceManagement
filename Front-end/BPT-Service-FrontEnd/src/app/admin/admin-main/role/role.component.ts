@@ -7,7 +7,6 @@ import { NotificationService } from "src/app/core/services/notification.service"
 @Component({
   selector: "app-role",
   templateUrl: "./role.component.html",
-  styleUrls: ["./role.component.css"]
 })
 export class RoleComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
@@ -126,7 +125,7 @@ export class RoleComponent implements OnInit {
           error => this._dataService.handleError(error)
         );
       }
-      
+
     }
   }
   deleteItem(idRole: any, id: any) {
@@ -150,8 +149,9 @@ export class RoleComponent implements OnInit {
             MessageConstants.DELETED_FAIL_MSG
           );
         }
+        this.spinnerService.hide();
       });
-      this.spinnerService.hide();
+
   }
   filterChanged(id: any) {
     this.pageSize = id;

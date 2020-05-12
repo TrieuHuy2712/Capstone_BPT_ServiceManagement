@@ -4,6 +4,7 @@ import { MessageConstants } from 'src/app/core/common/message.constants';
 import { ModalDirective } from 'ngx-bootstrap';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { UploadService } from 'src/app/core/services/upload.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 enum Status {
   InActive = 0,
   Active = 1,
@@ -13,7 +14,6 @@ enum Status {
 @Component({
   selector: 'app-provider',
   templateUrl: './provider.component.html',
-  styleUrls: ['./provider.component.css']
 })
 export class ProviderComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
@@ -39,7 +39,8 @@ export class ProviderComponent implements OnInit {
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {
 
   }
@@ -56,6 +57,7 @@ export class ProviderComponent implements OnInit {
     this.getAllUser();
   }
   loadData() {
+    this.spinnerService.show();
     this._dataService
       .get(
         "/Provider/GetAllPaging?page=" +
@@ -73,6 +75,7 @@ export class ProviderComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.loadPermission();
+        this.spinnerService.hide();
       });
   }
   loadPermission() {
@@ -102,6 +105,7 @@ export class ProviderComponent implements OnInit {
   }
   saveChange(valid: boolean) {
     if (valid) {
+      this.spinnerService.show();
       let fi = this.avatarPath.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/UploadImage/saveImage/category', null, fi.files)
@@ -135,6 +139,7 @@ export class ProviderComponent implements OnInit {
               MessageConstants.CREATED_FAIL_MSG
             );
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -153,6 +158,7 @@ export class ProviderComponent implements OnInit {
               MessageConstants.UPDATED_FAIL_MSG
             );
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -165,6 +171,7 @@ export class ProviderComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any,id: any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/Provider/DeleteProvider", "id", idRole)
       .subscribe((response:any) => {
@@ -173,7 +180,12 @@ export class ProviderComponent implements OnInit {
             MessageConstants.DELETED_OK_MSG
           );
         this.provider.splice(id,1);    
+        }else{
+          this._notificationService.printErrorMessage(
+            response.errorMessage
+          );
         }
+        this.spinnerService.hide();
       });
   }
   filterChanged(id: any) {

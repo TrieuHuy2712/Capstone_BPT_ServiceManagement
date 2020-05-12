@@ -66,7 +66,7 @@ namespace BPT_Service.Common.Logging
         {
             try
             {
-                DateTime datetime = DateTime.Now;
+                DateTime datetime = DateTime.Now.AddHours(7);
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -88,7 +88,7 @@ namespace BPT_Service.Common.Logging
         {
             try
             {
-                DateTime datetime = DateTime.Now;
+                DateTime datetime = DateTime.Now.AddHours(7);
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -134,7 +134,7 @@ namespace BPT_Service.Common.Logging
         {
             try
             {
-                DateTime datetime = DateTime.Now;
+                DateTime datetime = DateTime.Now.AddHours(7);
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

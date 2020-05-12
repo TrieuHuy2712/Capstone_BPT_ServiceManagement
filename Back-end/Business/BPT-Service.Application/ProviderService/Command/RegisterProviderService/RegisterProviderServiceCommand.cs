@@ -67,8 +67,8 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
             try
             {
                 //Check category has available
-                var availableCategory = _providerRepository.FindSingleAsync(x => x.ProviderName.ToLower() == vm.ProviderName.ToLower());
-                if (availableCategory == null)
+                var availableCategory = await _providerRepository.FindSingleAsync(x => x.ProviderName.ToLower() == vm.ProviderName.ToLower());
+                if (availableCategory != null)
                 {
                     return new CommandResult<ProviderServiceViewModel>
                     {

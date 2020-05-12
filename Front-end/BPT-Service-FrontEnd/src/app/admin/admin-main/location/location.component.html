@@ -52,7 +52,7 @@
             <tr *ngFor="let loc of location,let i=index">
               <td> {{loc.city}}</td>
               <td>{{loc.province}}</td>
-              <th><img [src]="loc.imagePath" alt="" width="128"></th>
+              <th><img [src]="loc.imgPath" alt="" width="128"></th>
               <td>
                 <button *ngIf="permission.canUpdate" class="btn btn-primary" (click)="showEditModal(i)"><i
                     class="fa fa-pencil-square-o"></i></button>
@@ -113,11 +113,11 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input type="file" #imagePath name="imagePath" class="form-control">
               <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
-              <input type="hidden" [(ngModel)]="entity.imagePath" name="imagePath" />
+              <input type="hidden" [(ngModel)]="entity.imgPath" name="imagePath" />
             </div>
 
-            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imagePath">
-              <img [src]="entity.imagePath" width="128" />
+            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imgPath">
+              <img [src]="entity.imgPath" width="128" />
             </div>
           </div>
           <div class="ln_solid"></div>

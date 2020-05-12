@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RatingService.Command.AddRatingService
@@ -45,7 +44,7 @@ namespace BPT_Service.Application.RatingService.Command.AddRatingService
             {
                 //Check provider has available
                 var getService = await _serviceRepository.FindByIdAsync(Guid.Parse(serviceRatingViewModel.ServiceId));
-                if (getService != null)
+                if (getService == null)
                 {
                     await Logging<AddUpdateRatingServiceCommand>
                         .WarningAsync(ActionCommand.COMMAND_ADD, userName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
@@ -69,7 +68,7 @@ namespace BPT_Service.Application.RatingService.Command.AddRatingService
                         InformationAsync(getUserId, userName, userName + "rated"
                         + getService.ServiceName + " with" + getServiceRating.NumberOfRating);
                     await Logging<AddUpdateRatingServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName,
-                        JsonConvert.SerializeObject(getServiceRating));
+                        JsonConvert.SerializeObject(serviceRatingViewModel));
                     return new CommandResult<ServiceRatingViewModel>
                     {
                         isValid = true,
@@ -89,7 +88,7 @@ namespace BPT_Service.Application.RatingService.Command.AddRatingService
                         InformationAsync(getUserId, userName, userName + "rated"
                         + getService.ServiceName + " with" + query.NumberOfRating);
                 await Logging<AddUpdateRatingServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName,
-                    JsonConvert.SerializeObject(query));
+                    JsonConvert.SerializeObject(serviceRatingViewModel));
                 return new CommandResult<ServiceRatingViewModel>
                 {
                     isValid = true,

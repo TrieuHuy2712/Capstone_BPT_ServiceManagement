@@ -156,6 +156,7 @@ export class PostServiceComponent implements OnInit {
     this.modalAddEdit.show();
   }
   async saveChange(valid: boolean) {
+    this.spinnerService.show();
     if (valid) {
       for (const item of this.listImage) {
         if (item.dataImage != null) {
@@ -178,13 +179,12 @@ export class PostServiceComponent implements OnInit {
             MessageConstants.CREATED_OK_MSG
           );
           this.modalAddEdit.hide();
-          this.spinnerService.hide();
         } else {
           this._notificationService.printErrorMessage(
             MessageConstants.CREATED_FAIL_MSG
           );
-          this.spinnerService.hide();
         }
+        this.spinnerService.hide();
       },
       error => this._dataService.handleError(error));
   }
@@ -198,18 +198,16 @@ export class PostServiceComponent implements OnInit {
             MessageConstants.CREATED_OK_MSG
           );
           this.modalAddEdit.hide();
-          this.spinnerService.hide();
         } else {
           this._notificationService.printErrorMessage(
             MessageConstants.CREATED_FAIL_MSG
           );
-          this.spinnerService.hide();
         }
+        this.spinnerService.hide();
       },
       error => this._dataService.handleError(error));
   }
   saveData() {
-    debugger;
     this.spinnerService.show();
     //Assign Id Category
     this.entity.categoryId = this.category.find(x => x.categoryName == this.entity.categoryName).id;
@@ -237,13 +235,12 @@ export class PostServiceComponent implements OnInit {
               MessageConstants.CREATED_OK_MSG
             );
             this.modalAddEdit.hide();
-            this.spinnerService.hide();
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.CREATED_FAIL_MSG
-            );
-            this.spinnerService.hide();
+            )
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error));
     }
@@ -271,7 +268,7 @@ export class PostServiceComponent implements OnInit {
               response.errorMessage
             );
           }
-
+          this.spinnerService.hide();
         });
     } else if (isProvider == true) {
       this._dataService
@@ -287,10 +284,10 @@ export class PostServiceComponent implements OnInit {
               response.errorMessage
             );
           }
-
+          this.spinnerService.hide();
         });
     }
-    this.spinnerService.hide();
+
 
   }
   filterChanged(id: any) {

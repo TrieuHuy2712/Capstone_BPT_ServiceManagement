@@ -52,8 +52,29 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                         FullName = userVm.FullName,
                         DateCreated = DateTime.Now,
                         PhoneNumber = userVm.PhoneNumber,
-                        
+                        Status = Model.Enums.Status.Active
                     };
+                    //Check email and username has been available
+                    var findUserName = await _userManager.FindByNameAsync(userVm.UserName);
+                    if (findUserName != null)
+                    {
+                        return new CommandResult<AppUserViewModelinUserService>
+                        {
+                            isValid = false,
+                            errorMessage = "User has been available"
+                        };
+                    }
+                    //Check email hase been available
+                    var findEmail = await _userManager.FindByEmailAsync(userVm.Email);
+                    if (findEmail != null)
+                    {
+                        return new CommandResult<AppUserViewModelinUserService>
+                        {
+                            isValid = false,
+                            errorMessage = "Email has been available"
+                        };
+                    }
+                    //Add user
                     var result = await _userManager.CreateAsync(user, userVm.Password);
                     if (result.Succeeded && userVm.Roles.Count > 0)
                     {
@@ -74,8 +95,8 @@ namespace BPT_Service.Application.UserService.Command.AddUserAsync
                             DateCreated = DateTime.Now,
                             PhoneNumber = userVm.PhoneNumber,
                             Id= user.Id,
+                            Status = Model.Enums.Status.Active,
                             Roles = _userManager.GetRolesAsync(user).Result.ToList()
-
                         }
                     };
                 }

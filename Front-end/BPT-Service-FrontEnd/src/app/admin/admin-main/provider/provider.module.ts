@@ -6,6 +6,7 @@ import { PaginationModule, ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 const roleRoutes: Routes = [
   //localhost:4200/main/user
@@ -23,6 +24,7 @@ const roleRoutes: Routes = [
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
     EditorModule,
+    Ng4LoadingSpinnerModule.forRoot(),
     RouterModule.forChild(roleRoutes)
   ]
 })

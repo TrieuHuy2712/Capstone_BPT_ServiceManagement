@@ -9,7 +9,6 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: 'app-service-tag',
   templateUrl: './service-tag.component.html',
-  styleUrls: ['./service-tag.component.css']
 })
 export class ServiceTagComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
@@ -103,6 +102,8 @@ export class ServiceTagComponent implements OnInit {
                 MessageConstants.CREATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
+
             
           },
           error => this._dataService.handleError(error)
@@ -122,11 +123,12 @@ export class ServiceTagComponent implements OnInit {
                 MessageConstants.UPDATED_FAIL_MSG
               );
             }
+            this.spinnerService.hide();
           },
           error => this._dataService.handleError(error)
         );
       }
-      this.spinnerService.hide();
+      
     }
   }
   deleteItem(idTag: any, id: any) {

@@ -9,7 +9,6 @@ import { UrlConstants } from 'src/app/core/common/url.constants';
 @Component({
   selector: 'app-main',
   templateUrl: './admin-main.component.html',
-  styleUrls: ['./admin-main.component.css']
 })
 export class MainComponent implements OnInit {
 

@@ -60,7 +60,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
                             Id = listModel.Id,
                             City = listModel.City,
                             Province = listModel.Province,
-                            ImagePath= listModel.ImgPath
+                            ImgPath= listModel.ImgPath
                         }
                     };
                 }
@@ -91,7 +91,7 @@ namespace BPT_Service.Application.LocationService.Command.AddCityProvinceService
             {
                 Id = listAddViewModel.Id,
                 City = listAddViewModel.City,
-                ImgPath = listAddViewModel.ImagePath,
+                ImgPath = listAddViewModel.ImgPath,
                 Province = listAddViewModel.Province
             };
         }

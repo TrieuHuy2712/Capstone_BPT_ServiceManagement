@@ -11,7 +11,6 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: 'app-location',
   templateUrl: './location.component.html',
-  styleUrls: ['./location.component.css']
 })
 export class LocationComponent implements OnInit {
   @ViewChild("modalAddEdit", { static: false })
@@ -99,7 +98,7 @@ export class LocationComponent implements OnInit {
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/UploadImage/saveImage/location', null, fi.files)
           .then((imageUrl: any) => {
-            this.entity.imagePath = imageUrl;
+            this.entity.imgPath = imageUrl;
           }).then(() => {
             this.saveData();
           });
@@ -107,7 +106,6 @@ export class LocationComponent implements OnInit {
       else {
         this.saveData();
       }
-      this.spinnerService.hide();
     }
   }
   saveData() {
@@ -125,6 +123,7 @@ export class LocationComponent implements OnInit {
               MessageConstants.CREATED_FAIL_MSG
             );
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -143,6 +142,7 @@ export class LocationComponent implements OnInit {
               MessageConstants.UPDATED_FAIL_MSG
             );
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -169,8 +169,8 @@ export class LocationComponent implements OnInit {
             MessageConstants.DELETED_FAIL_MSG
           );
         }
+        this.spinnerService.hide();
       });
-      this.spinnerService.hide();
   }
   filterChanged(id: any) {
     this.pageSize = id;

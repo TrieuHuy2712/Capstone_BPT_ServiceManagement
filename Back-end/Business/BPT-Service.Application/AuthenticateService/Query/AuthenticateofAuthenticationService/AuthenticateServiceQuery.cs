@@ -1,4 +1,5 @@
 using BPT_Service.Application.AuthenticateService.Query.CheckCanAccessMain;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -16,13 +17,18 @@ namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthen
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ICheckCanAccessMain _checkCanAccessMain;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
 
-        public AuthenticateServiceQuery(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            ICheckCanAccessMain checkCanAccessMain)
+        public AuthenticateServiceQuery(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            ICheckCanAccessMain checkCanAccessMain,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _checkCanAccessMain = checkCanAccessMain;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
         }
 
         public async Task<AppUser> ExecuteAsync(string username, string password)
@@ -60,13 +66,18 @@ namespace BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthen
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 user.Token = tokenHandler.WriteToken(token);
-                if (await _checkCanAccessMain.ExecuteAsync(user.UserName)==true)
+                if (await _checkCanAccessMain.ExecuteAsync(user.UserName) == true)
                 {
                     user.Status = Model.Enums.Status.Active;
                 }
                 else
                 {
                     user.Status = Model.Enums.Status.InActive;
+                }
+                var checkIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(user.Id.ToString());
+                if (checkIsProvider.isValid == true)
+                {
+                    user.IsProvider = true;
                 }
                 return user;
             }

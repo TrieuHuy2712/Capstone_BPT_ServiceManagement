@@ -7,5 +7,6 @@ namespace BPT_Service.Model.Enums
         Pending = 2,
         UpdatePending= 3,
         WaitingApprove =4,
+        IsProvider =5,
     }
 }

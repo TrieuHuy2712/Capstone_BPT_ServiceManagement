@@ -31,7 +31,7 @@ namespace BPT_Service.Common.Logging
             try
             {
                 var newPath = path + userNotification + "/";
-                DateTime datetime = DateTime.Now;
+                DateTime datetime = DateTime.Now.AddHours(7);
                 if (!Directory.Exists(newPath))
                 {
                     Directory.CreateDirectory(newPath);

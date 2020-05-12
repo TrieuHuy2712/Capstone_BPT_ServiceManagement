@@ -98,6 +98,7 @@ export class NewsComponent implements OnInit {
     this.modalAddEdit.show();
   }
   saveChange(valid: boolean) {
+    this.spinnerService.show();
     if (valid) {
       let fi = this.imgPath.nativeElement;
       if (fi.files.length > 0) {
@@ -114,7 +115,6 @@ export class NewsComponent implements OnInit {
     }
   }
   saveData() {
-    this.spinnerService.show();
     if (this.entity.id == undefined) {
       let getUser= this.provider.findIndex(x => x.providerName == this.entity.providerName);
       this.entity.providerId= this.provider[getUser].id;
@@ -126,13 +126,12 @@ export class NewsComponent implements OnInit {
               MessageConstants.CREATED_OK_MSG
             );
             this.modalAddEdit.hide();
-            this.spinnerService.hide();
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.CREATED_FAIL_MSG
             );
-            this.spinnerService.hide();
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -147,13 +146,12 @@ export class NewsComponent implements OnInit {
               MessageConstants.UPDATED_OK_MSG
               
             );
-            this.spinnerService.hide();
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.UPDATED_FAIL_MSG
             );
-            this.spinnerService.hide();
           }
+          this.spinnerService.hide();
         },
         error => this._dataService.handleError(error)
       );
@@ -166,6 +164,7 @@ export class NewsComponent implements OnInit {
     );
   }
   deleteItemConfirm(idRole: any,id:any) {
+    this.spinnerService.show();
     this._dataService
       .delete("/ProviderNews/DeleteNewsProvider", "id", idRole)
       .subscribe((response:any) => {
@@ -179,7 +178,7 @@ export class NewsComponent implements OnInit {
             response.errorMessage
           );
         }
-
+        this.spinnerService.hide();
       });
   }
   filterChanged(id: any) {
