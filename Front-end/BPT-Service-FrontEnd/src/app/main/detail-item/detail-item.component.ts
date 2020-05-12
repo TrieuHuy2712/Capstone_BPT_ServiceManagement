@@ -36,6 +36,13 @@ export class DetailItemComponent implements OnInit {
   public comments: any[];
   public testComment: any[];
   public child_comment: any[];
+  public isAuthor: boolean = false;
+  public currenUserId: any;
+
+  // rating param
+  public ratingVal: number;
+  public ratingEntity: any;
+  public myRating: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -45,12 +52,12 @@ export class DetailItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("ket qua = " + this.usId);
 
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.followEntity = {};
     this.unfEntity = {};
     this.commentEntity = {};
+    this.ratingEntity= {};
     this.newId = this.route.snapshot.paramMap.get("id");
     this.getFollowId();
 
@@ -59,6 +66,13 @@ export class DetailItemComponent implements OnInit {
     this.loadData();
     this.loadDataOfLocation();
     this.loadDataOfComment();
+
+    console.log("ket qua "+this.ratingVal);
+    this.getCurrentUserId();
+    console.log(this.currenUserId);
+    
+    
+    
 
   }
 
@@ -235,5 +249,53 @@ export class DetailItemComponent implements OnInit {
         }
       });
   }
-  
+  // confirm author of that comment
+  // confirmAuthorOfComment(){
+  //   this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+  //     this.UIS = response;
+  //     this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
+  //     this._dataService
+  //       .post(
+  //         "/CommentManagement/addNewComment", this.commentEntity
+  //       )
+  //       .subscribe((response: any) => {
+  //         this.testComment.push(response.myModel);
+  //         console.log(this.testComment);
+  //         this.loadDataOfComment();
+  //       });
+  //   });
+  // }
+  getCurrentUserId(){
+    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+      this.UIS = response;
+      this.currenUserId = this.UIS.find(x => x.fullName == this.user.fullName).id;
+      
+    });
+    return this.currenUserId;
+  }
+
+  // get rating value
+  getContentOfRating(val:number){
+    this.ratingVal = val;
+    this.ratingAService();
+  }
+
+  ratingAService(){
+    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+      this.UIS = response;
+      this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
+      // this.ratingEntity.userId = this.usId;
+      // this.ratingEntity.serviceId = this.newId;
+      // this.ratingEntity.numberOfRating = this.ratingVal;
+      this._dataService
+        .post(
+          "/RatingService/AddUpdateRating?userId="+this.usId+"&ServiceId="+this.newId+"&NumberOfRating="+this.ratingVal
+        )
+        .subscribe((response: any) => {
+          this.myRating.push(response.myModel);
+          console.log(this.myRating);
+        });
+    });
+  }
+
 }
