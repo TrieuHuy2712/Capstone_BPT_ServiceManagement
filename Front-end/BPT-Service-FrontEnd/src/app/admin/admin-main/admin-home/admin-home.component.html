@@ -111,196 +111,93 @@
   </div>
   <div class="row">
     <!-- Left col -->
-    <section class="col-lg-7 connectedSortable ui-sortable">
+    <section class="col-lg-8 connectedSortable ui-sortable">
       <!-- Custom tabs (Charts with tabs)-->
       <div class="card" style="position: relative; left: 0px; top: 0px;">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-          <h3 class="card-title">
-            <i class="fas fa-chart-pie mr-1"></i>
-            Sales
-          </h3>
-          <div class="card-tools">
-            <ul class="nav nav-pills ml-auto">
-              <li class="nav-item">
-                <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-              </li>
-            </ul>
+        <!-- custom recommend data -->
+        <div class="card-header">
+          <div class="title_admin">
+            <h3>Danh sách quản lý dữ liệu của quản trị viên</h3>
           </div>
-        </div><!-- /.card-header -->
+        </div>
         <div class="card-body">
-          <div class="tab-content p-0">
-            <!-- Morris chart - Sales -->
-            <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-              <div class="chartjs-size-monitor">
-                <div class="chartjs-size-monitor-expand">
-                  <div class=""></div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                      <button class="btn btn-success" (click)="showAddModal()">Thêm dữ liệu</button>
+                    </li>
+                    <li>
+                      <select class="form-control select-content" id="sel1"
+                        (change)="filterChanged($event.target.value)">
+                        <option value="0">Top 10 vị trí</option>
+                        <option value="1">Top 10 dịch vụ</option>
+                        <option value="2">Top 10 tin tức</option>
+                      </select>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
                 </div>
-                <div class="chartjs-size-monitor-shrink">
-                  <div class=""></div>
+                <div class="card-body table-responsive p-0">
+
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>Stt</th>
+                        <th>Tên đề xuất</th>
+                        <th>Hình ảnh</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Buôn Ma Thuột</td>
+                        <td><img src="../../../../assets/images/location_3_.png" alt="" style="width: 100px;"></td>
+                        <td>
+                          <button class="btn btn-primary" (click)="showEditModal(i)"><i
+                              class="fa fa-pencil-square-o"></i></button>
+                          <button class="btn btn-danger" (click)="deleteItem(role.id,i)"><i
+                              class="fa fa-trash"></i></button>
+
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-md-12">
+
+                  </div>
                 </div>
               </div>
-              <canvas id="revenue-chart-canvas" height="375" style="height: 300px; display: block; width: 676px;"
-                width="845" class="chartjs-render-monitor"></canvas>
-            </div>
-            <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-              <div class="chartjs-size-monitor">
-                <div class="chartjs-size-monitor-expand">
-                  <div class=""></div>
-                </div>
-                <div class="chartjs-size-monitor-shrink">
-                  <div class=""></div>
-                </div>
-              </div>
-              <canvas id="sales-chart-canvas" height="375" style="height: 300px; display: block; width: 676px;"
-                width="845" class="chartjs-render-monitor"></canvas>
             </div>
           </div>
-        </div><!-- /.card-body -->
+        </div>
+
       </div>
-
-      <!-- /.card -->
-
-      <!-- DIRECT CHAT -->
-
-      <!--/.direct-chat -->
-
-      <!-- TO DO List -->
-      <div class="card" style="position: relative; left: 0px; top: 0px;">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-          <h3 class="card-title">
-            <i class="ion ion-clipboard mr-1"></i>
-            To Do List
-          </h3>
-
-          <div class="card-tools">
-            <ul class="pagination pagination-sm">
-              <li class="page-item"><a href="#" class="page-link">«</a></li>
-              <li class="page-item"><a href="#" class="page-link">1</a></li>
-              <li class="page-item"><a href="#" class="page-link">2</a></li>
-              <li class="page-item"><a href="#" class="page-link">3</a></li>
-              <li class="page-item"><a href="#" class="page-link">»</a></li>
-            </ul>
-          </div>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-          <ul class="todo-list ui-sortable" data-widget="todo-list">
-            <li>
-              <!-- drag handle -->
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <!-- checkbox -->
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                <label for="todoCheck1"></label>
-              </div>
-              <!-- todo text -->
-              <span class="text">Design a nice theme</span>
-              <!-- Emphasis label -->
-              <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-              <!-- General tools such as edit or delete-->
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-            <li class="done">
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo2" id="todoCheck2" checked="">
-                <label for="todoCheck2"></label>
-              </div>
-              <span class="text">Make the theme responsive</span>
-              <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-            <li>
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo3" id="todoCheck3">
-                <label for="todoCheck3"></label>
-              </div>
-              <span class="text">Let theme shine like a star</span>
-              <small class="badge badge-warning"><i class="far fa-clock"></i> 1 day</small>
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-            <li>
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo4" id="todoCheck4">
-                <label for="todoCheck4"></label>
-              </div>
-              <span class="text">Let theme shine like a star</span>
-              <small class="badge badge-success"><i class="far fa-clock"></i> 3 days</small>
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-            <li>
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo5" id="todoCheck5">
-                <label for="todoCheck5"></label>
-              </div>
-              <span class="text">Check your messages and notifications</span>
-              <small class="badge badge-primary"><i class="far fa-clock"></i> 1 week</small>
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-            <li>
-              <span class="handle ui-sortable-handle">
-                <i class="fas fa-ellipsis-v"></i>
-                <i class="fas fa-ellipsis-v"></i>
-              </span>
-              <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" value="" name="todo6" id="todoCheck6">
-                <label for="todoCheck6"></label>
-              </div>
-              <span class="text">Let theme shine like a star</span>
-              <small class="badge badge-secondary"><i class="far fa-clock"></i> 1 month</small>
-              <div class="tools">
-                <i class="fas fa-edit"></i>
-                <i class="fas fa-trash-o"></i>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-          <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>
-        </div>
-      </div>
-      <!-- /.card -->
     </section>
+
+    <!-- popup -->
+    <!-- <div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+      aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Thêm dữ liệu</h4>
+            <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+          </div>
+        </div>
+      </div>
+    </div> -->
     <!-- /.Left col -->
     <!-- right col (We are only adding the ID to make the widgets sortable)-->
-    <section class="col-lg-5 connectedSortable ui-sortable">
+    <section class="col-lg-4 connectedSortable ui-sortable">
 
       <!-- Map card -->
       <div class="card bg-gradient-primary">

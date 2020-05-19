@@ -43,6 +43,7 @@ export class DetailItemComponent implements OnInit {
   public ratingVal: number;
   public ratingEntity: any;
   public myRating: any[];
+  public averageRatingOfAService: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -297,5 +298,11 @@ export class DetailItemComponent implements OnInit {
         });
     });
   }
-
+  // Average rating of a service
+  averageRatingContent(){
+    this._dataService.get("/RatingService/GetRatingByService?idService="+this.newId)
+    .subscribe((response: any) => {
+      this.averageRatingOfAService = response;
+    });
+  }
 }

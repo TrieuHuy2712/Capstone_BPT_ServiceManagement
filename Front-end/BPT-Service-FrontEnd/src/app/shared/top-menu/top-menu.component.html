@@ -17,16 +17,30 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
               <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                      <a href="/main/userManage/userProfile/index" class="nav-link active">Quản lý</a>
-                  </li>
-                  <li class="nav-item">
                       <a href="/register" class="nav-link">Đăng kí</a>
                   </li>
-                  <li class="nav-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <!-- <li class="nav-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <a (click)="logout()" class="nav-link">Xin chào {{user.fullName}}</a>
                       
-                  </li>
-                  
+                  </li> -->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-cog"></i>
+                        <span class="badge badge-warning navbar-badge">2</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">Xin chào {{user.fullName}}</span>
+                        <div class="dropdown-divider"></div>
+                        <a (click)="logout()" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+        
+                        <div class="dropdown-divider"></div>
+                        <a href="/main/userManage/userProfile/index" class="dropdown-item">
+                            <i class="fas fa-user"></i> Thông tin cá nhân
+                        </a>
+                    </div>
+                </li>
               </ul>
           </div>
       </div>

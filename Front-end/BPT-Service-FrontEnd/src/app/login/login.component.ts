@@ -99,6 +99,9 @@ export class LoginComponent implements OnInit {
           else if(data.fullName == "Administrator"){
             this.router.navigate([UrlConstants.ADMINHOME]);
           }
+          else if(data.isProvider == true){
+            this.router.navigate([UrlConstants.PROVIDERHOME])
+          }
           else {
             this.router.navigate([UrlConstants.HOME]);
           }
@@ -106,7 +109,7 @@ export class LoginComponent implements OnInit {
           //   this.notificationService.printErrorMessage("Username or password is incorrect");
         },
         error => {
-          this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
+          this.notificationService.printErrorMessage("Sai tên đăng nhập hoặc mật khẩu, vui lòng kiểm tra lại !!!");
           this.loading = false;
         }
       );

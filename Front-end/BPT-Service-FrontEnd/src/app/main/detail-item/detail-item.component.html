@@ -193,10 +193,16 @@
                                             Khi nhận thông tin và địa chỉ của khách hàng, chúng tôi sẽ chủ động liên lạc
                                             và phục vụ tạn nơi.
                                         </p>
-                                        <div _ngcontent-kvx-c5="" host-name="Hanahouse Dalat" title="Đánh giá">
+                                        <div _ngcontent-kvx-c5="" >
                                             <div _ngcontent-kvx-c5="" class="title mt--60">
-                                                <h3 _ngcontent-kvx-c5="">Đánh giá</h3>
+                                                <h3 style="display: inline-block; margin-right: 20px;">Đánh giá</h3>
+                                                <!-- rating in there -->
+                                                <div *ngFor="let item of details.rating">
+                                                    <span><i class="fas fa-star" style="color: orange; font-size: 40px;"></i></span>
+                                                </div>
                                             </div>
+                                            
+                                            
                                             <div _ngcontent-kvx-c5="" class="mt--24">
                                                 <input class="form-control form-control-sm" type="text"
                                                     placeholder="Type a comment"

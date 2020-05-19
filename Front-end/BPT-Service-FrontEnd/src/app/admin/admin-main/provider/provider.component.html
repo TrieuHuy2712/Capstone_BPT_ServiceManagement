@@ -229,7 +229,7 @@
                             <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(userName) || !checkLocation(cityName) && entity.id==undefined)">Cập
                                 nhật</button>
                             <button type="button" *ngIf="entity.status !=1 && entity.id != undefined" class="btn btn-info"
-                                (click)="approveProvider()">Chấp nhận</button>
+                                (click)="approveProvider(entity.id, entity.userId)">Chấp nhận</button>
                             <button type="button" *ngIf="entity.status !=0 && entity.id !=undefined" class="btn btn-danger"
                                 (click)="showRejectProvider()">Từ chối</button>
 

@@ -6,6 +6,7 @@ import { UploadService } from '../core/services/upload.service';
 import { AuthenService } from '../core/services/authen.service';
 import { Router } from '@angular/router';
 import { MessageConstants } from '../core/common/message.constants';
+import { UrlConstants } from '../core/common/url.constants';
 
 @Component({
   selector: 'app-register',
@@ -25,8 +26,8 @@ export class RegisterComponent implements OnInit {
     singleDatePicker: true
   };
   allRoles: any[];
-  
-  
+
+
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
@@ -37,11 +38,11 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+    this.entity = {};
 
     this.loadData();
     this.loadRoles();
-    this.entity = {};
+
   }
 
   loadData() {
@@ -52,22 +53,22 @@ export class RegisterComponent implements OnInit {
       .subscribe((response: any) => {
         this.users = response.results;
       });
-      
+
   }
 
   loadRoles() {
     this._dataService.get("/AdminRole/GetAllPaging?page=1&pageSize=20&keyword=Customer").subscribe((response: any) => {
       this.roles = response.results;
-      
+
     });
     console.log("ket qua ");
   }
   //
   saveChange(valid: boolean) {
     if (valid) {
-      
-        this.saveData();
-      
+
+      this.saveData();
+
     }
   }
   //  
@@ -77,16 +78,16 @@ export class RegisterComponent implements OnInit {
         .post("/UserManagement/CreateNewuser", this.entity)
         .subscribe(
           (response: any) => {
-            if (response.isValid == true) {
-              this.users.push(response.myModel);
-              
-              this._notificationService.printSuccessMessage(
-                MessageConstants.CREATED_OK_MSG
-              );
-            } 
+            this._notificationService.printSuccessMessage(
+              MessageConstants.CREATED_OK_MSG
+            );
+            this.router.navigate([UrlConstants.LOGIN]);
           },
           error => this._dataService.handleError(error)
         );
-    } 
+    }
   }
+
+  // login
+
 }

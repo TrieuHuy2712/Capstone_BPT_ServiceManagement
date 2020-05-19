@@ -41,6 +41,12 @@ export class PostComponent implements OnInit {
   public tag: any[];
   public tagState: any[];
   public services: any[];
+  public providerState: any[];
+  public permission: any;
+  public functionId: string = "SERVICE";
+
+
+
 
   public aTag: TagList;
   public listTag: TagList[] = [];
@@ -60,6 +66,13 @@ export class PostComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.permission = {
+      canCreate: true,
+      canDelete: false,
+      canUpdate: false,
+      canRead: false
+    };
+
     this.entity = {};
     this.tagName="";
     // get current user
@@ -69,12 +82,23 @@ export class PostComponent implements OnInit {
     this.getAllCategory();
     this.getAllTag();
     this.getAllUser();
+    this.getAllProvider();
 
     
   }
 
   selectedCategory(){
     this.isCategory = !this.isCategory;
+  }
+
+  loadPermission() {
+    this._dataService
+      .get(
+        "/PermissionManager/GetAllPermission/" + this.functionId
+      )
+      .subscribe((response: any) => {
+        this.permission = response;
+      });
   }
 
   // start service method
@@ -90,9 +114,8 @@ export class PostComponent implements OnInit {
     }
   }
 
-  saveDataUser() {
-    debugger;
-    this._dataService.post("/Service/registerServiceFromUser", this.entity).subscribe(
+  saveDataProvider() {
+    this._dataService.post("/Service/registerServiceFromProvider", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
           // this.services.push(response.myModel);
@@ -109,7 +132,7 @@ export class PostComponent implements OnInit {
   }
   selectOption(val:any){
     this.entity.categoryId = val;
-
+    this.entity.categoryName = this.category.find(x => x.id == val).categoryName;
   }
 
   saveData() {
@@ -122,12 +145,24 @@ export class PostComponent implements OnInit {
       this.entity.tagOfServices = this.listTag;
       if (true) {
         //Assign User ID
-        this.entity.userId = this.userInSystem.find(x => x.fullName == this.user.fullName).id;
-        this.saveDataUser();
+        this.entity.providerId = this.provider.find(x => x.providerName == this.entity.providerName).id;
+        
+        this.saveDataProvider();
       } 
     } 
   }
   // 
+
+  checkProviderName(userName: any) {
+    if (userName.pristine) {
+      return true;
+    }
+    let getUserName = this.providerState.find(x => x == userName.value);
+    if (getUserName == null) {
+      return false;
+    };
+    return true
+  }
 
   getAllUser() {
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
@@ -203,6 +238,19 @@ export class PostComponent implements OnInit {
   }
   removeImage(index: any) {
     this.listImage.splice(index, 1);
+  }
+
+  // get all provider
+
+  getAllProvider() {
+    this._dataService.get("/Provider/GetAllPaging?page=1&pageSize=0&keyword=&filter=5").subscribe((response: any) => {
+      this.provider = response.results;
+      let userName = new Array();
+      this.provider.forEach(element => {
+        userName.push(element.providerName);
+      });
+      this.providerState = userName;
+    });
   }
   
   // end service method

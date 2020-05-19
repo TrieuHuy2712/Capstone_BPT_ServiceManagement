@@ -16,9 +16,7 @@ body {
   color: rgba(82, 64, 120, 0.8) !important;
 }
 
-.navbar li a {
-  color: white !important;
-}
+
 
 .navbar li a:hover {
   color: black !important;
@@ -1580,10 +1578,24 @@ label.star:before {
   }
 }
 
+.title_admin h3{
+  font-size: 25px;
+  font-weight: 150;
+}
+
 input:not(.input--square),
 select:not(.input--square),
 textarea:not(.input--square) {
   border-radius: 3rem;
+}
+
+.select-content{
+  width: 150px !important ;
+}
+
+.select-content option{
+  text-align: center !important;
+
 }
 
 input,
