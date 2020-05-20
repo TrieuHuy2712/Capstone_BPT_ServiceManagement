@@ -102,6 +102,14 @@ using BPT_Service.Application.RatingService.Command.DeleteRatingService;
 using BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceByOwner;
 using BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser;
 using BPT_Service.Application.RatingService.Query.GetListAllPagingRatingService;
+using BPT_Service.Application.RatingService.Query.GetRatingByService;
+using BPT_Service.Application.RecommedationService.Command.AddRecommendService;
+using BPT_Service.Application.RecommedationService.Command.RecommendLocation.AddRecommendLocation;
+using BPT_Service.Application.RecommedationService.Command.RecommendLocation.DeleteRecommendLocation;
+using BPT_Service.Application.RecommedationService.Command.RecommendNews.AddRecommendNews;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
 using BPT_Service.Application.RecommedationService.Query.RecommendService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
@@ -481,9 +489,17 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingRatingServiceByOwnerQuery, GetAllPagingRatingServiceByOwnerQuery>();
             services.AddScoped<IGetAllServiceRatingByUserQuery, GetAllServiceRatingByUserQuery>();
             services.AddScoped<IGetListAllPagingRatingServiceQuery, GetListAllPagingRatingServiceQuery>();
+            services.AddScoped<IGetRatingByService, GetRatingByService>();
 
             //Recommend service
             services.AddScoped<IRecommendService, RecommendService>();
+            services.AddScoped<IGetRecommendByLocation, GetRecommendByLocation>();
+            services.AddScoped<IGetRecommendByNews, GetRecommendByNews>();
+            services.AddScoped<IDeleteRecommend, DeleteRecommend>();
+            services.AddScoped<IAddRecommendLocation, AddRecommendLocation>();
+            services.AddScoped<IAddRecommendNews, AddRecommendNews>();
+            services.AddScoped<IAddRecommendService, AddRecommendService>();
+            services.AddScoped<IGetRecommendByService, GetRecommendByService>();
 
             //Store Procedure
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();

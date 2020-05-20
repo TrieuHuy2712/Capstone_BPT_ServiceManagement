@@ -3,6 +3,7 @@ using BPT_Service.Application.RatingService.Command.DeleteRatingService;
 using BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceByOwner;
 using BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser;
 using BPT_Service.Application.RatingService.Query.GetListAllPagingRatingService;
+using BPT_Service.Application.RatingService.Query.GetRatingByService;
 using BPT_Service.Application.RatingService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,25 +20,35 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetAllPagingRatingServiceByOwnerQuery _getAllPagingRatingServiceByOwnerQuery;
         private readonly IGetAllServiceRatingByUserQuery _getAllServiceRatingByUserQuery;
         private readonly IGetListAllPagingRatingServiceQuery _getListAllPagingRatingServiceQuery;
+        private readonly IGetRatingByService _getRatingByService;
 
         public RatingController(
             IAddUpdateRatingServiceCommand addUpdateRatingServiceCommand,
         IDeleteRatingServiceCommand deleteRatingServiceCommand,
         IGetAllPagingRatingServiceByOwnerQuery getAllPagingRatingServiceByOwnerQuery,
         IGetAllServiceRatingByUserQuery getAllServiceRatingByUserQuery,
-        IGetListAllPagingRatingServiceQuery getListAllPagingRatingServiceQuery)
+        IGetListAllPagingRatingServiceQuery getListAllPagingRatingServiceQuery,
+        IGetRatingByService getRatingByService)
         {
             _addUpdateRatingServiceCommand = addUpdateRatingServiceCommand;
             _deleteRatingServiceCommand = deleteRatingServiceCommand;
             _getAllPagingRatingServiceByOwnerQuery = getAllPagingRatingServiceByOwnerQuery;
             _getAllServiceRatingByUserQuery = getAllServiceRatingByUserQuery;
             _getListAllPagingRatingServiceQuery = getListAllPagingRatingServiceQuery;
+            _getRatingByService = getRatingByService;
         }
 
         [HttpGet("GetDetailARatingForProvider")]
         public async Task<IActionResult> GetDetailARatingForProvider(string keyword, int page, int pageSize, string idService)
         {
             var model = await _getAllPagingRatingServiceByOwnerQuery.ExecuteAsync(keyword, page, pageSize, idService);
+            return new OkObjectResult(model);
+        }
+
+        [HttpGet("GetRatingByService")]
+        public async Task<IActionResult> GetRatingByService(string idService)
+        {
+            var model = await _getRatingByService.ExecuteAsync(idService);
             return new OkObjectResult(model);
         }
 

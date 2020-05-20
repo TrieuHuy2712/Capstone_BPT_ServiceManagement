@@ -97,18 +97,31 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
                         };
                     }
                     //Check user is Provider
-                    if (_checkUserIsProviderQuery.ExecuteAsync(mappingProvider.UserId.ToString()).Result.isValid == true)
+                    var getAllUserProvider = await _providerRepository.FindAllAsync(x => x.UserId == mappingProvider.UserId);
+                    if (getAllUserProvider.Count()>1)
                     {
                         return new CommandResult<ProviderServiceViewModel>
                         {
                             isValid = false,
-                            errorMessage = "This account has been a provider"
+                            errorMessage = "This user cannot register over 1 provider"
                         };
                     }
                     mappingProvider.Status = Status.WaitingApprove;
                     _providerRepository.Update(mappingProvider);
                     var findUserId = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
-                    await _userRepository.AddToRoleAsync(findUserId, ConstantRoles.Provider);
+                    var getAllRoleUser = await _userRepository.GetRolesAsync(findUserId);
+                    var countRole = 0;
+                    foreach (var item in getAllRoleUser)
+                    {
+                        if (item == ConstantRoles.Provider)
+                        {
+                            countRole++;
+                        }
+                    }
+                    if (countRole == 0)
+                    {
+                        await _userRepository.AddToRoleAsync(findUserId, ConstantRoles.Provider);
+                    }
                     await _providerRepository.SaveAsync();
                     var userMail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
 

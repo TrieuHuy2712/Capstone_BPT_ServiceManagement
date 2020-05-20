@@ -113,7 +113,8 @@ namespace BPT_Service.Data
                     new Function() {Id = "SERVICE",Name = "Service",ParentId = "MANAGE",Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "TAG",Name = "Service_Tag",ParentId = "MANAGE",Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
                     new Function() { Id = "LOCATION", Name = "Location", ParentId = "SYSTEM",Status = Status.Active, URL = "/main/location/index", IconCss = "fa-home" },
-                    new Function() { Id = "EMAIL", Name = "Email", ParentId = "SYSTEM", Status = Status.Active, URL = "/main/email/index", IconCss = "fa-home" }
+                    new Function() { Id = "EMAIL", Name = "Email", ParentId = "SYSTEM", Status = Status.Active, URL = "/main/email/index", IconCss = "fa-home" },
+                    new Function() { Id = "RECOMMENDATION", Name = "Recommendation", ParentId = "MANAGE", Status = Status.Active, URL = "/main/recommendation/index", IconCss = "fa-home" },
             };
                 await _context.Functions.AddRangeAsync(functions);
                 await _context.SaveChangesAsync();
@@ -184,6 +185,22 @@ namespace BPT_Service.Data
                         Message= "Dear #UserName </br> Your new password is #Password " +
                         "<strong>You can access to your personal page for change password or using login by social login</strong></br>"+
                         "If you have problem, please contact us"
+                    },
+                    new Email()
+                    {
+                        Subject="Received Provider Request",
+                        Name ="Receive_Register_Provider",
+                        Message= "Dear #UserName , your provider request has been sent"
+                    },new Email()
+                    {
+                        Subject="Received News Request",
+                        Name ="Receive_Register_News",
+                        Message= "Dear #UserName , your news request has been sent"
+                    },new Email()
+                    {
+                        Subject="Received Service Request",
+                        Name ="Receive_Register_Service",
+                        Message= "Dear #UserName , your service request has been sent"
                     },
                 };
                 await _context.Emails.AddRangeAsync(emails);

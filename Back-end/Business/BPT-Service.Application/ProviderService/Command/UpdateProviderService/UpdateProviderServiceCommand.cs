@@ -4,6 +4,7 @@ using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
 using BPT_Service.Common;
+using BPT_Service.Common.Constants;
 using BPT_Service.Common.Constants.EmailConstant;
 using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
@@ -70,18 +71,19 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
                 {
                     if (getProvider.UserId == Guid.Parse(userId) ||
                         await _checkUserIsAdminQuery.ExecuteAsync(userId) ||
-                        await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanUpdate))
+                        await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate))
                     {
                         var mapping = await MappingProvider(getProvider, vm, userId);
                         _providerRepository.Update(mapping);
                         await _providerRepository.SaveAsync();
                         await Logging<UpdateProviderServiceCommand>.
                            InformationAsync(ActionCommand.COMMAND_UPDATE, userName, JsonConvert.SerializeObject(vm));
-                        if ((await _getPermissionActionQuery.ExecuteAsync(userId, "PROVIDER", ActionSetting.CanCreate)
+                        if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanCreate)
                     || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                         {
                             var findUserId = await _userRepository.FindByIdAsync(vm.UserId);
-                            await _userRepository.AddToRoleAsync(findUserId, "Provider");
+                            
+
 
                             //Set content for email
                             var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
@@ -138,7 +140,7 @@ namespace BPT_Service.Application.ProviderService.Command.UpdateProviderService
         {
             pro.PhoneNumber = vm.PhoneNumber;
             pro.Status = (await _checkUserIsAdminQuery.ExecuteAsync(currentUserContext) ||
-                            await _getPermissionActionQuery.ExecuteAsync(currentUserContext, "PROVIDER", ActionSetting.CanUpdate)) ?
+                            await _getPermissionActionQuery.ExecuteAsync(currentUserContext, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate)) ?
                             Status.WaitingApprove : Status.Pending;
             pro.CityId = vm.CityId;
             pro.TaxCode = vm.TaxCode;

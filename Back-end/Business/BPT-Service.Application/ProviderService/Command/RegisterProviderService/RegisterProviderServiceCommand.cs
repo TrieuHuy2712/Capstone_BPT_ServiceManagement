@@ -78,7 +78,16 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 }
                 var checkUserIsProvider = await _checkUserIsProviderQuery.ExecuteAsync(userId);
                 var mappingProvider = await MappingProvider(vm, Guid.Parse(userId), userId);
-
+                //Check user is Provider
+                var getAllUserProvider = await _providerRepository.FindAllAsync(x => x.UserId == mappingProvider.UserId);
+                if (getAllUserProvider.Count() >= 1)
+                {
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = "This user cannot register over 1 provider"
+                    };
+                }
                 var userEmail = "";
                 if (vm.UserId == null)
                 {
@@ -95,10 +104,12 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                 await _providerRepository.Add(mappingProvider);
 
                 await _providerRepository.SaveAsync();
+                var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
                 if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanCreate)
                     || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                 {
-                    var findUserId = await _userManager.FindByIdAsync(vm.UserId);
+                    var checkUser = !string.IsNullOrEmpty(vm.UserId) ? vm.UserId : userId;
+                    var findUserId = await _userManager.FindByIdAsync(checkUser);
                     var getAllRole =  await _userManager.GetRolesAsync(findUserId);
                     var flagProvider = 0;
                     foreach (var item in getAllRole)
@@ -114,13 +125,23 @@ namespace BPT_Service.Application.ProviderService.Command.RegisterProviderServic
                     }
 
                     //Set content for email
-                    var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                    
                     var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmProvider").Value +
                          mappingProvider.OTPConfirm + '_' + mappingProvider.Id;
 
                     var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_Provider).FirstOrDefault();
                     getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userEmail).Replace(EmailKey.ConfirmLink, generateCode);
 
+                    ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                    getFirstEmail.Message, findUserId.Email).Wait();
+                }
+                else
+                {
+                    var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Receive_Register_Provider).FirstOrDefault();
+                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userEmail);
+                    //Check if UserId null
+                    var checkUser = !string.IsNullOrEmpty(vm.UserId) ? vm.UserId : userId;
+                    var findUserId = await _userManager.FindByIdAsync(checkUser);
                     ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, findUserId.Email).Wait();
                 }

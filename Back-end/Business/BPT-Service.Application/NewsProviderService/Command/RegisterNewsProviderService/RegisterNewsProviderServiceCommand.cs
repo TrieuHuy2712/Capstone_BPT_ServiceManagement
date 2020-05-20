@@ -42,15 +42,15 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
         private readonly UserManager<AppUser> _userManager;
 
         public RegisterNewsProviderServiceCommand(
-            ICheckUserIsAdminQuery checkUserIsAdminQuery, 
-            ICheckUserIsProviderQuery checkUserIsProviderQuery, 
-            IConfiguration configuration, 
-            IGetAllEmailServiceQuery getAllEmailServiceQuery, 
-            IGetPermissionActionQuery getPermissionActionQuery, 
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<EmailConfigModel> config, 
-            IRepository<Provider, Guid> providerRepository, 
-            IRepository<ProviderNew, int> newProviderRepository, 
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            IConfiguration configuration,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> config,
+            IRepository<Provider, Guid> providerRepository,
+            IRepository<ProviderNew, int> newProviderRepository,
             UserManager<AppUser> userManager)
         {
             _checkUserIsAdminQuery = checkUserIsAdminQuery;
@@ -85,21 +85,32 @@ namespace BPT_Service.Application.NewsProviderService.Command.RegisterNewsProvid
                     await Logging<RegisterNewsProviderServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
                     //Send mail confirm
-
                     //Get Provider Information
                     var providerInformation = await _providerRepository.FindByIdAsync(Guid.Parse(vm.ProviderId));
                     var findUser = await _userManager.FindByIdAsync(providerInformation.UserId.ToString());
                     //Set content for email
                     var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
-                    var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider").Value +
-                         mappingProvider.CodeConfirm + '_' + mappingProvider.Id;
+                    if (getIsProvider.isValid)
+                    {
+                        var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Receive_Register_News).FirstOrDefault();
+                        getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUser.Email);
 
-                    var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
-                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUser.Email).
-                        Replace(EmailKey.ConfirmLink, generateCode);
+                        ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                        getFirstEmail.Message, findUser.Email).Wait();
+                    }
+                    else
+                    {
+                        var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmNewsProvider").Value +
+     mappingProvider.CodeConfirm + '_' + mappingProvider.Id;
 
-                    ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
-                                    getFirstEmail.Message, findUser.Email).Wait();
+                        var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Approve_News).FirstOrDefault();
+                        getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, findUser.Email).
+                            Replace(EmailKey.ConfirmLink, generateCode);
+
+                        ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                        getFirstEmail.Message, findUser.Email).Wait();
+                    }
+
                     return new CommandResult<NewsProviderViewModel>
                     {
                         isValid = true,

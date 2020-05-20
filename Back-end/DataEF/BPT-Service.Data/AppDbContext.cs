@@ -40,6 +40,7 @@ namespace BPT_Service.Data
         public DbSet<CityProvince> CityProvinces { get; set; }
         public DbSet<ProviderFollowing> ProviderFollowings { get; set; }
         public DbSet<Email> Emails { get; set; }
+        public DbSet<Recommendation> Recommendations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

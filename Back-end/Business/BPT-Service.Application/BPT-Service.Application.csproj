@@ -19,5 +19,6 @@
 <ItemGroup>
   <Folder Include="NotificationService\ViewModel\" />
   <Folder Include="PermissionService\ViewModel\" />
+  <Folder Include="RecommedationService\Query\Extension\" />
 </ItemGroup>
 </Project>

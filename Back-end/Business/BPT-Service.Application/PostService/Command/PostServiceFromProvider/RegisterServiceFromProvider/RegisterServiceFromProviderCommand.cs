@@ -83,7 +83,7 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
             {
                 var checkUserIsProvider = await _checkUserIsProvider.ExecuteAsync(userId);
                 if (await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate) ||
-                    await _checkUserIsAdminQuery.ExecuteAsync(userId))
+                    await _checkUserIsAdminQuery.ExecuteAsync(userId) || checkUserIsProvider.isValid)
                 {
                     //Add new tag when isAdd equal true
                     List<Tag> newTag = new List<Tag>();
@@ -120,12 +120,12 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                     //Write Log
                     await Logging<RegisterServiceFromProviderCommand>.
                         InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
-
+                    //Get user Information
+                    var findUserId = await _userManager.FindByIdAsync(GetProvider(vm.ProviderId).Result.UserId.ToString());
                     //Send mail for user
                     if ((await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.SERVICE, ActionSetting.CanCreate)
                 || await _checkUserIsAdminQuery.ExecuteAsync(userId)))
                     {
-                        var findUserId = await _userManager.FindByIdAsync(GetProvider(vm.ProviderId).Result.UserId.ToString());
                         //Create Generate code
                         var generateCode = _configuration.GetSection("Host").GetSection("LinkConfirmService").Value +
                          mappingService.codeConfirm + '_' + mappingService.Id;
@@ -136,6 +136,15 @@ namespace BPT_Service.Application.PostService.Command.PostServiceFromProvider.Re
                             Replace(EmailKey.UserNameKey, findUserId.Email).
                             Replace(EmailKey.ConfirmLink, generateCode);
 
+                        ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                        getFirstEmail.Message, findUserId.Email).Wait();
+                    }
+                    else
+                    {
+                        var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                        var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Receive_Register_Service).FirstOrDefault();
+                        getFirstEmail.Message = getFirstEmail.Message.
+                            Replace(EmailKey.UserNameKey, findUserId.Email);
                         ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
                                         getFirstEmail.Message, findUserId.Email).Wait();
                     }
