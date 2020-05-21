@@ -26,9 +26,9 @@
             </ul>
 
             <button class="btn btn-primary btn-block"><b>Edit my profile</b></button>
-            <div class="center-xs">
+            <div class="center-xs" *ngIf=" !profile.isProvider">
               Bạn chưa là Nhà Cung Cấp ?
-              <a ><span class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí ngay</span> </a>
+              <a ><span  class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí ngay</span> </a>
             </div>
           </div>
           <!-- /.card-body -->

@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-4 col-xs-12 first-xs">
                 <div class="account">
-                    <form autocomplete="off" #addEditForm="ngForm" novalidate (ngSubmit)="saveChange(true)">
+                    <form autocomplete="off" novalidate (ngSubmit)="saveChange(true)">
                         <h3 class="account__title">Đăng ký thành viên</h3>
                         <div><label class="input-group__label bold is-block">Họ và tên</label>
                             <div class="input-group__icon is-relative">
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="account__body"><button type="submit"
-                                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold">Đăng
+                                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold" [routerLink]="['/login']" routerLinkActive="router-link-active" >Đăng
                                 ký</button>
                             <div class="center-xs">
                                 Bạn đã có tài khoản?

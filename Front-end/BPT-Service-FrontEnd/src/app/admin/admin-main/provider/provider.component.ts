@@ -212,7 +212,10 @@ export class ProviderComponent implements OnInit {
       this.state= userName;
     });
   }
-  approveProvider(){
+  approveProvider(a: any, b: any){
+    debugger;
+    this.entity.id = a;
+    this.entity.userId = b;
     this._dataService.post("/Provider/ApproveProvider", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {

@@ -16,6 +16,7 @@ import { LanguageService } from 'src/app/core/services/language.service';
 export class TopMenuComponent implements OnInit {
   public user: LoggedInUser;
   loading = false;
+  searchData: string = "";
   constructor(
     private _authenService: AuthenService,
     private router: Router,
@@ -26,6 +27,9 @@ export class TopMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._authenService.getLoggedInUser();
+    console.log(this.user);
+    console.log(this.searchData);
+    
   }
 
   logout() {
@@ -40,5 +44,9 @@ export class TopMenuComponent implements OnInit {
   onChange(deviceValue) {
     console.log(deviceValue);
     this.languageService.setLanguage(deviceValue);
+  }
+  dataSearchBinding(val: any){
+    this.searchData = val;
+    console.log(this.searchData);
   }
 }

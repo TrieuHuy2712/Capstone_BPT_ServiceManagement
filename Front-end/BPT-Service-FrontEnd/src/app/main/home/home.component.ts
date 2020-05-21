@@ -10,6 +10,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 export class HomeComponent implements OnInit {
   locations: any[];
   public category: any[];
+  public news: any[];
 
 
 
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   ) {
     this.loadDataOfLocation();
     this.getAllCategory();
+    this.getAllNews();
   }
 
   // slider 1
@@ -79,4 +81,11 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getAllNews() {
+    this._dataService.get("/ProviderNews/GetAllPagingProviderNews?isAdminPage=true&filter=5")
+    .subscribe((response: any) => {
+      this.news = response.results;
+      console.log(this.news)
+      });
+  }
 }

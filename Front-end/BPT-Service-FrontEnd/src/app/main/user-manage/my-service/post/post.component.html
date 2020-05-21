@@ -28,6 +28,33 @@
                     </div>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <label class="control-label">Chọn loại dịch vụ</label>
+                  <div>
+                    <select class="form-control" id="sel1" (change)="filterUserService($event.target.value)">
+                      <option value="1">Provider</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <label class="control-label">Tác giả</label>
+                  <div >
+                    <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" 
+                      [typeahead]="providerState" minlength="3" name="providerName" class="form-control" autocomplete="off"
+                      [disabled]="entity.id!=undefined">
+                    <small [hidden]="!providerName.invalid || (providerName.pristine && !addEditForm.submitted)"
+                      class="text-danger">
+                      Bạn phải nhập tên ít nhất 3 ký tự
+                    </small>
+                    <small [hidden]="checkProviderName(providerName)" class="text-danger">
+                      Không tìm thấy provider bạn đã nhập
+                    </small>
+                  </div>
+                  
+                </div>
+              </div>
             <!-- lưu ý không thêm loại khách thêm dịch vụ, để mặc định là Customer, yep -->
             <!-- lưu ý không thêm tên khách, để mặc định là Customer, yep -->
             <div class="row">

@@ -27,6 +27,9 @@ export class SidebarMenuComponent implements OnInit {
 
     // this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.getUser();
+    console.log("ket qua "+ this._functions);
+
+    
 
 
   }
@@ -41,10 +44,28 @@ export class SidebarMenuComponent implements OnInit {
           uName
         )
           .subscribe((response: any) => {
+            
             this._functions = response;
             this._functions = this._functions.filter(x => x.key != null);
+            // vietsub manage
+            this._functions[0].key = "Quản lý";
+            this._functions[0].childrenId[0].name = "Danh mục";
+            this._functions[0].childrenId[1].name = "Tin tức";
+            this._functions[0].childrenId[2].name = "Nhà cung cấp";
+            this._functions[0].childrenId[3].name = "Dịch vụ";
+            this._functions[0].childrenId[4].name = "Đuôi của dịch vụ";
+            // vietsub system
+            this._functions[1].key = "Hệ thống";
+            this._functions[1].childrenId[0].name = "Thư điện tử";
+            this._functions[1].childrenId[1].name = "Chức năng";
+            this._functions[1].childrenId[2].name = "Vị trí";
+            this._functions[1].childrenId[3].name = "Vai trò";
+            this._functions[1].childrenId[4].name = "Người dùng";
           });
-      };
+      }
+      if(this.currentUser.avatar == null){
+        this.currentUser.avatar = "../../../../assets/images/default.png";
+      }
     })
   }
 
@@ -67,4 +88,7 @@ export class SidebarMenuComponent implements OnInit {
   onChange(deviceValue) {
     this.languageService.setLanguage(deviceValue);
   }
+
+  // vietsub this sidebar
+
 }

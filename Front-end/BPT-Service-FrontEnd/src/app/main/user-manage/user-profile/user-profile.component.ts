@@ -138,28 +138,6 @@ export class UserProfileComponent implements OnInit {
     };
     return true
   }
-  approveProvider() {
-    this._dataService.post("/Service/approvePostService", this.entity).subscribe(
-      (response: any) => {
-        if (response.isValid == true) {
-          let getPostition = this.services.findIndex(x => x.id == this.entity.id);
-          this.services[getPostition].status = 1;
-          this.modalAddEdit.hide();
-          this._notificationService.printSuccessMessage(
-            MessageConstants.UPDATED_OK_MSG
-          );
-        } else {
-          this._notificationService.printErrorMessage(
-            response.errorMessage
-          );
-        }
-      },
-      error => this._dataService.handleError(error)
-    );
-  }
-  showRejectProvider() {
-    this.modalReason.show();
-    this.reject = [];
-  }
+  
 
 }

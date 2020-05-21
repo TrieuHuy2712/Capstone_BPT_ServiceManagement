@@ -119,8 +119,7 @@
                                                                             class="host-intro is-flex align-center">
                                                                             <div
                                                                                 class="image-box image-box--large image-box--circle">
-                                                                                <img
-                                                                                    [src]=""user.avatar>
+                                                                                <img [src]="" user.avatar>
                                                                             </div>
                                                                             <div
                                                                                 class="host-intro__name mx--12 mx--md--18">
@@ -194,42 +193,50 @@
                                             Khi nhận thông tin và địa chỉ của khách hàng, chúng tôi sẽ chủ động liên lạc
                                             và phục vụ tạn nơi.
                                         </p>
-                                        <div _ngcontent-kvx-c5="" host-name="Hanahouse Dalat" title="Đánh giá">
+                                        <div _ngcontent-kvx-c5="" >
                                             <div _ngcontent-kvx-c5="" class="title mt--60">
-                                                <h3 _ngcontent-kvx-c5="">Đánh giá</h3>
+                                                <h3 style="display: inline-block; margin-right: 20px;">Đánh giá</h3>
+                                                <!-- rating in there -->
+                                                <div *ngFor="let item of details.rating">
+                                                    <span><i class="fas fa-star" style="color: orange; font-size: 40px;"></i></span>
+                                                </div>
                                             </div>
+                                            
+                                            
                                             <div _ngcontent-kvx-c5="" class="mt--24">
                                                 <input class="form-control form-control-sm" type="text"
                                                     placeholder="Type a comment"
                                                     (keyup.enter)="postAComment($event.target.value)">
-                                                <div _ngcontent-kvx-c5="" class="review mt--24" *ngFor="let item of testComment">
-                                                    <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
+                                                <div _ngcontent-kvx-c5="" class="review mt--24 "
+                                                    *ngFor="let item of testComment">
+                                                    <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center fulse"
                                                         data-v-730e0d8f="">
                                                         <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
                                                             data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
                                                                 class="review__avatar" data-v-730e0d8f="" height="48"
-                                                                [src]="item.avatarPath"
-                                                                width="48">
+                                                                [src]="item.avatarPath" width="48">
                                                             <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
                                                                 data-v-730e0d8f="">
                                                                 <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
                                                                     data-v-730e0d8f="">{{item.userName}} <div
                                                                         _ngcontent-kvx-c5=""
                                                                         class="d-inline-block pl--6" data-v-730e0d8f="">
-                                                                        </div>
+                                                                    </div>
                                                                 </h5><span _ngcontent-kvx-c5="" class="caption"
                                                                     data-v-730e0d8f="">Wenesday, May 6, 2020</span>
                                                             </div>
-                                                            <button style="margin-left: 50px;" (click) = "deleteComment(item.id)"><i class="fas fa-trash-alt"></i></button>
+                                                            <button *ngIf="item.userId == 'c82f8075-a826-4df4-34b6-08d7f4de0028'" style="margin-left: 50px;"
+                                                                (click)="deleteComment(item.id)"><i
+                                                                    class="fas fa-trash-alt"></i></button>
                                                         </div>
                                                     </div>
                                                     <div _ngcontent-kvx-c5="" class="review__content"
                                                         data-v-730e0d8f="">
                                                         <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
                                                             data-v-730e0d8f="">{{item.contentOfRating}}</p>
-                                                            
+
                                                     </div>
-                                                    
+
                                                     <!-- child comment -->
                                                     <!-- <div _ngcontent-kvx-c5="" class="child-comment mt--24" *ngFor="let i of child_comment">
                                                         <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
@@ -260,7 +267,8 @@
                                                 </div>
 
                                                 <div _ngcontent-kvx-c5="" class="mt--24"><a _ngcontent-kvx-c5=""
-                                                        class="btn color-i semi-bold" role="button">Xem tất cả bình luận</a></div>
+                                                        class="btn color-i semi-bold" role="button">Xem tất cả bình
+                                                        luận</a></div>
                                                 <div _ngcontent-kvx-c5="" class="room-fw-modal"></div>
                                             </div>
                                         </div>
@@ -404,6 +412,23 @@
                                                         class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
                                                             style="color: #fff; font-weight: 600;">Đã theo
                                                             dõi</span></button>
+
+                                                    <!-- rating -->
+                                                    <div class="stars">
+                                                        <form>
+                                                          <input class="star star-5" id="star-5" type="radio" name="star" value=5 (click)="getContentOfRating($event.target.value)"/>
+                                                          <label class="star star-5" for="star-5" ></label>
+                                                          <input class="star star-4" id="star-4" type="radio" name="star" value=4 (click)="getContentOfRating($event.target.value)"/>
+                                                          <label class="star star-4" for="star-4"></label>
+                                                          <input class="star star-3" id="star-3" type="radio" name="star" value=3 (click)="getContentOfRating($event.target.value)"/>
+                                                          <label class="star star-3" for="star-3"></label>
+                                                          <input class="star star-2" id="star-2" type="radio" name="star" value=2 (click)="getContentOfRating($event.target.value)"/>
+                                                          <label class="star star-2" for="star-2"></label>
+                                                          <input class="star star-1" id="star-1" type="radio" name="star" value=1 (click)="getContentOfRating($event.target.value)"/>
+                                                          <label class="star star-1" for="star-1"></label>
+                                                        </form>
+                                                      </div>
+
                                                     <div class="mt--18">
                                                         <div class="room-event__wrap"></div>
                                                     </div>
