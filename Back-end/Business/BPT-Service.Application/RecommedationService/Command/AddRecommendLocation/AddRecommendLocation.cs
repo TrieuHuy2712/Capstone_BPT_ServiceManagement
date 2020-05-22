@@ -28,7 +28,7 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendLocation
             _userManager = userManager;
         }
 
-        public async Task<CommandResult<LocationRecommendationViewModel>> ExecuteAsync(LocationRecommendationViewModel vm)
+        public async Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
@@ -42,11 +42,11 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendLocation
                 }
 
                 //Check Location has been set
-                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdLocation.ToString() && x.Type == TypeRecommendation.Location);
+                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdType.ToString() && x.Type == TypeRecommendation.Location);
                 if (findIdAvaiable != null)
                 {
                     await Logging<AddRecommendLocation>.WarningAsync(ActionCommand.COMMAND_ADD, userName, "This location has been order at position " + findIdAvaiable.Order);
-                    return new CommandResult<LocationRecommendationViewModel>
+                    return new CommandResult<AddRecommendationViewModel>
                     {
                         isValid = false,
                         errorMessage = "This location has been order at position " + findIdAvaiable.Order
@@ -56,14 +56,14 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendLocation
                 //Add new recommendation
                 var addNewOrder = new Recommendation()
                 {
-                    IdType = vm.IdLocation.ToString(),
+                    IdType = vm.IdType.ToString(),
                     Order = vm.Order,
                     Type = TypeRecommendation.Location
                 };
                 await _recommendRepository.Add(addNewOrder);
                 await _recommendRepository.SaveAsync();
                 await Logging<AddRecommendLocation>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
-                return new CommandResult<LocationRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     isValid = true,
                     myModel = vm
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendLocation
             catch (Exception ex)
             {
                 await Logging<AddRecommendLocation>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
-                return new CommandResult<LocationRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     errorMessage = ex.Message.ToString(),
                     isValid = false

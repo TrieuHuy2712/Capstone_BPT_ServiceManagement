@@ -6,6 +6,6 @@ namespace BPT_Service.Application.RecommedationService.Command.AddRecommendServi
 {
     public interface IAddRecommendService
     {
-        Task<CommandResult<ServiceRecommendationViewModel>> ExecuteAsync(ServiceRecommendationViewModel vm);
+        Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm);
     }
 }

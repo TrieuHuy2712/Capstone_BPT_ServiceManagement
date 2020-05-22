@@ -28,7 +28,7 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendNews.Add
             _userManager = userManager;
         }
 
-        public async Task<CommandResult<NewsRecommendationViewModel>> ExecuteAsync(NewsRecommendationViewModel vm)
+        public async Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
@@ -42,11 +42,11 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendNews.Add
                 }
 
                 //Check News has been set
-                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdNews.ToString() && x.Type == TypeRecommendation.Location);
+                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdType.ToString() && x.Type == TypeRecommendation.Location);
                 if (findIdAvaiable != null)
                 {
                     await Logging<AddRecommendNews>.WarningAsync(ActionCommand.COMMAND_ADD, userName, "This location has been order at position " + findIdAvaiable.Order);
-                    return new CommandResult<NewsRecommendationViewModel>
+                    return new CommandResult<AddRecommendationViewModel>
                     {
                         isValid = false,
                         errorMessage = "This location has been order at position " + findIdAvaiable.Order
@@ -56,14 +56,14 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendNews.Add
                 //Add new recommendation
                 var addNewOrder = new Recommendation()
                 {
-                    IdType = vm.IdNews.ToString(),
+                    IdType = vm.IdType.ToString(),
                     Order = vm.Order,
                     Type = TypeRecommendation.Location
                 };
                 await _recommendRepository.Add(addNewOrder);
                 await _recommendRepository.SaveAsync();
                 await Logging<AddRecommendNews>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
-                return new CommandResult<NewsRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     isValid = true,
                     myModel = vm
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendNews.Add
             catch (Exception ex)
             {
                 await Logging<AddRecommendNews>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
-                return new CommandResult<NewsRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     errorMessage = ex.Message.ToString(),
                     isValid = false

@@ -6,6 +6,6 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendLocation
 {
     public interface IAddRecommendLocation
     {
-        Task<CommandResult<LocationRecommendationViewModel>> ExecuteAsync(LocationRecommendationViewModel vm);
+        Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm);
     }
 }

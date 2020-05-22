@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Recommendation")]
     [ApiController]
     [AllowAnonymous]
     public class RecommendationController : ControllerBase
@@ -71,21 +71,21 @@ namespace BPT_Service.WebAPI.Controllers
         #region POST API
 
         [HttpPost("AddLocationRecommend")]
-        public async Task<IActionResult> AddLocationRecommend(LocationRecommendationViewModel vm)
+        public async Task<IActionResult> AddLocationRecommend(AddRecommendationViewModel vm)
         {
             var model = await _addLocationRecommend.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
 
         [HttpPost("AddNewsRecommend")]
-        public async Task<IActionResult> AddNewsRecommend(NewsRecommendationViewModel vm)
+        public async Task<IActionResult> AddNewsRecommend(AddRecommendationViewModel vm)
         {
             var model = await _addNewsRecommend.ExecuteAsync(vm);
             return new OkObjectResult(model);
         }
 
         [HttpPost("AddServiceRecommend")]
-        public async Task<IActionResult> AddServiceRecommend(ServiceRecommendationViewModel vm)
+        public async Task<IActionResult> AddServiceRecommend(AddRecommendationViewModel vm)
         {
             var model = await _addRecommendService.ExecuteAsync(vm);
             return new OkObjectResult(model);
@@ -95,7 +95,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region DELETE API
 
-        [HttpPost("DeleteRecommend")]
+        [HttpDelete("DeleteRecommend")]
         public async Task<IActionResult> DeleteRecommend(int id)
         {
             var model = await _deleteRecommend.ExecuteAsync(id);

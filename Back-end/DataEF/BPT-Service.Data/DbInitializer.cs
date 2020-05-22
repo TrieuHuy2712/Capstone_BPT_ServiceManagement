@@ -110,7 +110,7 @@ namespace BPT_Service.Data
                     new Function() {Id = "NEWS",Name = "News",ParentId = "MANAGE",Status = Status.Active,URL = "/news/provider/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "PROVIDER",Name = "Provider",ParentId = "MANAGE",Status = Status.Active,URL = "/main/provider/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "CATEGORY",Name = "Category",ParentId = "MANAGE",Status = Status.Active,URL = "/main/category/index",IconCss = "fa-chevron-down"},
-                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "MANAGE",Status = Status.Active,URL = "/main/product/index",IconCss = "fa-chevron-down"},
+                    new Function() {Id = "SERVICE",Name = "Service",ParentId = "MANAGE",Status = Status.Active,URL = "/main/service/index",IconCss = "fa-chevron-down"},
                     new Function() {Id = "TAG",Name = "Service_Tag",ParentId = "MANAGE",Status = Status.Active,URL = "/main/tag/index",IconCss = "fa-chevron-down"},
                     new Function() { Id = "LOCATION", Name = "Location", ParentId = "SYSTEM",Status = Status.Active, URL = "/main/location/index", IconCss = "fa-home" },
                     new Function() { Id = "EMAIL", Name = "Email", ParentId = "SYSTEM", Status = Status.Active, URL = "/main/email/index", IconCss = "fa-home" },

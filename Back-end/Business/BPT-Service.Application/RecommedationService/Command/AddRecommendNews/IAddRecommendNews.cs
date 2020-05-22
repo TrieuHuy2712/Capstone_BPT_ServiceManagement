@@ -6,6 +6,6 @@ namespace BPT_Service.Application.RecommedationService.Command.RecommendNews.Add
 {
     public interface IAddRecommendNews
     {
-        Task<CommandResult<NewsRecommendationViewModel>> ExecuteAsync(NewsRecommendationViewModel vm);
+        Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm);
     }
 }

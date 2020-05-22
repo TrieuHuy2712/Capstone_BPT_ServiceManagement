@@ -15,6 +15,6 @@ import { adminRoutes } from './admin.routes';
     RouterModule.forChild(adminRoutes)
   ],
   declarations: [AdminComponent],
-  providers:[UtilityService,AuthenService,TranslationService]
+  providers: [UtilityService, AuthenService, TranslationService]
 })
 export class AdminModule { }

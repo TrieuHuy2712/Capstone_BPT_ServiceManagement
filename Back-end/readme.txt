@@ -20,3 +20,10 @@ inner join dbo.AppUserRoles userRoles
 on users.Id = userRoles.UserId
 inner join dbo.AppRoles roles
 on userRoles.RoleId = roles.Id
+
+//Connection String Server
+    "DefaultConnection": "Server=tcp:capstonevlu01.database.windows.net,1433;Database=BPTService;User ID=adminBPT@capstonevlu01.database.windows.net;Password=123456Ab;Trusted_Connection=False;Encrypt=True;"
+
+
+//Connection String windows
+Server=6YLCMH2\\SQLEXPRESS;Database=BPTService;Trusted_Connection=True;

@@ -1,4 +1,4 @@
-import { NgModule,CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { LocationComponent } from './location.component';
@@ -12,14 +12,14 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 
 const roleRoutes: Routes = [
-  //localhost:4200/main/user
+  // localhost:4200/main/user
   { path: '', redirectTo: 'index', pathMatch: 'full' },
-  //localhost:4200/main/home/index
+  // localhost:4200/main/home/index
   { path: 'index', component: LocationComponent }
 ]
 @NgModule({
   declarations: [LocationComponent],
-  providers:[DataService,NotificationService, TranslationService
+  providers: [DataService, NotificationService, TranslationService
   ],
   imports: [
     CommonModule,

@@ -28,7 +28,7 @@ namespace BPT_Service.Application.RecommedationService.Command.AddRecommendServi
             _userManager = userManager;
         }
 
-        public async Task<CommandResult<ServiceRecommendationViewModel>> ExecuteAsync(ServiceRecommendationViewModel vm)
+        public async Task<CommandResult<AddRecommendationViewModel>> ExecuteAsync(AddRecommendationViewModel vm)
         {
             var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
             var userName = _userManager.FindByIdAsync(userId).Result.UserName;
@@ -42,11 +42,11 @@ namespace BPT_Service.Application.RecommedationService.Command.AddRecommendServi
                 }
 
                 //Check News has been set
-                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdService && x.Type == TypeRecommendation.Location);
+                var findIdAvaiable = await _recommendRepository.FindSingleAsync(x => x.IdType == vm.IdType && x.Type == TypeRecommendation.Location);
                 if (findIdAvaiable != null)
                 {
                     await Logging<AddRecommendService>.WarningAsync(ActionCommand.COMMAND_ADD, userName, "This service has been order at position " + findIdAvaiable.Order);
-                    return new CommandResult<ServiceRecommendationViewModel>
+                    return new CommandResult<AddRecommendationViewModel>
                     {
                         isValid = false,
                         errorMessage = "This service has been order at position " + findIdAvaiable.Order
@@ -56,14 +56,14 @@ namespace BPT_Service.Application.RecommedationService.Command.AddRecommendServi
                 //Add new recommendation
                 var addNewOrder = new Recommendation()
                 {
-                    IdType = vm.IdService,
+                    IdType = vm.IdType,
                     Order = vm.Order,
                     Type = TypeRecommendation.Location
                 };
                 await _recommendRepository.Add(addNewOrder);
                 await _recommendRepository.SaveAsync();
                 await Logging<AddRecommendService>.InformationAsync(ActionCommand.COMMAND_ADD, userName, JsonConvert.SerializeObject(vm));
-                return new CommandResult<ServiceRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     isValid = true,
                     myModel = vm
@@ -72,7 +72,7 @@ namespace BPT_Service.Application.RecommedationService.Command.AddRecommendServi
             catch (Exception ex)
             {
                 await Logging<AddRecommendService>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName, "Has error");
-                return new CommandResult<ServiceRecommendationViewModel>
+                return new CommandResult<AddRecommendationViewModel>
                 {
                     errorMessage = ex.Message.ToString(),
                     isValid = false

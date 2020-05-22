@@ -18,7 +18,7 @@ import { mainRoutes } from './admin-main.routes';
     AdminHomeModule,
     RouterModule.forChild(mainRoutes)
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent],
-  providers:[UtilityService,AuthenService,TranslationService]
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent],
+  providers: [UtilityService, AuthenService, TranslationService]
 })
 export class AdminMainModule { }

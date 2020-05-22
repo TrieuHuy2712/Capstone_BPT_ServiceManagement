@@ -1,0 +1,146 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="page-title">
+  <div class="title_left">
+    <h3>Danh sách recommendation</h3>
+  </div>
+
+
+</div>
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <ul class="nav navbar-right panel_toolbox">
+          <li>
+            <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+              <option value="0">Danh sách News</option>
+              <option value="1">Danh sách Location</option>
+              <option value="2">Danh sách Service</option>
+            </select>
+          </li>
+          <li>
+            <button type="button" class="btn btn-success" (click)="setDefaultRecommend()">Reset default</button>
+          </li>
+          <li>
+            <button type="button" class="btn btn-primary" (click)="showAddModal()">Thêm mới recommendation</button>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="card-body table-responsive p-0">
+
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr>
+              <th>Stt</th>
+              <th>Tên</th>
+              <th>Hình ảnh</th>
+              <th></th>
+            </tr>
+          </thead>
+          <!-- Table News -->
+          <tbody *ngIf="currentRecommendation == TypeRecommend.News">
+            <tr *ngFor="let news of listRecommendNews, let i=index">
+              <td>{{news.order}}</td>
+              <td>{{news.titleNews}}</td>
+              <td>{{news.imgNews}}</td>
+              <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.News,i)"><i
+                  class="fa fa-pencil-square-o"></i></button>
+              <button *ngIf="permission.canDelete" class="btn btn-danger"
+                (click)="deleteItem(TypeRecommend.News,news.id,i)"><i class="fa fa-trash"></i></button>
+            </tr>
+          </tbody>
+          <!-- Table Location -->
+          <tbody *ngIf="currentRecommendation == TypeRecommend.Location">
+            <tr *ngFor="let location of listRecommendLocation, let i=index">
+              <td>{{location.order}}</td>
+              <td>{{location.nameLocation}}</td>
+              <td>{{location.imgLocation}}</td>
+              <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.Location,i)"><i
+                  class="fa fa-pencil-square-o"></i></button>
+              <button *ngIf="permission.canDelete" class="btn btn-danger"
+                (click)="deleteItem(TypeRecommend.Location,location.id,i)"><i class="fa fa-trash"></i></button>
+            </tr>
+          </tbody>
+          <!-- Table Location -->
+          <tbody *ngIf="currentRecommendation == TypeRecommend.Service">
+            <tr *ngFor="let service of listRecommendService, let i=index">
+              <td>{{service.order}}</td>
+              <td>{{service.nameService}}</td>
+              <td>{{service.imgService}}</td>
+              <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.Service,i)"><i
+                  class="fa fa-pencil-square-o"></i></button>
+              <button *ngIf="permission.canDelete" class="btn btn-danger"
+                (click)="deleteItem(TypeRecommend.Service,service.id,i)"><i class="fa fa-trash"></i></button>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Chi tiết recommend</h4>
+        <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-6 col-sm-6 col-xs-12"></div>
+        <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" *ngIf="entity"
+          (ngSubmit)="saveData(addEditForm.valid)">
+          <div class="form-group row">
+            <div class="col-md-6 col-sm-6 col-xs-12" [hidden]="!isAdd">
+              <label class="control-label">Loại Recommendation</label>
+              <div class="col-md-9 col-sm-9 col-xs-12">
+                <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+                  <option value="0">Danh sách News</option>
+                  <option value="1">Danh sách Location</option>
+                  <option value="2">Danh sách Service</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <label class="control-label">Chọn thứ tụ</label>
+              <div class="col-md-9 col-sm-9 col-xs-12">
+                <input type="number" min="0" max="10" name="order" [(ngModel)]="entity.order">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Tên loại</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <!-- Input location -->
+              <input [(ngModel)]="entity.selectedLocation" [typeahead]="listLocation" typeaheadOptionField="city"
+                (typeaheadOnSelect)="onSelectIdType(TypeRecommend.Location, $event)" class="form-control"
+                name="selectedLocation" *ngIf="currentRecommendation == TypeRecommend.Location && listLocation.length>0"
+                autocomplete="off">
+              <!-- Input news -->
+              <input [(ngModel)]="entity.selectedNews" [typeahead]="listNews" typeaheadOptionField="title"
+                (typeaheadOnSelect)="onSelectIdType(TypeRecommend.News,$event)" class="form-control" name="selectedNews"
+                *ngIf="currentRecommendation == TypeRecommend.News" autocomplete="off">
+              <!-- Input service -->
+              <input [(ngModel)]="selectedService" [typeahead]="listService" typeaheadOptionField="serviceName"
+                (typeaheadOnSelect)="onSelectIdType(TypeRecommend.Service,$event)" class="form-control"
+                name="selectedService" *ngIf="currentRecommendation == TypeRecommend.Service" autocomplete="off"
+                autocomplete="off">
+            </div>
+          </div>
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+              <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Thoát</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Lưu</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
