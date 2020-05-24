@@ -1,3 +1,4 @@
+using BPT_Service.Model;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
@@ -41,6 +42,7 @@ namespace BPT_Service.Data
         public DbSet<ProviderFollowing> ProviderFollowings { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<Recommendation> Recommendations { get; set; }
+        public DbSet<UserRecommendation> UserRecommendations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
