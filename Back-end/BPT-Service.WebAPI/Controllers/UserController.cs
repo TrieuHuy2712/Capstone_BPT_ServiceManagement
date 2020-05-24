@@ -89,6 +89,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region POST API
         [HttpPost("CreateNewuser")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModelinUserService userVm)
         {
             var model = await _addCustomerService.ExecuteAsync(userVm);

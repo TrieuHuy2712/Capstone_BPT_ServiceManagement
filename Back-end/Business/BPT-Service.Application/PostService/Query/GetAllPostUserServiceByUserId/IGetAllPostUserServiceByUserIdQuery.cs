@@ -6,6 +6,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
 {
     public interface IGetAllPostUserServiceByUserIdQuery
     {
-        Task<List<ListServiceViewModel>> ExecuteAsync(string idUser);
+        Task<List<ListServiceViewModel>> ExecuteAsync(string idUser, bool isProvider);
     }
 }

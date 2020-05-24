@@ -77,9 +77,9 @@ namespace BPT_Service.WebAPI.Controllers
 
 
         [HttpGet("getAllPostUserServiceByUserId")]
-        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
+        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser, bool isProvider)
         {
-            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
+            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser, isProvider);
             return new OkObjectResult(model);
         }
 
