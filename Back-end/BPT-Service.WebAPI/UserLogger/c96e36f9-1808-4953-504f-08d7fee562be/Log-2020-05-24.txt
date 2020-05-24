@@ -1,0 +1,4 @@
+INFO[2020-05-24 2:41:52]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: admin:: admin had followDịch vụ cho thuê vệ sĩ ( nữ )
+INFO[2020-05-24 2:44:44]:: AddCommentServiceAsyncCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: huytrieu:: dumb
+INFO[2020-05-24 2:50:08]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: huytrieu:: huytrieu had followDịch vụ dọn nhà
+INFO[2020-05-24 2:51:13]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: huytrieu:: huytrieu had followDịch vụ dọn nhà

@@ -38,6 +38,7 @@ export class ListOfItemComponent implements OnInit {
     this.loadData();
     this.loadCategoryData();
     this.loadDataOfLocation();
+    this.loadDataBySearching();
   }
   // load data function
   loadData() {
@@ -109,15 +110,11 @@ export class ListOfItemComponent implements OnInit {
   loadDataBySearching() {
     this._dataService
       .get(
-        "Service/getAllPagingPostService?isAdminPage=true&filter=5&keyword="+this.newId
+        "/Service/getAllPagingPostService?keyword="+this.newId+"&isAdminPage=true&filter=5"
       )
       .subscribe((response: any) => {
         this.services3 = response.results;
-        this.pageIndex = response.currentPage;
-        this.pageSize = response.pageSize;
-        this.totalRow = response.rowCount;
-        this.indexOfServices = this.services.length;
-        
+
       });
       
   }
