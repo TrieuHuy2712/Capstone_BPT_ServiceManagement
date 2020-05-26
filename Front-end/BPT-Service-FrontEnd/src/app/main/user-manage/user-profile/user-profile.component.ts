@@ -30,7 +30,7 @@ export class UserProfileComponent implements OnInit {
   public provider: any[];
   public permission: any;
   public location: any[];
-  public users: any[];
+  public users: any;
   public state:any[];
   public locationState:any[];
   public reject:any;
@@ -45,6 +45,9 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.profile = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
     SystemConstants.const_permission = this.profile.username;
+    if(this.profile.avatar == null){
+      this.profile.avatar = "../../../../assets/images/default.png";
+    }
     this.getAllLocation();
     this.getAllUser();
   }

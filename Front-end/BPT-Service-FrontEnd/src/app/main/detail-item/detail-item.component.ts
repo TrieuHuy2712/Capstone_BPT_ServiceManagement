@@ -20,7 +20,7 @@ export class DetailItemComponent implements OnInit {
   public details: any = [];
   public Uid: string = "";
   public user: LoggedInUser;
-  public isFollowed: boolean = false;
+  public isFollowed: boolean;
   public UIS: any[];
   public usId: any;
 
@@ -71,10 +71,6 @@ export class DetailItemComponent implements OnInit {
     console.log("ket qua "+this.ratingVal);
     this.getCurrentUserId();
     console.log(this.currenUserId);
-    
-    
-    
-
   }
 
 
@@ -113,8 +109,7 @@ export class DetailItemComponent implements OnInit {
               MessageConstants.FOLLOW_OK_MSG
 
             );
-            // this.isFollowed = !this.isFollowed;
-            this.getFollowId();
+            this.isFollowed = !this.isFollowed;
           } else {
             this._notificationService.printErrorMessage(
               MessageConstants.FOLLOW_FAIL_MSG
@@ -144,8 +139,7 @@ export class DetailItemComponent implements OnInit {
                 this._notificationService.printSuccessMessage(
                   MessageConstants.UNFOLLOW_OK_MSG
                 );
-                // this.isFollowed = !this.isFollowed;
-                this.getFollowId();
+                this.isFollowed = !this.isFollowed;
 
               } else {
                 this._notificationService.printErrorMessage(

@@ -304,11 +304,16 @@ a:hover {
 /* register css */
 .register-title {
   width: 100%;
-  background-color: cadetblue;
+  background-color: orangered;
   height: 100px;
   margin: 0;
   padding: 0;
   display: inline-block;
+}
+
+.main-titlte-login{
+  position: absolute;
+  right: 50px;
 }
 
 .register-title h2 {

@@ -37,7 +37,7 @@ export class TopMenuComponent implements OnInit {
     localStorage.clear();
     this._authenService.logout();
     this.router.navigate([UrlConstants.LOGIN]);
-    this.notificationService.printErrorMessage("Đã logout");
+    this.notificationService.printErrorMessage("Đã đăng xuất");
     this.loading = false;
   }
 

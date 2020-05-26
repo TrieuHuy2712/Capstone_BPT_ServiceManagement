@@ -1,0 +1,5 @@
+INFO[2020-05-23 20:53:54]:: ApproveProviderServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: admin:: adminYour provider:Nguyễn Tấn Huyhas been approved
+INFO[2020-05-23 21:03:23]:: ApproveProviderServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: admin:: adminYour provider:Nguyễn Tấn Huyhas been approved
+INFO[2020-05-23 21:04:34]:: ApproveProviderServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: admin:: adminYour provider:Nguyễn Tấn Huyhas been approved
+INFO[2020-05-23 21:07:17]:: ApprovePostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: admin:: adminYour service:Dịch vụ cho thuê tình bạn Huy Nguyễnhas been approved
+INFO[2020-05-23 21:21:24]:: AddCommentServiceAsyncCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: huy nguyen

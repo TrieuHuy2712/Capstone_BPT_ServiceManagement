@@ -52,8 +52,9 @@ export class SidebarMenuComponent implements OnInit {
             this._functions[0].childrenId[0].name = "Danh mục";
             this._functions[0].childrenId[1].name = "Tin tức";
             this._functions[0].childrenId[2].name = "Nhà cung cấp";
-            this._functions[0].childrenId[3].name = "Dịch vụ";
-            this._functions[0].childrenId[4].name = "Đuôi của dịch vụ";
+            this._functions[0].childrenId[3].name = "Khuyến nghị";
+            this._functions[0].childrenId[4].name = "Dịch vụ";
+            this._functions[0].childrenId[5].name = "Đuôi của dịch vụ ";
             // vietsub system
             this._functions[1].key = "Hệ thống";
             this._functions[1].childrenId[0].name = "Thư điện tử";

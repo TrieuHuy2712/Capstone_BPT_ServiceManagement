@@ -56,7 +56,7 @@ namespace BPT_Service.Application.UserService.Command.AddCustomerAsync
                         Status = Status.Active
                     }, userVm.Password);
                     var newUser = await _userManager.FindByNameAsync(userVm.UserName);
-                    await _userManager.AddToRoleAsync(user, ConstantRoles.Customer);
+                    await _userManager.AddToRoleAsync(newUser, ConstantRoles.Customer);
                     await Logging<AddCustomerAsyncCommand>.
                         InformationAsync(ActionCommand.COMMAND_ADD, userVm.UserName, "New Account:" + userVm.UserName);
                     return new CommandResult<AppUserViewModelinUserService>
