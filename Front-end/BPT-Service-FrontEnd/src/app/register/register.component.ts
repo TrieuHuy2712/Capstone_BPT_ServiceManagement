@@ -40,29 +40,29 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.entity = {};
 
-    this.loadData();
-    this.loadRoles();
+    // this.loadData();
+    // this.loadRoles();
 
   }
 
-  loadData() {
-    this._dataService
-      .get(
-        "/UserManagement/GetAllPaging?keyword=&page=1&pageSize=20"
-      )
-      .subscribe((response: any) => {
-        this.users = response.results;
-      });
+  // loadData() {
+  //   this._dataService
+  //     .get(
+  //       "/UserManagement/GetAllPaging?keyword=&page=1&pageSize=20"
+  //     )
+  //     .subscribe((response: any) => {
+  //       this.users = response.results;
+  //     });
 
-  }
+  // }
 
-  loadRoles() {
-    this._dataService.get("/AdminRole/GetAllPaging?page=1&pageSize=20&keyword=Customer").subscribe((response: any) => {
-      this.roles = response.results;
+  // loadRoles() {
+  //   this._dataService.get("/AdminRole/GetAllPaging?page=1&pageSize=20&keyword=Customer").subscribe((response: any) => {
+  //     this.roles = response.results;
 
-    });
-    console.log("ket qua ");
-  }
+  //   });
+  //   console.log("ket qua ");
+  // }
   //
   saveChange(valid: boolean) {
     if (valid) {
@@ -75,11 +75,11 @@ export class RegisterComponent implements OnInit {
   public saveData() {
     if (this.entity.id == undefined) {
       this._dataService
-        .post("/UserManagement/CreateNewuser", this.entity)
+        .postNoAu("/UserManagement/CreateNewuser", this.entity)
         .subscribe(
           (response: any) => {
             this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
+              MessageConstants.REGISTER_CREATE_OK_MSG
             );
             this.router.navigate([UrlConstants.LOGIN]);
           },

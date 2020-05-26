@@ -44,7 +44,7 @@ export class ViewComponent implements OnInit {
 
   @ViewChild('imgPath', { static: false }) imgPath;
 
-  public view: any[];
+  public viewOfService: any[];
   public user: LoggedInUser;
   public user01: any[];
   public userId: any;
@@ -105,18 +105,17 @@ export class ViewComponent implements OnInit {
   }
   //  get data of service of current user. Note ***
   getAllUser() {
-    debugger;
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
       this.userId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       this._dataService
         .get(
-          "/Service/getAllPostUserServiceByUserId?idUser=" + this.userId
+          "/Service/getAllPostUserServiceByUserId?idUser="+ this.userId+"&isProvider=true"
         )
         .subscribe((response: any) => {
-          this.view = response;
-
+          this.viewOfService = response;
+          
         });
     });
 

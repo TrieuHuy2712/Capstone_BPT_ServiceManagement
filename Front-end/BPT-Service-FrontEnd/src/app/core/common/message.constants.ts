@@ -19,4 +19,6 @@ export class MessageConstants {
     public static CONFIRM_DELETE_COMMENT_MSG = "Bạn có chắc muốn xóa bình luận này ?";
     public static COMMENT_DEL_OK_MSG = "Xóa comment thành công";
     public static COMMENT_DEL_FAIL_MSG = " Xóa comment thất bại";
+    public static REGISTER_CREATE_OK_MSG = "Tạo thành công tài khoản, vui lòng đăng nhập !!";
+    public static REGISTER_CREATE_FAIL_MSG = "Tạo thành công tài khoản thất bại, vui lòng kiểm tra lại !!";
 }

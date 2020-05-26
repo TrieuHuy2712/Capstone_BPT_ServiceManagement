@@ -1,5 +1,7 @@
 ﻿using BPT_Service.Application.PostService.ViewModel;
 using BPT_Service.Model.Entities.ServiceModel;
+using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
+using BPT_Service.Model.Entities.ServiceModel.UserServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,17 +16,20 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
         private readonly IRepository<Service, Guid> _serviceRepository;
         private readonly IRepository<ServiceImage, int> _imageRepository;
         private readonly IRepository<Provider, Guid> _providerRepository;
-        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, Guid> _providerServiceRepository;
+        private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> _providerServiceRepository;
 
         public GetAllPostUserServiceByUserIdQuery(
             IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository, 
-            IRepository<Service, Guid> serviceRepository, IRepository<ServiceImage, int> imageRepository, 
-            IRepository<Provider, Guid> providerRepository)
+            IRepository<Service, Guid> serviceRepository, 
+            IRepository<ServiceImage, int> imageRepository, 
+            IRepository<Provider, Guid> providerRepository, 
+            IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, int> providerServiceRepository)
         {
             _userServiceRepository = userServiceRepository;
             _serviceRepository = serviceRepository;
             _imageRepository = imageRepository;
             _providerRepository = providerRepository;
+            _providerServiceRepository = providerServiceRepository;
         }
 
         public async Task<List<ListServiceViewModel>> ExecuteAsync(string idUser, bool isProvider)
