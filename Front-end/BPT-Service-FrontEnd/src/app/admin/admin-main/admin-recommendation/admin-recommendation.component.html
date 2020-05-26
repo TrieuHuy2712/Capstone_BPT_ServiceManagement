@@ -94,7 +94,7 @@
       <div class="modal-body">
         <div class="col-md-6 col-sm-6 col-xs-12"></div>
         <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm" *ngIf="entity"
-          (ngSubmit)="saveData(addEditForm.valid)">
+          (ngSubmit)="saveData()">
           <div class="form-group row">
             <div class="col-md-6 col-sm-6 col-xs-12" [hidden]="!isAdd">
               <label class="control-label">Loại Recommendation</label>
