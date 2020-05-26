@@ -165,9 +165,6 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
                     case 2:
                         data = data.Where(x => x.Status == Model.Enums.Status.Pending).ToList();
                         break;
-                    default:
-                        data = data;
-                        break;
                 }
 
                 var paginationSet = new PagedResult<PostServiceViewModel>()
@@ -180,7 +177,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPagingPostService
 
                 return paginationSet;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 return new PagedResult<PostServiceViewModel>()
                 {

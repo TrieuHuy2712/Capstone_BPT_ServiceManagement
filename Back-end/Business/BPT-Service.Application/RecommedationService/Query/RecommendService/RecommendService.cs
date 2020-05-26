@@ -137,7 +137,7 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendService
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -16,15 +16,13 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
         private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, Guid> _providerServiceRepository;
 
-        public GetAllPostUserServiceByUserIdQuery(
-            IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository, 
-            IRepository<Service, Guid> serviceRepository, IRepository<ServiceImage, int> imageRepository, 
-            IRepository<Provider, Guid> providerRepository)
+        public GetAllPostUserServiceByUserIdQuery(IRepository<Model.Entities.ServiceModel.UserServiceModel.UserService, int> userServiceRepository, IRepository<Service, Guid> serviceRepository, IRepository<ServiceImage, int> imageRepository, IRepository<Provider, Guid> providerRepository, IRepository<Model.Entities.ServiceModel.ProviderServiceModel.ProviderService, Guid> providerServiceRepository)
         {
             _userServiceRepository = userServiceRepository;
             _serviceRepository = serviceRepository;
             _imageRepository = imageRepository;
             _providerRepository = providerRepository;
+            _providerServiceRepository = providerServiceRepository;
         }
 
         public async Task<List<ListServiceViewModel>> ExecuteAsync(string idUser, bool isProvider)
@@ -75,7 +73,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
                     return data;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return null;

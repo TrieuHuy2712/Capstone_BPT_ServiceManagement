@@ -110,7 +110,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByServi
                 }
                 return listRecommend.ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -3,7 +3,9 @@ using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
 {
@@ -17,10 +19,10 @@ namespace BPT_Service.Application.RoleService.Query.GetAllPagingAsync
             _roleManager = roleManager;
         }
 
-        public PagedResult<AppRoleViewModel> ExecuteAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<AppRoleViewModel>> ExecuteAsync(string keyword, int page, int pageSize)
         {
             
-            var query = _roleManager.Roles.ToList();
+            var query = await _roleManager.Roles.ToListAsync();
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.ToLower().Contains(keyword.ToLower())
                 || LevenshteinDistance.Compute(x.Name.ToLower(), keyword.ToLower()) <= 3

@@ -78,7 +78,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByNews
                 }
                 return listRecommend.ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;

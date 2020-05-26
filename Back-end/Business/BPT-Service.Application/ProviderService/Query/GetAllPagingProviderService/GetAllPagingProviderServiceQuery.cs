@@ -100,9 +100,6 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
                     case 2:
                         map = map.Where(x => x.Status == Model.Enums.Status.Pending).ToList();
                         break;
-                    default:
-                        map=map;
-                        break;
                 }
 
                 var paginationSet = new PagedResult<ProviderServiceViewModel>()
@@ -115,7 +112,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllPagingProviderServ
 
                 return paginationSet;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 return new PagedResult<ProviderServiceViewModel>()
                 {

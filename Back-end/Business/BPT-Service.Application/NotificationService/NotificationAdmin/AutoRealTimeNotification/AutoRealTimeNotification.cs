@@ -44,7 +44,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoReal
                     Types = "ALL"
                 };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

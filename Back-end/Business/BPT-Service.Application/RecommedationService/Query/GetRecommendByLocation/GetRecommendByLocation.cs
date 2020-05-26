@@ -89,7 +89,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByLocat
                 }
                 return listRecommend.ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

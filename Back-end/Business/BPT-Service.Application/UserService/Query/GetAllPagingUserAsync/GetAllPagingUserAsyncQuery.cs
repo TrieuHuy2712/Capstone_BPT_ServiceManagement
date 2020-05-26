@@ -3,6 +3,7 @@ using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Support;
 using BPT_Service.Model.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace BPT_Service.Application.UserService.Query.GetAllPagingAsync
 
         public async Task<PagedResult<AppUserViewModelinUserService>> ExecuteAsync(string keyword, int page, int pageSize)
         {
-            var query = _userManager.Users.ToList();
+            var query = await _userManager.Users.ToListAsync();
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(x => x.FullName.ToLower().Contains(keyword.ToLower())
