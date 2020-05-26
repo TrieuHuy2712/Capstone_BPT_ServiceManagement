@@ -25,7 +25,6 @@ export class SidebarMenuComponent implements OnInit {
   ngOnInit() {
 
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    console.log(this.user);
     SystemConstants.const_permission = this.user.username;
     const uName = localStorage.getItem(SystemConstants.const_username);
     if (uName) {

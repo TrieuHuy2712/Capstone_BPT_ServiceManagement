@@ -26,7 +26,7 @@
             </ul>
 
             <button class="btn btn-primary btn-block"><b>Edit my profile</b></button>
-            <div class="center-xs" *ngIf=" !profile.isProvider">
+            <div class="center-xs">
               Bạn chưa là Nhà Cung Cấp ?
               <a ><span  class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí ngay</span> </a>
             </div>
@@ -216,10 +216,6 @@
                                 bỏ</button>
                             <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(userName) || !checkLocation(cityName) && entity.id==undefined)">Cập
                                 nhật</button>
-                            <button type="button" *ngIf="entity.status !=1 && entity.id != undefined" class="btn btn-info"
-                                (click)="approveProvider()">Chấp nhận</button>
-                            <button type="button" *ngIf="entity.status !=0 && entity.id !=undefined" class="btn btn-danger"
-                                (click)="showRejectProvider()">Từ chối</button>
 
                         </div>
                     </div>
