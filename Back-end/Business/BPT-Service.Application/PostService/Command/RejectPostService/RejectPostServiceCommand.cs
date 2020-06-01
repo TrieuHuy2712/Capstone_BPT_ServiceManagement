@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
@@ -118,7 +118,7 @@ namespace BPT_Service.Application.PostService.Command.RejectPostService
                             InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName + "has been rejected");
 
                         await LoggingUser<RejectPostServiceCommand>.
-                            InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been rejected");
+                            InformationAsync(getUserId, userName, userName + "Dịch vụ " + getCurrentPost.ServiceName + "đã bị từ chối. Check mail để xác nhận");
                         return new CommandResult<PostServiceViewModel>
                         {
                             isValid = true,

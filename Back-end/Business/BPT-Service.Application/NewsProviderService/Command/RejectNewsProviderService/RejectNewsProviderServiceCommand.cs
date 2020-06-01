@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
@@ -92,7 +92,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider
                                     getFirstEmail.Message, getEmail.Email).Wait();
                     //Write Log
                     await LoggingUser<RejectNewsProviderServiceCommand>.
-                   InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been rejecte.Please check your email");
+                   InformationAsync(getProvider.UserId.ToString(), userName, userName + "Tin tức:" + map.Title + "của bạn đã bị từ chối. Xin vui lòng kiểm tra lại email");
                     await Logging<RejectNewsProviderServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_REJECT, userName, JsonConvert.SerializeObject(map.Title + "has been rejecte.Please check your email"));
                     return new CommandResult<NewsProviderViewModel>

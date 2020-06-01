@@ -59,3 +59,4 @@ INFO[2020-04-12 2:58:52]:: DeleteServiceFromUserCommand:: DELETE:: admin:: Abaaa
 INFO[2020-04-12 3:00:57]:: DeleteServiceFromUserCommand:: DELETE:: admin:: Abaaa213 has been removed
 INFO[2020-04-12 3:01:18]:: DeleteServiceFromUserCommand:: DELETE:: admin:: Abaaa has been removed
 INFO[2020-04-12 3:01:22]:: DeleteServiceFromUserCommand:: DELETE:: admin:: Abaaa has been removed
+[ENDNOTIFICATION]

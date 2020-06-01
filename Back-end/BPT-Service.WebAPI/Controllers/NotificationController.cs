@@ -6,6 +6,7 @@ using BPT_Service.Application.NotificationService.NotificationUser.AutoRealTimeU
 using BPT_Service.Application.NotificationService.NotificationUser.GetUserNotificationHasRead;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -17,17 +18,19 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IAutoRealTimeNotification _autorRealTimeNotification;
         private readonly IAutoGetNotification _autoGetNotification;
         private readonly IGetNotificationHasRead _getNotificationHasRead;
+
         //User Notification
         private readonly IAutoRealTimeUserNotification _autoRealTimeUserNotification;
+
         private readonly IAutoGetUserNotification _autoGetUserNotification;
         private readonly IGetUserNotificationHasRead _getUserNotificationHasRead;
 
         public NotificationController(
-            IAutoRealTimeNotification autorRealTimeNotification, 
-            IAutoGetNotification autoGetNotification, 
-            IGetNotificationHasRead getNotificationHasRead, 
-            IAutoRealTimeUserNotification autoRealTimeUserNotification, 
-            IAutoGetUserNotification autoGetUserNotification, 
+            IAutoRealTimeNotification autorRealTimeNotification,
+            IAutoGetNotification autoGetNotification,
+            IGetNotificationHasRead getNotificationHasRead,
+            IAutoRealTimeUserNotification autoRealTimeUserNotification,
+            IAutoGetUserNotification autoGetUserNotification,
             IGetUserNotificationHasRead getUserNotificationHasRead)
         {
             _autorRealTimeNotification = autorRealTimeNotification;
@@ -41,9 +44,9 @@ namespace BPT_Service.WebAPI.Controllers
         #region GET NOTIFICATION API
 
         [HttpGet("RealTimeNotification")]
-        public IActionResult RealTimeNotification()
+        public async Task<IActionResult> RealTimeNotification()
         {
-            var model = _autorRealTimeNotification.Execute();
+            var model = await _autorRealTimeNotification.ExecuteAsync();
             return new OkObjectResult(model);
         }
 
@@ -53,21 +56,22 @@ namespace BPT_Service.WebAPI.Controllers
             _getNotificationHasRead.Execute();
             return new OkObjectResult(true);
         }
+
         [HttpGet("AutoGetNotification")]
-        public IActionResult AutoGetNotification()
+        public async Task<IActionResult> AutoGetNotification()
         {
-            _autoGetNotification.Execute();
-            return new OkObjectResult(true);
+            var model = await _autoGetNotification.ExecuteAsync();
+            return new OkObjectResult(model);
         }
 
-        #endregion
+        #endregion GET NOTIFICATION API
 
         #region GET NOTIFICATION API
 
         [HttpGet("RealTimeUserNotification")]
-        public IActionResult RealTimeUserNotification()
+        public async Task<IActionResult> RealTimeUserNotification()
         {
-            var model = _autoRealTimeUserNotification.Execute();
+            var model = await _autoRealTimeUserNotification.Execute();
             return new OkObjectResult(model);
         }
 
@@ -77,13 +81,14 @@ namespace BPT_Service.WebAPI.Controllers
             _getUserNotificationHasRead.Execute();
             return new OkObjectResult(true);
         }
+
         [HttpGet("AutoGetUserNotification")]
-        public IActionResult AutoGetUserNotification()
+        public async Task<IActionResult> AutoGetUserNotification()
         {
-            _autoGetUserNotification.Execute();
-            return new OkObjectResult(true);
+            var model = await _autoGetUserNotification.Execute();
+            return new OkObjectResult(model);
         }
 
-        #endregion GET API
+        #endregion GET NOTIFICATION API
     }
 }

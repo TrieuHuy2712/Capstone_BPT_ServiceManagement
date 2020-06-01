@@ -145,6 +145,7 @@ using BPT_Service.Data.Repositories;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using BPT_Service.Model.IRepositories;
+using BPT_Service.WebAPI.Ultility;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -268,6 +269,9 @@ namespace BPT_Service.WebAPI
                 };
             });
             ApplicationContext(services);
+
+            
+            services.AddElasticsearch(Configuration);
 
             //Read email config json
             services.Configure<EmailConfigModel>(Configuration.GetSection("EmailConfig"));

@@ -1,4 +1,5 @@
 ﻿using BPT_Service.Application.LoggingService.ViewModel;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoRealTimeNotification
 {
@@ -6,6 +7,6 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoReal
     //It will run on Angular (setTimeOut) for realTime every minute
     public interface IAutoRealTimeNotification
     {
-        LogTypeViewModel Execute();
+        Task<LogTypeViewModel> ExecuteAsync();
     }
 }

@@ -2,10 +2,13 @@
 using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
 using BPT_Service.Application.LoggingService.ViewModel;
 using BPT_Service.Common.Constants;
+using BPT_Service.Model.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoRealTimeNotification
 {
@@ -21,22 +24,22 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoReal
 
         private readonly IGetLogFromAFile _getLogFromAFile;
         private readonly IGetLogFiles _getLogFiles;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AutoRealTimeNotification(
-            IGetLogFromAFile getLogFromAFile,
-            IGetLogFiles getLogFiles)
+        public AutoRealTimeNotification(IGetLogFromAFile getLogFromAFile, IGetLogFiles getLogFiles, UserManager<AppUser> userManager)
         {
             _getLogFromAFile = getLogFromAFile;
             _getLogFiles = getLogFiles;
+            _userManager = userManager;
         }
 
-        public LogTypeViewModel Execute()
+        public async Task<LogTypeViewModel> ExecuteAsync()
         {
             try
             {
                 DateTime datetime = DateTime.Now;
                 var currentTime = datetime.ToString(DateFormat.DateFormatStandard);
-                var getLogs = GetLogs(currentTime);
+                var getLogs = await GetLogs(currentTime);
                 return new LogTypeViewModel
                 {
                     NumberNotification = getLogs.Count,
@@ -50,7 +53,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoReal
             }
         }
 
-        private List<LogModel> GetLogs(string date)
+        private async Task<List<LogModel>> GetLogs(string date)
         {
             string fileName = $"{path}/Log-{date}.txt";
             string content = File.ReadAllText(fileName);
@@ -68,14 +71,19 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoReal
             {
                 LogModel model = new LogModel();
                 var splitLog = log.Split("::");
-                model.Type = log.Substring(0, log.IndexOf('['));
-                model.DateTime = log.Substring(log.IndexOf('[') + 1, log.IndexOf(']') - model.Type.Length - 1);
-                string logMessage = splitLog[4].Replace("||", "\n").Trim();
-                model.Statement = log.Split("::")[1];
-                model.Message = logMessage;
-                model.Action = splitLog[2];
-                model.UserAction = splitLog[4];
-                models.Add(model);
+                if (splitLog.Count() >= 5)
+                {
+                    model.Type = log.Substring(0, log.IndexOf('['));
+                    model.DateTime = log.Substring(log.IndexOf('[') + 1, log.IndexOf(']') - model.Type.Length - 1);
+                    string logMessage = splitLog[4].Replace("||", "\n").Trim();
+                    model.Statement = log.Split("::")[1];
+                    model.Message = logMessage;
+                    model.Action = splitLog[2];
+                    model.UserAction = splitLog[3];
+                    var getAvt = await _userManager.FindByNameAsync(model.UserAction);
+                    model.ImageUserAction = getAvt == null ? "" : getAvt.Avatar;
+                    models.Add(model);
+                }
             }
             models.Reverse();
             return models;

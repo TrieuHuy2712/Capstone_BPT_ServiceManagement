@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.NewsProviderService.ViewModel;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
@@ -97,7 +97,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvide
                     ContentEmail(_configEmail.Value.SendGridKey, getFirstEmail.Subject,
                                     getFirstEmail.Message, getEmail.Email).Wait();
                     await LoggingUser<ApproveNewsProviderServiceCommand>.
-                    InformationAsync(getProvider.UserId.ToString(), userName, userName + "Your news provider:" + map.Title + "has been approved");
+                    InformationAsync(getProvider.UserId.ToString(), userName, userName + "Tin tức" + map.Title + "của bạn đã được chấp thuận");
                     await Logging<ApproveNewsProviderServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_APPROVE, userName, userName + "Your news provider:" + map.Title + "has been approved");
                     return new CommandResult<NewsProviderViewModel>

@@ -67,7 +67,7 @@ namespace BPT_Service.Application.FollowingProviderService.Command.FollowProvide
                 await _providerFollowingRepository.Add(data);
                 await _providerFollowingRepository.SaveAsync();
                 await LoggingUser<FollowProviderServiceCommand>.
-                    InformationAsync(getProvider.UserId.ToString(), userName.UserName, userName.UserName + " had follow your provider");
+                    InformationAsync(getProvider.UserId.ToString(), userName.UserName, userName.UserName + " đã theo dõi provider của bạn");
                 await Logging<FollowProviderServiceCommand>.InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(data));
                 return new CommandResult<FollowingProviderServiceViewModel>
                 {

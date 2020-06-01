@@ -86,22 +86,36 @@
         </li>
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="fas fa-cog"></i>
-                <span class="badge badge-warning navbar-badge">2</span>
+            <a class="nav-link" data-toggle="dropdown" href="#" (click)="HasBeenClick()">
+              <i class="far fa-bell"></i>
+              <span *ngIf="quantityNotification > 0" class="badge badge-warning navbar-badge">{{quantityNotification}}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">Cài đặt chung</span>
-                <div class="dropdown-divider"></div>
-                <a (click)="logout()" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                </a>
-
-                <div class="dropdown-divider"></div>
-                <a href="/main/userManage/userProfile/index" class="dropdown-item">
-                    <i class="fas fa-user"></i> Thông tin cá nhân
-                </a>
+              <span class="dropdown-item dropdown-header">{{quantityNotification}}</span>
+              <div class="dropdown-divider"></div>
+              <ng-container *ngFor="let log of listNotificationinHtml">
+                <a class="dropdown-item" style="word-wrap: break-word;">
+                    <i class="fas fa-envelope mr-2"></i> <span style="word-wrap: break-word;">{{log.message}}</span>
+                    <span class="float-right text-muted text-sm">{{log.dateTime | date:'short' }}</span>
+                  </a>
+              </ng-container>
+              <!-- <a href="#" class="dropdown-item">
+                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                <span class="float-right text-muted text-sm">3 mins</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item">
+                <i class="fas fa-users mr-2"></i> 8 friend requests
+                <span class="float-right text-muted text-sm">12 hours</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> 3 new reports
+                <span class="float-right text-muted text-sm">2 days</span>
+              </a> -->
+              <div class="dropdown-divider"></div>
+              <!-- <a href="#" class="dropdown-item dropdown-footer" (click)="MoreNotification()">Xem thêm</a> -->
             </div>
-        </li>
+          </li>
     </ul>
 </nav>

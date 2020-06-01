@@ -66,3 +66,4 @@ ERROR[2020-04-09 13:09:41]:: DeleteNewsProviderServiceCommand:: APPROVE:: admin:
    at Newtonsoft.Json.JsonConvert.SerializeObject(Object value, Type type, JsonSerializerSettings settings)
    at Newtonsoft.Json.JsonConvert.SerializeObject(Object value)
    at BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService.DeleteNewsProviderServiceCommand.ExecuteAsync(Int32 id) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NewsProviderService\Command\DeleteNewsProviderService\DeleteNewsProviderServiceCommand.cs:line 60||Source: Newtonsoft.Json
+[ENDNOTIFICATION]
