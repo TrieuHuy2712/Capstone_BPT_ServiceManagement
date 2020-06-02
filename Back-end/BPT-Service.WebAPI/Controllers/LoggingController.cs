@@ -23,14 +23,14 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetLogFiles")]
-        public async Task<IActionResult> GetLogFiles()
+        public IActionResult GetLogFiles()
         {
             var model = _getLogFiles.Execute();
             return new OkObjectResult(model);
         }
 
         [HttpGet("GetLogFromAFile")]
-        public async Task<IActionResult> GetLogFromAFile(string datalog, string type)
+        public IActionResult GetLogFromAFile(string datalog, string type)
         {
             var model = _getLogFromAFile.Execute(datalog, type);
             return new OkObjectResult(model);

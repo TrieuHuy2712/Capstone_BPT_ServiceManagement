@@ -80,7 +80,7 @@ namespace BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserI
                     return data;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return null;

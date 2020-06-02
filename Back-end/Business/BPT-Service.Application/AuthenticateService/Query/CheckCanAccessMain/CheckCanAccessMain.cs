@@ -46,7 +46,7 @@ namespace BPT_Service.Application.AuthenticateService.Query.CheckCanAccessMain
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

@@ -1,7 +1,4 @@
 ﻿using BPT_Service.Application.LoggingService.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification
@@ -10,6 +7,6 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetN
     //System will use hang-fire after every minute to update notification
     public interface IAutoGetNotification
     {
-        LogTypeViewModel Execute();
+        Task<LogTypeViewModel> ExecuteAsync();
     }
 }

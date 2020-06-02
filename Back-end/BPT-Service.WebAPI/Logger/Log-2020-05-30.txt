@@ -1,0 +1,88 @@
+ERROR[2020-05-30 22:51:26]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactB(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 22:53:52]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 51||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 22:56:00]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 22:56:08]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 22:57:37]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 22:59:37]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 51||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 23:00:23]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 23:04:35]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 23:06:44]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).||Inner: No inner||StackTrace:    at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactD(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at System.ComponentModel.GuidConverter.ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, Object value)
+   at System.ComponentModel.TypeConverter.ConvertFromInvariantString(String text)
+   at Microsoft.AspNetCore.Identity.UserStoreBase`5.ConvertIdFromString(String id)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByIdAsync(String userId, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByIdAsync(String userId)
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: System.Private.CoreLib[ENDLOG]
+ERROR[2020-05-30 23:09:31]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 23:10:14]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.GetLogs(String date) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 94
+   at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 48||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 23:18:40]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 52||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 23:20:38]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.Execute() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 52||Source: BPT-Service.Application[ENDLOG]
+ERROR[2020-05-30 23:26:29]:: AutoGetNotification:: NOTIFICATION:: System:: Has error||Message: Object reference not set to an instance of an object.||Inner: No inner||StackTrace:    at BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification.AutoGetNotification.ExecuteAsync() in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\NotificationService\NotificationAdmin\AutoGetNotification\AutoGetNotification.cs:line 52||Source: BPT-Service.Application[ENDLOG]
+
+[ENDNOTIFICATION]

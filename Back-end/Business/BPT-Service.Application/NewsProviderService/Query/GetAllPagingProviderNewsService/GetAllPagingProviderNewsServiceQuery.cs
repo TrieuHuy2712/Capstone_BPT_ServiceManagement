@@ -72,9 +72,6 @@ namespace BPT_Service.Application.NewsProviderService.Query.GetAllPagingProvider
                     case 2:
                         data = data.Where(x => x.Status == Model.Enums.Status.Pending).ToList();
                         break;
-                    default:
-                        data = data;
-                        break;
                 }
                 if (isAdminPage)
                 {

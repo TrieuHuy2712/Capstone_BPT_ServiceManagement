@@ -71,3 +71,4 @@ The statement has been terminated.||StackTrace:    at Microsoft.EntityFrameworkC
 WARNING[2020-05-06 23:04:11]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
 WARNING[2020-05-06 23:05:58]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
 INFO[2020-05-06 23:06:13]:: ApproveProviderServiceCommand:: APPROVE:: admin:: KeyRisshas been approved[ENDLOG]
+[ENDNOTIFICATION]

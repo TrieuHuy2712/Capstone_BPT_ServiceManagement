@@ -107,10 +107,12 @@ using BPT_Service.Application.RecommedationService.Command.AddRecommendService;
 using BPT_Service.Application.RecommedationService.Command.RecommendLocation.AddRecommendLocation;
 using BPT_Service.Application.RecommedationService.Command.RecommendLocation.DeleteRecommendLocation;
 using BPT_Service.Application.RecommedationService.Command.RecommendNews.AddRecommendNews;
+using BPT_Service.Application.RecommedationService.Command.ViewService;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
 using BPT_Service.Application.RecommedationService.Query.RecommendService;
+using BPT_Service.Application.RecommedationService.Query.RecommendUserService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -143,6 +145,7 @@ using BPT_Service.Data.Repositories;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using BPT_Service.Model.IRepositories;
+using BPT_Service.WebAPI.Ultility;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -266,6 +269,9 @@ namespace BPT_Service.WebAPI
                 };
             });
             ApplicationContext(services);
+
+            
+            services.AddElasticsearch(Configuration);
 
             //Read email config json
             services.Configure<EmailConfigModel>(Configuration.GetSection("EmailConfig"));
@@ -500,6 +506,8 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IAddRecommendNews, AddRecommendNews>();
             services.AddScoped<IAddRecommendService, AddRecommendService>();
             services.AddScoped<IGetRecommendByService, GetRecommendByService>();
+            services.AddScoped<IViewUserService, ViewUserService>();
+            services.AddScoped<IRecommendUserService, RecommendUserService>();
 
             //Store Procedure
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();

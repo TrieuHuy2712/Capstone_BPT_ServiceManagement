@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
@@ -121,7 +121,7 @@ namespace BPT_Service.Application.PostService.Command.ApprovePostService
                             InformationAsync(ActionCommand.COMMAND_APPROVE, userName, getCurrentPost.ServiceName + "has been approved");
 
                         await LoggingUser<ApprovePostServiceCommand>.
-                    InformationAsync(getUserId, userName, userName + "Your service:" + getCurrentPost.ServiceName + "has been approved");
+                    InformationAsync(getUserId, userName, userName + "Dịch vụ:" + getCurrentPost.ServiceName + "đã được chấp thuận. Kiểm tra mail để xác nhận");
 
                         return new CommandResult<PostServiceViewModel>
                         {

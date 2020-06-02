@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
@@ -99,7 +99,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
                                     getFirstEmail.Message, userMail.Email).Wait();
 
                     await LoggingUser<RejectProviderServiceCommand>.
-                   InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been rejecte.Please check your email");
+                   InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Nhà cung cấp :" + mappingProvider.ProviderName + "của bạn đã bị từ chối.Kiểm tra mail để xem lí do");
                     await Logging<RejectProviderServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_REJECT, userName, mappingProvider.ProviderName + "has been rejected");
                     return new CommandResult<ProviderServiceViewModel>

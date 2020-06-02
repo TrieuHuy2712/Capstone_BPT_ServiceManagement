@@ -7,6 +7,7 @@
         public string Statement { get; set; }
         public string Action { get; set; }
         public string UserAction { get; set; }
+        public string ImageUserAction { get; set; }
         public string Message { get; set; }
     }
 }

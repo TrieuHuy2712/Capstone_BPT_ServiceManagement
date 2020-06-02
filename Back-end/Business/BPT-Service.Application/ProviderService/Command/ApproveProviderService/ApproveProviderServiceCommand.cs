@@ -1,4 +1,4 @@
-using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
 using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
 using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
@@ -140,7 +140,7 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 
                     //Write log
                     await LoggingUser<ApproveProviderServiceCommand>.
-                    InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Your provider:" + mappingProvider.ProviderName + "has been approved");
+                    InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Nhà cung cấp:" + mappingProvider.ProviderName + "đã được chấp thuận. Check mail để xác nhận dịch vụ");
                     await Logging<ApproveProviderServiceCommand>.
                         InformationAsync(ActionCommand.COMMAND_APPROVE, userName, mappingProvider.ProviderName + "has been approved");
 

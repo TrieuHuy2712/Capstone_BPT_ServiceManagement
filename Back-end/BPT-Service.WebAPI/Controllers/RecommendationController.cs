@@ -2,9 +2,11 @@
 using BPT_Service.Application.RecommedationService.Command.RecommendLocation.AddRecommendLocation;
 using BPT_Service.Application.RecommedationService.Command.RecommendLocation.DeleteRecommendLocation;
 using BPT_Service.Application.RecommedationService.Command.RecommendNews.AddRecommendNews;
+using BPT_Service.Application.RecommedationService.Command.ViewService;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
+using BPT_Service.Application.RecommedationService.Query.RecommendUserService;
 using BPT_Service.Application.RecommedationService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +26,8 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IAddRecommendNews _addNewsRecommend;
         private readonly IAddRecommendService _addRecommendService;
         private readonly IGetRecommendByService _getRecommendByService;
+        private readonly IViewUserService _viewUserService;
+        private readonly IRecommendUserService _recommendUserService;
 
         public RecommendationController(
             IGetRecommendByLocation getRecommendByLocation,
@@ -32,7 +36,9 @@ namespace BPT_Service.WebAPI.Controllers
             IAddRecommendLocation addLocationRecommend,
             IAddRecommendNews addNewsRecommend,
             IAddRecommendService addRecommendService,
-            IGetRecommendByService getRecommendByService)
+            IGetRecommendByService getRecommendByService,
+            IViewUserService viewUserService,
+            IRecommendUserService recommendUserService)
         {
             _getRecommendByLocation = getRecommendByLocation;
             _getRecommendByNews = getRecommendByNews;
@@ -41,6 +47,8 @@ namespace BPT_Service.WebAPI.Controllers
             _addNewsRecommend = addNewsRecommend;
             _addRecommendService = addRecommendService;
             _getRecommendByService = getRecommendByService;
+            _viewUserService = viewUserService;
+            _recommendUserService = recommendUserService;
         }
 
         #region GET API
@@ -66,9 +74,23 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [HttpGet("GetRecommendUserService")]
+        [Authorize]
+        public async Task<IActionResult> GetRecommendUserService()
+        {
+            var model = await _recommendUserService.ExecuteAsync();
+            return new OkObjectResult(model);
+        }
+
         #endregion GET API
 
         #region POST API
+        [HttpPost("ViewService")]
+        public async Task<IActionResult> ViewService(string idService)
+        {
+            var model = await _viewUserService.ExecuteAsync(idService);
+            return new OkObjectResult(model);
+        }
 
         [HttpPost("AddLocationRecommend")]
         public async Task<IActionResult> AddLocationRecommend(AddRecommendationViewModel vm)

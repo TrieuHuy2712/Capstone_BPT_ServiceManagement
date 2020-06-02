@@ -62,3 +62,4 @@ INFO[2020-04-05 19:50:20]:: UpdateCityProvinceServiceCommand:: UPDATE:: admin:: 
 INFO[2020-04-05 19:50:36]:: UpdateCityProvinceServiceCommand:: UPDATE:: admin:: {"City":"Hà Nội","Province":"Hà Nội","ImgPath":null,"Providers":null,"Id":5}
 INFO[2020-04-05 19:55:34]:: DeleteCityProvinceServiceCommand:: DELETE:: admin:: Has delete Quận 8_Hồ Chí Minh
 INFO[2020-04-05 21:15:45]:: UpdateCategoryServiceCommand:: UPDATE:: admin:: {"Id":1,"CategoryName":"Cleaner","Description":"This is cleaner","ImgPath":"http://localhost:5000/UploadedFiles/Categories//category04_DD_YYYY_9_15_43_38935_PM.jpg"}
+[ENDNOTIFICATION]

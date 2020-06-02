@@ -34,7 +34,7 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllProviderofUserServ
                 }).ToList();
                 return listService.ToList();
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
 
                 throw;

@@ -35,7 +35,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         [HttpPost]
         [Route("saveImage/{type}")]
-        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, long userId, string type)
+        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, int userId, string type)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace BPT_Service.WebAPI.Controllers
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var message1 = string.Format("Image Updated UnSuccessfully.");
                 return new OkObjectResult(message1);

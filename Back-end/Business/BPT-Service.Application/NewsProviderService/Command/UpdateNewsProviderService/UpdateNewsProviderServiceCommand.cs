@@ -39,15 +39,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
         private readonly IOptions<EmailConfigModel> _config;
         private readonly IRepository<Provider, Guid> _providerRepository;
 
-        public UpdateNewsProviderServiceCommand(
-            IRepository<ProviderNew, int> providerNewsRepository,
-            IHttpContextAccessor httpContext,
-            ICheckUserIsAdminQuery checkUserIsAdminQuery,
-            IGetPermissionActionQuery getPermissionActionQuery,
-            ICheckUserIsProviderQuery checkUserIsProviderQuery,
-            UserManager<AppUser> userManager,
-            IGetAllEmailServiceQuery getAllEmailServiceQuery,
-            IConfiguration configuration, IOptions<EmailConfigModel> config)
+        public UpdateNewsProviderServiceCommand(IRepository<ProviderNew, int> providerNewsRepository, IHttpContextAccessor httpContext, ICheckUserIsAdminQuery checkUserIsAdminQuery, IGetPermissionActionQuery getPermissionActionQuery, ICheckUserIsProviderQuery checkUserIsProviderQuery, UserManager<AppUser> userManager, IGetAllEmailServiceQuery getAllEmailServiceQuery, IConfiguration configuration, IOptions<EmailConfigModel> config, IRepository<Provider, Guid> providerRepository)
         {
             _providerNewsRepository = providerNewsRepository;
             _httpContext = httpContext;
@@ -58,6 +50,7 @@ namespace BPT_Service.Application.NewsProviderService.Command.UpdateNewsProvider
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _configuration = configuration;
             _config = config;
+            _providerRepository = providerRepository;
         }
 
         public async Task<CommandResult<NewsProviderViewModel>> ExecuteAsync(NewsProviderViewModel vm)
