@@ -149,15 +149,14 @@
                             <form class="form-horizontal form-label-left" novalidate #addImageForm="ngForm"
                                 *ngIf="entity">
                                 <div *ngFor="let atag of listImage, let i = index">
-                                    <div class="form-group row">
-                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group row" style="border: 2px solid orangered;">
+                                        <div class="col-md-3 col-sm-6 col-xs-12">
                                             <label class="control-label">Chọn hình ảnh</label>
                                             <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar"
                                                 minlength="3" name="isAvatar">
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group col-md-9"  style="margin-top: 20px;">
+                                            <div class="col-md-12">
                                                 <input type="file" #imgPath name="imgPath" class="form-control"
                                                     (change)="selectChangeFile($event.target.files,i)">
                                                 <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png,
@@ -166,14 +165,13 @@
                                                 <button type="button" class="btn btn-danger" (click)="removeImage(i)"><i
                                                         class="fa fa-trash"></i></button>
                                             </div>
-                                            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.path">
+                                            <div class="col-md-6 col-sm-3 col-xs-12" *ngIf="atag.path">
                                                 <img [src]="atag.path" width="128" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <button class="btn btn-secondary" (click)="addImage()">Thêm hình ảnh</button>
-                                <button type="submit" class="btn btn-success">Cập nhật</button>
                             </form>
                         </div>
                     </div>

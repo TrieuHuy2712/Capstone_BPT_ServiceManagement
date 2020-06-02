@@ -21,4 +21,7 @@ export class MessageConstants {
     public static COMMENT_DEL_FAIL_MSG = " Xóa comment thất bại";
     public static REGISTER_CREATE_OK_MSG = "Tạo thành công tài khoản, vui lòng đăng nhập !!";
     public static REGISTER_CREATE_FAIL_MSG = "Tạo thành công tài khoản thất bại, vui lòng kiểm tra lại !!";
+    public static REGISTER_REQUEST_SERVICE_OK_MSG = "Yêu cầu đăng dịch vụ của bạn đã được gửi thành công. Vui lòng kiểm tra Email !!";
+    public static REGISTER_REQUEST_SERVICE_FAIL_MSG = "Yêu cầu đăng dịch vụ của bạn không thành công, vui lòng kiểm tra lại thông tin.";
+
 }

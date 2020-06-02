@@ -301,7 +301,7 @@ a:hover {
   }
 }
 
-/* register css */
+/* register css */  
 .register-title {
   width: 100%;
   background-color: orangered;
@@ -313,7 +313,8 @@ a:hover {
 
 .main-titlte-login{
   position: absolute;
-  right: 50px;
+  right: 100px;
+  top: 20px;
 }
 
 .register-title h2 {
@@ -389,6 +390,16 @@ a:hover {
   }
 }
 
+.img-sheet{
+  border: 2px solid orangered;
+
+}
+
+.deleteImageButton{
+  position: absolute;
+  right: 20px;
+  top: 70%;
+}
 
 .media__title {
   margin: 1.5rem 0 .875rem;

@@ -120,11 +120,11 @@ export class PostComponent implements OnInit {
         if (response.isValid == true) {
           // this.services.push(response.myModel);
           this._notificationService.printSuccessMessage(
-            MessageConstants.CREATED_OK_MSG
+            MessageConstants.REGISTER_REQUEST_SERVICE_OK_MSG
           );
         } else {
           this._notificationService.printErrorMessage(
-            MessageConstants.CREATED_FAIL_MSG
+            MessageConstants.REGISTER_REQUEST_SERVICE_FAIL_MSG
           );
         }
       },
