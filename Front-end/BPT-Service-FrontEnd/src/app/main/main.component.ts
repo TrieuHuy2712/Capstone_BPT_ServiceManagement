@@ -15,6 +15,7 @@ export class MainComponent implements OnInit {
   isSidebar: boolean = false;
   currentURL = '';
   public user: LoggedInUser;
+  public constant: SystemConstants;
   constructor(private utilityService: UtilityService, private authenService: AuthenService) {
     this.currentURL = window.location.href;
   }
@@ -24,16 +25,16 @@ export class MainComponent implements OnInit {
     console.log(this.user);
     SystemConstants.const_permission = this.user.username;
     console.log(this.currentURL);
-    if (this.currentURL == "http://localhost:4200/main/userManage/followingProvider/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/userProfile/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/followingService/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/email" 
-    || this.currentURL == "http://localhost:4200/main/userManage/email/inbox/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/email/read/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/email/sent/index" 
-    || this.currentURL == "http://localhost:4200/main/userManage/myService/index"
-    || this.currentURL == "http://localhost:4200/main/userManage/myService/post/index"
-    || this.currentURL == "http://localhost:4200/main/userManage/myService/view/index") {
+    if (this.currentURL == SystemConstants.BASE_API+"main/userManage/followingProvider/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/userProfile/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/followingService/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/email" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/email/inbox/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/email/read/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/email/sent/index" 
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/myService/index"
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/myService/post/index"
+    || this.currentURL == SystemConstants.BASE_API+"main/userManage/myService/view/index") {
       this.isSidebar = true;
     }
     // else if(this.currentURL.includes("/main/detailItem")){

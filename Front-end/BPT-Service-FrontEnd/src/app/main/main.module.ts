@@ -7,14 +7,8 @@ import { AuthenService } from 'src/app/core/services/authen.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { RouterModule } from '@angular/router';
 import { mainRoutes } from './main.routes';
-import { HomeComponent } from './home/home.component';
 import { HomeModule } from './home/home.module';
-import { TranslatePipe } from '../core/common/translate.pipe';
-import { LanguageService } from '../core/services/language.service';
 import { TranslationService } from '../core/services/translation.service';
-import { ListOfItemComponent } from './list-of-item/list-of-item.component';
-import { DetailItemComponent } from './detail-item/detail-item.component';
-import { UserManageComponent } from './user-manage/user-manage.component';
 import { TopbarUserComponent } from '../shared/topbar-user/topbar-user.component';
 import { UserModule } from './user/user.module';
 @NgModule({
@@ -25,7 +19,7 @@ import { UserModule } from './user/user.module';
     RouterModule.forChild(mainRoutes),
 
   ],
-  declarations: [MainComponent,SidebarMenuComponent,TopMenuComponent, TopbarUserComponent],
-  providers:[UtilityService,AuthenService,TranslationService]
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, TopbarUserComponent],
+  providers: [UtilityService, AuthenService, TranslationService]
 })
 export class MainModule { }

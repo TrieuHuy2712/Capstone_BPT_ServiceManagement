@@ -14,6 +14,9 @@ using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 using BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsync;
 using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.ElasticSearchService.Command.FakeImport;
+using BPT_Service.Application.ElasticSearchService.Query;
+using BPT_Service.Application.ElasticSearchService.Query.SearchPostService;
 using BPT_Service.Application.EmailService.Command.AddNewEmailService;
 using BPT_Service.Application.EmailService.Command.DeleteEmailService;
 using BPT_Service.Application.EmailService.Command.UpdateNewEmailService;
@@ -245,6 +248,7 @@ namespace BPT_Service.WebAPI
             // Services
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+            services.AddTransient(typeof(IElasticSearchRepository<>), typeof(ElasticSearchRepository<>));
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -270,7 +274,6 @@ namespace BPT_Service.WebAPI
             });
             ApplicationContext(services);
 
-            
             services.AddElasticsearch(Configuration);
 
             //Read email config json
@@ -516,6 +519,10 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IDeleteMonthlyLogFiles, DeleteMonthlyLogFiles>();
             services.AddScoped<IGetLogFiles, GetLogFiles>();
             services.AddScoped<IGetLogFromAFile, GetLogFromAFile>();
+
+            //Elastic Search
+            services.AddScoped<IFakeImportService, FakeImportService>();
+            services.AddScoped<ISearchService, SearchService>();
 
             //Notification
             services.AddScoped<IAutoGetNotification, AutoGetNotification>();
