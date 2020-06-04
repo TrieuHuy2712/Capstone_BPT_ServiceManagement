@@ -1,227 +1,326 @@
 <section class="content" style="margin-top: 20px; max-width: 100%; margin-right: 20px;">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card card-primary card-outline">
-          <div class="card-body box-profile">
-            <div class="text-center">
-              <img class="profile-user-img img-fluid img-circle" [src]="profile.avatar" 
-                alt="User profile picture">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle" [src]="profile.avatar"
+                                alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">{{profile.fullName}}</h3>
+
+                        <p class="text-muted text-center">{{profile.username}}</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Followers</b> <a class="float-right">0</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Following</b> <a class="float-right">0</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Friends</b> <a class="float-right">0</a>
+                            </li>
+                        </ul>
+
+                        <button class="btn btn-primary btn-block" (click)="showEditProfile(profile.id)"><b>Edit my
+                                profile</b></button>
+                        <div *ngIf="sidebarOn" class="center-xs">
+                            Bạn chưa là Nhà Cung Cấp ?
+                            <a><span class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí
+                                    ngay</span> </a>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
             </div>
+            <div class="col-md-8">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">About Me</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
-            <h3 class="profile-username text-center">{{profile.fullName}}</h3>
+                        <p class="text-muted">
+                            Văn Lang University, Q. Gò Vấp, TP Hồ Chí Minh
+                        </p>
 
-            <p class="text-muted text-center">{{profile.username}}</p>
+                        <hr>
 
-            <ul class="list-group list-group-unbordered mb-3">
-              <li class="list-group-item">
-                <b>Followers</b> <a class="float-right">0</a>
-              </li>
-              <li class="list-group-item">
-                <b>Following</b> <a class="float-right">0</a>
-              </li>
-              <li class="list-group-item">
-                <b>Friends</b> <a class="float-right">0</a>
-              </li>
-            </ul>
+                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
 
-            <button class="btn btn-primary btn-block"><b>Edit my profile</b></button>
-            <div class="center-xs">
-              Bạn chưa là Nhà Cung Cấp ?
-              <a ><span  class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí ngay</span> </a>
+                        <p class="text-muted">Đang cập nhật</p>
+
+                        <hr>
+
+                        <strong><i class="far fa-file-alt mr-1"></i> Email</strong>
+
+                        <p class="text-muted">{{profile.email}}</p>
+
+                        <hr>
+
+                        <strong><i class="far fa-file-alt mr-1"></i> Phone number</strong>
+
+                        <p class="text-muted">034800167*</p>
+                        <ngb-rating [(rate)]="currentRate"></ngb-rating>
+                        <hr>
+                        <pre>Rate: <b>{{currentRate}}</b></pre>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
             </div>
-          </div>
-          <!-- /.card-body -->
         </div>
-      </div>
-      <div class="col-md-8">
-        <div class="card card-primary">
-          <div class="card-header">
-            <h3 class="card-title">About Me</h3>
-          </div>
-          <!-- /.card-header -->
-          <div class="card-body">
-            <strong><i class="fas fa-book mr-1"></i> Education</strong>
-
-            <p class="text-muted">
-              Văn Lang University, Q. Gò Vấp, TP Hồ Chí Minh
-            </p>
-
-            <hr>
-
-            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-            <p class="text-muted">500/116/10 Đoàn Văn Bơ - Phường 14 - Quận 4</p>
-
-            <hr>
-
-            <strong><i class="fas fa-pencil-alt mr-1"></i> Category Providers</strong>
-
-            <p class="text-muted">
-              <span class="tag tag-danger">Paiting Service</span>
-              <span class="tag tag-success">, Moving house</span>
-            </p>
-
-            <hr>
-
-            <strong><i class="far fa-file-alt mr-1"></i> Email</strong>
-
-            <p class="text-muted">{{profile.email}}</p>
-
-            <hr>
-
-            <strong><i class="far fa-file-alt mr-1"></i> Phone number</strong>
-
-            <p class="text-muted">034800169*</p>
-          </div>
-          <!-- /.card-body -->
-        </div>
-      </div>
     </div>
-  </div>
-  <!-- /.row -->
-  <div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title pull-left">Thêm/Sửa nhà cung cấp</h4>
-                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <!-- /.row -->
+    <div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">Bảng đăng kí để trở thành nhà cung cấp dịch vụ</h4>
+                    <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+                        (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+                        <div class="form-group row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label">Tên nhà cung cấp</label>
+                                <div>
+                                    <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                                    <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName"
+                                        required minlength="3" name="providerName" class="form-control">
+                                    <small
+                                        [hidden]="providerName.valid || (providerName.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải nhập tên ít nhất 3 ký tự
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="control-label">Tên người đăng ký</label>
+                                <div>
+                                    <!-- <input type="hidden" [(ngModel)]="entity.userId" name="userId" /> -->
+                                    <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" required
+                                        [typeahead]="state" minlength="3" name="userName" class="form-control"
+                                        autocomplete="off" [disabled]="entity.id!=undefined">
+                                    <small [hidden]="userName.valid || (userName.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải nhập tên ít nhất 3 ký tự
+                                    </small>
+                                    <small [hidden]="checkUserName(userName)" class="text-danger">
+                                        Không tìm thấy tên bạn đã nhập
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>TaxCode</label>
+                                <div>
+                                    <input class="form-control" #taxCode="ngModel" required [(ngModel)]="entity.taxCode"
+                                        name="taxCode" rows="3">
+                                    <small [hidden]="taxCode.valid || (taxCode.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải mã số thuế
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>Tên tỉnh/thành phố</label>
+                                <div>
+                                    <!-- <input type="hidden" [(ngModel)]="entity.cityId" name="cityId" /> -->
+                                    <input type="text" #cityName="ngModel" [(ngModel)]="entity.cityName" required
+                                        [typeahead]="locationState" minlength="3" name="cityName" class="form-control"
+                                        autocomplete="off">
+                                    <small [hidden]="cityName.valid || (cityName.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải nhập tên ít nhất 3 ký tự
+                                    </small>
+                                    <small [hidden]="checkLocation(cityName)" class="text-danger">
+                                        Không tìm thấy tên bạn đã nhập !
+                                    </small>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>Điện thoại</label>
+                                <div>
+                                    <input type="text" #phoneNumber="ngModel" [(ngModel)]="entity.phoneNumber" required
+                                        minlength="3" name="phoneNumber" class="form-control">
+                                    <small
+                                        [hidden]="phoneNumber.valid || (phoneNumber.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải nhập tên ít nhất 3 ký tự
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>Địa chỉ</label>
+                                <div>
+                                    <input type="text" #address="ngModel" [(ngModel)]="entity.address" required
+                                        minlength="3" name="address" class="form-control">
+                                    <small [hidden]="address.valid || (address.pristine && !addEditForm.submitted)"
+                                        class="text-danger">
+                                        Bạn phải nhập tên ít nhất 3 ký tự
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <textarea type="text" #description="ngModel" [(ngModel)]="entity.description" required
+                                    minlength="3" name="description" class="form-control"></textarea>
+                                <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="file" #avatarPath name="avatarPath" class="form-control">
+                                <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+                                <input type="hidden" [(ngModel)]="entity.avatarPath" name="imgPath" />
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatarPath">
+                                <img [src]="entity.avatarPath" width="128" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
+                            <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
+                            <span *ngIf="entity.status==0"><span class="badge badge-danger">Approved</span></span>
+                            <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
+                                    bỏ</button>
+                                <button type="submit" class="btn btn-success"
+                                    [disabled]="!addEditForm.form.valid || (!checkUserName(userName) || !checkLocation(cityName) && entity.id==undefined)">Cập
+                                    nhật</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
-                    (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
-                    <div class="form-group row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label">Tên nhà cung cấp</label>
-                            <div>
-                                <input type="hidden" [(ngModel)]="entity.id" name="id" />
-                                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
-                                    minlength="3" name="providerName" class="form-control">
+        </div>
+    </div>
+
+    <div bsModal #modalEditProfile="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">Chỉnh sửa thông tin cá nhân</h4>
+                    <button type="button" class="close pull-right" (click)="modalEditProfile.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+                        (ngSubmit)="saveEditUser(true)" *ngIf="entity">
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Họ tên đầy đủ</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" #name="ngModel" [(ngModel)]="userEntity.fullName" required
+                                    minlength="3" name="name" class="form-control">
+                                <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập đủ 6 kí tự !
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tên tài khoản</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" #username="ngModel" [(ngModel)]="userEntity.userName" required
+                                    name="username" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group" *ngIf="!entity.id">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Mật khẩu</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="password" #password="ngModel" [(ngModel)]="entity.Password" required
+                                    minlength="6" name="password" class="form-control">
+                                <small [hidden]="password.valid || (password.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 6 ký tự
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="!entity.id">
+                            <label
+                                class="control-label col-md-3 col-sm-3 col-xs-12">Mật khẩu</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="password" #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword"
+                                    required validateEqual="password" minlength="6" name="confirmpassword"
+                                    class="form-control">
                                 <small
-                                    [hidden]="providerName.valid || (providerName.pristine && !addEditForm.submitted)"
+                                    [hidden]="confirmpassword.valid || (confirmpassword.pristine && !addEditForm.submitted)"
                                     class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                    Mật khẩu bạn nhập không khớp !!
                                 </small>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label class="control-label">Tên người đăng ký</label>
-                            <div>
-                                <!-- <input type="hidden" [(ngModel)]="entity.userId" name="userId" /> -->
-                                <input type="text" #userName="ngModel" [(ngModel)]="entity.userName" required
-                                    [typeahead]="state" minlength="3" name="userName" class="form-control"
-                                    autocomplete="off" [disabled]="entity.id!=undefined">
-                                <small [hidden]="userName.valid || (userName.pristine && !addEditForm.submitted)"
+                        </div> -->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Thư điện tử</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                    [(ngModel)]="userEntity.email" required name="email" class="form-control">
+                                <!-- <small [hidden]="email.valid || (email.pristine && !addEditForm.submitted)"
                                     class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                                <small [hidden]="checkUserName(userName)"
-                                    class="text-danger">
-                                    Không tìm thấy tên bạn đã nhập
-                                </small>
+                                    Bạn phải nhập thư điện tử !!!
+                                </small> -->
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>TaxCode</label>
-                            <div>
-                                <input class="form-control" #taxCode="ngModel" required [(ngModel)]="entity.taxCode"
-                                    name="taxCode" rows="3">
-                                <small [hidden]="taxCode.valid || (taxCode.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải mã số thuế
-                                </small>
+                        <!-- <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{'address'|translate}}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input type="text" #address="ngModel" [(ngModel)]="entity.address" name="address" class="form-control">
+            </div>
+          </div> -->
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Hình đại diện</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="file" #avatar name="avatar" class="form-control">
+                                <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+                                <input type="hidden" [(ngModel)]="userEntity.avatar" name="avatar" />
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Tên tỉnh/thành phố</label>
-                            <div>
-                                <!-- <input type="hidden" [(ngModel)]="entity.cityId" name="cityId" /> -->
-                                <input type="text" #cityName="ngModel" [(ngModel)]="entity.cityName" required
-                                    [typeahead]="locationState" minlength="3" name="cityName" class="form-control"
-                                    autocomplete="off">
-                                <small [hidden]="cityName.valid || (cityName.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                                <small [hidden]="checkLocation(cityName)"
-                                    class="text-danger">
-                                    Không tìm thấy tên bạn đã nhập !
-                                </small>
-                                
+
+                            <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatar">
+                                <img [src]="entity.avatar" width="128" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Điện thoại</label>
-                            <div>
-                                <input type="text" #phoneNumber="ngModel" [(ngModel)]="entity.phoneNumber" required
-                                    minlength="3" name="phoneNumber" class="form-control">
-                                <small [hidden]="phoneNumber.valid || (phoneNumber.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Địa chỉ</label>
-                            <div>
-                                <input type="text" #address="ngModel" [(ngModel)]="entity.address" required
-                                    minlength="3" name="address" class="form-control">
-                                <small [hidden]="address.valid || (address.pristine && !addEditForm.submitted)"
-                                    class="text-danger">
-                                    Bạn phải nhập tên ít nhất 3 ký tự
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea type="text" #description="ngModel" [(ngModel)]="entity.description" required
-                                minlength="3" name="description" class="form-control"></textarea>
-                            <small [hidden]="description.valid || (description.pristine && !addEditForm.submitted)"
-                                class="text-danger">
-                                Bạn phải nhập tên ít nhất 3 ký tự
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="file" #avatarPath name="avatarPath" class="form-control">
-                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
-                            <input type="hidden" [(ngModel)]="entity.avatarPath" name="imgPath" />
                         </div>
 
-                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatarPath">
-                            <img [src]="entity.avatarPath" width="128" />
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                <button type="button" (click)="editProfile.hide()" class="btn btn-primary">Hủy
+                                    bỏ</button>
+                                <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập
+                                    nhật</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
-                        <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
-                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Approved</span></span>
-                        <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
-                    </div>
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
-                                bỏ</button>
-                            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid || (!checkUserName(userName) || !checkLocation(cityName) && entity.id==undefined)">Cập
-                                nhật</button>
-
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </section>

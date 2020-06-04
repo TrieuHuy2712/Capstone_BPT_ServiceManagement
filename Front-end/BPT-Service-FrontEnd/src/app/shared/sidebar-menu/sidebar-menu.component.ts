@@ -15,6 +15,7 @@ export class SidebarMenuComponent implements OnInit {
   public _functions: any[];
   public vnFunctionion= "";
   public user: LoggedInUser;
+  public sidebarOn: any;
 
   constructor(
     private dataService: DataService,
@@ -25,6 +26,7 @@ export class SidebarMenuComponent implements OnInit {
   ngOnInit() {
 
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.sidebarOn = this.user.isProvider;
     SystemConstants.const_permission = this.user.username;
     const uName = localStorage.getItem(SystemConstants.const_username);
     if (uName) {

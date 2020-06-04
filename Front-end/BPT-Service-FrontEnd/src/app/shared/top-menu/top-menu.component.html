@@ -7,7 +7,7 @@
           </a>
           <!-- search bar -->
           <form class="form-inline my-2 my-lg-0 " style="margin-left: 20px;">
-              <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa" aria-label="Search" (change)="dataSearchBinding($event.target.value)">
+              <input class="form-control mr-sm-2 search-bar" type="search" placeholder="Nhập từ khóa" aria-label="Search" (change)="dataSearchBinding($event.target.value)">
               <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit"><a [routerLink]="['/main/listOfItem', searchData]" target="_blank">Tìm kiếm</a></button>
           </form>
           <!-- menu when responsive -->
@@ -16,13 +16,6 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
               <ul class="navbar-nav ml-auto">
-                  <li class="nav-item">
-                      <a href="/register" class="nav-link">Đăng kí</a>
-                  </li>
-                  <!-- <li class="nav-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <a (click)="logout()" class="nav-link">Xin chào {{user.fullName}}</a>
-                      
-                  </li> -->
                   <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="fas fa-cog"></i>
