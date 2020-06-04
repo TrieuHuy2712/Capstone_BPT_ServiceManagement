@@ -71,17 +71,17 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
                         if (findProviderService != null)
                         {
                             var findProvider = await _providerRepository.FindSingleAsync(x => x.Id == findProviderService.ProviderId);
-                            return MapViewModel(service, null, findProvider).Result;
+                            return await MapViewModel(service, null, findProvider);
                         }
                         else
                         {
-                            return MapViewModel(service, null, null).Result;
+                            return await MapViewModel(service, null, null);
                         }
                     }
                     else
                     {
                         var findUser = await _userManager.FindByIdAsync(findUserService.UserId.ToString());
-                        return MapViewModel(service, findUser, null).Result;
+                        return await MapViewModel(service, findUser, null);
                     }
                 }
                 else
