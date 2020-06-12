@@ -7,3 +7,5 @@ INFO[2020-05-26 17:00:07]:: AddUpdateRatingServiceCommand:: c96e36f9-1808-4953-5
 INFO[2020-05-26 17:02:42]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: shincrazychan had followDịch vụ bán và chăm sóc thú cưng Huy
 INFO[2020-05-26 17:03:01]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: shincrazychan had followDịch vụ bán và chăm sóc thú cưng Huy
 INFO[2020-05-26 18:03:13]:: AddCommentServiceAsyncCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: alo
+INFO[2020-05-26 20:58:36]:: AddUpdateRatingServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: shincrazychanratedDịch vụ bán đồ nội thất của Nguyễn with4
+INFO[2020-05-26 20:58:38]:: FollowPostServiceCommand:: c96e36f9-1808-4953-504f-08d7fee562be:: shincrazychan:: shincrazychan had followDịch vụ bán đồ nội thất của Nguyễn

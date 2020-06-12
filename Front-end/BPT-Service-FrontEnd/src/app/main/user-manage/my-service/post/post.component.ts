@@ -37,7 +37,7 @@ export class PostComponent implements OnInit {
   public categoryState: any[];
   public provider: any[];
   public user: LoggedInUser;
-  public tagName:string="";
+  public tagName: string = "";
   public tag: any[];
   public tagState: any[];
   public services: any[];
@@ -56,8 +56,13 @@ export class PostComponent implements OnInit {
   kindOfStyle: number;
   public cId: any;
 
-  public userInSystem : any[];
-  // 
+  public userInSystem: any[];
+
+  // Provider name
+  public providerName: any;
+
+  // Image params
+  public isImage: boolean = false;
   constructor(
     private _dataService: DataService,
     private _notificationService: NotificationService,
@@ -74,20 +79,21 @@ export class PostComponent implements OnInit {
     };
 
     this.entity = {};
-    this.tagName="";
+    this.tagName = "";
     // get current user
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    console.log("user id "+this.user.fullName);
+    console.log("user id " + this.user.fullName);
 
     this.getAllCategory();
     this.getAllTag();
     this.getAllUser();
     this.getAllProvider();
+    this.checkIsSelectImage();
 
-    
+
   }
 
-  selectedCategory(){
+  selectedCategory() {
     this.isCategory = !this.isCategory;
   }
 
@@ -104,7 +110,7 @@ export class PostComponent implements OnInit {
   // start service method
   async saveChange(valid: boolean) {
     if (valid) {
-      for(const item of this.listImage){
+      for (const item of this.listImage) {
         await this._uploadService.postWithFile('/UploadImage/saveImage/service', null, item.dataImage)
           .then((imageUrl: any) => {
             item.path = imageUrl;
@@ -114,23 +120,31 @@ export class PostComponent implements OnInit {
     }
   }
 
+  // check if user select any image or not
+  checkIsSelectImage(){
+    if(this.listImage.length == 0){
+      this.isImage = true;
+      return this.isImage;
+    }
+  }
+
   saveDataProvider() {
     this._dataService.post("/Service/registerServiceFromProvider", this.entity).subscribe(
       (response: any) => {
         if (response.isValid == true) {
           // this.services.push(response.myModel);
           this._notificationService.printSuccessMessage(
-            MessageConstants.CREATED_OK_MSG
+            MessageConstants.REGISTER_REQUEST_SERVICE_OK_MSG
           );
         } else {
           this._notificationService.printErrorMessage(
-            MessageConstants.CREATED_FAIL_MSG
+            MessageConstants.REGISTER_REQUEST_SERVICE_FAIL_MSG
           );
         }
       },
       error => this._dataService.handleError(error));
   }
-  selectOption(val:any){
+  selectOption(val: any) {
     this.entity.categoryId = val;
     this.entity.categoryName = this.category.find(x => x.id == val).categoryName;
   }
@@ -143,13 +157,9 @@ export class PostComponent implements OnInit {
       this.entity.listImages = this.listImage;
       //Assign Tag
       this.entity.tagOfServices = this.listTag;
-      if (true) {
-        //Assign User ID
-        this.entity.providerId = this.provider.find(x => x.providerName == this.entity.providerName).id;
-        
-        this.saveDataProvider();
-      } 
-    } 
+      // this.entity.providerId = this.provider.find(x => x.providerName == this.entity.providerName).id;
+      this.saveDataProvider();
+    }
   }
   // 
 
@@ -173,12 +183,12 @@ export class PostComponent implements OnInit {
   getAllCategory() {
     this._dataService.get("/CategoryManagement/GetAllCategory").subscribe((response: any) => {
       this.category = response;
-      
+
     });
   }
 
   onEnter(value: string) {
-    if(value.trim()==""){
+    if (value.trim() == "") {
       return
     }
     var findIsIndex = this.tagState.findIndex(x => x == value);
@@ -223,6 +233,9 @@ export class PostComponent implements OnInit {
   showImageModel() {
     this.modalImage.show();
   }
+  closeImageForm(){
+    this.modalImage.hide();
+  }
 
   addImage() {
     let newImage: ImageList = {
@@ -243,15 +256,22 @@ export class PostComponent implements OnInit {
   // get all provider
 
   getAllProvider() {
-    this._dataService.get("/Provider/GetAllPaging?page=1&pageSize=0&keyword=&filter=5").subscribe((response: any) => {
-      this.provider = response.results;
-      let userName = new Array();
-      this.provider.forEach(element => {
-        userName.push(element.providerName);
-      });
-      this.providerState = userName;
+    let profile = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    console.log("profile name " + profile.id);
+
+    this._dataService.get("/Provider/GetAllPaging?filter=5").subscribe((response: any) => {
+      let fakeProvider = response.results;
+      let providerId = fakeProvider.find(x => x.userId == profile.id).id;
+      let providerName = fakeProvider.find(x => x.userId == profile.id).providerName;
+      console.log("this is providerID = " + providerId);
+      console.log("this is providerName =" + providerName);
+
+      this.entity.providerId = providerId;
+      this.entity.providerName = providerName;
+
     });
+
   }
-  
+
   // end service method
 }

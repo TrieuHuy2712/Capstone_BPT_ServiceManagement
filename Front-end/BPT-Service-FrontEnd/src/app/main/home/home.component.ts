@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
     { img: "../../../assets/images/introduce-2.jpg", tit1: "Dịch vụ sơn", tit2: "Sơn nhà đón tết nào bà con ơi !" },
     { img: "../../../assets/images/introduce-3.jpg", tit1: "Chuyển nhà", tit2:"Chuyển nhà đón tài lộc nào cả nhà" }
   ];
-  slideConfig2 = { "slidesToShow": 3, "slidesToScroll": 1, "arrows": true, "autoplay": false};
+  slideConfig2 = { "slidesToShow": 5, "slidesToScroll": 1, "arrows": true, "autoplay": false};
 
   //  location slider
 

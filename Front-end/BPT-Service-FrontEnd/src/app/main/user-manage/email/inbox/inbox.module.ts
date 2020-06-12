@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { PaginationModule  } from 'ngx-bootstrap/pagination';
@@ -9,8 +9,11 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
-import { RatingModule } from 'ngx-bootstrap';
+import { RatingModule, TypeaheadModule } from 'ngx-bootstrap';
 import { InboxComponent } from './inbox.component';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
@@ -21,15 +24,18 @@ const itemRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    PaginationModule,
     FormsModule,
     ModalModule.forRoot(),
+    PaginationModule,
     RouterModule.forChild(itemRoutes),
-    SharedModule,
-    SlickModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    EditorModule,
+    Ng4LoadingSpinnerModule.forRoot()
     
   ],
+  
   declarations: [InboxComponent],
-  providers:[DataService,NotificationService, TranslationService]
+  providers:[DataService,NotificationService, TranslationService],
+  
 })
 export class InboxModule { }

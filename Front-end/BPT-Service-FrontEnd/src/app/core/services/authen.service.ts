@@ -88,7 +88,8 @@ export class AuthenService {
         userData.Email,
         userData.avatar,
         userData.roles,
-        userData.permissions
+        userData.permissions,
+        userData.isProvider
       );
     } else {
       user = null;

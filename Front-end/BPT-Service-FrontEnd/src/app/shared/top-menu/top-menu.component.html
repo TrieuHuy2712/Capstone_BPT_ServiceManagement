@@ -2,12 +2,12 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
       <div class="container-fluid">
           <!-- logo -->
-          <a class="navbar-branch" href="#">
+          <a class="navbar-branch" href="/main/home/index">
               <img class="logo" src="../../../assets/images/logovl.jpg" height="50px;">
           </a>
           <!-- search bar -->
           <form class="form-inline my-2 my-lg-0 " style="margin-left: 20px;">
-              <input class="form-control mr-sm-2" type="search" placeholder="Nhập từ khóa" aria-label="Search" (change)="dataSearchBinding($event.target.value)">
+              <input class="form-control mr-sm-2 search-bar" type="search" placeholder="Nhập từ khóa" aria-label="Search" (change)="dataSearchBinding($event.target.value)">
               <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit"><a [routerLink]="['/main/listOfItem', searchData]" target="_blank">Tìm kiếm</a></button>
           </form>
           <!-- menu when responsive -->
@@ -17,12 +17,11 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
               <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                      <a href="/register" class="nav-link">Đăng kí</a>
+                    <a class="nav-link" href="/main/home/index">Trang chủ</a>
                   </li>
-                  <!-- <li class="nav-item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <a (click)="logout()" class="nav-link">Xin chào {{user.fullName}}</a>
-                      
-                  </li> -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Liên hệ</a>
+                  </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="fas fa-cog"></i>
@@ -30,14 +29,20 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">Xin chào {{user.fullName}}</span>
+                        <!-- logout -->
                         <div class="dropdown-divider"></div>
                         <a (click)="logout()" class="dropdown-item">
                             <i class="fas fa-sign-out-alt"></i> Đăng xuất
                         </a>
-        
+                        <!-- personal profile -->
                         <div class="dropdown-divider"></div>
                         <a href="/main/userManage/userProfile/index" class="dropdown-item">
                             <i class="fas fa-user"></i> Thông tin cá nhân
+                        </a>
+                        <!-- this link is for admin -->
+                        <div class="dropdown-divider"></div>
+                        <a href="/admin/main/home/index" class="dropdown-item">
+                            <i class="fas fa-user"></i> Quản lý ( Administrator )
                         </a>
                     </div>
                 </li>

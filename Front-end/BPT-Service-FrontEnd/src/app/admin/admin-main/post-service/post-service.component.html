@@ -303,19 +303,19 @@
         <form class="form-horizontal form-label-left" novalidate #addImageForm="ngForm"
           *ngIf="entity">
           <div *ngFor="let atag of listImage, let i = index">
-            <div class="form-group row">
-              <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group row img-sheet">
+              <div class="col-md-3" >
                 <label class="control-label">Chọn hình ảnh</label>
                   <input type="checkbox" #isAvatar="ngModel" [(ngModel)]="atag.isAvatar" [disabled]="!disableIsAvatar()"
                     name="isAvatar">
               </div>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-9 form-group" style="margin-top: 20px;">
+                
+                <div class="col-md-12">
                   <input type="file" #imgPath name="imgPath" class="form-control" (change)="selectChangeFile($event.target.files,i)">
                   <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
                   <input type="hidden" [(ngModel)]="atag.dataImage" name="imgPath" />
-                  <button type="button" class="btn btn-danger" (click)="removeImage(i)"><i class="fa fa-trash"></i></button>
+                  <button type="button" class="btn btn-danger deleteImageButton" (click)="removeImage(i)"><i class="fa fa-trash"></i></button>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.path">
                   <img [src]="atag.path" width="128px" />

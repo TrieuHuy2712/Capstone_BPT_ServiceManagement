@@ -10,6 +10,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { DetailItemComponent } from './detail-item.component';
+import { BarRatingModule } from 'ngx-bar-rating';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user
@@ -25,7 +26,8 @@ const itemRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(itemRoutes),
     SharedModule,
-    SlickModule.forRoot()
+    SlickModule.forRoot(),
+    BarRatingModule
   ],
   declarations: [DetailItemComponent],
   providers:[DataService,NotificationService, TranslationService]

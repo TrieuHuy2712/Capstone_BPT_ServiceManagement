@@ -1,5 +1,10 @@
+<!-- content will appear if that service is not available -->
+<div *ngIf="!isAvailable">
+    <h3 style="font-weight: 300;">Xin lỗi !! Dịch vụ mà bạn chọn hiện không khả dụng, quay lại <a href="/main/home/index">Trang chủ</a></h3>
+    <img style="margin-left: 0x; width: 80%;" src="../../../assets/images/503-error.jpg" alt="lỗi">
+</div>
 <!-- main content -->
-<div id="__nuxt" style="margin-left: -250px;" *ngIf="details">
+<div id="__nuxt" style="margin-left: -250px;" *ngIf="isAvailable">
     <!---->
     <div id="__layout">
         <div class="position-relative h-100 message-mobile layout-default fixed-header"><i class="d-none"></i>
@@ -64,6 +69,7 @@
                                                                     <div class="col-xs-12 col-sm-10">
                                                                         <h1 class="mb--12">{{details.serviceName}}</h1>
                                                                     </div>
+
                                                                     <div
                                                                         class="d-none d-sm-block col-lg-2 text-right room-id">
                                                                         <div class="room-id__wrapper d-inline-block">
@@ -74,6 +80,7 @@
                                                                             </p>
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
                                                             </div>
                                                             <div
@@ -141,8 +148,8 @@
                                                                 <div class="is-relative">
                                                                     <div id="short_intro" class="room-des dot show"
                                                                         style="-webkit-box-orient: vertical;">
-                                                                        <p>{{details.description}}</p>
-
+                                                                        <p [innerHTML]="details.description">
+                                                                        </p>
                                                                     </div>
 
                                                                 </div>
@@ -193,24 +200,20 @@
                                             Khi nhận thông tin và địa chỉ của khách hàng, chúng tôi sẽ chủ động liên lạc
                                             và phục vụ tạn nơi.
                                         </p>
-                                        <div _ngcontent-kvx-c5="" >
+                                        <div _ngcontent-kvx-c5="">
                                             <div _ngcontent-kvx-c5="" class="title mt--60">
-                                                <h3 style="display: inline-block; margin-right: 20px;">Đánh giá</h3>
-                                                <!-- rating in there -->
-                                                <div *ngFor="let item of details.rating">
-                                                    <span><i class="fas fa-star" style="color: orange; font-size: 40px;"></i></span>
-                                                </div>
+                                                <h3 style="display: inline-block; margin-right: 20px; font-weight: 300;">Đánh giá : {{averageRatingOfAService.averageRating}}</h3>
                                             </div>
-                                            
-                                            
+
+
                                             <div _ngcontent-kvx-c5="" class="mt--24">
                                                 <input class="form-control form-control-sm" type="text"
                                                     placeholder="Type a comment"
-                                                    (keyup.enter)="postAComment($event.target.value)">
+                                                    (keyup.enter)="postAComment($event.target.value)" [ngModel]="emptyMess">
                                                 <div _ngcontent-kvx-c5="" class="review mt--24 "
                                                     *ngFor="let item of testComment">
-                                                    <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center fulse"
-                                                        data-v-730e0d8f="">
+                                                    <div _ngcontent-kvx-c5=""
+                                                        class="is-flex jbetween align-center fulse" data-v-730e0d8f="">
                                                         <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
                                                             data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
                                                                 class="review__avatar" data-v-730e0d8f="" height="48"
@@ -225,7 +228,8 @@
                                                                 </h5><span _ngcontent-kvx-c5="" class="caption"
                                                                     data-v-730e0d8f="">Wenesday, May 6, 2020</span>
                                                             </div>
-                                                            <button *ngIf="item.userId == 'c82f8075-a826-4df4-34b6-08d7f4de0028'" style="margin-left: 50px;"
+                                                            <button *ngIf="item.userName == user.userName"
+                                                                style="margin-left: 50px;"
                                                                 (click)="deleteComment(item.id)"><i
                                                                     class="fas fa-trash-alt"></i></button>
                                                         </div>
@@ -402,32 +406,42 @@
                                                                 </div>
                                                             </span></div>
                                                     </div>
-                                                    <!----> <button id="addtocart-btn" *ngIf="isFollowed"
+                                                    <!----> <button id="addtocart-btn" *ngIf="!isFollowed"
                                                         (click)="followAService()"
                                                         class="btn btn-grad--primary px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
                                                             style="color: #fff; font-weight: 600;">Theo
                                                             dõi</span></button>
-                                                    <button id="addtocart-btn" *ngIf="!isFollowed"
+                                                    <button id="addtocart-btn" *ngIf="isFollowed"
                                                         (click)="unFollowAService()"
                                                         class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
                                                             style="color: #fff; font-weight: 600;">Đã theo
                                                             dõi</span></button>
 
                                                     <!-- rating -->
-                                                    <div class="stars">
+                                                    <div *ngIf="isRated" class="stars">
                                                         <form>
-                                                          <input class="star star-5" id="star-5" type="radio" name="star" value=5 (click)="getContentOfRating($event.target.value)"/>
-                                                          <label class="star star-5" for="star-5" ></label>
-                                                          <input class="star star-4" id="star-4" type="radio" name="star" value=4 (click)="getContentOfRating($event.target.value)"/>
-                                                          <label class="star star-4" for="star-4"></label>
-                                                          <input class="star star-3" id="star-3" type="radio" name="star" value=3 (click)="getContentOfRating($event.target.value)"/>
-                                                          <label class="star star-3" for="star-3"></label>
-                                                          <input class="star star-2" id="star-2" type="radio" name="star" value=2 (click)="getContentOfRating($event.target.value)"/>
-                                                          <label class="star star-2" for="star-2"></label>
-                                                          <input class="star star-1" id="star-1" type="radio" name="star" value=1 (click)="getContentOfRating($event.target.value)"/>
-                                                          <label class="star star-1" for="star-1"></label>
+                                                            <input class="star star-5" id="star-5" type="radio"
+                                                                name="star" value=5
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-5" for="star-5"></label>
+                                                            <input class="star star-4" id="star-4" type="radio"
+                                                                name="star" value=4
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-4" for="star-4"></label>
+                                                            <input class="star star-3" id="star-3" type="radio"
+                                                                name="star" value=3
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-3" for="star-3"></label>
+                                                            <input class="star star-2" id="star-2" type="radio"
+                                                                name="star" value=2
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-2" for="star-2"></label>
+                                                            <input class="star star-1" id="star-1" type="radio"
+                                                                name="star" value=1
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-1" for="star-1"></label>
                                                         </form>
-                                                      </div>
+                                                    </div>
 
                                                     <div class="mt--18">
                                                         <div class="room-event__wrap"></div>
@@ -436,16 +450,16 @@
                                                 <hr>
                                                 <div class="provider_place">
                                                     <div class="room-sidebar__host py--24 px--12 px--lg--24 w--100"><a
-                                                            [routerLink]="[ '/main/viewAboutProvider',details.userId]"
+                                                            [routerLink]="[ '/main/viewAboutProvider',details.providerId]"
                                                             routerLinkActive="active"
                                                             class="host-intro is-flex align-center">
                                                             <div class="image-box image-box--large image-box--circle">
-                                                                <img [src]="user.avatar">
+                                                                <img [src]="provider.avatarPath">
                                                             </div>
                                                             <div class="host-intro__name mx--12 mx--md--18 pl--12">
-                                                                <p class="mb--6 extra-bold">{{user.fullName}}</p>
-                                                                <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia
-                                                                    11/2018</p>
+                                                                <p class="mb--6 extra-bold">{{provider.providerName}}
+                                                                </p>
+                                                                <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia ngày : <strong><i>Đang cập nhật</i></strong></p>
                                                             </div>
                                                             <!---->
                                                         </a></div>
@@ -453,8 +467,8 @@
                                                         <div
                                                             class="rounded bg-gray-f p--12 is-flex align-center jbetween">
                                                             <p class="mb--0 p--small-2 c-gray-3">
-                                                                Gọi <a href="tel:18006586" class="extra-bold">18006586
-                                                                    (miễn phí)</a> để được hỗ trợ 24/7
+                                                                Số điện thoại liên hệ <a href="tel:18006586" class="extra-bold">{{provider.phoneNumber}}
+                                                                    (miễn phí)</a> để được hỗ trợ
                                                             </p> <svg version="1.1" viewBox="0 0 19 16"
                                                                 class="svg-icon svg-fill"
                                                                 style="width: 16px; height: 16px;">

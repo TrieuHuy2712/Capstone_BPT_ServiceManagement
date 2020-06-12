@@ -91,9 +91,10 @@ export class ViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.entity = {};
     this.getAllUser();
     this.tagName = "";
-    this.loadData();
+    // this.loadData();
 
   }
 
@@ -111,10 +112,11 @@ export class ViewComponent implements OnInit {
       this.userId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       this._dataService
         .get(
-          "/Service/getAllPostUserServiceByUserId?idUser="+ this.userId+"&isProvider=true"
+          "/Service/getAllPostUserServiceByUserId?idUser="+this.userId+"&isProvider=true"
         )
         .subscribe((response: any) => {
           this.viewOfService = response;
+          console.log(this.viewOfService);
           
         });
     });
@@ -123,17 +125,17 @@ export class ViewComponent implements OnInit {
 
   // get data of current service, to edit info.
 
-  loadData() {
-    this._dataService
-      .get(
-        "/Service/getAllPagingPostService?page=1&pageSize=20&keyword=" +
-        this.filter +
-        "&isAdminPage=true&filter=5"
-      )
-      .subscribe((response: any) => {
-        this.services = response.results;
-      });
-  }
+  // loadData() {
+  //   this._dataService
+  //     .get(
+  //       "/Service/getAllPagingPostService?page=1&pageSize=20&keyword=" +
+  //       this.filter +
+  //       "&isAdminPage=true&filter=5"
+  //     )
+  //     .subscribe((response: any) => {
+  //       this.services = response.results;
+  //     });
+  // }
 
   // show form to edit
   showEditModal(id: any) {
@@ -157,15 +159,12 @@ export class ViewComponent implements OnInit {
 
 
   loadRole(id: any) {
-    let findIdthis = this.services[id];
-    this.entity = findIdthis;
-    this.listTag = [];
-    this.listImage = [];
-    this.listTag = this.entity.tagofServices;
-    this.listImage = this.entity.listImages;
+    this.entity = this.viewOfService[id];
+    this.entity.providerName = this.entity.author;
 
-    this.entity.userName = this.entity.author;
-
+    console.log(this.entity);
+    
+    
   }
 
   getAllProvider() {
@@ -472,7 +471,7 @@ export class ViewComponent implements OnInit {
   }
   filterStatus(id: any) {
     this.defaultStatus = id;
-    this.loadData();
+    // this.loadData();
   }
   filterUserService(style: any) {
     if (style == 0) {

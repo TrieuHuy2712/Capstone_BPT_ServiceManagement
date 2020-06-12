@@ -1,5 +1,5 @@
 export class LoggedInUser {
-    constructor( token: string, username: string, fullName: string, email: string, avatar: string,roles:any,permissions:any
+    constructor( token: string, username: string, fullName: string, email: string, avatar: string,roles:any,permissions:any, isProvider:any
     ) {
         this.token = token;
         this.fullName = fullName;
@@ -8,6 +8,7 @@ export class LoggedInUser {
         this.avatar = avatar;
         this.roles = roles;
         this.permissions = permissions;
+        this.isProvider = isProvider;
     }
     public Id: string;
     public token: string;
@@ -17,4 +18,5 @@ export class LoggedInUser {
     public avatar: string;
     public permissions:any;
     public roles: any;
+    public isProvider: any;
 }
