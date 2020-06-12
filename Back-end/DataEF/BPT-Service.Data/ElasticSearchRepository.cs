@@ -73,5 +73,10 @@ namespace BPT_Service.Data
         {
             await _elasticClient.IndexDocumentAsync<T>(entity);
         }
+
+        public async Task DeleteAllAsync()
+        {
+            await _elasticClient.DeleteByQueryAsync<T>(del => del.Query(q => q.QueryString(qs => qs.Query("*"))));
+        }
     }
 }

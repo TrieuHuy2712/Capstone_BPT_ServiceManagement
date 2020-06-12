@@ -20,17 +20,17 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendUserServic
         private readonly IRepository<ServiceImage, int> _imageRepository;
         private readonly IRepository<ServiceRating, int> _ratingRepository;
         private readonly IRepository<Tag, Guid> _tagRepository;
-
         private readonly IRepository<UserRecommendation, int> _userRecommendationRepository;
 
         public RecommendUserService(
-            IHttpContextAccessor httpContextAccessor, 
-            IRepository<Category, int> categoryRepository, 
-            IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository, 
-            IRepository<Service, Guid> serviceRepository, 
-            IRepository<ServiceImage, int> imageRepository, 
-            IRepository<ServiceRating, int> ratingRepository, 
-            IRepository<Tag, Guid> tagRepository)
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Category, int> categoryRepository,
+            IRepository<Model.Entities.ServiceModel.TagService, int> tagServiceRepository,
+            IRepository<Service, Guid> serviceRepository,
+            IRepository<ServiceImage, int> imageRepository,
+            IRepository<ServiceRating, int> ratingRepository,
+            IRepository<Tag, Guid> tagRepository,
+            IRepository<UserRecommendation, int> userRecommendationRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _categoryRepository = categoryRepository;
@@ -39,6 +39,7 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendUserServic
             _imageRepository = imageRepository;
             _ratingRepository = ratingRepository;
             _tagRepository = tagRepository;
+            _userRecommendationRepository = userRecommendationRepository;
         }
 
         public async Task<List<ServiceRecommendationViewModel>> ExecuteAsync()
@@ -74,7 +75,7 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendUserServic
                                                    IdService = service.Id.ToString(),
                                                    ImgService = _imageRepository.FindSingleAsync(x => x.ServiceId == service.Id && x.isAvatar).Result.Path,
                                                    NameService = service.ServiceName,
-                                                   Rating = ps == null ? 0 : ps.Select(x=>x.NumberOfRating).ToList().Average(),
+                                                   Rating = ps == null ? 0 : ps.Select(x => x.NumberOfRating).ToList().Average(),
                                                }).ToList();
                 return returListRecommendation;
             }

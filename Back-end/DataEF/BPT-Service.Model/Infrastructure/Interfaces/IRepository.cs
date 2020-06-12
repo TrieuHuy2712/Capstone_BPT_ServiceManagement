@@ -14,6 +14,8 @@ namespace BPT_Service.Model.Infrastructure.Interfaces
 
         Task<IEnumerable<T>> FindAllAsync(params Expression<Func<T, object>>[] includeProperties);
 
+        Task<T> FindSingleDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
         Task Add(T entity);

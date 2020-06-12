@@ -100,7 +100,7 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                 {
                     var listViewModelLocation = await FilterByLocation(query, filterName, provider, provideService, userService, getAvatar, getAllTag, getAllServiceTag, allRating);
                     int totalRowSearch = listViewModelLocation.Count();
-                    listViewModelLocation = listViewModelLocation.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    listViewModelLocation = pageSize==0 ? listViewModelLocation.ToList() : listViewModelLocation.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                     return new PagedResult<ListServiceViewModel>
                     {
                         Results = listViewModelLocation,
@@ -243,6 +243,7 @@ namespace BPT_Service.Application.PostService.Query.FilterAllPagingPostService
                          select new ListServiceViewModel
                          {
                              Id = serv.Id,
+                             CategoryId = serv.CategoryId,
                              CategoryName = getAllCategory.Where(x => x.Id == serv.CategoryId).Select(x => x.CategoryName).FirstOrDefault(),
                              Author = _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider
                             == "" ? _getUserInformationQuery.ExecuteAsync(serv.Id, service, userService) : _getProviderInformationQuery.ExecuteAsync(serv.Id, service, provider, provideService).NameProvider,

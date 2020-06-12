@@ -68,12 +68,12 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByServi
                         };
                         await _recommendRepository.Add(addRecommend);
                         var findImage = await _serviceImageRepository.
-                                FindSingleAsync(x => x.ServiceId == findInformation.Id && x.isAvatar);
+                                FindSingleDefaultAsync(x => x.ServiceId == findInformation.Id && x.isAvatar);
                         var recommend = new ServiceRecommendationViewModel()
                         {
                             Id = addRecommend.Id,
                             IdService = findInformation.Id.ToString(),
-                            ImgService = !string.IsNullOrEmpty(findImage.Path) ? findImage.Path : "",
+                            ImgService = findImage != null && !string.IsNullOrEmpty(findImage.Path) ? findImage.Path : "",
                             NameService = findInformation.ServiceName,
                             Rating = item.Rating,
                             Order = countIncrement,
@@ -91,12 +91,12 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByServi
                         {
                             var findInformation = await _serviceRepository.FindByIdAsync(numberParse);
                             var findImage = await _serviceImageRepository.
-                                FindSingleAsync(x => x.ServiceId == findInformation.Id && x.isAvatar);
+                                FindSingleDefaultAsync(x => x.ServiceId == findInformation.Id && x.isAvatar);
                             var findRating = await _ratingRepository.FindAllAsync(x => x.ServiceId == findInformation.Id);
                             listRecommend.Add(new ServiceRecommendationViewModel()
                             {
                                 IdService = findInformation.Id.ToString(),
-                                ImgService = !string.IsNullOrEmpty(findImage.Path) ? findImage.Path : "",
+                                ImgService = findImage != null && !string.IsNullOrEmpty(findImage.Path) ? findImage.Path : "",
                                 NameService = findInformation.ServiceName,
                                 Rating = findRating.Count() > 0 ? findRating.GroupBy(x => x.ServiceId).Select(t => new
                                 {
@@ -110,7 +110,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByServi
                 }
                 return listRecommend.ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

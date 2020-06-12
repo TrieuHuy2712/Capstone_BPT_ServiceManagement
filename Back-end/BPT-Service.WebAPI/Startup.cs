@@ -14,6 +14,8 @@ using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
 using BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsync;
 using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.ElasticSearchService.Command.AddAllService;
+using BPT_Service.Application.ElasticSearchService.Command.DeleteAllService;
 using BPT_Service.Application.ElasticSearchService.Command.FakeImport;
 using BPT_Service.Application.ElasticSearchService.Query;
 using BPT_Service.Application.ElasticSearchService.Query.SearchPostService;
@@ -85,6 +87,7 @@ using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformati
 using BPT_Service.Application.PostService.Query.Extension.GetProviderInformation;
 using BPT_Service.Application.PostService.Query.Extension.GetServiceRating;
 using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
+using BPT_Service.Application.PostService.Query.FilterAllPagingLocationPostService;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
@@ -432,6 +435,8 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetPostUserServiceByUserIdQuery, GetPostUserServiceByUserIdQuery>();
             services.AddScoped<IGetAllPostUserServiceByUserIdQuery, GetAllPostUserServiceByUserIdQuery>();
             services.AddScoped<IConfirmPostService, ConfirmPostService>();
+            services.AddScoped<IFilterAllPagingLocationPostService, FilterAllPagingLocationPostService>();
+
             //Extension
             services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
             services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
@@ -523,6 +528,8 @@ namespace BPT_Service.WebAPI
             //Elastic Search
             services.AddScoped<IFakeImportService, FakeImportService>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IDeleteAllService, DeleteAllService>();
+            services.AddScoped<IAddAllService, AddAllService>();
 
             //Notification
             services.AddScoped<IAutoGetNotification, AutoGetNotification>();

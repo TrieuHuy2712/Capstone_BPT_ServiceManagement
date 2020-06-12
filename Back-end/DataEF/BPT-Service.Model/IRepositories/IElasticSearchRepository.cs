@@ -15,7 +15,7 @@ namespace BPT_Service.Model.IRepositories
 
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);
-
+        Task DeleteAllAsync();
         Task SaveSingleAsync(T entity);
 
         Task SaveManyAsync(T[] entities);

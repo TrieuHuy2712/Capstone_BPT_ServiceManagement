@@ -120,6 +120,11 @@ namespace BPT_Service.Data
             return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(predicate);
         }
 
+        public async Task<T> FindSingleDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).FirstOrDefaultAsync(predicate);
+        }
+
         #endregion
     }
 }
