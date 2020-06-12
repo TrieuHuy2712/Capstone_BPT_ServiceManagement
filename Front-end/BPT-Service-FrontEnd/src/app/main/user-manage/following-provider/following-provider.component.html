@@ -1,10 +1,9 @@
-
 <div class="fp">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">DANH SÁCH CÁC PROVIDER BẠN ĐÃ THEO DÕI</h3>
+                    <h3 class="card-title">SỐ LƯỢNG NGƯỜI DÙNG THEO DÕI BẠN : {{listFollower.length}}</h3>
 
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -22,61 +21,27 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>Avatar</th>
-                                <th>Name</th>
-                                <th>Rate</th>
-                                <th>Follower</th>
+                                <th>Hình đại diện</th>
+                                <th>Họ tên</th>
+                                <th>Thời gian theo dõi</th>
                                 <th>
-                                    Action
+                                    Hành động
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                
-                                <td><img class="provider-image img-circle" src="../../../../assets/images/tramanh.jpg" alt="User profile picture"></td>
-                                <td>Nguyễn Tấn Huy</td>
-                                <td>*</td>
-                                <td><span class="tag tag-success">6666</span></td>
-                                <td>            
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-danger">Unfollow</a>
-                                      </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img class="provider-image img-fluid img-circle" src="../../../../assets/images/tramanh.jpg" alt="User profile picture"></td>
-                                <td>Triệu Đức Huy</td>
-                                <td>*****</td>
-                                <td><span class="tag tag-success">99999</span></td>
+                            <tr *ngFor="let item of listFollower">
+                                <td><img class="provider-image img-circle" src="../../../../assets/images/default.png"
+                                        alt="User profile picture"></td>
+                                <td>{{item.userName}}</td>
+                                <td>{{item.dateCreated}}</td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-danger">Unfollow</a>
-                                      </div>
+                                        <a href="#" class="btn btn-danger">Xem chi tiết</a>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><img class="provider-image img-fluid img-circle text-center" src="../../../../assets/images/tramanh.jpg" alt="User profile picture"></td>
-                                <td>Nguyễn Đình Song Hiệp</td>
-                                <td>****</td>
-                                <td><span class="tag tag-success">1000000</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-danger">Unfollow</a>
-                                      </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><img class="provider-image img-fluid img-circle" src="../../../../assets/images/tramanh.jpg" alt="User profile picture"></td>
-                                <td>Yui Hatano</td>
-                                <td>*********</td>
-                                <td><span class="tag tag-danger">999999999</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-danger">Unfollow</a>
-                                      </div>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>

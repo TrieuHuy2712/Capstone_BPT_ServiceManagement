@@ -12,6 +12,7 @@ import { TranslationService } from './core/services/translation.service';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthMainGuard } from './core/guards/authMain.guard';
+import { BarRatingModule } from "ngx-bar-rating";
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AuthMainGuard } from './core/guards/authMain.guard';
     RouterModule.forRoot(appRoutes),
     PaginationModule.forRoot(),
     TypeaheadModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    BarRatingModule
   ],
   providers: [AuthGuard,  LanguageService,AuthMainGuard,
     TranslationService],

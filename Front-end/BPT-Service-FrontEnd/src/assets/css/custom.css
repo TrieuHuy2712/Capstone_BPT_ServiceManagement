@@ -91,13 +91,13 @@ body {
 .intro-img-2{
   margin-left: 10px;
   width: 130px;
-  height: auto;
+  height: 80px;
 }
 
 .intro-img {
   margin-left: 10px;
   width: 230px;
-  height: auto;
+  height: 150px;
 }
 
 .introduce-content {
@@ -110,9 +110,9 @@ body {
 
 
 .title-1 {
-  margin-top: 20px;
-  margin-left: 20px;
-  font-size: 1.2rem;
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .title-2 {
@@ -135,7 +135,9 @@ body {
   box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
   border-radius: 15px;
   align-content: center;
-  width: 100px;
+  width: 100px; 
+  height: 130px !important;
+  margin: 5px;
 }
 
 .body-part-1 {
@@ -326,6 +328,9 @@ a:hover {
   position: absolute;
   left: 40px;
 }
+
+@import '~ngx-bar-rating/themes/br-default-theme.css';
+@import '~ngx-bar-rating/themes/br-horizontal-theme.css';
 
 /* main content */
 
@@ -2525,9 +2530,13 @@ p {
   overflow-y: none;
 }
 
+.category-cus{
+   height: 100vh;
+}
+
 .option-cus {
   text-align: center;
-  height: 2rem;
+  height: 3rem;
   border: 1px solid #ddd;
   padding: 10px 15px;
   cursor: pointer;
@@ -35140,5 +35149,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #f2f2f2;
+}
+.search-bar{
+  width: 500px !important;
 }
 

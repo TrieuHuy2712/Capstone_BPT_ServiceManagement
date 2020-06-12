@@ -57,9 +57,7 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.indexOfServices = this.services.length;
-        
       });
-      
   }
 
   loadCategoryData() {

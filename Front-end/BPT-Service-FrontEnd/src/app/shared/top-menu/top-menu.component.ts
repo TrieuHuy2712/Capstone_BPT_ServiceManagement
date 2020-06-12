@@ -17,6 +17,7 @@ export class TopMenuComponent implements OnInit {
   public user: LoggedInUser;
   loading = false;
   searchData: string = "";
+  public isAdministrator = false;
   constructor(
     private _authenService: AuthenService,
     private router: Router,
@@ -27,9 +28,10 @@ export class TopMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._authenService.getLoggedInUser();
-    console.log(this.user);
-    console.log(this.searchData);
-    
+    console.log("this is username = "+this.user.fullName);
+    if(this.user.fullName == "Administrator"){
+      this.isAdministrator = true;
+    }
   }
 
   logout() {

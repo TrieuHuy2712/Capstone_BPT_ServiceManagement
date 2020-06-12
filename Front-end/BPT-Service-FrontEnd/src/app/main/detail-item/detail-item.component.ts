@@ -36,14 +36,25 @@ export class DetailItemComponent implements OnInit {
   public comments: any[];
   public testComment: any[];
   public child_comment: any[];
-  public isAuthor: boolean = false;
+  public isAuthor: boolean;
   public currenUserId: any;
+  public emptyMess: string;
 
   // rating param
   public ratingVal: number;
   public ratingEntity: any;
   public myRating: any[];
   public averageRatingOfAService: any[];
+  public currentRating: any[];
+  public isRated: boolean = true;
+  public canDeleteComment: boolean = false;
+
+  // provider param
+  public provider: any[];
+  public providerId: any;
+
+  // system param
+  public isAvailable: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,19 +69,25 @@ export class DetailItemComponent implements OnInit {
     this.followEntity = {};
     this.unfEntity = {};
     this.commentEntity = {};
-    this.ratingEntity= {};
+    this.ratingEntity = {};
     this.newId = this.route.snapshot.paramMap.get("id");
-    this.getFollowId();
-
+    this.checkFollowService();
 
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+
+    if (this.user.avatar == null) {
+      this.user.avatar = "../../../../assets/images/default.png";
+    }
     this.loadData();
     this.loadDataOfLocation();
     this.loadDataOfComment();
 
-    console.log("ket qua "+this.ratingVal);
+    console.log("ket qua " + this.ratingVal);
     this.getCurrentUserId();
     console.log(this.currenUserId);
+    this.averageRatingContent();
+    this.getInfoOfProvider();
+
   }
 
 
@@ -86,7 +103,13 @@ export class DetailItemComponent implements OnInit {
         this.details = response;
         this.Uid = response.userId;
         this.details.userId = "";
-        console.log(this.details);
+        console.log("this is Response = " + response.id);
+        if (response.id == undefined) {
+          this.isAvailable = false;
+        }
+        else {
+          this.isAvailable = true;
+        }
       });
   }
 
@@ -115,6 +138,7 @@ export class DetailItemComponent implements OnInit {
               MessageConstants.FOLLOW_FAIL_MSG
             );
           }
+          this.checkFollowService();
         });
     });
 
@@ -146,27 +170,44 @@ export class DetailItemComponent implements OnInit {
                   MessageConstants.UNFOLLOW_FAIL_MSG
                 );
               }
+              this.checkFollowService();
             });
         });
     });
+  }
+  // function check if u follow a service or not
+  checkFollowService() {
+    // get current user id
+    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+      this.UIS = response;
+      this.currenUserId = this.UIS.find(x => x.fullName == this.user.fullName).id;
+      // get all user follow that service
+      this._dataService.get("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
+        .subscribe((response: any) => {
+          this.flId = response;
+          let checkId = this.flId.find(x => x.userId == this.currenUserId).userId;
+          console.log("check id = " + checkId);
 
+          if (checkId == this.currenUserId) {
+            this.isFollowed = true;
+            console.log("isFollow = " + this.isFollowed);
+          }
+          else if (checkId == undefined) {
+            this.isFollowed = false;
+          }
+          else {
+            this.isFollowed = false;
+            console.log("isFollow = " + this.isFollowed);
 
+          }
+
+        });
+    });
   }
 
-  getFollowId() {
-    this._dataService.get("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
-      .subscribe((response: any) => {
-        this.flId = response;
-        if (this.flId.length == 0) {
-          this.isFollowed = true;
-        }
-        else {
-          this.isFollowed = false;
-        }
+  // transfer html  to text
 
-      });
 
-  }
   // get location
   loadDataOfLocation() {
     this._dataService
@@ -180,7 +221,7 @@ export class DetailItemComponent implements OnInit {
   }
 
   // add a comment in a service
-  postAComment(mes: string) {
+  postAComment(mes) {
     this.commentEntity.contentOfRating = mes;
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
@@ -196,6 +237,8 @@ export class DetailItemComponent implements OnInit {
           this.testComment.push(response.myModel);
           console.log(this.testComment);
           this.loadDataOfComment();
+          this.emptyMess = " ";
+
         });
     });
 
@@ -203,20 +246,20 @@ export class DetailItemComponent implements OnInit {
 
   // load data of comment of a service
 
-  loadDataOfComment(){
+  loadDataOfComment() {
     this._dataService
       .get(
-        "/CommentManagement/getComment?id="+this.newId
+        "/CommentManagement/getComment?id=" + this.newId
       )
       .subscribe((response: any) => {
-        this.testComment = response;
-        this.testComment.reverse();
-        for(let x = 0; x < response.length; x++){
-          if(response[x] != null){
-            this.child_comment.push(response.listVm);
+        for (let x = 0; x < response.length; x++) {
+          if (response[x].avatarPath == null) {
+            response[x].avatarPath == "../../../../assets/images/default.png";
+            this.testComment = response;
+            this.testComment.reverse();
           }
         }
-        console.log(this.child_comment);
+
       });
   }
 
@@ -228,9 +271,9 @@ export class DetailItemComponent implements OnInit {
       () => this.deleteCommentConfirm(id)
     );
   }
-  deleteCommentConfirm( id: any) {
+  deleteCommentConfirm(id: any) {
     this._dataService
-      .delete("/CommentManagement/DeleteComment","id",id)
+      .delete("/CommentManagement/DeleteComment", "id", id)
       .subscribe((response: any) => {
         if (response.isValid == true) {
           this._notificationService.printSuccessMessage(
@@ -260,22 +303,22 @@ export class DetailItemComponent implements OnInit {
   //       });
   //   });
   // }
-  getCurrentUserId(){
+  getCurrentUserId() {
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.currenUserId = this.UIS.find(x => x.fullName == this.user.fullName).id;
-      
+
     });
     return this.currenUserId;
   }
 
   // get rating value
-  getContentOfRating(val:number){
+  getContentOfRating(val: number) {
     this.ratingVal = val;
     this.ratingAService();
   }
 
-  ratingAService(){
+  ratingAService() {
     this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
@@ -284,19 +327,51 @@ export class DetailItemComponent implements OnInit {
       // this.ratingEntity.numberOfRating = this.ratingVal;
       this._dataService
         .post(
-          "/RatingService/AddUpdateRating?userId="+this.usId+"&ServiceId="+this.newId+"&NumberOfRating="+this.ratingVal
+          "/RatingService/AddUpdateRating?userId=" + this.usId + "&ServiceId=" + this.newId + "&NumberOfRating=" + this.ratingVal
         )
         .subscribe((response: any) => {
-          this.myRating.push(response.myModel);
-          console.log(this.myRating);
+          if (response.isValid == true) {
+            this._notificationService.printSuccessMessage(
+              MessageConstants.RATING_OK_MSG
+            );
+          } else {
+            this._notificationService.printErrorMessage(
+              MessageConstants.RATING_FAIL_MSG
+            );
+          }
+
         });
     });
   }
   // Average rating of a service
-  averageRatingContent(){
-    this._dataService.get("/RatingService/GetRatingByService?idService="+this.newId)
-    .subscribe((response: any) => {
-      this.averageRatingOfAService = response;
-    });
+  averageRatingContent() {
+    this._dataService.get("RatingService/GetRatingByService?idService=" + this.newId)
+      .subscribe((response: any) => {
+        this.averageRatingOfAService = response;
+        this.currentRating = response.listRating;
+        let currentUserRating = this.currentRating.find(x => x.userNameWithEmail == this.user.email).numberOfRating;
+        console.log("ket qua = " + currentUserRating);
+        if (currentUserRating !== undefined) {
+          this.isRated = !this.isRated;
+        }
+      });
   }
+
+  // infor about provider
+  getInfoOfProvider() {
+    this._dataService.get("/Service/getPostServiceById?idService=" + this.newId)
+      .subscribe((response: any) => {
+        this.providerId = response.providerId;
+        console.log("Provider id = "+this.providerId);
+
+        this._dataService.get("/Provider/GetProviderById/" + this.providerId)
+          .subscribe((response: any) => {
+            this.provider = response.myModel;
+            console.log("provider " + this.provider);
+
+          });
+      });
+
+  }
+
 }

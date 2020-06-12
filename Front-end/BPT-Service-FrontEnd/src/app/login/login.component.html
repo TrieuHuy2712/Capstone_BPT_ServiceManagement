@@ -64,14 +64,14 @@
   <div class="main-titlte-login">
     <p>
     </p>
-    <h2>Chào mừng đến với trang đăng nhập</h2>
+    <h2>Chào mừng đến với hệ thống BPT Service</h2>
     <p></p>
   </div>
 </div>
-<div class="section"style="background-image: url(../../assets/images/login.jpg);" >
+<div class="section" style="background-image: url(../../assets/images/login.jpg);">
   <div class="container container--sm">
     <div class="row">
-      
+
       <div class="col-md-4 col-xs-12 first-xs">
         <div class="account">
           <form autocomplete="off" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
@@ -79,30 +79,34 @@
             <div><label class="input-group__label bold is-block">Tên đăng nhập</label>
               <div class="input-group__icon is-relative">
                 <div class="input-group">
-                  <div class="input-group__icon is-relative" style="width: 100%;"><input (keyup)=emailValid($event) name="username" type="text"
-                      class="input mt--0" aria-required="true" aria-invalid="false" placeholder="Username" required [(ngModel)]="model.username" #username="ngModel"> <span
-                      class="is-absolute input-icon"><i class="far fa-user"></i></span>
-                    <span class="c-gray-9" [hidden] = "email">
-                      Tối thiểu 8 ký tự</span></div>
+                  <div class="input-group__icon is-relative" style="width: 100%;"><input (keyup)=emailValid($event)
+                      name="username" type="text" class="input mt--0" aria-required="true" aria-invalid="false"
+                      placeholder="Nhập tên đăng nhập..." required [(ngModel)]="model.username" #username="ngModel">
+                    <span class="is-absolute input-icon"><i class="far fa-user"></i></span>
+                    <span class="c-gray-9" [hidden]="email">
+                      Tối thiểu 5 ký tự</span></div>
                 </div>
-                <div style="margin-top: 20px; margin-bottom: 20px;" class="mb--18"><label class="input-group__label is-block"><span class="bold">Mật
+                <div style="margin-top: 20px; margin-bottom: 20px;" class="mb--18"><label
+                    class="input-group__label is-block"><span class="bold">Mật
                       khẩu</span> </label>
-                  <div class="input-group__icon is-relative"><input (keyup)=passValid($event) name="password" type="password"
-                      placeholder="Mật khẩu" autocomplete="password" class="input" aria-required="true"
-                      aria-invalid="false" required [(ngModel)]="model.password" #password="ngModel"> <span class="is-absolute input-icon"><i class="fas fa-unlock-alt"></i>
-                    </span> <span class="c-gray-9" [hidden]= "pass">  Tối thiểu 8 ký
-                      tự </span></div>
+                  <div class="input-group__icon is-relative"><input (keyup)=passValid($event) name="password"
+                      type="password" placeholder="Nhập mật khẩu..." autocomplete="password" class="input"
+                      aria-required="true" aria-invalid="false" required [(ngModel)]="model.password"
+                      #password="ngModel"> <span class="is-absolute input-icon"><i class="fas fa-unlock-alt"></i>
+                    </span> <span class="c-gray-9" [hidden]="pass"> Tối thiểu 7 ký tự
+                    </span></div>
                 </div>
 
                 <div *ngIf="blocked">
                   <p>You was blocked out in 5 minutes</p>
-                  
+
                 </div>
                 <a class="reset_pass" href="#">Quên mật khẩu</a>
               </div>
             </div>
             <div class="account__body"><button type="submit"
-                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold" [disabled] = "registerBtn" >Đăng
+                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold"
+                [disabled]="registerBtn">Đăng
                 nhập</button>
               <div class="center-xs">
                 Bạn chưa có tài khoản ?
@@ -147,7 +151,7 @@
         </div>
       </div>
       <div class="col-md-8 col-xs-12 last-xs first-md">
-        
+
       </div>
     </div>
   </div>

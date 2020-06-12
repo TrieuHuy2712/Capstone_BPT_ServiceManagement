@@ -23,5 +23,12 @@ export class MessageConstants {
     public static REGISTER_CREATE_FAIL_MSG = "Tạo thành công tài khoản thất bại, vui lòng kiểm tra lại !!";
     public static REGISTER_REQUEST_SERVICE_OK_MSG = "Yêu cầu đăng dịch vụ của bạn đã được gửi thành công. Vui lòng kiểm tra Email !!";
     public static REGISTER_REQUEST_SERVICE_FAIL_MSG = "Yêu cầu đăng dịch vụ của bạn không thành công, vui lòng kiểm tra lại thông tin.";
+    public static RATING_OK_MSG = "Cám ơn quý khách đã đánh giá dịch vụ này !!!!";
+    public static RATING_FAIL_MSG = "Đánh giá dịch vụ không thành công, vui lòng kiểm tra lại thông tin !!!!";
+    public static FOLLOW_PROVIDER_OK_MSG = "Bạn đã theo dõi nhà cung cấp này !!!!";
+    public static FOLLOW_PROVIDER_FAIL_MSG = "Theo dõi thất bại !!!!";
+    public static UNFOLLOW_PROVIDER_OK_MSG = "Bạn đã hủy theo dõi nhà cung cấp này !!!!";
+    public static UNFOLLOW_PROVIDER_FAIL_MSG = "Hủy theo dõi thất bại !!!!";
+
 
 }

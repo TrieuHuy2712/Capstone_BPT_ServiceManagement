@@ -98,13 +98,11 @@ export class UserProfileComponent implements OnInit {
       this._dataService.post("/Provider/RegisterProvider", this.entity).subscribe(
         (response: any) => {
           if (response.isValid == true) {
-            this._notificationService.printSuccessMessage(
-              MessageConstants.CREATED_OK_MSG
-            );
+            this._notificationService.printSuccessMessage("Thông tin của bạn đã được gửi đến nhà quản trị để xác thực, vui lòng kiểm tra email !!!");
             this.modalAddEdit.hide();
           } else {
             this._notificationService.printErrorMessage(
-              MessageConstants.CREATED_FAIL_MSG
+              "Thông tin chưa được gửi, vui lòng kiểm tra lại thông tin !!!"
             );
           }
         },
@@ -112,6 +110,7 @@ export class UserProfileComponent implements OnInit {
       );
     }
   }
+
 
   // sava new data of user
 

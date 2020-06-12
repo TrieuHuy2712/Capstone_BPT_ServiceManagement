@@ -27,7 +27,7 @@
 
                         <button class="btn btn-primary btn-block" (click)="showEditProfile(profile.id)"><b>Edit my
                                 profile</b></button>
-                        <div *ngIf="sidebarOn" class="center-xs">
+                        <div *ngIf="!profile.isProvider" class="center-xs">
                             Bạn chưa là Nhà Cung Cấp ?
                             <a><span class="text-orange bold" style="cursor: pointer;" (click)="showAddModal()"> Đăng kí
                                     ngay</span> </a>
@@ -66,9 +66,7 @@
                         <strong><i class="far fa-file-alt mr-1"></i> Phone number</strong>
 
                         <p class="text-muted">034800167*</p>
-                        <ngb-rating [(rate)]="currentRate"></ngb-rating>
-                        <hr>
-                        <pre>Rate: <b>{{currentRate}}</b></pre>
+                        
                     </div>
                     <!-- /.card-body -->
                 </div>

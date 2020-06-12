@@ -7,10 +7,10 @@
     </div>
 </div>
 <div class="section" style="background-image: url(../../assets/images/register.jpg);">
-    <div class="container container--sm" >
+    <div class="container container--sm">
         <div class="row">
             <div class="col-md-8 col-xs-12 last-xs first-md">
-                
+
             </div>
             <div class="col-md-4 col-xs-12 first-xs">
                 <div class="account">
@@ -21,24 +21,25 @@
                                 <div class="input-group">
                                     <div class="input-group__icon is-relative"><input type="text" #name="ngModel"
                                             [(ngModel)]="entity.fullName" required minlength="3" name="fullName"
-                                            placeholder="Nhập đầy đủ họ tên" > <span
-                                            class="is-absolute input-icon"><i class="far fa-envelope"></i></span>
+                                            placeholder="Nhập đầy đủ họ tên"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-user"></i></span>
                                     </div>
                                 </div>
                                 <div class="input-group"><label class="input-group__label bold is-block">Tên đăng
                                         nhập</label>
                                     <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required
-                                        name="username" placeholder="Nhập tên đăng nhập" >
-                                    </div>
+                                        name="username" placeholder="Nhập tên đăng nhập">
+
+                                </div>
                                 <div class="input-group mb--18"><label class="input-group__label is-block"><span
                                             class="bold">Mật
                                             khẩu</span> </label>
                                     <div class="input-group input-group__icon is-relative"><input type="password"
                                             #password="ngModel" [(ngModel)]="entity.Password" required minlength="6"
                                             name="password" placeholder="Mật khẩu" class="input" aria-required="true"
-                                            aria-invalid="false" > <span
-                                            class="is-absolute input-icon"><i class="fas fa-unlock-alt"></i></span>
-                                        </div>
+                                            aria-invalid="false"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-unlock-alt"></i></span>
+                                    </div>
                                 </div>
                                 <div><label class="input-group input-group__label is-block"><span class="bold">Xác nhận
                                             mật khẩu
@@ -46,16 +47,16 @@
                                     <div class="input-group__icon is-relative"><input type="password"
                                             #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required
                                             validateEqual="password" minlength="6" name="confirmpassword" class="input"
-                                            placeholder="Nhập mật khẩu"> <span
-                                            class="is-absolute input-icon"><i class="fas fa-unlock-alt"></i></span>
-                                        </div>
+                                            placeholder="Nhập mật khẩu"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-unlock-alt"></i></span>
+                                    </div>
                                 </div>
                                 <div class="input-group"><label class="input-group__label bold is-block">
                                         Email</label> <input type="text" #email="ngModel"
                                         pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                         [(ngModel)]="entity.email" required name="email"
-                                        placeholder="Nhập địa chỉ email" >
-                                    </div>
+                                        placeholder="Nhập địa chỉ email">
+                                </div>
                                 <!-- <div class="input-group"><label class="input-group__label bold is-block">
                                         Avatar</label>
                                     <input type="file" #avatar name="avatar" class="form-control">
@@ -69,7 +70,8 @@
                             </div>
                         </div>
                         <div class="account__body"><button type="submit"
-                                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold" [routerLink]="['/login']" routerLinkActive="router-link-active" >Đăng
+                                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold"
+                                [routerLink]="['/login']" routerLinkActive="router-link-active">Đăng
                                 ký</button>
                             <div class="center-xs">
                                 Bạn đã có tài khoản?
