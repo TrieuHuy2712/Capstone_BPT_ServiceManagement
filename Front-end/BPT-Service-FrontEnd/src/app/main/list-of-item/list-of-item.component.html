@@ -43,12 +43,12 @@
                                 <div class="row">
                                     <div *ngFor="let service of services" class="col-md-3">
 
-                                        <div class="c-product-card--grid">
+                                        <div *ngFor="let item of service.listService" class="c-product-card--grid">
                                             <div class="promo is-relative" routerLinkActive="active"><a
-                                                    [routerLink]="['/main/detailItem',service.id]" data-value="23052">
+                                                    [routerLink]="['/main/detailItem',item.id]" data-value="23052">
                                                     <div class="promo__image">
                                                         <div class="promo__image-wrap"><img class="w--100"
-                                                                [src]="service.avtService" lazy="loaded">
+                                                                [src]="item.avtService" lazy="loaded">
                                                             <!---->
                                                         </div>
                                                         <div class="is-absolute promo__label-wrap"><span
@@ -60,7 +60,7 @@
                                                 <!---->
                                                 <div class="promo__content">
                                                     <div class="promo__type bold" style="-webkit-box-orient: vertical;">
-                                                        {{service.categoryName}}
+                                                        {{item.categoryName}}
                                                         <!---->
                                                     </div>
                                                     <div class="is-relative"><a href="/vi/rooms/23052" class=""
@@ -89,16 +89,16 @@
                                                                             fill="#FFF"></path>
                                                                     </g>
                                                                 </svg>
-                                                                {{service.serviceName}}
+                                                                {{item.serviceName}}
                                                             </div>
                                                         </a>
                                                         <div class="promo__description my--6 text-lowercase">
-                                                            {{service.author}}</div>
+                                                            {{item.author}}</div>
                                                         <div class="promo__price mb--6">
                                                             <!----> <span
-                                                                class="extra-bold"><span>{{service.priceOfService}}</span>vnd</span>
+                                                                class="extra-bold"><span>{{item.priceOfService}}</span>vnd</span>
                                                             <span
-                                                                class="strike c-gray-9 ml--6">{{service.priceOfService - - service.priceOfService*0.25}}vnd</span>
+                                                                class="strike c-gray-9 ml--6">{{item.priceOfService - - item.priceOfService*0.25}}vnd</span>
                                                         </div>
                                                         <div class="promo__add mb--6 promo__add mb--6"><a
                                                                 href="/vi/vietnam/lam-dong/da-lat"
@@ -113,7 +113,7 @@
                                                                         d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
                                                                         _fill-rule="evenodd"></path>
                                                                 </svg></div> <span
-                                                                class="promo__review-count p--small">{{service.rating}}</span>
+                                                                class="promo__review-count p--small">{{item.rating}}</span>
                                                         </div>
                                                         
                                                     </div>

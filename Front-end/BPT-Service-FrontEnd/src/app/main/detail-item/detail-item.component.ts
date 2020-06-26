@@ -56,6 +56,10 @@ export class DetailItemComponent implements OnInit {
   // system param
   public isAvailable: boolean = true;
 
+
+  // user param
+  public isLoggin: boolean = true;
+  
   constructor(
     private route: ActivatedRoute,
     private _dataService: DataService,
@@ -64,8 +68,9 @@ export class DetailItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    // check if user loggin or not?
+    this.isUserLogging();
 
-    this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.followEntity = {};
     this.unfEntity = {};
     this.commentEntity = {};
@@ -75,8 +80,10 @@ export class DetailItemComponent implements OnInit {
 
     this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
 
-    if (this.user.avatar == null) {
-      this.user.avatar = "../../../../assets/images/default.png";
+    if(this.user !== null){
+      if (this.user.avatar == null) {
+        this.user.avatar = "../../../../assets/images/default.png";
+      }
     }
     this.loadData();
     this.loadDataOfLocation();
@@ -115,11 +122,18 @@ export class DetailItemComponent implements OnInit {
       });
   }
   // Save seen detail
-  saveLogService(idService: any) {
-    this._dataService.post('/Recommendation/ViewService', idService).subscribe((response: any) => {
+    saveLogService(idService: any) {
+        this._dataService.post('/Recommendation/ViewService', idService).subscribe((response: any) => {
+        });
+    }
 
-    });
+  isUserLogging(){
+    this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    if(this.user == null){
+      this.isLoggin = false;
+    }
   }
+
   // follow a service
 
   followAService() {
@@ -262,9 +276,10 @@ export class DetailItemComponent implements OnInit {
         for (let x = 0; x < response.length; x++) {
           if (response[x].avatarPath == null) {
             response[x].avatarPath == "../../../../assets/images/default.png";
-            this.testComment = response;
-            this.testComment.reverse();
+            
           }
+          this.testComment = response;
+          this.testComment.reverse();
         }
 
       });
