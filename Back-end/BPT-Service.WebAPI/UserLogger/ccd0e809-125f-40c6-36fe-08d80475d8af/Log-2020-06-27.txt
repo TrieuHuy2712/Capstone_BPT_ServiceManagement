@@ -1,0 +1,3 @@
+INFO[2020-06-27 8:14:43]:: AddUpdateRatingServiceCommand:: ccd0e809-125f-40c6-36fe-08d80475d8af:: admin:: adminratedNhận tài xế lái xe dịch vụ cho gia đình with5
+INFO[2020-06-27 8:14:44]:: AddUpdateRatingServiceCommand:: ccd0e809-125f-40c6-36fe-08d80475d8af:: admin:: adminratedNhận tài xế lái xe dịch vụ cho gia đình with2
+INFO[2020-06-27 8:23:13]:: AddUpdateRatingServiceCommand:: ccd0e809-125f-40c6-36fe-08d80475d8af:: admin:: adminratedSơn nhà trọn gói. with1

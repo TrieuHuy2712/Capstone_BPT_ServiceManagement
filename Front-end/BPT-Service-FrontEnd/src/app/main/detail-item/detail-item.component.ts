@@ -102,9 +102,11 @@ export class DetailItemComponent implements OnInit {
       .subscribe((response: any) => {
         this.details = response;
         this.Uid = response.userId;
-        this.details.userId = "";
-        console.log("this is Response = " + response.id);
-        if (response.id == undefined) {
+        this.details.userId = '';
+        if(localStorage.getItem(SystemConstants.CURRENT_USER) != null){
+          this.saveLogService(response.id);
+        }
+        if (response.id === undefined) {
           this.isAvailable = false;
         }
         else {
@@ -112,7 +114,12 @@ export class DetailItemComponent implements OnInit {
         }
       });
   }
+  // Save seen detail
+  saveLogService(idService: any) {
+    this._dataService.post('/Recommendation/ViewService', idService).subscribe((response: any) => {
 
+    });
+  }
   // follow a service
 
   followAService() {

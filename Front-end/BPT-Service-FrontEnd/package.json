@@ -35,7 +35,7 @@
     "angular-tree-component": "^8.5.2",
     "angular1-star-rating": "^1.2.11",
     "angular2-dropdown-multiselect": "^1.2.1",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^4.0.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.9.0",

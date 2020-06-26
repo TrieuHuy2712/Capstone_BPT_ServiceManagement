@@ -29,29 +29,6 @@
         </div>
       </div>
     </div>
-    <!-- body part 1 -->
-
-    <!-- <div class="body-part-1">
-      <div class="row">
-        <div class="col-xl-12" class="title mb--18">
-          <h2 class="extra-bold p--giant">Chọn nơi bạn sống !</h2>
-          <p>Các vị trí dưới đây tập hợp các dịch vụ bạn cần tại nơi bạn sống, nhanh tay lên nào các bạn!
-          </p>
-          <div class="body-part1-content">
-            <ngx-slick class="carousel " #slickModal="slick-modal" [config]="slideConfig3"
-              (afterChange)="afterChange($event)">
-              <div ngxSlickItem *ngFor="let slide2 of locationSliders" class="">
-                <div class="outside-1">
-                  <img src="{{slide2.img}}" alt="slider image" class="intro-img">
-                  <p class="title-1"><strong>{{slide2.description}}</strong></p>
-                  
-                </div>
-              </div>
-            </ngx-slick>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <!-- location -->
     <h2 class="extra-bold p--giant" style="margin-top: 50px;">Chọn nơi bạn sống !</h2>
@@ -132,16 +109,6 @@
                     {{service.nameService}}
                   </div>
                 </a>
-                <!-- <div class="promo__description my--6 text-lowercase">
-                  {{service.author}}</div> -->
-                <!-- <div class="promo__price mb--6">
-                  <span class="extra-bold"><span>{{service.priceOfService}}</span>vnd</span>
-                  <span
-                    class="strike c-gray-9 ml--6">{{service.priceOfService - - service.priceOfService*0.25}}vnd</span>
-                </div> -->
-                <!-- <div class="promo__add mb--6 promo__add mb--6"><a href="/vi/vietnam/lam-dong/da-lat"
-                    class="nuxt-link-exact-active nuxt-link-active">Inprocess</a>
-                </div> -->
                 <div class="promo__review">
                   <div class="star-rating d-inline-block"><svg version="1.1" viewBox="0 0 14 14"
                       class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;">
@@ -156,6 +123,31 @@
         </div>
       </div>
     </div>
+    <!-- location -->
+    <ng-container *ngIf="isLoggedIn">
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Những dịch vụ bạn có thể quan tâm !</h2>
+    <p>Các dịch vụ dưới đây có thể phù hợp với bạn
+    </p>
+    <div id="body-part1-content">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+        (afterChange)="afterChange($event)">
+        <div ngxSlickItem *ngFor="let item of recommendService">
+          <!-- 1st -->
+          <div class="outside-1" alt=slider>
+            <div><a [routerLink]="[ '/main/detailItem',item.idService]" tabindex="0"
+                style="width: 100%; display: inline-block;">
+                <div class="outside-1">
+                  <img [src]="item.imgService" class="intro-img">
+
+                  <p class="location-titlte">{{item.nameService}}</p>
+                </div>
+
+              </a></div>
+          </div>
+        </div>
+      </ngx-slick>
+    </div>
+  </ng-container>
   </div>
 </div>
 

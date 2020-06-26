@@ -30,6 +30,11 @@ export class DataService {
     return this._http.get(SystemConstants.BASE_API + uri,
       { headers: new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token) }).pipe(map(this.extractData));
   }
+
+  getNoAu(uri:string){
+    return this._http.get(SystemConstants.BASE_API+uri);
+  }
+  
   post(uri: string, data?: any): Observable<any> {
     this.headers.delete("Authorization");
     if(this.tokenExpired(this._authenService.getLoggedInUser().token)){
