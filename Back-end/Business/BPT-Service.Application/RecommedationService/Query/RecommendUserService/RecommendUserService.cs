@@ -4,6 +4,7 @@ using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,23 +60,23 @@ namespace BPT_Service.Application.RecommedationService.Query.RecommendUserServic
                 {
                     IdService = x.ServiceId.ToString()
                 }).ToList();
-                var listServiceRecommend = getRecommendByCategory.Distinct().ToList();
-                listServiceRecommend.Except(listServiceHasViewed);
+                var listServiceRecommend = getRecommendByCategory.DistinctBy(x => x.IdService);
+                listServiceRecommend = listServiceRecommend.ExceptBy(listServiceHasViewed, x => x.IdService);
 
                 //Var get all rating service
                 var allRating = await _ratingRepository.FindAllAsync();
                 // Return list content Rating
-                var returListRecommendation = (from serviceRecommend in listServiceRecommend.ToList()
-                                               join service in getAllService.ToList()
+                var returListRecommendation = (from serviceRecommend in listServiceRecommend
+                                               join service in getAllService
                                                on Guid.Parse(serviceRecommend.IdService) equals service.Id
-                                               join rating in allRating.ToList().DefaultIfEmpty()
+                                               join rating in allRating.DefaultIfEmpty()
                                                on service.Id equals rating.ServiceId into ps
                                                select new ServiceRecommendationViewModel()
                                                {
                                                    IdService = service.Id.ToString(),
                                                    ImgService = _imageRepository.FindSingleAsync(x => x.ServiceId == service.Id && x.isAvatar).Result.Path,
                                                    NameService = service.ServiceName,
-                                                   Rating = ps == null ? 0 : ps.Select(x => x.NumberOfRating).ToList().Average(),
+                                                   Rating = ps == null ? 0 : ps.Select(x => x.NumberOfRating).Average(),
                                                }).ToList();
                 return returListRecommendation;
             }

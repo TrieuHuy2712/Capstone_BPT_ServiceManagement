@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   public news: any[];
   public hotService: any[];
   public recommendService: any[];
+  public historyService: any[];
   @ViewChild("modalEditProfile", { static: false })
   public modalEditProfile: ModalDirective;
   public detailNews: any[];
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
     this.getAllNews();
     this.getRecommendService();
     this.getUserRecommendationService();
+    this.getHistoryRecommendationService();
   }
 
   // slider 1
@@ -119,6 +121,15 @@ export class HomeComponent implements OnInit {
     }
     this._dataService.get('/Recommendation/GetRecommendUserService').subscribe((response: any) => {
       this.recommendService = response;
+    });
+  }
+
+  getHistoryRecommendationService() {
+    if (localStorage.getItem(SystemConstants.const_username) != null) {
+      this.isLoggedIn = true;
+    }
+    this._dataService.get('/Recommendation/HistoryService').subscribe((response: any) => {
+      this.historyService = response;
     });
   }
 }

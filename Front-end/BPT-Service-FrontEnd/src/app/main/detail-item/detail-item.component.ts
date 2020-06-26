@@ -123,7 +123,7 @@ export class DetailItemComponent implements OnInit {
   }
   // Save seen detail
     saveLogService(idService: any) {
-        this._dataService.post('/Recommendation/ViewService', idService).subscribe((response: any) => {
+        this._dataService.get('/Recommendation/ViewService?idService='+idService).subscribe((response: any) => {
         });
     }
 

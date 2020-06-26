@@ -117,6 +117,7 @@ using BPT_Service.Application.RecommedationService.Command.ViewService;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
+using BPT_Service.Application.RecommedationService.Query.GetViewedService;
 using BPT_Service.Application.RecommedationService.Query.RecommendService;
 using BPT_Service.Application.RecommedationService.Query.RecommendUserService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
@@ -516,6 +517,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetRecommendByService, GetRecommendByService>();
             services.AddScoped<IViewUserService, ViewUserService>();
             services.AddScoped<IRecommendUserService, RecommendUserService>();
+            services.AddScoped<IGetViewedServiceQuery, GetViewedServiceQuery>();
 
             //Store Procedure
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();

@@ -148,6 +148,30 @@
       </ngx-slick>
     </div>
   </ng-container>
+  <ng-container *ngIf="isLoggedIn">
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Những dịch vụ bạn đã xem !</h2>
+    <p>Các dịch vụ dưới đây có thể phù hợp với bạn
+    </p>
+    <div id="body-part1-content">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+        (afterChange)="afterChange($event)">
+        <div ngxSlickItem *ngFor="let item of historyService">
+          <!-- 1st -->
+          <div class="outside-1" alt=slider>
+            <div><a [routerLink]="[ '/main/detailItem',item.idService]" tabindex="0"
+                style="width: 100%; display: inline-block;">
+                <div class="outside-1">
+                  <img [src]="item.imgService" class="intro-img">
+
+                  <p class="location-titlte">{{item.nameService}}</p>
+                </div>
+
+              </a></div>
+          </div>
+        </div>
+      </ngx-slick>
+    </div>
+  </ng-container>
   </div>
 </div>
 

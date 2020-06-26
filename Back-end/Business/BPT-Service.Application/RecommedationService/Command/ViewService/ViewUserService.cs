@@ -37,17 +37,20 @@ namespace BPT_Service.Application.RecommedationService.Command.ViewService
                 }
                 var findLatestTime = await _userRecommendation.
                     FindAllAsync(x => x.UserId == Guid.Parse(userId) && x.ServiceId == Guid.Parse(idService));
-
-                var getNearestTime = findLatestTime.OrderByDescending(x => x.DateCreated).FirstOrDefault().DateCreated;
-                var subtractLatestDate = current.Subtract(getNearestTime);
-                var subtractDefaultDate = current.Subtract(current.AddMinutes(-15));
-                if(subtractLatestDate < subtractDefaultDate)
+                if (findLatestTime.Any())
                 {
-                    return new CommandResult<UserRecommendation>
+                    var getNearestTime = findLatestTime.OrderByDescending(x => x.DateCreated).FirstOrDefault().DateCreated;
+                    var subtractLatestDate = current.Subtract(getNearestTime);
+                    var subtractDefaultDate = current.Subtract(current.AddMinutes(-15));
+                    if (subtractLatestDate < subtractDefaultDate)
                     {
-                        isValid = false,
-                    };
+                        return new CommandResult<UserRecommendation>
+                        {
+                            isValid = false,
+                        };
+                    }
                 }
+                
                 var addInformation = new UserRecommendation()
                 {
                     DateCreated = DateTime.Now,

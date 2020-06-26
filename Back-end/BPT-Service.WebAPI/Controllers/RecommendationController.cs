@@ -6,6 +6,7 @@ using BPT_Service.Application.RecommedationService.Command.ViewService;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
 using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
+using BPT_Service.Application.RecommedationService.Query.GetViewedService;
 using BPT_Service.Application.RecommedationService.Query.RecommendUserService;
 using BPT_Service.Application.RecommedationService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetRecommendByService _getRecommendByService;
         private readonly IViewUserService _viewUserService;
         private readonly IRecommendUserService _recommendUserService;
+        private readonly IGetViewedServiceQuery _getViewedServiceQuery;
 
         public RecommendationController(
             IGetRecommendByLocation getRecommendByLocation,
@@ -38,7 +40,8 @@ namespace BPT_Service.WebAPI.Controllers
             IAddRecommendService addRecommendService,
             IGetRecommendByService getRecommendByService,
             IViewUserService viewUserService,
-            IRecommendUserService recommendUserService)
+            IRecommendUserService recommendUserService,
+            IGetViewedServiceQuery getViewedServiceQuery)
         {
             _getRecommendByLocation = getRecommendByLocation;
             _getRecommendByNews = getRecommendByNews;
@@ -49,6 +52,7 @@ namespace BPT_Service.WebAPI.Controllers
             _getRecommendByService = getRecommendByService;
             _viewUserService = viewUserService;
             _recommendUserService = recommendUserService;
+            _getViewedServiceQuery = getViewedServiceQuery;
         }
 
         #region GET API
@@ -85,10 +89,17 @@ namespace BPT_Service.WebAPI.Controllers
         #endregion GET API
 
         #region POST API
-        [HttpPost("ViewService")]
+        [HttpGet("ViewService")]
         public async Task<IActionResult> ViewService(string idService)
         {
             var model = await _viewUserService.ExecuteAsync(idService);
+            return new OkObjectResult(model);
+        }
+
+        [HttpGet("HistoryService")]
+        public async Task<IActionResult> HistoryService()
+        {
+            var model = await _getViewedServiceQuery.ExecuteAsync();
             return new OkObjectResult(model);
         }
 
