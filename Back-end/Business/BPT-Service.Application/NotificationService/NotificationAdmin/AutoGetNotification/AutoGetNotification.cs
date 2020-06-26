@@ -65,7 +65,7 @@ namespace BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetN
             }
             catch (Exception ex)
             {
-                await Logging<AutoGetNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
+                //await Logging<AutoGetNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
                 return null;
             }
         }

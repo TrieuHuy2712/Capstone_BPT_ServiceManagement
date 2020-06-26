@@ -15,7 +15,7 @@ export class ViewAboutProviderComponent implements OnInit {
   newId: string;
   public user: any;
   public isFollowedProvider: boolean;
-  public provider: any[];
+  public provider: any;
   public UIS: any[];
   public viewOfService: any[];
   public id: any;

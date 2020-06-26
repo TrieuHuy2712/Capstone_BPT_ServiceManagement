@@ -60,6 +60,8 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByLocat
                             Id = addRecommend.Id,
                             IdLocation = item.NumberOfCity,
                             NameLocation = findInformation.City + '_' + findInformation.Province,
+                            CityLocation = findInformation.City,
+                            ProvinceLocation = findInformation.Province,
                             ImgLocation = findInformation.ImgPath,
                             Order = countIncrement,
                         };
@@ -81,6 +83,8 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByLocat
                                 IdLocation = findInformation.Id,
                                 NameLocation = findInformation.City + '_' + findInformation.Province,
                                 ImgLocation = findInformation.ImgPath,
+                                CityLocation = findInformation.City,
+                                ProvinceLocation = findInformation.Province,
                                 Id = item.Id,
                                 Order = item.Order
                             }) ;

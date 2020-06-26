@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
+import { ModalDirective, } from 'ngx-bootstrap/modal';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { DataService } from '../../../core/services/data.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -52,7 +53,6 @@ export class AdminRecommendationComponent implements OnInit {
       canUpdate: false,
       canRead: false
     };
-
     this.getRecommendLocation(false);
     this.getRecommendNews(false);
     this.getRecommendService(false);
@@ -67,11 +67,12 @@ export class AdminRecommendationComponent implements OnInit {
 
 
   showEditModal(type: TypeRecommend, id: any) {
-    this.isAdd = false
+    debugger
+    this.isAdd = false;
     if (type == TypeRecommend.News) {
       this.selectedNews = undefined;
       this.entity = this.listRecommendNews[id];
-      this.entity.selectedLocation = this.listRecommendNews[id].title;
+      this.entity.selectedNews = this.listRecommendNews[id].titleNews;
       this.entity.idType = this.listRecommendNews[id].idNews;
     } else if (type == TypeRecommend.Location) {
       this.selectedLocation = undefined;
@@ -88,17 +89,18 @@ export class AdminRecommendationComponent implements OnInit {
   }
 
   filterChanged(typeRecommend: any) {
-    console.log(this.currentRecommendation);
     this.currentRecommendation = typeRecommend;
   }
 
   getRecommendLocation(isDefault: boolean) {
+    this.spinnerService.show();
     this.dataService
       .get(
         '/Recommendation/GetRecommendLocation?isDefault=' + isDefault
       )
       .subscribe((response: any) => {
         this.listRecommendLocation = response;
+        this.spinnerService.hide();
         this.loadPermission();
       });
   }
@@ -116,12 +118,14 @@ export class AdminRecommendationComponent implements OnInit {
   }
 
   getRecommendService(isDefault: boolean) {
+    this.spinnerService.show();
     this.dataService
       .get(
         '/Recommendation/GetRecommendService?isDefault=' + isDefault
       )
       .subscribe((response: any) => {
         this.listRecommendService = response;
+        this.spinnerService.hide();
       });
   }
 
@@ -146,12 +150,12 @@ export class AdminRecommendationComponent implements OnInit {
       });
     // Get all news
     this.dataService
-      .get(`/ProviderNews/GetAllPagingProviderNews?page=0&pageSize=0`).subscribe((response: any) => {
+      .get(`/ProviderNews/GetAllPagingProviderNews?page=0&pageSize=0&filter=1`).subscribe((response: any) => {
         this.listNews = response.results;
       });
     // Get all service
     this.dataService
-      .get(`/Service/getAllPagingPostService?page=0&pageSize=0`).subscribe((response: any) => {
+      .get(`/Service/getAllPagingPostService?page=0&pageSize=0&filter=1`).subscribe((response: any) => {
         this.listService = response.results;
       });
   }

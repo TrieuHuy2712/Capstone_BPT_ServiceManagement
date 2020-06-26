@@ -54,7 +54,7 @@ export class FunctionComponent implements OnInit {
     this.search();
   }
   public showPermission(id: any) {
-    this._dataService.get("/AdminRole/getAllPermission/" + id).subscribe((response: any[]) => {
+    this._dataService.get("/AdminRole/getAllPermission/" + id).subscribe((response: any) => {
       this.functionId = id;
       this._permission = response;
       this.permissionModal.show();

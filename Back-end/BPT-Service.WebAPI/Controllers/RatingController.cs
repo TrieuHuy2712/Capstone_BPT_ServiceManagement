@@ -45,6 +45,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetRatingByService")]
         public async Task<IActionResult> GetRatingByService(string idService)
         {

@@ -10,7 +10,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { FollowingProviderComponent } from './following-provider.component';
-import { RatingModule } from 'ngx-bootstrap';
+import { RatingModule } from 'ngx-bootstrap/rating';
 
 const itemRoutes: Routes = [
   //localhost:4200/main/user

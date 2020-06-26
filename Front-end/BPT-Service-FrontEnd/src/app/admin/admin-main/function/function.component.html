@@ -37,7 +37,7 @@
               <li *ngFor="let item of _functions">
                 <div class="function_lv1"><i class="fa {{item.iconCss}}"></i> {{item.key | titlecase}}</div>
                 <button class="btn btn-xs btn-danger" *ngIf="_userPermission.canDelete" (click)="delete(item.key)"><i
-                    class="fa fa-trash" aria-hidden="true"></i></button>
+                    class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <ul class="">
                   <li *ngFor="let subItem of item.childrenId">
                     <div class="function_lv2">{{subItem.name}} </div>
@@ -46,7 +46,7 @@
                     <button class="btn btn-xs btn-primary fbutton ct" *ngIf="_userPermission.canUpdate"
                       (click)="showEdit(subItem.id)"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     <button class="btn btn-xs btn-danger fbutton ct" (click)="delete(subItem.id)"
-                      *ngIf="_userPermission.canDelete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                      *ngIf="_userPermission.canDelete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                   </li>
                 </ul>
               </li>

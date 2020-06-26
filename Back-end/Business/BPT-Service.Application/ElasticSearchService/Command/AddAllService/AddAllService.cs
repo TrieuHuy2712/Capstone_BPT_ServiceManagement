@@ -32,7 +32,7 @@ namespace BPT_Service.Application.ElasticSearchService.Command.AddAllService
                 await _deleteAllService.ExecuteAsync();
 
                 //Get All Service
-                var pagingService = await _getAllPagingPostServiceQuery.ExecuteAsync(string.Empty, 1, 0, false, 0);
+                var pagingService = await _getAllPagingPostServiceQuery.ExecuteAsync(string.Empty, 1, 0, false, 1);
                 var listService = pagingService.Results;
                 await _elasticSearchRepository.SaveManyAsync(listService.ToArray());
                 return true;

@@ -83,7 +83,8 @@ namespace BPT_Service.WebAPI.Controllers
 
             return new OkObjectResult(model);
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("GetAllPagingProviderNews")]
         public async Task<IActionResult> GetAllPagingProviderNews(string keyword, int page, int pageSize, bool isAdminPage,int filter)
         {

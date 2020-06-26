@@ -59,7 +59,8 @@
                                 <button *ngIf="permission.canUpdate" class="btn btn-primary"
                                     (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
                                 <button *ngIf="permission.canDelete" class="btn btn-danger"
-                                    (click)="deleteItem(category.id,i)"><i class="fa fa-trash"></i></button>
+                                    (click)="deleteItem(category.id,i)"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>
 
                             </td>
                         </tr>

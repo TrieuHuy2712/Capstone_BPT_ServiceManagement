@@ -46,7 +46,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByServi
                         Average = t.Average(x => x.NumberOfRating)
                     }).ToList();
 
-                    var joinService = (from service in await _serviceRepository.FindAllAsync()
+                    var joinService = (from service in await _serviceRepository.FindAllAsync(x=>x.Status == Status.Active)
                                        join rating in groupCountService.DefaultIfEmpty()
                                        on service.Id equals rating.IdService into ps
                                        select new

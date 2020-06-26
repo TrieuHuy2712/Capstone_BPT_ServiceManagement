@@ -9,7 +9,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
-import { RatingModule } from 'ngx-bootstrap';
+import { RatingModule } from 'ngx-bootstrap/rating';
 import { SentComponent } from './sent.component';
 
 const itemRoutes: Routes = [

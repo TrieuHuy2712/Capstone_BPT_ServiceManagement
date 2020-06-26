@@ -76,6 +76,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new ObjectResult(execute);
         }
 
+        [AllowAnonymous]
         [HttpGet("getAllPagingPostService")]
         public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage, int filter)
         {
@@ -98,6 +99,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("getPostServiceById")]
         public async Task<IActionResult> GetPostServiceById(string idService)
         {
@@ -105,6 +107,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("getFilterAllPaging")]
         public async Task<IActionResult> GetFilterAllPaging(int page, int pageSize, string typeFilter, string filterName)
         {

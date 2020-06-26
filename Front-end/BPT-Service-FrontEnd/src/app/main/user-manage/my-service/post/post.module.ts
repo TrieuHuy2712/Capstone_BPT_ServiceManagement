@@ -10,7 +10,7 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { SlickModule } from 'ngx-slick';
 import { PostComponent } from './post.component';
-import { TypeaheadModule } from 'ngx-bootstrap';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';

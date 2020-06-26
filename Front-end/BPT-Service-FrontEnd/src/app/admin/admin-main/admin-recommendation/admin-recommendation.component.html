@@ -44,11 +44,11 @@
             <tr *ngFor="let news of listRecommendNews, let i=index">
               <td>{{news.order}}</td>
               <td>{{news.titleNews}}</td>
-              <td>{{news.imgNews}}</td>
+              <td><img [src]="news.imgNews" width="100px"></td>
               <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.News,i)"><i
                   class="fa fa-pencil-square-o"></i></button>
               <button *ngIf="permission.canDelete" class="btn btn-danger"
-                (click)="deleteItem(TypeRecommend.News,news.id,i)"><i class="fa fa-trash"></i></button>
+                (click)="deleteItem(TypeRecommend.News,news.id,i)"><i class="fa fa-trash-o"></i></button>
             </tr>
           </tbody>
           <!-- Table Location -->
@@ -56,11 +56,11 @@
             <tr *ngFor="let location of listRecommendLocation, let i=index">
               <td>{{location.order}}</td>
               <td>{{location.nameLocation}}</td>
-              <td>{{location.imgLocation}}</td>
+              <td><img [src]="location.imgLocation" width="100px"></td>
               <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.Location,i)"><i
                   class="fa fa-pencil-square-o"></i></button>
               <button *ngIf="permission.canDelete" class="btn btn-danger"
-                (click)="deleteItem(TypeRecommend.Location,location.id,i)"><i class="fa fa-trash"></i></button>
+                (click)="deleteItem(TypeRecommend.Location,location.id,i)"><i class="fa fa-trash-o"></i></button>
             </tr>
           </tbody>
           <!-- Table Location -->
@@ -68,11 +68,11 @@
             <tr *ngFor="let service of listRecommendService, let i=index">
               <td>{{service.order}}</td>
               <td>{{service.nameService}}</td>
-              <td>{{service.imgService}}</td>
+              <td><img [src]="service.imgService" width="100px"></td>
               <button class="btn btn-primary" (click)="showEditModal(TypeRecommend.Service,i)"><i
                   class="fa fa-pencil-square-o"></i></button>
               <button *ngIf="permission.canDelete" class="btn btn-danger"
-                (click)="deleteItem(TypeRecommend.Service,service.id,i)"><i class="fa fa-trash"></i></button>
+                (click)="deleteItem(TypeRecommend.Service,service.id,i)"><i class="fa fa-trash-o"></i></button>
             </tr>
           </tbody>
         </table>
@@ -126,7 +126,7 @@
                 (typeaheadOnSelect)="onSelectIdType(TypeRecommend.News,$event)" class="form-control" name="selectedNews"
                 *ngIf="currentRecommendation == TypeRecommend.News" autocomplete="off">
               <!-- Input service -->
-              <input [(ngModel)]="selectedService" [typeahead]="listService" typeaheadOptionField="serviceName"
+              <input [(ngModel)]="entity.selectedService" [typeahead]="listService" typeaheadOptionField="serviceName"
                 (typeaheadOnSelect)="onSelectIdType(TypeRecommend.Service,$event)" class="form-control"
                 name="selectedService" *ngIf="currentRecommendation == TypeRecommend.Service" autocomplete="off"
                 autocomplete="off">

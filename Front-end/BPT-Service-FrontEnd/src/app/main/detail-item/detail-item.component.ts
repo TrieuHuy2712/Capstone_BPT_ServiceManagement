@@ -44,13 +44,13 @@ export class DetailItemComponent implements OnInit {
   public ratingVal: number;
   public ratingEntity: any;
   public myRating: any[];
-  public averageRatingOfAService: any[];
+  public averageRatingOfAService: any;
   public currentRating: any[];
   public isRated: boolean = true;
   public canDeleteComment: boolean = false;
 
   // provider param
-  public provider: any[];
+  public provider: any;
   public providerId: any;
 
   // system param
@@ -362,7 +362,7 @@ export class DetailItemComponent implements OnInit {
     this._dataService.get("/Service/getPostServiceById?idService=" + this.newId)
       .subscribe((response: any) => {
         this.providerId = response.providerId;
-        console.log("Provider id = "+this.providerId);
+        console.log("Provider id = " + this.providerId);
 
         this._dataService.get("/Provider/GetProviderById/" + this.providerId)
           .subscribe((response: any) => {

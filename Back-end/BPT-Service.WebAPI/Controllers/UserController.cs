@@ -49,6 +49,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         #region GET API
+        [AllowAnonymous]
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {

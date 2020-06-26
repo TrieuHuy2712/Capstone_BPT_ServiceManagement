@@ -30,7 +30,8 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByNews
                 List<NewsRecommendationViewModel> listRecommend = new List<NewsRecommendationViewModel>();
                 if (isSetDefault)
                 {
-                    var getNewsRecommendation = await _providerNewsRepository.FindAllAsync();
+                    _recommendRepository.RemoveMultiple(getRecommendLocation.ToList());
+                    var getNewsRecommendation = await _providerNewsRepository.FindAllAsync(x => x.Status == Status.Active);
                     var getTopTenNews = getNewsRecommendation.OrderByDescending(x => x.DateCreated).Take(10).ToList();
 
                     //Add new Information
@@ -41,7 +42,7 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByNews
                         {
                             IdType = item.Id.ToString(),
                             Order = ++countIncrement,
-                            Type = TypeRecommendation.Location
+                            Type = TypeRecommendation.News
                         };
                         await _recommendRepository.Add(addRecommend);
 
@@ -80,7 +81,6 @@ namespace BPT_Service.Application.RecommedationService.Query.GetRecommendByNews
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

@@ -3,7 +3,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { LoggedInUser } from 'src/app/core/domain/loggedin.user';
 import { SystemConstants } from 'src/app/core/common/system,constants';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploadService } from 'src/app/core/services/upload.service';
 import { MessageConstants } from 'src/app/core/common/message.constants';
 

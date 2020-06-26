@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import { MessageConstants } from 'src/app/core/common/message.constants';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';

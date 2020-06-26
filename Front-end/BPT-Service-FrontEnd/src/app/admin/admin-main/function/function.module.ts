@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FunctionComponent } from './function.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TreeModule } from 'angular-tree-component';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
@@ -21,7 +21,7 @@ const functionRoutes: Routes = [
     RouterModule.forChild(functionRoutes),
     TreeModule,
     FormsModule,
-    ModalModule,
+    ModalModule.forRoot(),
     SharedModule,
     Ng4LoadingSpinnerModule.forRoot()
   ],

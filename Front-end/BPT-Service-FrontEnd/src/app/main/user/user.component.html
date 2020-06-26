@@ -52,7 +52,7 @@
                 <button class="btn btn-primary" *ngIf="permission.canUpdate && user.userName !='admin'"
                   (click)="showEditModal(user.id)"><i class="fa fa-pencil-square-o"></i></button>
                 <button class="btn btn-danger" *ngIf="permission.canDelete && user.userName !='admin' "
-                  (click)="deleteItem(user.id)"><i class="fa fa-trash"></i></button>
+                  (click)="deleteItem(user.id)"><i class="fa fa-trash-o"></i></button>
 
               </td>
             </tr>

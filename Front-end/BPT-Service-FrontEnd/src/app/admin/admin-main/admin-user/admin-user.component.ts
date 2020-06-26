@@ -101,7 +101,7 @@ export class UserComponent implements OnInit {
 
   loadRoles() {
     this._dataService.get("/AdminRole/GetAll").subscribe(
-      (response: any[]) => {
+      (response: any) => {
         this.allRoles = [];
         for (let role of response) {
           this.allRoles.push({ id: role.name, name: role.description });

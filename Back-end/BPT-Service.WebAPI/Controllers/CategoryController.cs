@@ -40,6 +40,7 @@ namespace BPT_Service.WebAPI.Controllers
             _updateCategoryService = updateCategoryService;
         }
         #region GET API
+        [AllowAnonymous]
         [HttpGet("GetAllCategory")]
         public async Task<IActionResult> GetAllCategory()
         {

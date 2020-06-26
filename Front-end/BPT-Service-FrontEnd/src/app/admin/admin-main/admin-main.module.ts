@@ -14,8 +14,8 @@ import { mainRoutes } from './admin-main.routes';
 @NgModule({
   imports: [
     CommonModule,
-    AdminUserModule,
-    AdminHomeModule,
+    // AdminUserModule,
+    // AdminHomeModule,
     RouterModule.forChild(mainRoutes)
   ],
   declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent],

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LoggedInUser } from 'src/app/core/domain/loggedin.user';
 import { SystemConstants } from 'src/app/core/common/system,constants';
 import { DataService } from 'src/app/core/services/data.service';

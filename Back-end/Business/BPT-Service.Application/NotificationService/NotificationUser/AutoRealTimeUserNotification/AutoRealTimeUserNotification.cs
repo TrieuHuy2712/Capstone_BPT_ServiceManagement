@@ -48,7 +48,7 @@ namespace BPT_Service.Application.NotificationService.NotificationUser.AutoRealT
             }
             catch (Exception ex)
             {
-                await Logging<AutoRealTimeUserNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
+                //await Logging<AutoRealTimeUserNotification>.ErrorAsync(ex, ActionCommand.COMMAND_NOTIFICATION, "System", "Has error");
                 throw;
             }
         }

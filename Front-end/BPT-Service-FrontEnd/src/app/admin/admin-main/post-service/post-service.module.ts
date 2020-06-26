@@ -2,10 +2,13 @@ import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { PostServiceComponent } from './post-service.component';
 import { FormsModule } from '@angular/forms';
-import { ModalModule, PaginationModule, TypeaheadModule } from 'ngx-bootstrap';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { RouterModule, Routes } from '@angular/router';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { UploadService } from '../../../core/services/upload.service';
 
 const roleRoutes: Routes = [
   //localhost:4200/main/user
@@ -26,6 +29,9 @@ const roleRoutes: Routes = [
     TypeaheadModule.forRoot(),
     EditorModule,
     Ng4LoadingSpinnerModule.forRoot()
+  ],
+  providers:[
+    UploadService
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

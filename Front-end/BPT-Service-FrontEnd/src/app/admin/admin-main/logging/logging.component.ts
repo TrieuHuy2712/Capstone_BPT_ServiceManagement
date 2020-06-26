@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../../core/services/data.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 
 @Component({

@@ -72,7 +72,7 @@
                 <button *ngIf="permission.canUpdate" class="btn btn-primary" (click)="showEditModal(i)"><i
                     class="fa fa-pencil-square-o"></i></button>
                 <button *ngIf="permission.canDelete" class="btn btn-danger" (click)="deleteItem(serv.id,serv.isProvider, i)"><i
-                    class="fa fa-trash"></i></button>
+                    class="fa fa-trash-o"></i></button>
               </td>
             </tr>
           </tbody>
@@ -315,7 +315,7 @@
                   <input type="file" #imgPath name="imgPath" class="form-control" (change)="selectChangeFile($event.target.files,i)">
                   <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
                   <input type="hidden" [(ngModel)]="atag.dataImage" name="imgPath" />
-                  <button type="button" class="btn btn-danger deleteImageButton" (click)="removeImage(i)"><i class="fa fa-trash"></i></button>
+                  <button type="button" class="btn btn-danger deleteImageButton" (click)="removeImage(i)"><i class="fa fa-o"></i></button>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="atag.path">
                   <img [src]="atag.path" width="128px" />

@@ -70,6 +70,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetProviderById/{id}")]
         public async Task<IActionResult> GetProviderById(string id)
         {

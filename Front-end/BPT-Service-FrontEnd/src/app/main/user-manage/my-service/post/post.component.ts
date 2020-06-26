@@ -5,7 +5,7 @@ import { UploadService } from 'src/app/core/services/upload.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { LoggedInUser } from 'src/app/core/domain/loggedin.user';
 import { SystemConstants } from 'src/app/core/common/system,constants';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { MessageConstants } from 'src/app/core/common/message.constants';
 
 export interface TagList {

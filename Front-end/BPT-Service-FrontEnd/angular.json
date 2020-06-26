@@ -25,12 +25,20 @@
               "src/web.config"
             ],
             "styles": [
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/assets/css/custom.css",
-              "node_modules/alertifyjs/build/css/alertify.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/alertifyjs/build/css/alertify.min.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "src/assets/css/slick.css",
+              "node_modules/ngx-bar-rating/themes/br-default-theme.css",
+              "src/assets/css/custom.css"
+
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/alertifyjs/build/alertify.min.js",
+              "src/assets/js/font-awesome.js",
+              "src/assets/js/slick.js",
               "src/assets/js/custom.js"
             ]
           },
@@ -54,13 +62,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "4mb",
                   "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 }
               ]
             }

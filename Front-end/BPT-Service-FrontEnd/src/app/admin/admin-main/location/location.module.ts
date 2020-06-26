@@ -5,10 +5,12 @@ import { LocationComponent } from './location.component';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
-import { PaginationModule, ModalModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/core/common/SharedModule';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { UploadService } from '../../../core/services/upload.service';
 
 
 const roleRoutes: Routes = [
@@ -19,7 +21,7 @@ const roleRoutes: Routes = [
 ]
 @NgModule({
   declarations: [LocationComponent],
-  providers: [DataService, NotificationService, TranslationService
+  providers: [DataService, NotificationService, TranslationService, UploadService
   ],
   imports: [
     CommonModule,

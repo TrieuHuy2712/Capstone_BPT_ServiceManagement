@@ -329,9 +329,6 @@ a:hover {
   left: 40px;
 }
 
-@import '~ngx-bar-rating/themes/br-default-theme.css';
-@import '~ngx-bar-rating/themes/br-horizontal-theme.css';
-
 /* main content */
 
 .container--sm {
@@ -2870,11 +2867,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper 
     margin-left: 0 !important;
 } */
 
-
 /* end new topbar css */
-
-@charset "UTF-8";
-
 /*!
  *   AdminLTE v3.0.2
  *   Author: Colorlib
@@ -17088,7 +17081,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   .sidebar-mini-md.sidebar-collapse .main-sidebar.sidebar-focused .sidebar-form,
   .sidebar-mini-md.sidebar-collapse .main-sidebar.sidebar-focused .user-panel>.info {
     display: block !important;
-    -webkit-transform: translateZ(0);
+    /* //-webkit-transform: translateZ(0); */
   }
 
   .sidebar-mini-md.sidebar-collapse .main-sidebar:hover .nav-sidebar>.nav-item>.nav-link>span,

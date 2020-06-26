@@ -75,7 +75,7 @@ namespace BPT_Service.WebAPI.Controllers
         }
 
         [HttpGet("GetRecommendUserService")]
-        [Authorize]
+
         public async Task<IActionResult> GetRecommendUserService()
         {
             var model = await _recommendUserService.ExecuteAsync();

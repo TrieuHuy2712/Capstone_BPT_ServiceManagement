@@ -13,6 +13,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthMainGuard } from './core/guards/authMain.guard';
 import { BarRatingModule } from "ngx-bar-rating";
+import { UploadService } from './core/services/upload.service';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { BarRatingModule } from "ngx-bar-rating";
     BrowserAnimationsModule,
     BarRatingModule
   ],
-  providers: [AuthGuard,  LanguageService,AuthMainGuard,
+  providers: [AuthGuard, LanguageService, AuthMainGuard, UploadService,
     TranslationService],
   bootstrap: [AppComponent]
 })
