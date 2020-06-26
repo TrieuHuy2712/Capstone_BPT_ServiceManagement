@@ -103,7 +103,7 @@ export class DataService {
     }
     newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
     return this._http.post(SystemConstants.BASE_API + uri, data,
-      { headers: new HttpHeaders().set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token) }).pipe(map(this.handleError()));
+      { headers: new HttpHeaders().set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token) }).pipe(map(this.extractData));
   }
   private extractData(res: Response) {
     let body = res;
