@@ -34,6 +34,7 @@ export class ListOfItemComponent implements OnInit {
 
   ngOnInit() {
     this.newId = this.route.snapshot.paramMap.get("id");
+    console.log("new id = "+this.newId);
     
     this.loadData();
     this.loadCategoryData();
@@ -43,7 +44,7 @@ export class ListOfItemComponent implements OnInit {
   // load data function
   loadData() {
     this._dataService
-      .get(
+      .getNoAu(
         "/Service/getFilterAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
@@ -62,7 +63,7 @@ export class ListOfItemComponent implements OnInit {
 
   loadCategoryData() {
     this._dataService
-      .get(
+      .getNoAu(
         "/Service/getFilterAllPaging?page=" +
         this.pageIndex +
         "&pageSize=" +
@@ -81,12 +82,11 @@ export class ListOfItemComponent implements OnInit {
       });
       
   }
-  // send data
 
-
+  // load data of all location
   loadDataOfLocation(){
     this._dataService
-      .get(
+      .getNoAu(
         "/LocationManagement/GetAllLocation"
       )
       .subscribe((response: any) => {
@@ -107,13 +107,11 @@ export class ListOfItemComponent implements OnInit {
   // loading data by searching 
   loadDataBySearching() {
     this._dataService
-      .get(
-        "/Service/getAllPagingPostService?keyword="+this.newId+"&isAdminPage=true&filter=5"
+      .getNoAu(
+        "/Service/getAllPagingPostService?keyword="+this.newId+"&isAdminPage=true&filter=1"
       )
       .subscribe((response: any) => {
         this.services3 = response.results;
-
       });
-      
   }
 }

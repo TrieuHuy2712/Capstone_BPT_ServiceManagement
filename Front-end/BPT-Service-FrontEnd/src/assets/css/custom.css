@@ -90,8 +90,8 @@ body {
 
 .intro-img-2{
   margin-left: 10px;
-  width: 130px;
-  height: 80px;
+  width: 165px;
+  height: 100px;
 }
 
 .intro-img {
@@ -316,7 +316,7 @@ a:hover {
 .main-titlte-login{
   position: absolute;
   right: 100px;
-  top: 20px;
+  top: 10px;
 }
 
 .register-title h2 {
@@ -329,8 +329,7 @@ a:hover {
   left: 40px;
 }
 
-@import '~ngx-bar-rating/themes/br-default-theme.css';
-@import '~ngx-bar-rating/themes/br-horizontal-theme.css';
+
 
 /* main content */
 
@@ -465,8 +464,9 @@ h6 {
 }
 
 .account__title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
+  color: orangered;
 }
 
 .input-group__label {
@@ -2873,7 +2873,6 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper 
 
 /* end new topbar css */
 
-@charset "UTF-8";
 
 /*!
  *   AdminLTE v3.0.2
@@ -35152,5 +35151,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .search-bar{
   width: 500px !important;
+}
+.res-label{
+  margin-bottom: -6px;
 }
 

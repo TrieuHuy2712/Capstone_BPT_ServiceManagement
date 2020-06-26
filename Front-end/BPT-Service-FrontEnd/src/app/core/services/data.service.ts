@@ -24,6 +24,12 @@ export class DataService {
     return this._http.get(SystemConstants.BASE_API+uri,
       {headers:new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', 'Bearer ' + this._authenService.getLoggedInUser().token)}).pipe(map(this.extractData));
   }
+
+  // get no authentication
+  getNoAu(uri:string){
+    return this._http.get(SystemConstants.BASE_API+uri);
+  }
+
   post(uri:string,data?:any): Observable<any>{
     this.headers.delete("Authorization");
     this.headers.append("Authorization","Bearer "+this._authenService.getLoggedInUser().token);

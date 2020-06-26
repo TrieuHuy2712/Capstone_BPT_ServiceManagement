@@ -98,7 +98,7 @@ export class DetailItemComponent implements OnInit {
 
   // load data
   loadData() {
-    this._dataService.get("/Service/getPostServiceById?idService=" + this.newId)
+    this._dataService.getNoAu("/Service/getPostServiceById?idService=" + this.newId)
       .subscribe((response: any) => {
         this.details = response;
         this.Uid = response.userId;
@@ -116,7 +116,7 @@ export class DetailItemComponent implements OnInit {
   // follow a service
 
   followAService() {
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       this.followEntity.userId = this.usId;
@@ -145,10 +145,10 @@ export class DetailItemComponent implements OnInit {
   }
 
   unFollowAService() {
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
-      this._dataService.get("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
+      this._dataService.getNoAu("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
         .subscribe((response: any) => {
           this.flId = response;
           this.followServiceId = this.flId.find(x => x.userId == this.usId).id;
@@ -178,11 +178,11 @@ export class DetailItemComponent implements OnInit {
   // function check if u follow a service or not
   checkFollowService() {
     // get current user id
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.currenUserId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       // get all user follow that service
-      this._dataService.get("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
+      this._dataService.getNoAu("/ServiceFollowing/GetServiceFollow?idService=" + this.newId)
         .subscribe((response: any) => {
           this.flId = response;
           let checkId = this.flId.find(x => x.userId == this.currenUserId).userId;
@@ -211,7 +211,7 @@ export class DetailItemComponent implements OnInit {
   // get location
   loadDataOfLocation() {
     this._dataService
-      .get(
+      .getNoAu(
         "/LocationManagement/GetAllLocation"
       )
       .subscribe((response: any) => {
@@ -223,7 +223,7 @@ export class DetailItemComponent implements OnInit {
   // add a comment in a service
   postAComment(mes) {
     this.commentEntity.contentOfRating = mes;
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       this.commentEntity.userId = this.usId;
@@ -248,7 +248,7 @@ export class DetailItemComponent implements OnInit {
 
   loadDataOfComment() {
     this._dataService
-      .get(
+      .getNoAu(
         "/CommentManagement/getComment?id=" + this.newId
       )
       .subscribe((response: any) => {
@@ -289,7 +289,7 @@ export class DetailItemComponent implements OnInit {
   }
   // confirm author of that comment
   // confirmAuthorOfComment(){
-  //   this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+  //   this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
   //     this.UIS = response;
   //     this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
   //     this._dataService
@@ -304,7 +304,7 @@ export class DetailItemComponent implements OnInit {
   //   });
   // }
   getCurrentUserId() {
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.currenUserId = this.UIS.find(x => x.fullName == this.user.fullName).id;
 
@@ -319,7 +319,7 @@ export class DetailItemComponent implements OnInit {
   }
 
   ratingAService() {
-    this._dataService.get("/UserManagement/GetAllUser").subscribe((response: any) => {
+    this._dataService.getNoAu("/UserManagement/GetAllUser").subscribe((response: any) => {
       this.UIS = response;
       this.usId = this.UIS.find(x => x.fullName == this.user.fullName).id;
       // this.ratingEntity.userId = this.usId;
@@ -345,7 +345,7 @@ export class DetailItemComponent implements OnInit {
   }
   // Average rating of a service
   averageRatingContent() {
-    this._dataService.get("RatingService/GetRatingByService?idService=" + this.newId)
+    this._dataService.getNoAu("RatingService/GetRatingByService?idService=" + this.newId)
       .subscribe((response: any) => {
         this.averageRatingOfAService = response;
         this.currentRating = response.listRating;
@@ -359,12 +359,12 @@ export class DetailItemComponent implements OnInit {
 
   // infor about provider
   getInfoOfProvider() {
-    this._dataService.get("/Service/getPostServiceById?idService=" + this.newId)
+    this._dataService.getNoAu("/Service/getPostServiceById?idService=" + this.newId)
       .subscribe((response: any) => {
         this.providerId = response.providerId;
         console.log("Provider id = "+this.providerId);
 
-        this._dataService.get("/Provider/GetProviderById/" + this.providerId)
+        this._dataService.getNoAu("/Provider/GetProviderById/" + this.providerId)
           .subscribe((response: any) => {
             this.provider = response.myModel;
             console.log("provider " + this.provider);

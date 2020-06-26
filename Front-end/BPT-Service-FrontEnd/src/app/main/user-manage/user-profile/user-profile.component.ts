@@ -67,7 +67,7 @@ export class UserProfileComponent implements OnInit {
     this.getAllUser();
   }
 
-  showEditProfile() {
+  showEditProfile(id: any) {
     this.modalEditProfile.show();
   }
 

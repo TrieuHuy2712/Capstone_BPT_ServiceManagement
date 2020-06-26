@@ -20,10 +20,9 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
-    console.log(this.user);
-    SystemConstants.const_permission = this.user.username;
-    console.log(this.currentURL);
+    // this.user = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER));
+    // console.log(this.user);
+    // console.log(this.currentURL);
     if (this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/followingProvider/index" 
     || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/userProfile/index" 
     || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/followingService/index" 
@@ -33,8 +32,9 @@ export class MainComponent implements OnInit {
     || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/email/sent/index" 
     || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/myService/index"
     || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/myService/post/index"
-    || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/myService/view/index") {
-      this.isSidebar = true;
+    || this.currentURL == SystemConstants.SECOND_BASE_API+"main/userManage/myService/view/index"
+    || this.currentURL == SystemConstants.SECOND_BASE_API+"home/index") {
+      this.isSidebar = !this.isSidebar;
     }
     // else if(this.currentURL.includes("/main/detailItem")){
     //   this.isSidebar = false;
