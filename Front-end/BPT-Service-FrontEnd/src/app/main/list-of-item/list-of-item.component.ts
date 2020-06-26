@@ -41,23 +41,19 @@ export class ListOfItemComponent implements OnInit {
     this.loadDataOfLocation();
     this.loadDataBySearching();
   }
-  // load data function
+  // load data service from location function
   loadData() {
     this._dataService
       .getNoAu(
-        "/Service/getFilterAllPaging?page=" +
-        this.pageIndex +
-        "&pageSize=" +
-        this.pageSize +
-        "&typeFilter=Location"+
-        "&filterName="+this.newId
+        "/Service/getAllLocationPostService?pageIndex=1&nameLocation="+this.newId
       )
       .subscribe((response: any) => {
-        this.services = response.results;
+        this.services = response;
         this.pageIndex = response.currentPage;
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
-        this.indexOfServices = this.services.length;
+        console.log("location service work !");
+        
       });
   }
 

@@ -31,19 +31,17 @@ export class TopMenuComponent implements OnInit {
   ngOnInit() {
     this.user = this._authenService.getLoggedInUser();
     console.log("this session have user login? "+this.user);
-    
-    if(this.user.fullName == "Administrator"){
-      this.isAdministrator = true;
-    }
-    if(this.user.fullName == null){
-      this.isAdministrator = false;
-    }
     if(this.user == null){
       this.guestName = "Khách";
       this.isLogin != this.isLogin;
     }
-    else{
-      this.guestName = this.user.fullName;    
+    if(this.user !== null){
+      if(this.user.fullName == "Administrator"){
+        this.isAdministrator = true;
+      }
+       else if(this.user.fullName == null){
+        this.isAdministrator = false;
+      }
     }
   }
 
