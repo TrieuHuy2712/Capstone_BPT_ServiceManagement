@@ -64,7 +64,8 @@
   <div class="main-titlte-login">
     <p>
     </p>
-    <h2>Chào mừng đến với hệ thống BPT Service</h2>
+    <h2>Chào mừng đến với hệ thống <a href="/main/home/index" style="font-size: 120%; color: black;">BPT Service</a>
+    </h2>
     <p></p>
   </div>
 </div>
@@ -76,7 +77,8 @@
         <div class="account">
           <form autocomplete="off" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
             <h3 class="account__title">Đăng nhập</h3>
-            <div><label class="input-group__label bold is-block">Tên đăng nhập</label>
+            <div class="dropdown-divider"></div>
+            <div><label class="input-group__label bold is-block" style="margin-bottom: -10px;">Tên đăng nhập</label>
               <div class="input-group__icon is-relative">
                 <div class="input-group">
                   <div class="input-group__icon is-relative" style="width: 100%;"><input (keyup)=emailValid($event)
@@ -86,7 +88,7 @@
                     <span class="c-gray-9" [hidden]="email">
                       Tối thiểu 5 ký tự</span></div>
                 </div>
-                <div style="margin-top: 20px; margin-bottom: 20px;" class="mb--18"><label
+                <div style="margin-top: 30px; margin-bottom: 20px;" class="mb--18"><label
                     class="input-group__label is-block"><span class="bold">Mật
                       khẩu</span> </label>
                   <div class="input-group__icon is-relative"><input (keyup)=passValid($event) name="password"
@@ -101,6 +103,7 @@
                   <p>You was blocked out in 5 minutes</p>
 
                 </div>
+                <!-- this function is in process -->
                 <a class="reset_pass" href="#">Quên mật khẩu</a>
               </div>
             </div>
@@ -122,12 +125,12 @@
               <div class="account__3rd">
                 <div>
                   <div class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative">
-                    <span>Đăng nhập với Facebook</span> <i class="fab fa-facebook-square"
+                    <span style="position: absolute; top: 30%; left: 20%;">Đăng nhập với Facebook</span> <i class="fab fa-facebook-square"
                       style="float: right; position: absolute; top: 40%; color: blue;"></i></div>
                 </div>
                 <div class="mt-2">
                   <div id="g-signin-btn" class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative">
-                    <span>Đăng nhập với Google</span> <svg version="1.1" viewBox="0 0 16 16"
+                    <span style="position: absolute; top: 30%; left: 20%;">Đăng nhập với Google</span> <svg version="1.1" viewBox="0 0 16 16"
                       class="is-absolute svg-icon svg-fill">
                       <g fill="none">
                         <path pid="0" fill="#557EBF"

@@ -48,20 +48,49 @@ export class SidebarMenuComponent implements OnInit {
             this._functions = response;
             this._functions = this._functions.filter(x => x.key != null);
             // vietsub manage
-            this._functions[0].key = "Quản lý";
-            this._functions[0].childrenId[0].name = "Danh mục";
-            this._functions[0].childrenId[1].name = "Tin tức";
-            this._functions[0].childrenId[2].name = "Nhà cung cấp";
-            this._functions[0].childrenId[3].name = "Khuyến nghị";
-            this._functions[0].childrenId[4].name = "Dịch vụ";
-            this._functions[0].childrenId[5].name = "Đuôi của dịch vụ ";
+            if(this._functions[0].key == "Manage"){
+              this._functions[0].key = "Quản lý";
+            }
+            else if(this._functions[0].childrenId[0].name == "Category"){
+              this._functions[0].childrenId[0].name = "Danh mục";
+            }
+            if(this._functions[0].childrenId[1].name == "News"){
+              this._functions[0].childrenId[1].name = "Tin tức";
+            }
+            if(this._functions[0].childrenId[2].name == "Provider"){
+              this._functions[0].childrenId[2].name = "Nhà cung cấp";
+            }
+            if(this._functions[0].childrenId[3].name == "Recommendation"){
+              this._functions[0].childrenId[3].name = "Khuyến nghị";
+            }
+            if(this._functions[0].childrenId[4].name == "Service"){
+              this._functions[0].childrenId[4].name = "Dịch vụ";
+            }
+            if(this._functions[0].childrenId[4].name == "Service"){
+              this._functions[0].childrenId[4].name = "Dịch vụ";
+            }
+            if(this._functions[0].childrenId[5].name == "Service_Tag"){
+              this._functions[0].childrenId[5].name = "Tag của dịch vụ";
+            }
             // vietsub system
-            this._functions[1].key = "Hệ thống";
-            this._functions[1].childrenId[0].name = "Thư điện tử";
-            this._functions[1].childrenId[1].name = "Chức năng";
-            this._functions[1].childrenId[2].name = "Vị trí";
-            this._functions[1].childrenId[3].name = "Vai trò";
-            this._functions[1].childrenId[4].name = "Người dùng";
+            if(this._functions[1].key == "System"){
+              this._functions[1].key = "Hệ thống";
+            }
+            if(this._functions[1].childrenId[0].name == "Email"){
+              this._functions[1].childrenId[0].name = "Thư điện tử";
+            }
+            if(this._functions[1].childrenId[1].name == "Function"){
+              this._functions[1].childrenId[1].name = "Chức năng";
+            }
+            if(this._functions[1].childrenId[2].name == "Location"){
+              this._functions[1].childrenId[2].name = "Vị trí";
+            }
+            if(this._functions[1].childrenId[3].name == "Role"){
+              this._functions[1].childrenId[3].name = "Vai trò";
+            }
+            if(this._functions[1].childrenId[4].name = "User"){
+              this._functions[1].childrenId[4].name = "Người dùng";
+            }
           });
       }
       if(this.currentUser.avatar == null){

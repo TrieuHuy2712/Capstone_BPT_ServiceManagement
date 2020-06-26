@@ -19,6 +19,8 @@ export class ViewAboutProviderComponent implements OnInit {
   public UIS: any[];
   public viewOfService: any[];
   public id: any;
+  avaPath: any[];
+  provName: any;
   
 
   // follow param
@@ -26,6 +28,7 @@ export class ViewAboutProviderComponent implements OnInit {
   public checkId: any;
   public checkArr: any[];
   public userIdInCheck: any;
+
 
 
   constructor(
@@ -46,6 +49,8 @@ export class ViewAboutProviderComponent implements OnInit {
     this._dataService.get("/Provider/GetProviderById/" + this.newId)
       .subscribe((response: any) => {
         this.provider = response.myModel;
+        this.avaPath = response.myModel.avatarPath;
+        this.provName = response.myModel.providerName;
         // console.log("provider " + this.provider);
 
       });

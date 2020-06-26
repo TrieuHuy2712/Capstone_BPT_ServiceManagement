@@ -18,6 +18,8 @@ export class TopMenuComponent implements OnInit {
   loading = false;
   searchData: string = "";
   public isAdministrator = false;
+  public guestName: string;
+  public isLogin: boolean = true;
   constructor(
     private _authenService: AuthenService,
     private router: Router,
@@ -28,9 +30,20 @@ export class TopMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._authenService.getLoggedInUser();
-    console.log("this is username = "+this.user.fullName);
+    console.log("this session have user login? "+this.user);
+    
     if(this.user.fullName == "Administrator"){
       this.isAdministrator = true;
+    }
+    if(this.user.fullName == null){
+      this.isAdministrator = false;
+    }
+    if(this.user == null){
+      this.guestName = "Khách";
+      this.isLogin != this.isLogin;
+    }
+    else{
+      this.guestName = this.user.fullName;    
     }
   }
 

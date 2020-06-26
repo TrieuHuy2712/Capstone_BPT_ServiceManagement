@@ -3,8 +3,8 @@
     <div class="col-md-2 host__info">
       <div class="rounded bg-gray-f pt--24 pb--36">
         <div class="text-center px--18 pb--18">
-          <div class="image-box image-box--circle image-box--large mx--auto"><img [src]="provider.avatarPath"></div>
-          <h1 class="p--giant mt--6 c-gray-3 mb--0">{{provider.providerName}}</h1>
+          <div class="image-box image-box--circle image-box--large mx--auto"><img [src]="avaPath"></div>
+          <h1 class="p--giant mt--6 c-gray-3 mb--0">{{provName}}</h1>
           <p class="c-gray-9 mb--6">Việt Nam</p>
           <p class="c-gray-6 mb--0"><span>
               <button id="addtocart-btn" *ngIf="!isFollowedProvider" (click)="followAProvider()"

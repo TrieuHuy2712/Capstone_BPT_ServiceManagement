@@ -16,7 +16,7 @@
                 <div class="account">
                     <form autocomplete="off" novalidate (ngSubmit)="saveChange(true)">
                         <h3 class="account__title">Đăng ký thành viên</h3>
-                        <div><label class="input-group__label bold is-block">Họ và tên</label>
+                        <div><label class="input-group__label bold is-block res-label">Họ và tên</label>
                             <div class="input-group__icon is-relative">
                                 <div class="input-group">
                                     <div class="input-group__icon is-relative"><input type="text" #name="ngModel"
@@ -25,13 +25,13 @@
                                                 class="fas fa-user"></i></span>
                                     </div>
                                 </div>
-                                <div class="input-group"><label class="input-group__label bold is-block">Tên đăng
+                                <div class="input-group"><label class="input-group__label bold is-block res-label">Tên đăng
                                         nhập</label>
                                     <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required
                                         name="username" placeholder="Nhập tên đăng nhập">
 
                                 </div>
-                                <div class="input-group mb--18"><label class="input-group__label is-block"><span
+                                <div class="input-group mb--18"><label class="input-group__label is-block res-label"><span
                                             class="bold">Mật
                                             khẩu</span> </label>
                                     <div class="input-group input-group__icon is-relative"><input type="password"
@@ -41,7 +41,7 @@
                                                 class="fas fa-unlock-alt"></i></span>
                                     </div>
                                 </div>
-                                <div><label class="input-group input-group__label is-block"><span class="bold">Xác nhận
+                                <div><label class="input-group input-group__label is-block res-label"><span class="bold">Xác nhận
                                             mật khẩu
                                             mới</span></label>
                                     <div class="input-group__icon is-relative"><input type="password"
@@ -51,7 +51,7 @@
                                                 class="fas fa-unlock-alt"></i></span>
                                     </div>
                                 </div>
-                                <div class="input-group"><label class="input-group__label bold is-block">
+                                <div class="input-group"><label class="input-group__label bold is-block res-label">
                                         Email</label> <input type="text" #email="ngModel"
                                         pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                                         [(ngModel)]="entity.email" required name="email"
