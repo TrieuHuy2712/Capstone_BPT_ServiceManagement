@@ -39,7 +39,6 @@ namespace BPT_Service.WebAPI.Ultility
                     .Ignore(p=>p.ProviderId)
                     .Ignore(p=>p.listImages)
                     .Ignore(p=>p.Email)
-                    .Ignore(p => p.Rating)
                 );
         }
 

@@ -299,6 +299,7 @@ namespace BPT_Service.WebAPI
             IWebHostEnvironment env,
             IHttpContextAccessor accessor,
             IRecommendService _recommendService,
+            IAddAllService _addAllService,
             IDeleteMonthlyLogFiles _deleteMonthlyLogFiles)
         {
             if (env.IsDevelopment())
@@ -322,6 +323,7 @@ namespace BPT_Service.WebAPI
             });
             RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
             RecurringJob.AddOrUpdate(() => _deleteMonthlyLogFiles.Execute(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _addAllService.ExecuteAsync(), Cron.Hourly);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

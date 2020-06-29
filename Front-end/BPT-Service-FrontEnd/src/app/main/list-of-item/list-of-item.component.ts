@@ -25,7 +25,7 @@ export class ListOfItemComponent implements OnInit {
   public functionId: string = "SERVICES";
   public indexOfServices: number;
   locations: any;
-  public newId:any;
+  public newId: any;
   constructor(
     private route: ActivatedRoute,
     private _dataService: DataService,
@@ -34,8 +34,7 @@ export class ListOfItemComponent implements OnInit {
 
   ngOnInit() {
     this.newId = this.route.snapshot.paramMap.get("id");
-    console.log("new id = "+this.newId);
-    
+
     this.loadData();
     this.loadCategoryData();
     this.loadDataOfLocation();
@@ -45,7 +44,7 @@ export class ListOfItemComponent implements OnInit {
   loadData() {
     this._dataService
       .getNoAu(
-        "/Service/getAllLocationPostService?pageIndex=1&nameLocation="+this.newId
+        "/Service/getAllLocationPostService?pageIndex=1&nameLocation=" + this.newId
       )
       .subscribe((response: any) => {
         this.services = response;
@@ -53,7 +52,7 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         console.log("location service work !");
-        
+
       });
   }
 
@@ -64,8 +63,8 @@ export class ListOfItemComponent implements OnInit {
         this.pageIndex +
         "&pageSize=" +
         this.pageSize +
-        "&typeFilter=Category"+
-        "&filterName="+this.newId
+        "&typeFilter=Category" +
+        "&filterName=" + this.newId
       )
       .subscribe((response: any) => {
         this.services2 = response.results;
@@ -73,14 +72,14 @@ export class ListOfItemComponent implements OnInit {
         this.pageSize = response.pageSize;
         this.totalRow = response.rowCount;
         this.indexOfServices = this.services2.length;
-        console.log("fuking thing is here "+this.services2);
-        
+        console.log("fuking thing is here " + this.services2);
+
       });
-      
+
   }
 
   // load data of all location
-  loadDataOfLocation(){
+  loadDataOfLocation() {
     this._dataService
       .getNoAu(
         "/LocationManagement/GetAllLocation"
@@ -93,7 +92,7 @@ export class ListOfItemComponent implements OnInit {
 
 
   // start load slide
-  sliderConfigPopular = { "slidesToShow": 4, "slidesToScroll": 1, "arrows" : true};
+  sliderConfigPopular = { "slidesToShow": 4, "slidesToScroll": 1, "arrows": true };
   afterChange(e) {
     console.log('afterChange');
   }
@@ -104,10 +103,10 @@ export class ListOfItemComponent implements OnInit {
   loadDataBySearching() {
     this._dataService
       .getNoAu(
-        "/Service/getAllPagingPostService?keyword="+this.newId+"&isAdminPage=true&filter=1"
+        "/ServiceSearch/SearchService?query=" + this.newId + "&page=1&pageSize=10"
       )
       .subscribe((response: any) => {
-        this.services3 = response.results;
+        this.services3 = response;
       });
   }
 }
