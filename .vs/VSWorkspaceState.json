@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Back-end",
+    "\\Back-end\\BPT-Service.WebAPI",
+    "\\Back-end\\DataEF",
+    "\\Back-end\\DataEF\\BPT-Service.Data",
+    "\\Back-end\\DataEF\\BPT-Service.Data\\Migrations"
+  ],
+  "SelectedNode": "\\Back-end\\DataEF\\BPT-Service.Data\\Migrations\\20200516144048_Initial4.cs",
+  "PreviewInSolutionExplorer": false
+}

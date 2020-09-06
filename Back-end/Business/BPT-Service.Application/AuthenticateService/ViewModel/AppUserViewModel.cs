@@ -1,6 +1,6 @@
+using BPT_Service.Model.Enums;
 using System;
 using System.Collections.Generic;
-using BPT_Service.Model.Enums;
 
 namespace BPT_Service.Application.AuthenticateService.ViewModel
 {
@@ -10,12 +10,15 @@ namespace BPT_Service.Application.AuthenticateService.ViewModel
         {
             Roles = new List<string>();
         }
+
         public Guid? Id { set; get; }
         public string FullName { set; get; }
         public string BirthDay { set; get; }
         public string Email { set; get; }
         public string Password { set; get; }
         public string UserName { set; get; }
+        public string AccessMain { get; set; }
+
         public AppUserViewModel(string address, string avatar, Status status, string token, string expiration, string gender, DateTime dateCreated)
         {
             this.Address = address;
@@ -25,8 +28,8 @@ namespace BPT_Service.Application.AuthenticateService.ViewModel
             this.Expiration = expiration;
             this.Gender = gender;
             this.DateCreated = dateCreated;
-
         }
+
         public string Address { get; set; }
         public string PhoneNumber { set; get; }
         public string Avatar { get; set; }
@@ -41,6 +44,7 @@ namespace BPT_Service.Application.AuthenticateService.ViewModel
 
         public List<string> NewRoles { get; set; }
     }
+
     public class UserRoleViewModel
     {
         public Guid MyProperty { get; set; }

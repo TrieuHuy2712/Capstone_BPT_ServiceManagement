@@ -1,0 +1,519 @@
+<!-- content will appear if that service is not available -->
+<div *ngIf="!isAvailable">
+    <h3 style="font-weight: 300;">Xin lỗi !! Dịch vụ mà bạn chọn hiện không khả dụng, quay lại <a href="/main/home/index">Trang chủ</a></h3>
+    <img style="margin-left: 0x; width: 80%;" src="../../../assets/images/503-error.jpg" alt="lỗi">
+</div>
+<!-- main content -->
+<div id="__nuxt" style="margin-left: -250px;" *ngIf="isAvailable">
+    <!---->
+    <div id="__layout">
+        <div class="position-relative h-100 message-mobile layout-default fixed-header"><i class="d-none"></i>
+            <div class="wapper">
+                <div class="gallery">
+                    <div id="headerSlider" lg-uid="lg0">
+                        <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigDetail"
+                            (afterChange)="afterChange($event)">
+
+                            <div ngxSlickItem *ngFor="let img of details.listImages">
+                                <div>
+                                    <div class="room-slide is-flex" style="width: 100%; display: inline-block;">
+                                        <img elementtiming="detail-gallery" [src]="img.path"></div>
+                                </div>
+                            </div>
+
+
+                        </ngx-slick>
+                    </div>
+                    <div class="gallery__item-bot d-none d-sm-block is-absolute gallery__item-child"><button
+                            class="btn btn--xs btn--up btn--white semi-bold"><i class="icon-dots"></i> <span>Khám
+                                phá chỗ ở</span></button></div>
+                    <div class="room-id d-block d-sm-none">
+                        <div class="room-id__wrapper d-inline-block">
+                            <p class="mb--0 p--small-2 bold text-center">
+                                <span style="color: black !important;">Mã dịch vụ :</span> <br>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!---->
+                </div>
+                <div class="detail">
+                    <div class="container container--room">
+                        <div class="section">
+                            <div class="row">
+                                <div class="col-md-8 col-xs-12">
+                                    <div class="detail-left">
+                                        <div id="general"></div>
+                                        <div class="section">
+                                            <div class="breadcrumbs middle-xs d-none d-sm-flex"><a
+                                                    href="/main/home/index" class="nuxt-link-active">Trang chủ</a> <i
+                                                    class="fas fa-chevron-right"></i> <span class="is-flex middle-xs"><a
+                                                        href="#" class="">
+                                                        Vietnam
+                                                    </a> <i class="fas fa-chevron-right"></i></span><span
+                                                    class="is-flex middle-xs"><a href="#" class="">
+                                                        {{locations[0].province}}
+                                                    </a> <i class="fas fa-chevron-right"></i></span><span
+                                                    class="is-flex middle-xs"><a href="#" class="">
+                                                        {{locations[0].city}}
+                                                    </a> <i class="fas fa-chevron-right"></i></span></div>
+                                            <div class="pt--30 pt--sm--0"></div>
+                                            <section>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div>
+                                                            <div class="title">
+                                                                <div class="row">
+                                                                    <div class="col-xs-12 col-sm-10">
+                                                                        <h1 class="mb--12">{{details.serviceName}}</h1>
+                                                                    </div>
+
+                                                                    <div
+                                                                        class="d-none d-sm-block col-lg-2 text-right room-id">
+                                                                        <div class="room-id__wrapper d-inline-block">
+                                                                            <p
+                                                                                class="mb--0 p--small-2 bold text-center c-primary">
+                                                                                Mã dịch vụ <br>
+                                                                                {{newId.slice(0, 7)}}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="detail__location is-flex middle-xs between-xs start-md mt--18">
+                                                                <div><svg version="1.1" viewBox="0 0 24 24"
+                                                                        class="svg-icon svg-fill"
+                                                                        style="width: 24px; height: 24px;">
+                                                                        <g fill="none" fill-rule="evenodd">
+                                                                            <circle pid="0" cx="12" cy="12" r="12"
+                                                                                fill="#000" fill-opacity=".2"
+                                                                                fill-rule="nonzero"></circle>
+                                                                            <path pid="1" fill="#FFF"
+                                                                                d="M11.92 6c2.87 0 5.218 2.335 5.218 5.205a5.112 5.112 0 0 1-1.055 3.137c-.97 1.252-3.77 3.461-3.882 3.56a.43.43 0 0 1-.282.098.43.43 0 0 1-.281-.098c-.113-.099-2.912-2.308-3.883-3.546a5.182 5.182 0 0 1-1.055-3.15C6.7 8.335 9.05 6 11.92 6zm0 7.203a2.104 2.104 0 0 0 0-4.207 2.104 2.104 0 0 0 0 4.206z">
+                                                                            </path>
+                                                                        </g>
+                                                                    </svg> <span class="ml--6 bold">This is
+                                                                        location</span> <a href="#map"
+                                                                        class="ml--12 c-green">Xem bản đồ</a></div>
+                                                            </div>
+                                                            <div class="mt--12"><svg version="1.1" viewBox="0 0 24 24"
+                                                                    class="svg-icon svg-fill"
+                                                                    style="width: 24px; height: 24px;">
+                                                                    <g fill="none" fill-rule="evenodd">
+                                                                        <circle pid="0" cx="12" cy="12" r="12"
+                                                                            fill="#000" fill-opacity=".2"></circle>
+                                                                        <path pid="1" fill="#FFF"
+                                                                            d="M7 17V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v9M8 7V6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1m-6 1a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-4 3a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-4 3a1 1 0 0 1 0 2 1 1 0 1 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-7 3h10a1 1 0 0 1 1 1v1H6v-1a1 1 0 0 1 1-1z">
+                                                                        </path>
+                                                                    </g>
+                                                                </svg> <span class="ml--6 bold">Mô tả dịch vụ</span>
+                                                            </div>
+                                                            <div class="detail__type is-short-intro is-flex"
+                                                                room="[object Object]">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row d-md-none">
+                                                            <div class="col-sm-6 col-xs-12 mt--30">
+                                                                <div class="is-flex align-center bg-gray-f2 rounded">
+                                                                    <div
+                                                                        class="room-sidebar__host py--24 px--12 px--lg--24 w--100">
+                                                                        <a [routerLink]="[ '/main/viewAboutProvider',details.userId]"
+                                                                            class="host-intro is-flex align-center">
+                                                                            <div
+                                                                                class="image-box image-box--large image-box--circle">
+                                                                                <img [src]="" user.avatar>
+                                                                            </div>
+                                                                            <div
+                                                                                class="host-intro__name mx--12 mx--md--18">
+                                                                                <p class="mb--6 extra-bold">
+                                                                                    This is provider</p>
+                                                                                <p
+                                                                                    class="p--small-2 semi-bold c-gray-6 mb--0">
+                                                                                    Tham gia 11/2018</p>
+                                                                            </div>
+                                                                            <!---->
+                                                                        </a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!---->
+                                                        <div class="d-none d-sm-flex amenities">
+                                                            <div class="detail__intro">
+                                                                <!---->
+                                                                <div class="is-relative">
+                                                                    <div id="short_intro" class="room-des dot show"
+                                                                        style="-webkit-box-orient: vertical;">
+                                                                        <p [innerHTML]="details.description">
+                                                                        </p>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div id="amenities"></div>
+
+                                        <div id="price"></div>
+                                        <div>
+                                            <div class="title mt--60 mb--24">
+                                                <h3 class="mb--6">Giá dịch vụ</h3> <span>Giá có thể được điều chỉnh tùy
+                                                    vào thời gian trong năm</span>
+                                            </div>
+                                            <div class="room-price__wrap">
+                                                <div class="is-flex jbetween align-center py--12 px--18"><span
+                                                        class="c-gray-3 fl-item-50">Thứ hai - Thứ năm</span> <span
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">{{details.priceOfService}}</span>
+                                                </div>
+                                                <div class="is-flex jbetween align-center py--12 px--18"><span
+                                                        class="c-gray-3 fl-item-50">Thứ sáu - Chủ nhật</span> <span
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right">{{details.priceOfService  - - details.priceOfService*0.1}}</span>
+                                                </div>
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                                <div class="is-flex jbetween align-center py--12 px--18"><span
+                                                        class="c-gray-3 fl-item-50">Điều kiện</span> <span
+                                                        class="c-gray-3 fl-item-50 pl--12 bold text-right"> Không</span>
+                                                </div>
+                                                <!---->
+                                            </div>
+                                        </div>
+                                        <div id="availability"></div>
+
+                                        <div id="reviews"></div>
+                                        <!---->
+                                        <div id="policy"></div>
+
+                                        <div id="utilities"></div>
+                                        <!---->
+                                        <p id="map_desc" class="mb--0 pt--24">
+                                            Khi nhận thông tin và địa chỉ của khách hàng, chúng tôi sẽ chủ động liên lạc
+                                            và phục vụ tạn nơi.
+                                        </p>
+                                        <div _ngcontent-kvx-c5="">
+                                            <div _ngcontent-kvx-c5="" class="title mt--60">
+                                                <!-- <h3 style="display: inline-block; margin-right: 20px; font-weight: 300;">Đánh giá : {{averageRatingOfAService.averageRating}}</h3> -->
+                                            </div>
+
+
+                                            <div _ngcontent-kvx-c5="" class="mt--24">
+                                                <input *ngIf="isLoggin" class="form-control form-control-sm" type="text"
+                                                    placeholder="Type a comment"
+                                                    (keyup.enter)="postAComment($event.target.value)" [ngModel]="emptyMess">
+                                                <div _ngcontent-kvx-c5="" class="review mt--24 "
+                                                    *ngFor="let item of testComment">
+                                                    <div _ngcontent-kvx-c5=""
+                                                        class="is-flex jbetween align-center fulse" data-v-730e0d8f="">
+                                                        <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
+                                                            data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
+                                                                class="review__avatar" data-v-730e0d8f="" height="48"
+                                                                [src]="item.avatarPath" width="48">
+                                                            <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
+                                                                data-v-730e0d8f="">
+                                                                <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
+                                                                    data-v-730e0d8f="">{{item.userName}} <div
+                                                                        _ngcontent-kvx-c5=""
+                                                                        class="d-inline-block pl--6" data-v-730e0d8f="">
+                                                                    </div>
+                                                                </h5><span _ngcontent-kvx-c5="" class="caption"
+                                                                    data-v-730e0d8f="">Wenesday, May 6, 2020</span>
+                                                            </div>
+                                                            <!-- <button *ngIf="item.userName == user.username"
+                                                                style="margin-left: 50px;"
+                                                                (click)="deleteComment(item.id)"><i
+                                                                    class="fas fa-trash-alt"></i></button> -->
+                                                        </div>
+                                                    </div>
+                                                    <div _ngcontent-kvx-c5="" class="review__content"
+                                                        data-v-730e0d8f="">
+                                                        <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
+                                                            data-v-730e0d8f="">{{item.contentOfRating}}</p>
+
+                                                    </div>
+
+                                                    <!-- child comment -->
+                                                    <!-- <div _ngcontent-kvx-c5="" class="child-comment mt--24" *ngFor="let i of child_comment">
+                                                        <div _ngcontent-kvx-c5="" class="is-flex jbetween align-center"
+                                                            data-v-730e0d8f="">
+                                                            <div _ngcontent-kvx-c5="" class="is-flex middle-xs"
+                                                                data-v-730e0d8f=""><img _ngcontent-kvx-c5=""
+                                                                    class="review__avatar" data-v-730e0d8f="" height="48"
+                                                                    [src]="i.avatarPath"
+                                                                    width="48">
+                                                                <div _ngcontent-kvx-c5="" class="review__author grow pl--6"
+                                                                    data-v-730e0d8f="">
+                                                                    <h5 _ngcontent-kvx-c5="" class="m--0 user-comment-name"
+                                                                        data-v-730e0d8f="">{{i.userName}} <div
+                                                                            _ngcontent-kvx-c5=""
+                                                                            class="d-inline-block pl--6" data-v-730e0d8f="">
+                                                                            <i class="fas fa-star"></i></div>
+                                                                    </h5><span _ngcontent-kvx-c5="" class="caption"
+                                                                        data-v-730e0d8f="">Wenesday, May 6, 2020</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div _ngcontent-kvx-c5="" class="review__content_child"
+                                                            data-v-730e0d8f="">
+                                                            <p _ngcontent-kvx-c5="" class="mb--0 c-gray-5"
+                                                                data-v-730e0d8f="">{{i.contentOfRating}}</p>
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+
+                                                <div _ngcontent-kvx-c5="" class="mt--24"><a _ngcontent-kvx-c5=""
+                                                        class="btn color-i semi-bold" role="button">Xem tất cả bình
+                                                        luận</a></div>
+                                                <div _ngcontent-kvx-c5="" class="room-fw-modal"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4 col-xs-12 d-md-block">
+                                    <div class="text-right room-action"><button
+                                            class="btn btn--xs px--0 btn--pure"><span class="pr--6">Chia sẻ</span>
+                                            <i class="icon-upload"></i></button> <button
+                                            class="btn btn--xs px--0 ml--42 btn--pure" style="display: none;"><span
+                                                class="pr--6">Lưu lại</span> <svg version="1.1" viewBox="0 0 18 16"
+                                                class="svg-icon svg-fill" style="width: 18px; height: 18px;">
+                                                <path pid="0"
+                                                    d="M13.437.5h-.006c-.146 0-.3.01-.473.028a5.02 5.02 0 0 0-1.916.648c-.564.317-1.111.734-1.686 1.29l-.348.336-.347-.335a8.414 8.414 0 0 0-1.687-1.291A5.208 5.208 0 0 0 5.072.529C4.9.509 4.732.499 4.562.5 2.318.5.5 2.376.5 5.256c0 1.902 1.212 4.045 3.58 6.402a31.464 31.464 0 0 0 4.598 3.744.575.575 0 0 0 .647-.003 31.452 31.452 0 0 0 4.594-3.741C16.288 9.3 17.5 7.158 17.5 5.256 17.5 2.382 15.698.514 13.444.5h-.007z"
+                                                    fill-rule="nonzero" stroke="#333" fill="none"></path>
+                                            </svg></button></div>
+                                    <div id="booking-top-hook"></div>
+                                    <div class="room-sidebar">
+                                        <div class="room-sidebar">
+                                            <div class="is-shadow-box-2">
+                                                <div class="room-sidebar__wrap py--24 px--12 px--lg--18">
+                                                    <div class="room-sidebar__pricing">
+                                                        <p class="fadeIn"><span
+                                                                class="extra-bold">{{details.priceOfService}} vnd</span>
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <div class="">
+                                                            <div class="room-discount"><span
+                                                                    class="label label--cool-red">Giảm ngay 0% tới từ
+                                                                    nhà cung cấp</span>
+                                                                <p class="mb--0 mt--6 p--small-2">Giảm
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="input-group mt--6">
+                                                        <div><span>
+                                                                <div role="tooltip" id="el-popover-1083"
+                                                                    aria-hidden="true" class="el-popover el-popper"
+                                                                    tabindex="0" style="width: 320px; display: none;">
+                                                                    <!---->
+                                                                    <div class="select-number">
+                                                                        <div class="select-number__title">
+                                                                            <p class="mb--0 semi-bold">Người lớn</p>
+                                                                        </div>
+                                                                        <div class="el-input-number"><span role="button"
+                                                                                class="el-input-number__decrease is-disabled"><i
+                                                                                    class="el-icon-minus"></i></span><span
+                                                                                role="button"
+                                                                                class="el-input-number__increase"><i
+                                                                                    class="el-icon-plus"></i></span>
+                                                                            <div class="el-input">
+                                                                                <!----><input type="text"
+                                                                                    autocomplete="off" max="12" min="1"
+                                                                                    class="el-input__inner"
+                                                                                    role="spinbutton" aria-valuemax="12"
+                                                                                    aria-valuemin="1" aria-valuenow="1"
+                                                                                    aria-disabled="undefined">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="select-number mt--18">
+                                                                        <div class="select-number__title">
+                                                                            <p class="mb--0 semi-bold">Trẻ em</p>
+                                                                            <p class="mb--0 p--small-2 c-gray-5">
+                                                                                Tuổi từ 2–12</p>
+                                                                        </div>
+                                                                        <div class="el-input-number"><span role="button"
+                                                                                class="el-input-number__decrease is-disabled"><i
+                                                                                    class="el-icon-minus"></i></span><span
+                                                                                role="button"
+                                                                                class="el-input-number__increase"><i
+                                                                                    class="el-icon-plus"></i></span>
+                                                                            <div class="el-input">
+                                                                                <!----><input type="text"
+                                                                                    autocomplete="off" max="11" min="0"
+                                                                                    class="el-input__inner"
+                                                                                    role="spinbutton" aria-valuemax="11"
+                                                                                    aria-valuemin="0" aria-valuenow="0"
+                                                                                    aria-disabled="undefined">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="select-number mt--18">
+                                                                        <div class="select-number__title">
+                                                                            <p class="mb--0 semi-bold">Trẻ sơ sinh
+                                                                            </p>
+                                                                            <p class="mb--0 p--small-2 c-gray-5">
+                                                                                Dưới 2 tuổi</p>
+                                                                        </div>
+                                                                        <div class="el-input-number"><span role="button"
+                                                                                class="el-input-number__decrease is-disabled"><i
+                                                                                    class="el-icon-minus"></i></span><span
+                                                                                role="button"
+                                                                                class="el-input-number__increase is-disabled"><i
+                                                                                    class="el-icon-plus"></i></span>
+                                                                            <div class="el-input">
+                                                                                <!----><input type="text"
+                                                                                    autocomplete="off" min="0"
+                                                                                    class="el-input__inner"
+                                                                                    role="spinbutton"
+                                                                                    aria-valuemax="null"
+                                                                                    aria-valuemin="0" aria-valuenow="0"
+                                                                                    aria-disabled="undefined">
+                                                                                <!---->
+                                                                                <!---->
+                                                                                <!---->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="is-flex align-center jbetween mt--30">
+                                                                        <button class="cursor semi-bold">Xoá</button>
+                                                                        <button class="cursor semi-bold c-primary">Áp
+                                                                            dụng</button></div>
+                                                                </div>
+                                                                <div class="modal-booking-time el-popover__reference"
+                                                                    aria-describedby="el-popover-1083" tabindex="0">
+                                                                    <p class="cursor">
+                                                                        1 khách
+                                                                    </p>
+                                                                </div>
+                                                            </span></div>
+                                                    </div>
+                                                    <div *ngIf="isLoggin">
+                                                        <button id="addtocart-btn" *ngIf="!isFollowed"
+                                                        (click)="followAService()"
+                                                        class="btn btn-grad--primary px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
+                                                            style="color: #fff; font-weight: 600;">Theo
+                                                            dõi</span></button>
+                                                    <button id="addtocart-btn" *ngIf="isFollowed"
+                                                        (click)="unFollowAService()"
+                                                        class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
+                                                            style="color: #fff; font-weight: 600;">Đã theo
+                                                            dõi</span></button>
+
+                                                    <!-- rating -->
+                                                    <div *ngIf="isRated" class="stars">
+                                                        <form>
+                                                            <input class="star star-5" id="star-5" type="radio"
+                                                                name="star" value=5
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-5" for="star-5"></label>
+                                                            <input class="star star-4" id="star-4" type="radio"
+                                                                name="star" value=4
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-4" for="star-4"></label>
+                                                            <input class="star star-3" id="star-3" type="radio"
+                                                                name="star" value=3
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-3" for="star-3"></label>
+                                                            <input class="star star-2" id="star-2" type="radio"
+                                                                name="star" value=2
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-2" for="star-2"></label>
+                                                            <input class="star star-1" id="star-1" type="radio"
+                                                                name="star" value=1
+                                                                (click)="getContentOfRating($event.target.value)" />
+                                                            <label class="star star-1" for="star-1"></label>
+                                                        </form>
+                                                    </div>
+                                                    </div>
+
+                                                    <div class="mt--18">
+                                                        <div class="room-event__wrap"></div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="provider_place">
+                                                    <div class="room-sidebar__host py--24 px--12 px--lg--24 w--100"><a
+                                                            [routerLink]="[ '/main/viewAboutProvider',details.providerId]"
+                                                            routerLinkActive="active"
+                                                            class="host-intro is-flex align-center">
+                                                            <!-- <div class="image-box image-box--large image-box--circle">
+                                                                <img [src]="provider.avatarPath">
+                                                            </div> -->
+                                                            <div class="host-intro__name mx--12 mx--md--18 pl--12">
+                                                                <p class="mb--6 extra-bold">Chi tiết nhà cung cấp
+                                                                </p>
+                                                                <p class="p--small-2 semi-bold c-gray-6 mb--0">Tham gia ngày : <strong><i>Đang cập nhật</i></strong></p>
+                                                            </div>
+                                                        </a></div>
+                                                    <div class="pb--24 px--12 px--lg--24">
+                                                        <!-- <div
+                                                            class="rounded bg-gray-f p--12 is-flex align-center jbetween">
+                                                            <p class="mb--0 p--small-2 c-gray-3">
+                                                                Số điện thoại liên hệ <a href="tel:18006586" class="extra-bold">{{provider.phoneNumber}}
+                                                                    (miễn phí)</a> để được hỗ trợ
+                                                            </p> <svg version="1.1" viewBox="0 0 19 16"
+                                                                class="svg-icon svg-fill"
+                                                                style="width: 16px; height: 16px;">
+                                                                <g fill="none" fill-rule="evenodd"
+                                                                    transform="translate(1 1)">
+                                                                    <path pid="0" stroke="#666" stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M17 10c0 1.043-.846 2-1.889 2H3.778l-2.051 2.171A1 1 0 0 1 0 13.485V1.889A1.89 1.89 0 0 1 1.889 0H15.11A1.89 1.89 0 0 1 17 1.889V10z">
+                                                                    </path>
+                                                                    <circle pid="1" cx="5" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                    <circle pid="2" cx="9" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                    <circle pid="3" cx="13" cy="6" r="1" fill="#D8D8D8">
+                                                                    </circle>
+                                                                </g>
+                                                            </svg>
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="pt--54 pt--sm--0"></div>
+                <div class="mobile-price d-flex d-md-none bg-white w--100">
+                    <div class="container container--sm w--100">
+                        <div class="row mobile-price__intro">
+                            <div class="col-xs-6">
+                                <div class="is-flex align-center h--100">
+                                    <p class="mb--0"><span class="extra-bold p--large">{{details.priceOfService}}</span>
+                                        <span class="bold p--small">/</span></p>
+                                </div> <span class="c-primary cursor p--small" role="button" style="display: none;">Chi
+                                    tiết đặt chỗ</span>
+                            </div>
+                            <div class="col-xs-6 text-right col-sm-4 offset-sm-2"><button
+                                    class="btn btn-grad--primary px--6 btn--sm btn--full bold rounded btn--shadow-primary">
+                                    <span>Đặt ngay</span></button></div>
+                        </div>
+                    </div>
+                </div>
+                <!----> <span class="d-none" role="button"></span>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -7,23 +7,12 @@ using BPT_Service.Model.Interfaces;
 namespace BPT_Service.Model.Entities.ServiceModel
 {
     [Table("ServiceComment")]
-    public class ServiceComment : DomainEntity<Guid>, IDateTracking
+    public class ServiceComment : DomainEntity<int>
     {
-
-        public ServiceComment(Guid userId, Guid serviceId, Guid parentId, string contentOfRating, DateTime dateCreated, DateTime dateModified)
-        {
-            this.UserId = userId;
-            this.ServiceId = serviceId;
-            this.ParentId = parentId;
-            this.ContentOfRating = contentOfRating;
-            this.DateCreated = dateCreated;
-            this.DateModified = dateModified;
-
-        }
         public Guid UserId { get; set; }
         public Guid ServiceId { get; set; }
 
-        public Guid ParentId { get; set; }
+        public int ParentId { get; set; }
 
         public string ContentOfRating { get; set; }
 

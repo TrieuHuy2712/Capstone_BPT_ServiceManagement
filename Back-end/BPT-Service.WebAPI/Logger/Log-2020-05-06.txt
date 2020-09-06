@@ -1,0 +1,74 @@
+WARNING[2020-05-06 18:32:10]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:32:21]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:33:22]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:34:28]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:35:55]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:36:11]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:37:09]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:38:00]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+INFO[2020-05-06 18:38:39]:: AddCategoryServiceCommand:: ADD:: admin:: {"Id":7,"CategoryName":"Somthing","Description":"123123","ImgPath":"https://bpt-servicewebapi.azurewebsites.net/UploadedFiles/Categories/category05_06_2020_6_38_06_45935_PM.jpg"}[ENDLOG]
+INFO[2020-05-06 18:39:43]:: DeleteCategoryServiceCommand:: DELETE:: admin:: {"Id":7,"CategoryName":"Somthing","Description":"123123","ImgPath":null}[ENDLOG]
+WARNING[2020-05-06 18:40:23]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:40:38]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+WARNING[2020-05-06 18:41:15]:: AddCategoryServiceCommand:: ADD:: admin:: You don't have permission to add[ENDLOG]
+INFO[2020-05-06 18:42:09]:: AddCategoryServiceCommand:: ADD:: admin:: {"Id":8,"CategoryName":"Somthing","Description":"123123","ImgPath":"https://bpt-servicewebapi.azurewebsites.net/UploadedFiles/Categories/category05_06_2020_6_41_39_74388_PM.jpg"}[ENDLOG]
+INFO[2020-05-06 18:43:41]:: UpdateCategoryServiceCommand:: UPDATE:: admin:: {"Id":6,"CategoryName":"Sửa chửa nhà ở/căn hộ.","Description":"Sửa chửa, thiết kế trọn gói căn hộ/nhà ở theo yêu cầu của khách hàng.","ImgPath":"https://bpt-servicewebapi.azurewebsites.net/UploadedFiles/Categories/category05_06_2020_6_43_39_18041_PM.jpg"}[ENDLOG]
+WARNING[2020-05-06 18:48:53]:: DeleteCategoryServiceCommand:: DELETE:: admin:: Can't find this ID[ENDLOG]
+INFO[2020-05-06 22:40:26]:: AddUserAsyncCommand:: ADD:: admin:: {"Id":null,"FullName":"Trieu Duc Huy 1","Email":"huytrieu@kms-technology.com","Password":"123654$","UserName":"huytrieu123","Avatar":"https://bpt-servicewebapi.azurewebsites.net/UploadedFiles/Avatars/avatar05_06_2020_10_40_23_43435_PM.jpg","Status":0,"Token":null,"Expiration":null,"PhoneNumber":null,"DateCreated":"0001-01-01T00:00:00","Roles":[],"NewRoles":["Customer"]}[ENDLOG]
+WARNING[2020-05-06 22:46:16]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:46:48]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: An error occurred while updating the entries. See the inner exception for details.||Inner: Violation of PRIMARY KEY constraint 'PK_AppUserRoles'. Cannot insert duplicate key in object 'dbo.AppUserRoles'. The duplicate key value is (56463f1f-f7b0-47e3-1ad2-08d7ef1cd62b, fa614adc-11ef-4968-f3ff-08d7ef1cd922).
+The statement has been terminated.||StackTrace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.UpdateAsync(TUser user, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.UpdateUserAsync(TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleAsync(TUser user, String role)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 111||Source: Microsoft.EntityFrameworkCore.Relational[ENDLOG]
+WARNING[2020-05-06 22:47:14]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+INFO[2020-05-06 22:52:45]:: UpdateUserAsyncCommand:: UPDATE:: admin:: {"FullName":"Nguyễn Đình Song Hiệp","Token":null,"Avatar":"https://bpt-servicewebapi.azurewebsites.net/UploadedFiles/Avatars/avatar05_04_2020_12_37_54_32368_AM.jpg","DateCreated":"2020-05-04T00:37:56.019474","DateModified":"0001-01-01T00:00:00","Status":0,"Providers":null,"UserServices":null,"ServiceFollowings":null,"ServiceRatings":null,"ServiceComments":null,"Id":"6517896e-95de-4a47-89cb-08d7efc36373","UserName":"KeyRiss","NormalizedUserName":"KEYRISS","Email":"nguyenhiep260498@gmail.com","NormalizedEmail":"NGUYENHIEP260498@GMAIL.COM","EmailConfirmed":false,"PasswordHash":"AQAAAAEAACcQAAAAEPPhspkcUjAUQfIDMQi2KaVhXmK7WGJ3ojcidpbDHZvAxJDp9AaIk0L6UyHvIRYQwA==","SecurityStamp":"XF2KJ4OIB24L3HLDVXQ43TQMR3UAS4ZI","ConcurrencyStamp":"6ec89af2-062d-40de-86c2-977da5ff000c","PhoneNumber":null,"PhoneNumberConfirmed":false,"TwoFactorEnabled":false,"LockoutEnd":null,"LockoutEnabled":true,"AccessFailedCount":0}[ENDLOG]
+WARNING[2020-05-06 22:53:06]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:53:06]:: CheckUserProviderQuery:: Enumerator failed to MoveNextAsync.[ENDLOG]
+ERROR[2020-05-06 22:53:07]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: One or more errors occurred. (Object reference not set to an instance of an object.)||Inner: Object reference not set to an instance of an object.||StackTrace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 100||Source: System.Private.CoreLib[ENDLOG]
+WARNING[2020-05-06 22:53:35]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:53:37]:: CheckUserProviderQuery:: Enumerator failed to MoveNextAsync.[ENDLOG]
+ERROR[2020-05-06 22:53:46]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: One or more errors occurred. (Object reference not set to an instance of an object.)||Inner: Object reference not set to an instance of an object.||StackTrace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 100||Source: System.Private.CoreLib[ENDLOG]
+WARNING[2020-05-06 22:53:57]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:54:28]:: CheckUserProviderQuery:: Enumerator failed to MoveNextAsync.[ENDLOG]
+ERROR[2020-05-06 22:54:29]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: One or more errors occurred. (Object reference not set to an instance of an object.)||Inner: Object reference not set to an instance of an object.||StackTrace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 100||Source: System.Private.CoreLib[ENDLOG]
+WARNING[2020-05-06 22:54:44]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:57:55]:: CheckUserProviderQuery:: Enumerator failed to MoveNextAsync.[ENDLOG]
+ERROR[2020-05-06 22:57:55]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: One or more errors occurred. (Object reference not set to an instance of an object.)||Inner: Object reference not set to an instance of an object.||StackTrace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 100||Source: System.Private.CoreLib[ENDLOG]
+WARNING[2020-05-06 22:58:33]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 22:59:30]:: CheckUserProviderQuery:: Enumerator failed to MoveNextAsync.[ENDLOG]
+ERROR[2020-05-06 22:59:30]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: One or more errors occurred. (Object reference not set to an instance of an object.)||Inner: Object reference not set to an instance of an object.||StackTrace:    at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 100||Source: System.Private.CoreLib[ENDLOG]
+WARNING[2020-05-06 23:03:08]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+ERROR[2020-05-06 23:03:27]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Has error||Message: An error occurred while updating the entries. See the inner exception for details.||Inner: Violation of PRIMARY KEY constraint 'PK_AppUserRoles'. Cannot insert duplicate key in object 'dbo.AppUserRoles'. The duplicate key value is (56463f1f-f7b0-47e3-1ad2-08d7ef1cd62b, fa614adc-11ef-4968-f3ff-08d7ef1cd922).
+The statement has been terminated.||StackTrace:    at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.UpdateAsync(TUser user, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.UpdateUserAsync(TUser user)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleAsync(TUser user, String role)
+   at BPT_Service.Application.ProviderService.Command.ApproveProviderService.ApproveProviderServiceCommand.ExecuteAsync(String userProvider, String providerId) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Business\BPT-Service.Application\ProviderService\Command\ApproveProviderService\ApproveProviderServiceCommand.cs:line 111||Source: Microsoft.EntityFrameworkCore.Relational[ENDLOG]
+WARNING[2020-05-06 23:04:11]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+WARNING[2020-05-06 23:05:58]:: ApproveProviderServiceCommand:: APPROVE:: admin:: Can't find this ID[ENDLOG]
+INFO[2020-05-06 23:06:13]:: ApproveProviderServiceCommand:: APPROVE:: admin:: KeyRisshas been approved[ENDLOG]
+[ENDNOTIFICATION]

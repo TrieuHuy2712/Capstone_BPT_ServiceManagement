@@ -1,47 +1,210 @@
-<div class="page-title">
-  <div class="title_right">
-    <div class="col-md-4 col-sm-5 col-xs-12 form-group pull-right top_search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for...">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
+<div style="margin-left: -250px;">
+  <div style="width: 100%; margin: 0;">
+    <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (afterChange)="afterChange($event)">
+      <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+        <img src="{{slide.img}}" alt="slider image">
+      </div>
+    </ngx-slick>
+  </div>
+  <div class="container">
+    <!-- introduce body -->
+    <div class="introduce">
+      <div class="first-block row">
+        <div class="col-md-12">
+          <h3><strong>Chào mừng đến với bất động sản BPT !</strong></h3>
+          <h5>Nhanh tay chọn các dịch vụ bạn ưa thích dưới đây</h5>
+          <h5><a href="/login">Đăng nhập</a> hoặc <a href="/register">đăng kí</a> để trải nghiệm</h5>
+          <div class="introduce-content">
+            <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig2"
+              (afterChange)="afterChange($event)">
+              <div ngxSlickItem *ngFor="let item of category" class="outside">
+                <a [routerLink]="[ '/main/listOfItem',item.categoryName]">
+                  <img [src]="item.imgPath" alt="slider image" class="intro-img-2">
+                  <p class="title-1"><strong>{{item.categoryName}}</strong></p>
+                </a>
+
+              </div>
+            </ngx-slick>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- location -->
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Chọn nơi bạn sống !</h2>
+    <p>Các vị trí dưới đây tập hợp các dịch vụ bạn cần tại nơi bạn sống, nhanh tay lên nào các bạn!
+    </p>
+    <div id="body-part1-content">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+        (afterChange)="afterChange($event)">
+        <div ngxSlickItem *ngFor="let item of locations">
+          <!-- 1st -->
+          <div class="outside-1" alt=slider>
+            <div><a [routerLink]="[ '/main/listOfItem',item.cityLocation]" tabindex="0"
+                style="width: 100%; display: inline-block;">
+                <div class="outside-1">
+                  <img [src]="item.imgLocation" class="intro-img">
+
+                  <p class="location-titlte">{{item.cityLocation}}</p>
+                </div>
+
+              </a></div>
+          </div>
+        </div>
+      </ngx-slick>
+    </div>
+
+    <!-- news -->
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Bản tin ngày hôm nay !</h2>
+    <div class="row">
+      <div *ngFor="let item of news" class="col-md-3">
+
+        <div class="c-product-card--grid" (click)="showAddModal(item.idNews)">
+          <div class="promo is-relative"><a>
+              <div class="promo__image">
+                <div class="promo__image-wrap"><img class="w--100" [src]="item.imgNews">
+                  <!---->
+                </div>
+              </div>
+            </a>
+            <!---->
+            <div class="promo__content">
+              <div class="is-relative"><a class="" target="_blank" id="room-item" data-value="23052">
+                  <div class="promo__title extra-bold"
+                    style="-webkit-box-orient: vertical; color: #3c66f3; font-weight: 500;">
+                    {{item.titleNews}}
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- hot service -->
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Các dịch vụ <span style="color: orangered;"> <i
+          class="fab fa-hotjar"></i> hot</span> gần đây !</h2>
+    <div class="row">
+      <div *ngFor="let service of hotService" class="col-md-3">
+
+        <div class="c-product-card--grid">
+          <div class="promo is-relative" routerLinkActive="active"><a
+              [routerLink]="['/main/detailItem',service.idService]" data-value="23052">
+              <div class="promo__image">
+                <div class="promo__image-wrap"><img class="w--100" [src]="service.imgService" lazy="loaded">
+                  <!---->
+                </div>
+                <div class="is-absolute promo__label-wrap"><span class="promo__label is-promotion">-0% Hôm nay</span>
+                  <!---->
+                </div>
+              </div>
+            </a>
+            <!---->
+            <div class="promo__content">
+              <!-- <div class="promo__type bold" style="-webkit-box-orient: vertical;">
+                {{service.categoryName}}
+              </div> -->
+              <div class="is-relative"><a class="">
+                  <div class="promo__title extra-bold" style="-webkit-box-orient: vertical;">
+                    {{service.nameService}}
+                  </div>
+                </a>
+                <div class="promo__review">
+                  <div class="star-rating d-inline-block"><svg version="1.1" viewBox="0 0 14 14"
+                      class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;">
+                      <path fill="#ffb025" stroke="none" pid="0"
+                        d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                        _fill-rule="evenodd"></path>
+                    </svg></div> <span class="promo__review-count p--small">{{service.rating}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- location -->
+    <ng-container *ngIf="isLoggedIn">
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Những dịch vụ bạn có thể quan tâm !</h2>
+    <p>Các dịch vụ dưới đây có thể phù hợp với bạn
+    </p>
+    <div id="body-part1-content">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+        (afterChange)="afterChange($event)">
+        <div ngxSlickItem *ngFor="let item of recommendService">
+          <!-- 1st -->
+          <div class="outside-1" alt=slider>
+            <div><a [routerLink]="[ '/main/detailItem',item.idService]" tabindex="0"
+                style="width: 100%; display: inline-block;">
+                <div class="outside-1">
+                  <img [src]="item.imgService" class="intro-img">
+
+                  <p class="location-titlte">{{item.nameService}}</p>
+                </div>
+
+              </a></div>
+          </div>
+        </div>
+      </ngx-slick>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isLoggedIn">
+    <h2 class="extra-bold p--giant" style="margin-top: 50px;">Những dịch vụ bạn đã xem !</h2>
+    <p>Các dịch vụ dưới đây có thể phù hợp với bạn
+    </p>
+    <div id="body-part1-content">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+        (afterChange)="afterChange($event)">
+        <div ngxSlickItem *ngFor="let item of historyService">
+          <!-- 1st -->
+          <div class="outside-1" alt=slider>
+            <div><a [routerLink]="[ '/main/detailItem',item.idService]" tabindex="0"
+                style="width: 100%; display: inline-block;">
+                <div class="outside-1">
+                  <img [src]="item.imgService" class="intro-img">
+
+                  <p class="location-titlte">{{item.nameService}}</p>
+                </div>
+
+              </a></div>
+          </div>
+        </div>
+      </ngx-slick>
+    </div>
+  </ng-container>
   </div>
 </div>
 
-<div class="clearfix"></div>
-
-<div class="row">
-  <div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="x_panel">
-      <div class="x_title">
-        <div>
-          <h3>Chào mừng đến với trang Admin</h3>
+<!-- pop up of news -->
+<div bsModal #modalEditProfile="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">{{detailTitle}}</h4>
+        <button type="button" class="close pull-right" (click)="modalEditProfile.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 50px;">
+          <img style="width: 500px; margin-left: 18%;" [src]="detailImage">
         </div>
-        <ul class="nav navbar-right panel_toolbox">
-          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
-                class="fa fa-wrench"></i></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Settings 1</a>
-              </li>
-              <li><a href="#">Settings 2</a>
-              </li>
-            </ul>
-          </li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a>
-          </li>
-        </ul>
-        <div class="clearfix"></div>
-      </div>
-      <div class="x_content">
-        Add content to the page ...
-      </div>
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Tác giả : {{detailAuthor}}</h3>
 
+          </div>
+          <div class="card-body" [innerHTML]="detailContent">
+
+          </div> 
+        </div>
+        <div>
+          <strong>
+            <p class="card-title">Nhà cung cấp: {{detailProviderName}}</p>
+          </strong>
+        </div>
+      </div>
     </div>
   </div>
 </div>

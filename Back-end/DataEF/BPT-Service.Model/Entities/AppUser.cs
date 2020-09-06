@@ -33,6 +33,7 @@ namespace BPT_Service.Model.Entities
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
+        public bool IsProvider { get; set; }
         public ICollection<Provider> Providers{ get; set; }
         public ICollection<UserService> UserServices { get; set; }
         public ICollection<ServiceFollowing> ServiceFollowings { get; set; }

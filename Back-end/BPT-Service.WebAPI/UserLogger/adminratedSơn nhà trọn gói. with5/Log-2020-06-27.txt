@@ -1,0 +1,7 @@
+ERROR[2020-06-27 8:23:14]:: AddUpdateRatingServiceCommand:: adminratedSơn nhà trọn gói. with5:: Message: The process cannot access the file 'D:\CapstoneProject\BRT_Service_Management_1\Back-end\BPT-Service.WebAPI\UserLogger\ccd0e809-125f-40c6-36fe-08d80475d8af\Log-2020-06-27.txt' because it is being used by another process.:: Inner: No inner||StackTrace:    at System.IO.FileStream.ValidateFileHandle(SafeFileHandle fileHandle)
+   at System.IO.FileStream.CreateFileOpenHandle(FileMode mode, FileShare share, FileOptions options)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options)
+   at System.IO.StreamWriter.ValidateArgsAndOpenPath(String path, Boolean append, Encoding encoding, Int32 bufferSize)
+   at System.IO.StreamWriter..ctor(String path, Boolean append)
+   at System.IO.File.AppendText(String path)
+   at BPT_Service.Common.Logging.LoggingUser`1.WritelLogAsync(String logType, String userNotification, String userName, String[] message) in D:\CapstoneProject\BRT_Service_Management_1\Back-end\Shared\BPT-Service.Common\Logging\LoggingUser.cs:line 40||Source: System.Private.CoreLib

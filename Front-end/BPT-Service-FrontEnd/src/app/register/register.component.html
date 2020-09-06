@@ -1,0 +1,122 @@
+<div class="register-title">
+    <div class="main-titlte">
+        <p>
+        </p>
+        <h2>Chào mừng đến với trang đăng kí</h2>
+        <p></p>
+    </div>
+</div>
+<div class="section" style="background-image: url(../../assets/images/register.jpg);">
+    <div class="container container--sm">
+        <div class="row">
+            <div class="col-md-8 col-xs-12 last-xs first-md">
+
+            </div>
+            <div class="col-md-4 col-xs-12 first-xs">
+                <div class="account">
+                    <form autocomplete="off" novalidate (ngSubmit)="saveChange(true)">
+                        <h3 class="account__title">Đăng ký thành viên</h3>
+                        <div><label class="input-group__label bold is-block res-label">Họ và tên</label>
+                            <div class="input-group__icon is-relative">
+                                <div class="input-group">
+                                    <div class="input-group__icon is-relative"><input type="text" #name="ngModel"
+                                            [(ngModel)]="entity.fullName" required minlength="3" name="fullName"
+                                            placeholder="Nhập đầy đủ họ tên"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-user"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group"><label class="input-group__label bold is-block res-label">Tên đăng
+                                        nhập</label>
+                                    <input type="text" #username="ngModel" [(ngModel)]="entity.userName" required
+                                        name="username" placeholder="Nhập tên đăng nhập">
+
+                                </div>
+                                <div class="input-group mb--18"><label class="input-group__label is-block res-label"><span
+                                            class="bold">Mật
+                                            khẩu</span> </label>
+                                    <div class="input-group input-group__icon is-relative"><input type="password"
+                                            #password="ngModel" [(ngModel)]="entity.Password" required minlength="6"
+                                            name="password" placeholder="Mật khẩu" class="input" aria-required="true"
+                                            aria-invalid="false"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-unlock-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div><label class="input-group input-group__label is-block res-label"><span class="bold">Xác nhận
+                                            mật khẩu
+                                            mới</span></label>
+                                    <div class="input-group__icon is-relative"><input type="password"
+                                            #confirmpassword="ngModel" [(ngModel)]="entity.ConfirmPassword" required
+                                            validateEqual="password" minlength="6" name="confirmpassword" class="input"
+                                            placeholder="Nhập mật khẩu"> <span class="is-absolute input-icon"><i
+                                                class="fas fa-unlock-alt"></i></span>
+                                    </div>
+                                </div>
+                                <div class="input-group"><label class="input-group__label bold is-block res-label">
+                                        Email</label> <input type="text" #email="ngModel"
+                                        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                        [(ngModel)]="entity.email" required name="email"
+                                        placeholder="Nhập địa chỉ email">
+                                </div>
+                                <!-- <div class="input-group"><label class="input-group__label bold is-block">
+                                        Avatar</label>
+                                    <input type="file" #avatar name="avatar" class="form-control">
+                                    <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg
+                                    </p>
+                                    <input type="hidden" [(ngModel)]="entity.avatar" name="avatar" />
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.avatar">
+                                    <img [src]="entity.avatar" width="128" />
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="account__body"><button type="submit"
+                                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold"
+                                [routerLink]="['/login']" routerLinkActive="router-link-active">Đăng
+                                ký</button>
+                            <div class="center-xs">
+                                Bạn đã có tài khoản?
+                                <a href="/login"><span class="text-orange bold" style="cursor: pointer;">Đăng
+                                        nhập</span></a></div>
+                            <div class="caption center-xs">
+                                Tôi đồng ý với
+                                <a href="/vi/privacy-policy" target="_blank" rel="noopener" class="bold">Bảo mật</a>
+                                và
+                                <a href="/vi/tos" rel="noopener" target="_blank" class="bold">Điều khoản hoạt
+                                    động</a> của trang web.
+                            </div>
+                            <div class="account__3rd">
+                                <div>
+                                    <div
+                                        class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative fb-btn">
+                                        <span>Đăng nhập với Facebook</span> <i class="fab fa-facebook-square"
+                                            style="float: right; position: absolute; top: 40%; color: blue;"></i></div>
+                                </div>
+                                <div class="mt-2">
+                                    <div id="g-signin-btn"
+                                        class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative">
+                                        <span>Đăng nhập với Google</span> <svg version="1.1" viewBox="0 0 16 16"
+                                            class="is-absolute svg-icon svg-fill">
+                                            <g fill="none">
+                                                <path pid="0" fill="#557EBF"
+                                                    d="M15.85 8.2c0-.55-.05-1.1-.15-1.65H8.15v3.1h4.3c-.2 1-.75 1.85-1.6 2.4v2h2.6c1.5-1.4 2.4-3.45 2.4-5.85z">
+                                                </path>
+                                                <path pid="1" fill="#36A852"
+                                                    d="M8.15 16c2.15 0 3.95-.7 5.3-1.95l-2.6-2c-.7.5-1.65.75-2.7.75-2.1 0-3.85-1.4-4.5-3.3H1v2.05C2.35 14.2 5.05 16 8.15 16z">
+                                                </path>
+                                                <path pid="2" fill="#F9BC15"
+                                                    d="M3.7 9.5c-.15-.5-.25-1-.25-1.5s.1-1.05.25-1.5V4.4H1C.45 5.5.15 6.7.15 8c0 1.3.3 2.5.85 3.6l2.7-2.1z">
+                                                </path>
+                                                <path pid="3" fill="#EA4535"
+                                                    d="M8.15 3.2c1.15 0 2.25.4 3.05 1.2l2.3-2.3C12.15.8 10.3 0 8.15 0 5.05 0 2.35 1.8 1 4.4l2.7 2.1c.6-1.9 2.4-3.3 4.45-3.3z">
+                                                </path>
+                                            </g>
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

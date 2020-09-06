@@ -7,24 +7,19 @@ import { AuthenService } from 'src/app/core/services/authen.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { RouterModule } from '@angular/router';
 import { mainRoutes } from './main.routes';
-import { HomeComponent } from './home/home.component';
-import { FunctionComponent } from './function/function.component';
-import { RoleComponent } from './role/role.component';
 import { HomeModule } from './home/home.module';
-import { UserComponent } from './user/user.component';
+import { TranslationService } from '../core/services/translation.service';
+import { TopbarUserComponent } from '../shared/topbar-user/topbar-user.component';
 import { UserModule } from './user/user.module';
-import { ServiceCategoryComponent } from './service-category/service-category.component';
-import { ServiceTagComponent } from './service-tag/service-tag.component';
-
-
 @NgModule({
   imports: [
     CommonModule,
     UserModule,
     HomeModule,
-    RouterModule.forChild(mainRoutes)
+    RouterModule.forChild(mainRoutes),
+
   ],
-  declarations: [MainComponent,SidebarMenuComponent],
-  providers:[UtilityService,AuthenService]
+  declarations: [MainComponent, SidebarMenuComponent, TopMenuComponent, TopbarUserComponent],
+  providers: [UtilityService, AuthenService, TranslationService]
 })
 export class MainModule { }

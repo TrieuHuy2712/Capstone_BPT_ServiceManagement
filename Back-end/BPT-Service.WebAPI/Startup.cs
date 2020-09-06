@@ -1,6 +1,7 @@
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsync;
 using BPT_Service.Application.AuthenticateService.Command.ResetPasswordAsyncCommand;
 using BPT_Service.Application.AuthenticateService.Query.AuthenticateofAuthenticationService;
+using BPT_Service.Application.AuthenticateService.Query.CheckCanAccessMain;
 using BPT_Service.Application.AuthenticateService.Query.GetAllAuthenticateService;
 using BPT_Service.Application.AuthenticateService.Query.GetByIdAuthenticateService;
 using BPT_Service.Application.CategoryService.Command.AddCategoryService;
@@ -9,6 +10,30 @@ using BPT_Service.Application.CategoryService.Command.UpdateCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetAllPagingAsyncCategoryService;
 using BPT_Service.Application.CategoryService.Query.GetByIDCategoryService;
+using BPT_Service.Application.CommentService.Command.AddCommentServiceAsync;
+using BPT_Service.Application.CommentService.Command.DeleteCommentServiceAsync;
+using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
+using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
+using BPT_Service.Application.ElasticSearchService.Command.AddAllService;
+using BPT_Service.Application.ElasticSearchService.Command.DeleteAllService;
+using BPT_Service.Application.ElasticSearchService.Command.FakeImport;
+using BPT_Service.Application.ElasticSearchService.Query;
+using BPT_Service.Application.ElasticSearchService.Query.SearchPostService;
+using BPT_Service.Application.EmailService.Command.AddNewEmailService;
+using BPT_Service.Application.EmailService.Command.DeleteEmailService;
+using BPT_Service.Application.EmailService.Command.UpdateNewEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.EmailService.Query.GetAllPagingEmailService;
+using BPT_Service.Application.EmailService.Query.GetEmailByIdService;
+using BPT_Service.Application.EmailService.Query.GetListEmailService;
+using BPT_Service.Application.FollowingPostService.Command.FollowPostService;
+using BPT_Service.Application.FollowingPostService.Command.UnFollowPostService;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByPost;
+using BPT_Service.Application.FollowingPostService.Query.GetFollowByUser;
+using BPT_Service.Application.FollowingProviderService.Command.FollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.RegisterEmailProviderService;
+using BPT_Service.Application.FollowingProviderService.Command.UnFollowProviderService;
+using BPT_Service.Application.FollowingProviderService.Query.GetFollowByProvider;
 using BPT_Service.Application.FunctionService.Command.AddFunctionService;
 using BPT_Service.Application.FunctionService.Command.DeleteFunctionService;
 using BPT_Service.Application.FunctionService.Command.UpdateFunctionService;
@@ -19,15 +44,82 @@ using BPT_Service.Application.FunctionService.Query.GetAllWithParentIdFunctionSe
 using BPT_Service.Application.FunctionService.Query.GetByIdFunctionService;
 using BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermission;
 using BPT_Service.Application.FunctionService.Query.ReOrderFunctionService;
+using BPT_Service.Application.LocationService.Command.AddCityProvinceService;
+using BPT_Service.Application.LocationService.Command.DeleteCityProvinceService;
+using BPT_Service.Application.LocationService.Command.UpdateCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetAllCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetAllPagingCityProvinceService;
+using BPT_Service.Application.LocationService.Query.GetByIdCityProvinceService;
+using BPT_Service.Application.LoggingService.Command.DeleteMonthlyLogFiles;
+using BPT_Service.Application.LoggingService.Query.GetLogFiles;
+using BPT_Service.Application.LoggingService.Query.GetLogFromAFile;
+using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.ConfirmNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
+using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
+using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
+using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using BPT_Service.Application.NotificationService.NotificationAdmin.AutoGetNotification;
+using BPT_Service.Application.NotificationService.NotificationAdmin.AutoRealTimeNotification;
+using BPT_Service.Application.NotificationService.NotificationAdmin.GetNotificationHasRead;
+using BPT_Service.Application.NotificationService.NotificationUser.AutoGetUserNotification;
+using BPT_Service.Application.NotificationService.NotificationUser.AutoRealTimeUserNotification;
+using BPT_Service.Application.NotificationService.NotificationUser.GetUserNotificationHasRead;
+using BPT_Service.Application.PermissionService.Query.CheckOwnService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRole;
 using BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery;
+using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.ConfirmPostService;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
+using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
+using BPT_Service.Application.PostService.Command.RejectPostService;
+using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.Extension.GetAvtInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetListTagInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetOwnServiceInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetProviderInformation;
+using BPT_Service.Application.PostService.Query.Extension.GetServiceRating;
+using BPT_Service.Application.PostService.Query.Extension.GetUserInformation;
+using BPT_Service.Application.PostService.Query.FilterAllPagingLocationPostService;
+using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
+using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
+using BPT_Service.Application.PostService.Query.GetPostServiceById;
+using BPT_Service.Application.PostService.Query.GetPostUserServiceByUserId;
 using BPT_Service.Application.ProviderService.Command.ApproveProviderService;
+using BPT_Service.Application.ProviderService.Command.ConfirmProviderService;
 using BPT_Service.Application.ProviderService.Command.DeleteProviderService;
 using BPT_Service.Application.ProviderService.Command.RegisterProviderService;
 using BPT_Service.Application.ProviderService.Command.RejectProviderService;
+using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.Query.GetAllPagingProviderService;
 using BPT_Service.Application.ProviderService.Query.GetAllProviderofUserService;
 using BPT_Service.Application.ProviderService.Query.GetByIdProviderService;
+using BPT_Service.Application.RatingService.Command.AddRatingService;
+using BPT_Service.Application.RatingService.Command.DeleteRatingService;
+using BPT_Service.Application.RatingService.Query.GetAllPagingRatingServiceByOwner;
+using BPT_Service.Application.RatingService.Query.GetAllServiceRatingByUser;
+using BPT_Service.Application.RatingService.Query.GetListAllPagingRatingService;
+using BPT_Service.Application.RatingService.Query.GetRatingByService;
+using BPT_Service.Application.RecommedationService.Command.AddRecommendService;
+using BPT_Service.Application.RecommedationService.Command.RecommendLocation.AddRecommendLocation;
+using BPT_Service.Application.RecommedationService.Command.RecommendLocation.DeleteRecommendLocation;
+using BPT_Service.Application.RecommedationService.Command.RecommendNews.AddRecommendNews;
+using BPT_Service.Application.RecommedationService.Command.ViewService;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByLocation;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByNews;
+using BPT_Service.Application.RecommedationService.Query.GetRecommendByService;
+using BPT_Service.Application.RecommedationService.Query.GetViewedService;
+using BPT_Service.Application.RecommedationService.Query.RecommendService;
+using BPT_Service.Application.RecommedationService.Query.RecommendUserService;
 using BPT_Service.Application.RoleService.Command.AddRoleAsync;
 using BPT_Service.Application.RoleService.Command.DeleteRoleAsync;
 using BPT_Service.Application.RoleService.Command.SavePermissionRole;
@@ -50,12 +142,18 @@ using BPT_Service.Application.UserService.Command.DeleteUserAsync;
 using BPT_Service.Application.UserService.Command.UpdateUserAsync;
 using BPT_Service.Application.UserService.Query.GetAllAsync;
 using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
+using BPT_Service.Application.UserService.Query.GetByContextUserAsync;
 using BPT_Service.Application.UserService.Query.GetByIdAsync;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
 using BPT_Service.Common.Support;
 using BPT_Service.Data;
+using BPT_Service.Data.Repositories;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
+using BPT_Service.WebAPI.Ultility;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,28 +165,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
 using System;
-using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
-using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
-using BPT_Service.Application.PostService.Command.ApprovePostService;
-using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
-using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
-using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
-using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
-using BPT_Service.Application.PostService.Command.RejectPostService;
-using BPT_Service.Application.PostService.Command.UpdatePostService;
-using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
-using BPT_Service.Application.PostService.Query.GetPostServiceById;
-using BPT_Service.Application.ProviderService.Command.UpdateProviderService;
-using BPT_Service.Application.NewsProviderService.Command.ApproveNewsProvider;
-using BPT_Service.Application.NewsProviderService.Command.DeleteNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Command.RegisterNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Command.RejectNewsProvider;
-using BPT_Service.Application.NewsProviderService.Command.UpdateNewsProviderService;
-using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsOfProvider;
-using BPT_Service.Application.NewsProviderService.Query.GetAllPagingProviderNewsService;
-using BPT_Service.Application.NewsProviderService.Query.GetByIdProviderNewsService;
+using System.Collections.Generic;
+using System.Text;
 
 namespace BPT_Service.WebAPI
 {
@@ -104,10 +184,12 @@ namespace BPT_Service.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfireServer();
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 o => o.MigrationsAssembly("DataEF/BPT-Service.Data")));
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
@@ -116,7 +198,37 @@ namespace BPT_Service.WebAPI
             services.AddMvc()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddMemoryCache();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
 
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement(){
+                    {
+                        new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                      }
+                    });
+            });
             services.AddTransient<DbInitializer>();
             // Configure Identity
             services.Configure<IdentityOptions>(options =>
@@ -137,21 +249,112 @@ namespace BPT_Service.WebAPI
                 options.User.RequireUniqueEmail = true;
             });
 
-            // Services 
+            // Services
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+            services.AddTransient(typeof(IElasticSearchRepository<>), typeof(ElasticSearchRepository<>));
 
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            ApplicationContext(services);
+
+            services.AddElasticsearch(Configuration);
+
+            //Read email config json
+            services.Configure<EmailConfigModel>(Configuration.GetSection("EmailConfig"));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    p => p.SetIsOriginAllowed(_ => true).
+                        AllowAnyHeader().
+                        AllowAnyMethod().
+                        AllowCredentials()
+                        );
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IHttpContextAccessor accessor,
+            IRecommendService _recommendService,
+            IAddAllService _addAllService,
+            IDeleteMonthlyLogFiles _deleteMonthlyLogFiles)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+            app.UseHangfireDashboard();
+            app.UseHangfireServer();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+            RecurringJob.AddOrUpdate(() => _recommendService.ExecuteAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _deleteMonthlyLogFiles.Execute(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => _addAllService.ExecuteAsync(), Cron.Hourly);
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+            app.UseCors("CorsPolicy");
+            app.UseDeveloperExceptionPage();
+        }
+
+        public void ApplicationContext(IServiceCollection services)
+        {
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
 
             //Authenticate service
             services.AddScoped<IResetPasswordAsyncCommand, ResetPasswordAsyncCommand>();
             services.AddScoped<IAuthenticateServiceQuery, AuthenticateServiceQuery>();
             services.AddScoped<IGetAllAuthenticateServiceQuery, GetAllAuthenticateServiceQuery>();
             services.AddScoped<IGetByIdAuthenticateService, GetByIdAuthenticateServiceQuery>();
+            services.AddScoped<ICheckCanAccessMain, CheckCanAccessMain>();
 
             //Category service
             services.AddScoped<IAddCategoryServiceCommand, AddCategoryServiceCommand>();
@@ -172,9 +375,12 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IReOrderFunctionServiceQuery, ReOrderFunctionServiceQuery>();
             services.AddScoped<IUpdateFunctionServiceCommand, UpdateFunctionServiceCommand>();
             services.AddScoped<IUpdateParentIdServiceCommand, UpdateParentIdServiceCommand>();
+
             //Permission service
             services.AddScoped<IGetPermissionRoleQuery, GetPermissionRoleQuery>();
             services.AddScoped<IGetPermissionActionQuery, GetPermissionActionQuery>();
+            services.AddScoped<ICheckUserIsAdminQuery, CheckUserIsAdminQuery>();
+            services.AddScoped<ICheckOwnService, CheckOwnService>();
 
             //Role service
             services.AddScoped<IAddRoleAsyncCommand, AddRoleAsyncCommand>();
@@ -204,6 +410,7 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IGetAllPagingUserAsyncQuery, GetAllPagingUserAsyncQuery>();
             services.AddScoped<IGetAllUserAsyncQuery, GetAllUserAsyncQuery>();
             services.AddScoped<IGetByIdUserAsyncQuery, GetByIdUserAsyncQuery>();
+            services.AddScoped<IGetByContextUserAsync, GetByContextUserAsync>();
 
             //Provider service
             services.AddScoped<IApproveProviderServiceCommand, ApproveProviderServiceCommand>();
@@ -215,83 +422,130 @@ namespace BPT_Service.WebAPI
             services.AddScoped<IRegisterProviderServiceCommand, RegisterProviderServiceCommand>();
             services.AddScoped<IRejectProviderServiceCommand, RejectProviderServiceCommand>();
             services.AddScoped<IUpdateProviderServiceCommand, UpdateProviderServiceCommand>();
+            services.AddScoped<IConfirmProviderService, ConfirmProviderService>();
 
-            //Post service 
+            //Post service
             services.AddScoped<IApprovePostServiceCommand, ApprovePostServiceCommand>();
             services.AddScoped<IDeleteServiceFromProviderCommand, DeleteServiceFromProviderCommand>();
-            services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
             services.AddScoped<IDeleteServiceFromUserCommand, DeleteServiceFromUserCommand>();
+            services.AddScoped<IFilterAllPagingPostServiceQuery, FilterAllPagingPostServiceQuery>();
+            services.AddScoped<IGetAllPagingPostServiceQuery, GetAllPagingPostServiceQuery>();
+            services.AddScoped<IGetPostServiceByIdQuery, GetPostServiceByIdQuery>();
+            services.AddScoped<IRegisterServiceFromProviderCommand, RegisterServiceFromProviderCommand>();
             services.AddScoped<IRegisterServiceFromUserCommand, RegisterServiceFromUserCommand>();
             services.AddScoped<IRejectPostServiceCommand, RejectPostServiceCommand>();
             services.AddScoped<IUpdatePostServiceCommand, UpdatePostServiceCommand>();
-            services.AddScoped<IGetAllPagingPostServiceQuery, GetAllPagingPostServiceQuery>();
-            services.AddScoped<IGetPostServiceByIdQuery, GetPostServiceByIdQuery>();
+            services.AddScoped<IGetPostUserServiceByUserIdQuery, GetPostUserServiceByUserIdQuery>();
+            services.AddScoped<IGetAllPostUserServiceByUserIdQuery, GetAllPostUserServiceByUserIdQuery>();
+            services.AddScoped<IConfirmPostService, ConfirmPostService>();
+            services.AddScoped<IFilterAllPagingLocationPostService, FilterAllPagingLocationPostService>();
+
+            //Extension
+            services.AddScoped<IGetAvtInformationQuery, GetAvtInformationQuery>();
+            services.AddScoped<IGetListTagInformationQuery, GetListTagInformationQuery>();
+            services.AddScoped<IGetProviderInformationQuery, GetProviderInformationQuery>();
+            services.AddScoped<IGetServiceRatingQuery, GetServiceRatingQuery>();
+            services.AddScoped<IGetUserInformationQuery, GetUserInformationQuery>();
+            services.AddScoped<IGetOwnServiceInformationQuery, GetOwnServiceInformationQuery>();
 
             //NewsProvider
             services.AddScoped<IApproveNewsProviderServiceCommand, ApproveNewsProviderServiceCommand>();
             services.AddScoped<IDeleteNewsProviderServiceCommand, DeleteNewsProviderServiceCommand>();
             services.AddScoped<IGetAllPagingProviderNewsOfProviderQuery, GetAllPagingProviderNewsOfProviderQuery>();
             services.AddScoped<IGetAllPagingProviderNewsServiceQuery, GetAllPagingProviderNewsServiceQuery>();
-            services.AddScoped<IGetByIdProviderNewsServiceQuery,GetByIdProviderNewsServiceQuery>();
+            services.AddScoped<IGetByIdProviderNewsServiceQuery, GetByIdProviderNewsServiceQuery>();
             services.AddScoped<IRegisterNewsProviderServiceCommand, RegisterNewsProviderServiceCommand>();
             services.AddScoped<IRejectNewsProviderServiceCommand, RejectNewsProviderServiceCommand>();
             services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
+            services.AddScoped<IUpdateNewsProviderServiceCommand, UpdateNewsProviderServiceCommand>();
+
+            //Location Service
+            services.AddScoped<IAddCityProvinceServiceCommand, AddCityProvinceServiceCommand>();
+            services.AddScoped<IDeleteCityProvinceServiceCommand, DeleteCityProvinceServiceCommand>();
+            services.AddScoped<IGetAllCityProvinceServiceQuery, GetAllCityProvinceServiceQuery>();
+            services.AddScoped<IGetAllPagingCityProvinceServiceQuery, GetAllPagingCityProvinceServiceQuery>();
+            services.AddScoped<IGetByIdCityProvinceServiceQuery, GetByIdCityProvinceServiceQuery>();
+            services.AddScoped<IConfirmNewsProviderService, ConfirmNewsProviderService>();
+            services.AddScoped<IUpdateCityProvinceServiceCommand, UpdateCityProvinceServiceCommand>();
+
+            //Comment service
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand, AddCommentServiceAsyncCommand>();
+
+            //Follow service
+            services.AddScoped<IFollowPostServiceCommand, FollowPostServiceCommand>();
+            services.AddScoped<IGetFollowByPostQuery, GetFollowByPostQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+            services.AddScoped<IUnFollowPostServiceCommand, UnFollowPostServiceCommand>();
+
+            //Follow provider
+            services.AddScoped<IFollowProviderServiceCommand, FollowProviderServiceCommand>();
+            services.AddScoped<IUnFollowProviderServiceCommand, UnFollowProviderServiceCommand>();
+            services.AddScoped<IRegisterEmailProviderServiceCommand, RegisterEmailProviderServiceCommand>();
+            services.AddScoped<IGetFollowByProviderQuery, GetFollowByProviderQuery>();
+            services.AddScoped<IGetFollowByUserQuery, GetFollowByUserQuery>();
+
+            //Comment
+            services.AddScoped<IGetCommentServiceByIDAsyncQuery, GetCommentServiceByIDAsyncQuery>();
+            services.AddScoped<IAddCommentServiceAsyncCommand, AddCommentServiceAsyncCommand>();
+            services.AddScoped<IUpdateCommentServiceAsyncCommand, UpdateCommentServiceAsyncCommand>();
+            services.AddScoped<IDeleteCommentServiceAsyncCommand, DeleteCommentServiceAsyncCommand>();
+
+            //Email
+            services.AddScoped<IAddNewEmailServiceCommand, AddNewEmailServiceCommand>();
+            services.AddScoped<IUpdateNewEmailServiceCommand, UpdateNewEmailServiceCommand>();
+            services.AddScoped<IDeleteEmailServiceCommand, DeleteEmailServiceCommand>();
+            services.AddScoped<IGetAllEmailServiceQuery, GetAllEmailServiceQuery>();
+            services.AddScoped<IGetAllPagingEmailServiceQuery, GetAllPagingEmailServiceQuery>();
+            services.AddScoped<IGetEmailByIdService, GetEmailByIdService>();
+            services.AddScoped<IGetListEmailService, GetListEmailService>();
+
+            //Rating service
+            services.AddScoped<IAddUpdateRatingServiceCommand, AddUpdateRatingServiceCommand>();
+            services.AddScoped<IDeleteRatingServiceCommand, DeleteRatingServiceCommand>();
+            services.AddScoped<IGetAllPagingRatingServiceByOwnerQuery, GetAllPagingRatingServiceByOwnerQuery>();
+            services.AddScoped<IGetAllServiceRatingByUserQuery, GetAllServiceRatingByUserQuery>();
+            services.AddScoped<IGetListAllPagingRatingServiceQuery, GetListAllPagingRatingServiceQuery>();
+            services.AddScoped<IGetRatingByService, GetRatingByService>();
+
+            //Recommend service
+            services.AddScoped<IRecommendService, RecommendService>();
+            services.AddScoped<IGetRecommendByLocation, GetRecommendByLocation>();
+            services.AddScoped<IGetRecommendByNews, GetRecommendByNews>();
+            services.AddScoped<IDeleteRecommend, DeleteRecommend>();
+            services.AddScoped<IAddRecommendLocation, AddRecommendLocation>();
+            services.AddScoped<IAddRecommendNews, AddRecommendNews>();
+            services.AddScoped<IAddRecommendService, AddRecommendService>();
+            services.AddScoped<IGetRecommendByService, GetRecommendByService>();
+            services.AddScoped<IViewUserService, ViewUserService>();
+            services.AddScoped<IRecommendUserService, RecommendUserService>();
+            services.AddScoped<IGetViewedServiceQuery, GetViewedServiceQuery>();
+
+            //Store Procedure
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+            //Logging
+            services.AddScoped<IDeleteMonthlyLogFiles, DeleteMonthlyLogFiles>();
+            services.AddScoped<IGetLogFiles, GetLogFiles>();
+            services.AddScoped<IGetLogFromAFile, GetLogFromAFile>();
+
+            //Elastic Search
+            services.AddScoped<IFakeImportService, FakeImportService>();
+            services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IDeleteAllService, DeleteAllService>();
+            services.AddScoped<IAddAllService, AddAllService>();
+
+            //Notification
+            services.AddScoped<IAutoGetNotification, AutoGetNotification>();
+            services.AddScoped<IAutoRealTimeNotification, AutoRealTimeNotification>();
+            services.AddScoped<IGetNotificationHasRead, GetNotificationHasRead>();
+            services.AddScoped<IAutoGetUserNotification, AutoGetUserNotification>();
+            services.AddScoped<IAutoRealTimeUserNotification, AutoRealTimeUserNotification>();
+            services.AddScoped<IGetUserNotificationHasRead, GetUserNotificationHasRead>();
 
             //Another service
             services.AddScoped<RandomSupport, RandomSupport>();
             services.AddScoped<RemoveSupport, RemoveSupport>();
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("qwertyuioplkjhgfdsazxcvbnmqwertlkjfdslkjflksjfklsjfklsjdflskjflyuioplkjhgfdsazxcvbnmmnbv")),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor accessor)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseCors(x => x
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }

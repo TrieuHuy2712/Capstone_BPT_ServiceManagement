@@ -1,0 +1,100 @@
+<div _ngcontent-sjt-c5="" class="container container--md">
+    <div _ngcontent-sjt-c5="" class="row">
+      <div _ngcontent-sjt-c5="" class="col-12">
+        <div _ngcontent-sjt-c5="" class="row mt--30">
+          <div _ngcontent-sjt-c5="" class="col-lg-12">
+            <div _ngcontent-sjt-c5="" class="title">
+              <h2 _ngcontent-sjt-c5="" class="mb--0 p--giant">{{followingService.length}} services are available</h2>
+            </div>
+          </div>
+        </div>
+        <div _ngcontent-sjt-c5="" class="row">
+          <div _ngcontent-sjt-c5="" *ngFor="let item of followingService, let i = index" class="col-md-3">
+            <div _ngcontent-sjt-c5="" class="c-product-card--grid">
+              <div _ngcontent-sjt-c5="" class="promo is-relative"><a _ngcontent-sjt-c5="" class="" data-value="23052">
+                  <div _ngcontent-sjt-c5="" class="promo__image">
+                    <a  target="_blank" [routerLink]="[ '/main/detailItem',item.serviceId]" rel="noopener noreferrer">
+                        <div _ngcontent-sjt-c5="" class="promo__image-wrap img-in-view"><img _ngcontent-sjt-c5=""
+                            class="w--100" [src]="item.avtService" width="270"  >
+                            
+                        </div>
+                    </a>
+                    
+  
+                  </div>
+                </a>
+                <div _ngcontent-sjt-c5="" class="promo__content">
+                  <div _ngcontent-sjt-c5="" class="promo__type bold" style="-webkit-box-orient: vertical;">
+                    {{item.serviceName}} </div>
+                  <div _ngcontent-sjt-c5="" class="is-relative"><a _ngcontent-sjt-c5="" class="" data-value="23052"
+                      href="/vi/rooms/23052" id="room-item" target="_blank">
+                      <div _ngcontent-sjt-c5="" class="promo__title extra-bold" style="-webkit-box-orient: vertical;"><svg
+                          _ngcontent-sjt-c5="" class="is-instant-book mr--6 svg-icon svg-fill"
+                          style="width: 20px; height: 20px;" version="1.1" viewBox="0 0 20 20">
+                          <defs _ngcontent-sjt-c5="">
+                            <linearGradient _ngcontent-sjt-c5="" id="svgicon_instant_book_a" x1="100%" x2="0%" y1="50%"
+                              y2="50%">
+                              <stop _ngcontent-sjt-c5="" offset="0%" stop-color="#F68A39">
+                              </stop>
+                              <stop _ngcontent-sjt-c5="" offset="100%" stop-color="#F65E39">
+                              </stop>
+                            </linearGradient>
+                          </defs>
+                          <g _ngcontent-sjt-c5="" fill="none" fill-rule="evenodd">
+                            <circle _ngcontent-sjt-c5="" cx="10" cy="10" fill="url(#svgicon_instant_book_a)" pid="0"
+                              r="10"></circle>
+                            <path _ngcontent-sjt-c5=""
+                              d="M10.42 15.158l3.037-6.073A.75.75 0 0 0 12.787 8H10V5.177a.75.75 0 0 0-1.42-.335l-3.037 6.073A.75.75 0 0 0 6.213 12H9v2.823a.75.75 0 0 0 1.42.335z"
+                              fill="#FFF" pid="1"></path>
+                          </g>
+                        </svg></div>
+                    </a>
+  
+                    <div _ngcontent-sjt-c5="" class="promo__review">
+                      <div _ngcontent-sjt-c5="" class="star-rating d-inline-block"><svg _ngcontent-sjt-c5=""
+                          class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;" version="1.1"
+                          viewBox="0 0 14 14">
+                          <path _ngcontent-sjt-c5="" _fill-rule="evenodd"
+                            d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                            fill="#ffb025" pid="0" stroke="none"></path>
+                        </svg><svg _ngcontent-sjt-c5="" class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;"
+                          version="1.1" viewBox="0 0 14 14">
+                          <path _ngcontent-sjt-c5="" _fill-rule="evenodd"
+                            d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                            fill="#ffb025" pid="0" stroke="none"></path>
+                        </svg><svg _ngcontent-sjt-c5="" class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;"
+                          version="1.1" viewBox="0 0 14 14">
+                          <path _ngcontent-sjt-c5="" _fill-rule="evenodd"
+                            d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                            fill="#ffb025" pid="0" stroke="none"></path>
+                        </svg><svg _ngcontent-sjt-c5="" class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;"
+                          version="1.1" viewBox="0 0 14 14">
+                          <path _ngcontent-sjt-c5="" _fill-rule="evenodd"
+                            d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                            fill="#ffb025" pid="0" stroke="none"></path>
+                        </svg><svg _ngcontent-sjt-c5="" class="mr--3 svg-icon svg-fill" style="width: 14px; height: 14px;"
+                          version="1.1" viewBox="0 0 14 14">
+                          <path _ngcontent-sjt-c5="" _fill-rule="evenodd"
+                            d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                            fill="#ffb025" pid="0" stroke="none"></path>
+                        </svg></div><span _ngcontent-sjt-c5="" class="promo__review-count p--small">2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+        </div>
+      </div>
+      <div _ngcontent-sjt-c5="" class="col-md-5 search-map__wrapper" style="display: none;">
+        <div _ngcontent-sjt-c5="" class="search-map__action bg-white px--12 py--6 rounded"><label _ngcontent-sjt-c5=""
+            class="el-checkbox ml-0" role="checkbox"><span _ngcontent-sjt-c5="" aria-checked="mixed"
+              class="el-checkbox__input"><span _ngcontent-sjt-c5="" class="el-checkbox__inner"></span><input
+                _ngcontent-sjt-c5="" aria-hidden="true" class="el-checkbox__original" type="checkbox"
+                value=""></span><span _ngcontent-sjt-c5="" class="el-checkbox__label"> Tìm kiếm theo di chuyển bản đồ
+            </span></label></div>
+      </div>
+    </div>
+  </div>

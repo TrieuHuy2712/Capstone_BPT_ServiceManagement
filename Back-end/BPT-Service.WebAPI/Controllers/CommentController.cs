@@ -4,12 +4,11 @@ using BPT_Service.Application.CommentService.Command.UpdateCommentServiceAsync;
 using BPT_Service.Application.CommentService.Query.GetCommentServiceByIDAsync;
 using BPT_Service.Application.CommentService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -23,6 +22,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IAddCommentServiceAsyncCommand _addCommentService;
         private readonly IUpdateCommentServiceAsyncCommand _updateCommentService;
         private readonly IDeleteCommentServiceAsyncCommand _deleteCommentService;
+
         public CommentController(
         IGetCommentServiceByIDAsyncQuery getCommentServiceByID,
         IAddCommentServiceAsyncCommand addCommentService,
@@ -34,10 +34,12 @@ namespace BPT_Service.WebAPI.Controllers
             _updateCommentService = updateCommentService;
             _deleteCommentService = deleteCommentService;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region GET API
 
+        [AllowAnonymous]
         [HttpGet("getComment")]
         public async Task<IActionResult> GetByID(string id)
         {
@@ -45,19 +47,21 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
-        #endregion
+        #endregion GET API
 
         #region POST
+
         [HttpPost("addNewComment")]
         public async Task<IActionResult> AddNewComment([FromBody]CommentViewModel commentVm)
         {
-            
             var execute = await _addCommentService.ExecuteAsync(commentVm);
             return new OkObjectResult(execute);
         }
-        #endregion
+
+        #endregion POST
 
         #region PUT API
+
         [HttpPut("updateComment")]
         public async Task<IActionResult> UpdateComment([FromBody]CommentViewModel commentserviceVm)
         {
@@ -72,11 +76,13 @@ namespace BPT_Service.WebAPI.Controllers
                 return new OkObjectResult(execute);
             }
         }
-        #endregion
+
+        #endregion PUT API
 
         #region DELETE API
+
         [HttpDelete("DeleteComment")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -88,7 +94,7 @@ namespace BPT_Service.WebAPI.Controllers
                 return new OkObjectResult(execute);
             }
         }
-        #endregion
 
+        #endregion DELETE API
     }
 }

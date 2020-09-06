@@ -7,6 +7,6 @@ namespace BPT_Service.Application.PostService.Query.GetPostServiceById
 {
     public interface IGetPostServiceByIdQuery
     {
-         Task<CommandResult<PostServiceViewModel>> ExecuteAsync(Guid idService);
+         Task<PostServiceViewModel> ExecuteAsync(string idService);
     }
 }

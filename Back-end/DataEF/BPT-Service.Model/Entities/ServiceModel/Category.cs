@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BPT_Service.Model.Entities
 {
     [Table("Category")]
-    public class Category: DomainEntity<int>
+    public class Category : DomainEntity<int>
     {
         [Required]
         public string CategoryName { get; set; }
@@ -15,11 +15,12 @@ namespace BPT_Service.Model.Entities
         [StringLength(200)]
         public string Description { get; set; }
 
+        public string ImgPath { get; set; }
+
         public ICollection<Service> Services { get; set; }
-        public Category() {  }
-        public Category(string categoryName, string vietnameseName, string description) {
-            CategoryName = categoryName;
-            Description = description;
+
+        public Category()
+        {
         }
     }
 }

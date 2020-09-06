@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BPT_Service.Application.EmailService.Query.GetListEmailService;
 
 namespace BPT_Service.WebAPI.Controllers
 {
@@ -24,13 +25,15 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
         private readonly IGetAllPagingEmailServiceQuery _getAllPagingEmailService;
         private readonly IGetEmailByIdService _getEmailByIdService;
+        private readonly IGetListEmailService _getListEmailService; 
 
         public EmailController(IAddNewEmailServiceCommand addNewEmailServiceCommand,
             IUpdateNewEmailServiceCommand updateNewEmailServiceCommand,
             IDeleteEmailServiceCommand deleteEmailServiceCommand,
             IGetAllEmailServiceQuery getAllEmailServiceQuery,
             IGetAllPagingEmailServiceQuery getAllPagingEmailService,
-            IGetEmailByIdService getEmailByIdService)
+            IGetEmailByIdService getEmailByIdService,
+            IGetListEmailService getListEmailService)
         {
             _addNewEmailServiceCommand = addNewEmailServiceCommand;
             _updateNewEmailServiceCommand = updateNewEmailServiceCommand;
@@ -38,9 +41,17 @@ namespace BPT_Service.WebAPI.Controllers
             _getAllEmailServiceQuery = getAllEmailServiceQuery;
             _getAllPagingEmailService = getAllPagingEmailService;
             _getEmailByIdService = getEmailByIdService;
+            _getListEmailService = getListEmailService;
         }
-        
+
         #region GET API
+
+        [HttpGet("GetEmailinSystem")]
+        public async Task<IActionResult> GetListEmail()
+        {
+            var model = await _getListEmailService.ExecuteAsync();
+            return new OkObjectResult(model);
+        }
         [HttpGet("GetAllEmail")]
         public async Task<IActionResult> GetAllEmail()
         {

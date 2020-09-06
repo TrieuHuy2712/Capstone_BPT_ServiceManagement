@@ -1,39 +1,89 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.CategoryService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Common;
+using BPT_Service.Common.Constants;
+using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
 {
     public class AddCategoryServiceCommand : IAddCategoryServiceCommand
     {
         private readonly IRepository<Category, int> _categoryRepository;
-        public AddCategoryServiceCommand(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
+
+        public AddCategoryServiceCommand(IRepository<Category, int> categoryRepository,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<AppUser> userManager)
         {
             _categoryRepository = categoryRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
+
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(CategoryServiceViewModel userVm)
         {
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
-                var mappingCate = mappingCategory(userVm);
-                await _categoryRepository.Add(mappingCate);
-                await _categoryRepository.SaveAsync();
-
-                return new CommandResult<CategoryServiceViewModel>
+                //Check category has available
+                var availableCategory = await _categoryRepository.FindSingleAsync(x => x.CategoryName.ToLower() == userVm.CategoryName.ToLower());
+                if (availableCategory != null)
                 {
-                    isValid = true,
-                    myModel = new CategoryServiceViewModel
+                    return new CommandResult<CategoryServiceViewModel>
                     {
-                        Id = mappingCate.Id,
-                        CategoryName = mappingCate.CategoryName,
-                        Description = mappingCate.Description,
-                    },
-                };
+                        isValid = false,
+                        errorMessage = "Category Name has available"
+                    };
+                }
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanCreate))
+                {
+                    var mappingCate = mappingCategory(userVm);
+                    await _categoryRepository.Add(mappingCate);
+                    await _categoryRepository.SaveAsync();
+                    var createReturn = new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = true,
+                        myModel = new CategoryServiceViewModel
+                        {
+                            Id = mappingCate.Id,
+                            CategoryName = mappingCate.CategoryName,
+                            Description = mappingCate.Description,
+                            ImgPath = mappingCate.ImgPath
+                        },
+                    };
+                    await Logging<AddCategoryServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_ADD, userName.UserName, JsonConvert.SerializeObject(createReturn.myModel));
+                    return createReturn;
+                }
+                else
+                {
+                    await Logging<AddCategoryServiceCommand>.WarningAsync(ActionCommand.COMMAND_ADD, userName.UserName, ErrorMessageConstant.ERROR_ADD_PERMISSION);
+                    return new CommandResult<CategoryServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_ADD_PERMISSION
+                    };
+                }
             }
             catch (System.Exception ex)
             {
-
+                await Logging<AddCategoryServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_ADD, userName.UserName, "You have error");
                 return new CommandResult<CategoryServiceViewModel>
                 {
                     isValid = false,
@@ -42,13 +92,14 @@ namespace BPT_Service.Application.CategoryService.Command.AddCategoryService
                 };
             }
         }
-        
+
         private Category mappingCategory(CategoryServiceViewModel userVm)
         {
             Category category = new Category();
             category.Id = userVm.Id;
             category.CategoryName = userVm.CategoryName;
             category.Description = userVm.Description;
+            category.ImgPath = userVm.ImgPath;
             return category;
         }
     }

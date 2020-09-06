@@ -1,0 +1,184 @@
+<!-- this is area that news of provider was displayed -->
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">All new</h3>
+
+        <div class="card-tools">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" placeholder="Search news">
+                <div class="input-group-append">
+                    <div class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+        <div class="mailbox-controls" style="display: flex; margin-top: 20px; margin-left: 20px;">
+            <button class="btn btn-primary btn-block mb-3" style="width: 200px;" (click)="showAddModal()">Đăng ký tin
+                tức</button>
+            <!-- /.float-right -->
+        </div>
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr *ngFor="let item of news, let i = index">
+                        <td class="mailbox-name">
+                            <img [src]="item.imgPath" style="width: 150px; height: 100px;">
+                        </td>
+                        <td class="mailbox-star">{{item.title}}</td>
+                        <td class="mailbox-name">{{item.providerName}}</td>
+
+                        <td class="mailbox-date">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm"><i
+                                        class="far fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-default btn-sm" (click)="showEditModal(i)"><i
+                                        class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-default btn-sm"><i
+                                        class="fas fa-share"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <!-- /.table -->
+        </div>
+        <!-- /.mail-box-messages -->
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer p-0">
+        <div class="mailbox-controls">
+            <div class="float-right">
+                1-50/200
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <!-- /.btn-group -->
+            </div>
+            <!-- /.float-right -->
+        </div>
+    </div>
+</div>
+
+<!-- form add new a provider news -->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Bảng thông tin đăng ký bản tin của nhà cung cấp</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+                    (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+                    <div class="form-group row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label">Tiêu đề bài đăng</label>
+                            <div>
+                                <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                                <input type="text" #title="ngModel" [(ngModel)]="entity.title" required minlength="3"
+                                    name="title" class="form-control">
+                                <small [hidden]="title.valid || (title.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label class="control-label">Tên nhà cung cấp</label>
+                            <div>
+                                <!-- <input type="hidden" [(ngModel)]="entity.userId" name="userId" /> -->
+                                <input type="text" #providerName="ngModel" [(ngModel)]="entity.providerName" required
+                                    [typeahead]="state" minlength="3" name="providerName" class="form-control"
+                                    autocomplete="off" [disabled]="entity.id!=undefined">
+                                <small
+                                    [hidden]="!providerName.invalid || (providerName.pristine && !addEditForm.submitted)"
+                                    class="text-danger">
+                                    Bạn phải nhập tên ít nhất 3 ký tự
+                                </small>
+                                <small [hidden]="checkProviderName(providerName)" class="text-danger">
+                                    Không tìm thấy tên bạn đã nhập
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tác giả</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <input class="form-control" #author="ngModel" required [(ngModel)]="entity.author"
+                                name="author" rows="3">
+                            <small [hidden]="author.valid || (author.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Bạn phải nhập tên tác giả
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <editor #content="ngModel" [(ngModel)]="entity.content" name="content"
+                                apiKey="ztc2nqv57d595lqblftjrhjfgqax9nsxltybl49jl02zys0x" [init]="{
+                                    height: 500,
+                                    menubar: true,
+                                    plugins: [
+                                      'advlist autolink lists link image charmap print',
+                                      'preview anchor searchreplace visualblocks code',
+                                      'fullscreen insertdatetime media table paste',
+                                      'help wordcount'
+                                    ],
+                                    toolbar:
+                                      'undo redo | formatselect | bold italic | \
+                                      alignleft aligncenter alignright alignjustify | \
+                                      bullist numlist outdent indent | help'
+                                  }"></editor>
+                            <small [hidden]="content.valid || (content.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Bạn phải nhập tên ít nhất 3 ký tự
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Image</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="file" #imgPath name="imgPath" class="form-control">
+                            <p class="help-block label label-danger"> chỉ hỗ trợ định dạng *.png, *.jpg, *.jpeg </p>
+                            <input type="hidden" [(ngModel)]="entity.imgPath" name="imgPath" />
+                        </div>
+
+                        <div class="col-md-3 col-sm-3 col-xs-12" *ngIf="entity.imgPath">
+                            <img [src]="entity.imgPath" width="128" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang thái</label>
+                        <span *ngIf="entity.status==1"><span class="badge badge-success">Approved</span></span>
+                        <span *ngIf="entity.status==0"><span class="badge badge-danger">Rejected</span></span>
+                        <span *ngIf="entity.status==2"><span class="badge badge-secondary">Pending</span></span>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()" class="btn btn-primary">Hủy
+                                bỏ</button>
+                            <button type="submit" class="btn btn-success"
+                                [disabled]="!addEditForm.form.valid || (entity.id==undefined && !checkProviderName(providerName))">Cập
+                                nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  -->

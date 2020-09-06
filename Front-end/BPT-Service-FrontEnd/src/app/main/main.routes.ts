@@ -10,14 +10,20 @@ export const mainRoutes: Routes = [
       //localhost:4200/main/home
       { path: "home", loadChildren: "./home/home.module#HomeModule" },
       { path: "user", loadChildren: "./user/user.module#UserModule" },
-      { path: "role", loadChildren: "./role/role.module#RoleModule" },
-      { path: "category", loadChildren: "./service-category/service-category.module#ServiceCategoryModule" },
-      { path: "tag", loadChildren: "./service-tag/service-tag.module#ServiceTagModule" },
-     
       {
-        path: "function",
-        loadChildren: "./function/function.module#FunctionModule"
-      }
+        path: "listOfItem/:id", loadChildren: "./list-of-item/list-of-item.module#ListOfItemModule"
+      },
+
+      {
+        path: "detailItem/:id", loadChildren: "./detail-item/detail-item.module#DetailItemModule",
+      },
+      {
+        path: "userManage", loadChildren: "./user-manage/user-manage.module#UserManageModule"
+      },
+      {
+        path: "viewAboutProvider/:id", loadChildren: "./view-about-provider/view-about-provider.module#ViewAboutProviderModule",
+      },
+      
     ]
   }
 ];

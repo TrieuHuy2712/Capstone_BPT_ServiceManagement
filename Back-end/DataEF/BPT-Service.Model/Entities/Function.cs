@@ -6,7 +6,7 @@ using BPT_Service.Model.Interfaces;
 namespace BPT_Service.Model.Entities
 {
     [Table("Functions")]
-    public class Function: DomainEntity<string>, ISwitchable, ISortable
+    public class Function: DomainEntity<string>, ISwitchable
     {
         public Function()
         {
@@ -18,7 +18,6 @@ namespace BPT_Service.Model.Entities
             this.URL = url;
             this.ParentId = parentId;
             this.IconCss = iconCss;
-            this.SortOrder = sortOrder;
             this.Status = Status.Active;
         }
         [Required]
@@ -34,7 +33,6 @@ namespace BPT_Service.Model.Entities
         public string ParentId { set; get; }
 
         public string IconCss { get; set; }
-        public int SortOrder { set; get; }
         public Status Status { set; get; }
     }
 }

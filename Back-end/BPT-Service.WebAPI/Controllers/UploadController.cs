@@ -11,25 +11,31 @@ namespace BPT_Service.WebAPI.Controllers
 {
     [Authorize]
     [Route("UploadImage")]
-    public class UploadController : ControllerBase
+    public class UploadController : Controller
     {
         //private const string BaseUrl = "$'{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}'";
-        private const string BaseUrl = "http://localhost:5000";
+        //private const string BaseUrl = "http://localhost:5000";
+        //private const string BaseUrl = "https://bpt-servicewebapi20200509090056.azurewebsites.net";
+        //private const string BaseUrl = $"{Request.Scheme}://{this.Request.Host}";
 
         private readonly IWebHostEnvironment _env;
+        private static IHttpContextAccessor _httpContextAccessor;
+        public static HttpContext Current => _httpContextAccessor.HttpContext;
+        public static string BaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
 
         #region Constructor
 
-        public UploadController(IWebHostEnvironment env)
+        public UploadController(IWebHostEnvironment env, IHttpContextAccessor contextAccessor)
         {
             _env = env;
+            _httpContextAccessor = contextAccessor;
         }
 
         #endregion Constructor
 
         [HttpPost]
         [Route("saveImage/{type}")]
-        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, long userId, string type)
+        public async Task<IActionResult> SaveImage([FromForm(Name = "postedFile")] IFormFile postedFile, int userId, string type)
         {
             try
             {
@@ -103,7 +109,7 @@ namespace BPT_Service.WebAPI.Controllers
                 var res = string.Format("Please Upload a image.");
                 return new OkObjectResult(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var message1 = string.Format("Image Updated UnSuccessfully.");
                 return new OkObjectResult(message1);

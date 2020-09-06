@@ -22,6 +22,7 @@ namespace BPT_Service.Application.CategoryService.Query.GetAllAsyncCategoryServi
                 Id = x.Id,
                 CategoryName = x.CategoryName,
                 Description = x.Description,
+                ImgPath = x.ImgPath
             }).ToList();
             return categoryViewModels;
         }

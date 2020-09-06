@@ -1,19 +1,19 @@
 using BPT_Service.Application.PostService.Command.ApprovePostService;
+using BPT_Service.Application.PostService.Command.ConfirmPostService;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.DeleteServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromProvider.RegisterServiceFromProvider;
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.DeleteServiceFromUser;
 using BPT_Service.Application.PostService.Command.PostServiceFromUser.RegisterServiceFromUser;
 using BPT_Service.Application.PostService.Command.RejectPostService;
 using BPT_Service.Application.PostService.Command.UpdatePostService;
+using BPT_Service.Application.PostService.Query.FilterAllPagingLocationPostService;
 using BPT_Service.Application.PostService.Query.FilterAllPagingPostService;
 using BPT_Service.Application.PostService.Query.GetAllPagingPostService;
-using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.Query.GetAllPostUserServiceByUserId;
+using BPT_Service.Application.PostService.Query.GetPostServiceById;
 using BPT_Service.Application.PostService.ViewModel;
-using BPT_Service.WebAPI.Models.ServiceViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace BPT_Service.WebAPI.Controllers
@@ -24,60 +24,82 @@ namespace BPT_Service.WebAPI.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IApprovePostServiceCommand _approvePostServiceCommand;
+        private readonly IConfirmPostService _confirmPostService;
         private readonly IDeleteServiceFromProviderCommand _deleteServiceFromProviderCommand;
         private readonly IDeleteServiceFromUserCommand _deleteServiceFromUserCommand;
         private readonly IFilterAllPagingPostServiceQuery _filterAllPagingPostServiceQuery;
         private readonly IGetAllPagingPostServiceQuery _getAllPagingPostServiceQuery;
+        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
         private readonly IGetPostServiceByIdQuery _getPostServiceByIdQuery;
         private readonly IRegisterServiceFromProviderCommand _registerServiceFromProviderCommand;
         private readonly IRegisterServiceFromUserCommand _registerServiceFromUserCommand;
         private readonly IRejectPostServiceCommand _rejectPostServiceCommand;
         private readonly IUpdatePostServiceCommand _updatePostServiceCommand;
-        private readonly IGetAllPostUserServiceByUserIdQuery _getAllPostUserServiceByUserIdQuery;
+        private readonly IFilterAllPagingLocationPostService _filterAllPagingLocationPostService;
 
         public ServiceController(
             IApprovePostServiceCommand approvePostServiceCommand,
+            IConfirmPostService confirmPostService,
             IDeleteServiceFromProviderCommand deleteServiceFromProviderCommand,
             IDeleteServiceFromUserCommand deleteServiceFromUserCommand,
+            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
             IGetAllPagingPostServiceQuery getAllPagingPostServiceQuery,
+            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery,
             IGetPostServiceByIdQuery getPostServiceByIdQuery,
             IRegisterServiceFromProviderCommand registerServiceFromProviderCommand,
             IRegisterServiceFromUserCommand registerServiceFromUserCommand,
             IRejectPostServiceCommand rejectPostServiceCommand,
             IUpdatePostServiceCommand updatePostServiceCommand,
-            IFilterAllPagingPostServiceQuery filterAllPagingPostServiceQuery,
-            IGetAllPostUserServiceByUserIdQuery getAllPostUserServiceByUserIdQuery
-        )
+            IFilterAllPagingLocationPostService filterAllPagingLocationPostService)
         {
             _approvePostServiceCommand = approvePostServiceCommand;
+            _confirmPostService = confirmPostService;
             _deleteServiceFromProviderCommand = deleteServiceFromProviderCommand;
             _deleteServiceFromUserCommand = deleteServiceFromUserCommand;
+            _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
             _getAllPagingPostServiceQuery = getAllPagingPostServiceQuery;
+            _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
             _getPostServiceByIdQuery = getPostServiceByIdQuery;
             _registerServiceFromProviderCommand = registerServiceFromProviderCommand;
             _registerServiceFromUserCommand = registerServiceFromUserCommand;
             _rejectPostServiceCommand = rejectPostServiceCommand;
             _updatePostServiceCommand = updatePostServiceCommand;
-            _filterAllPagingPostServiceQuery = filterAllPagingPostServiceQuery;
-            _getAllPostUserServiceByUserIdQuery = getAllPostUserServiceByUserIdQuery;
+            _filterAllPagingLocationPostService = filterAllPagingLocationPostService;
         }
 
         #region GETAPI
-
-        [HttpGet("getAllPagingPostService")]
-        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage,int filter)
+        [AllowAnonymous]
+        [HttpGet("getAllLocationPostService")]
+        public async Task<IActionResult> GetAllLocationPostService(int typeCategory = 0, int pageIndex = 1, int pageSize = 0, string nameLocation = null)
         {
-            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage,filter);
+            var execute = await _filterAllPagingLocationPostService.ExecuteAsync(typeCategory, pageIndex, pageSize, nameLocation);
+            return new ObjectResult(execute);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getAllPagingPostService")]
+        public async Task<IActionResult> GetAllPagingPostService(string keyword, int page, int pageSize, bool isAdminPage, int filter)
+        {
+            var model = await _getAllPagingPostServiceQuery.ExecuteAsync(keyword, page, pageSize, isAdminPage, filter);
             return new OkObjectResult(model);
         }
 
         [HttpGet("getAllPostUserServiceByUserId")]
-        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser)
+        public async Task<IActionResult> GetAllPostUserServiceByUserId(string idUser, bool isProvider)
         {
-            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser);
+            var model = await _getAllPostUserServiceByUserIdQuery.ExecuteAsync(idUser, isProvider);
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
+        [HttpGet("confirmService/{codeOTP}")]
+        public async Task<IActionResult> ConfirmPostService(string codeOTP)
+        {
+            var model = await _confirmPostService.ExecuteAsync(codeOTP);
+            return new OkObjectResult(model);
+        }
+
+        [AllowAnonymous]
         [HttpGet("getPostServiceById")]
         public async Task<IActionResult> GetPostServiceById(string idService)
         {
@@ -85,6 +107,7 @@ namespace BPT_Service.WebAPI.Controllers
             return new OkObjectResult(model);
         }
 
+        [AllowAnonymous]
         [HttpGet("getFilterAllPaging")]
         public async Task<IActionResult> GetFilterAllPaging(int page, int pageSize, string typeFilter, string filterName)
         {

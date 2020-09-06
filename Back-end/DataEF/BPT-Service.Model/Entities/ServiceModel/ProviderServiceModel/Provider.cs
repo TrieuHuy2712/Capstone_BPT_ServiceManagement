@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using BPT_Service.Data.Infrastructure.SharedKernel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BPT_Service.Model.Entities.ServiceModel
 {
@@ -38,12 +38,17 @@ namespace BPT_Service.Model.Entities.ServiceModel
 
         public DateTime DateCreated { get; set; }
 
+        public string AvartarPath { get; set; }
+
         public DateTime DateModified { get; set; }
+
+        public string OTPConfirm { get; set; }
 
         [ForeignKey("CityId")]
         public virtual CityProvince ServiceCityProvince { get; set; }
 
         public ICollection<ProviderService> ProviderServices { get; set; }
+
         public ICollection<ProviderNew> ProviderNews { get; set; }
     }
 }

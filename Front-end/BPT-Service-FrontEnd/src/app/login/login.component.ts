@@ -3,7 +3,7 @@ import {
   FacebookLoginProvider,
   GoogleLoginProvider
 } from "angular-6-social-login";
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { AuthenService } from "src/app/core/services/authen.service";
@@ -20,14 +20,18 @@ import { map } from "rxjs/operators";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"],
-  providers: [AuthService]
+  styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
   blocked = false;
   loading = false;
   model: any = {};
   returnUrl: string;
+  pass: boolean = true;
+  passVal: string = "";
+  email: boolean =true;
+  emailVal: string = "";
+  registerBtn: boolean =false;
   socialusers = new Socialusers();
 
   constructor(
@@ -36,12 +40,10 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private _dataService: DataService,
-    private _http: HttpClient,
-    private zone: NgZone
+    private _http: HttpClient
   ) {}
-  ngOnInit() {
-    console.log("login component");
-  }
+
+  ngOnInit() {}
 
   public socialSignIn(socialProvider: string) {
     let socialPlatformProvider;
@@ -52,26 +54,19 @@ export class LoginComponent implements OnInit {
     }
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
       this.socialusers = socialusers;
-      console.log(this.socialusers);
       let loggedUsers = {
-        Token: this.socialusers.idToken,
-        FullName: this.socialusers.name,
-        UserName: this.socialusers.name,
-        Email: this.socialusers.email,
-        Avatar: this.socialusers.image
+        Token :this.socialusers.idToken,
+        FullName : this.socialusers.name,
+        UserName : this.socialusers.name,
+        Email : this.socialusers.email,
+        Avatar : this.socialusers.image
       };
-      console.log(loggedUsers);
       this.authenService.loginExternal(loggedUsers).subscribe(
         data => {
-          if (data != null) {
-            this.zone.run(() => {
-              window.location.href=SystemConstants.BASE_URL+'/'+UrlConstants.HOME;
-              // this.router.navigate([UrlConstants.HOME]);
-            });
-          }
+          this.router.navigate([UrlConstants.HOME]);
         },
         error => {
-          this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
+          this.notificationService.printErrorMessage("No Authenticated");
           this.loading = false;
         }
       );
@@ -84,7 +79,6 @@ export class LoginComponent implements OnInit {
       .login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          console.log(data);
           if (data == null)
             this.notificationService.printErrorMessage(
               "Username or password is incorrect"
@@ -101,17 +95,50 @@ export class LoginComponent implements OnInit {
             this.notificationService.printErrorMessage(
               "You was blocked out in 5 minutes"
             );
-          } else {
-            // this.router.navigate([UrlConstants.HOME]);
-            window.location.href=SystemConstants.BASE_URL+'/'+UrlConstants.HOME;
+          }
+          else if(data.fullName == "Administrator"){
+            this.router.navigate([UrlConstants.ADMINHOME]);
+          }
+          else if(data.isProvider == true){
+            this.router.navigate([UrlConstants.PROVIDERHOME])
+          }
+          else {
+            this.router.navigate([UrlConstants.HOME]);
           }
           // if(data == null)
           //   this.notificationService.printErrorMessage("Username or password is incorrect");
         },
         error => {
-          this.notificationService.printErrorMessage("Có lỗi rồi nhóc");
+          this.notificationService.printErrorMessage("Sai tên đăng nhập hoặc mật khẩu, vui lòng kiểm tra lại !!!");
           this.loading = false;
         }
       );
   }
+
+  emailValid(event){
+    this.emailVal = event.target.value;
+    if(event.target.value.length < 4){
+      this.email = false;
+    }
+    else{
+      this.email = true;
+    }
+  }
+
+  passValid(event){
+    if(event.target.value.length < 4){
+      this.pass = false;
+    }
+    else{
+      this.pass = true;
+    }
+    // if(event.target.value.length > 4 && this.emailVal.length > 4){
+    //   this.registerBtn = false;
+    // }
+    // else{
+    //   this.registerBtn = true;
+    // }
+  }
+
+
 }

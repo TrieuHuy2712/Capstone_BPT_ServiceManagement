@@ -115,7 +115,7 @@ export class UserComponent implements OnInit {
 
   loadRoles() {
     this._dataService.get("/AdminRole/GetAll").subscribe(
-      (response: any[]) => {
+      (response: any) => {
         this.allRoles = [];
         for (let role of response) {
           this.allRoles.push({ id: role.name, name: role.description });
@@ -207,7 +207,7 @@ export class UserComponent implements OnInit {
   deleteItemConfirm(id: any) {
     this._dataService
       .delete("/UserManagement/DeleteUser", "id", id)
-      .subscribe((response: Response) => {
+      .subscribe((response: any) => {
         this._notificationService.printSuccessMessage(
           MessageConstants.DELETED_OK_MSG
         );

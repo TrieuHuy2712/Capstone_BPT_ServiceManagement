@@ -1,11 +1,11 @@
+using BPT_Service.Data.Infrastructure.SharedKernel;
+using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using BPT_Service.Data.Infrastructure.SharedKernel;
-using BPT_Service.Model.Infrastructure.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BPT_Service.Data
 {
@@ -17,6 +17,7 @@ namespace BPT_Service.Data
         {
             _context = context;
         }
+
         public async Task Add(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
@@ -34,6 +35,7 @@ namespace BPT_Service.Data
         {
             return await this.FindAll((Expression<Func<T, object>>[])includeProperties).ToListAsync();
         }
+
         public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
             return await this.FindAll(predicate, (Expression<Func<T, object>>[])includeProperties).ToListAsync();
@@ -53,6 +55,7 @@ namespace BPT_Service.Data
         {
             await _context.Set<T>().AddRangeAsync(entities);
         }
+
         public void Remove(T entity)
         {
             _context.Set<T>().Remove(entity);
@@ -79,7 +82,8 @@ namespace BPT_Service.Data
             await _context.SaveChangesAsync();
         }
 
-        #region 
+        #region
+
         private IQueryable<T> FindAll(params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> items = _context.Set<T>();
@@ -105,6 +109,7 @@ namespace BPT_Service.Data
             }
             return items.Where(predicate);
         }
+
         private T FindById(K id, params Expression<Func<T, object>>[] includeProperties)
         {
             return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(x => x.Id.Equals(id));
@@ -115,6 +120,10 @@ namespace BPT_Service.Data
             return this.FindAll((Expression<Func<T, object>>[])includeProperties).SingleOrDefault(predicate);
         }
 
+        public async Task<T> FindSingleDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return await this.FindAll((Expression<Func<T, object>>[])includeProperties).FirstOrDefaultAsync(predicate);
+        }
 
         #endregion
     }

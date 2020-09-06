@@ -65,14 +65,13 @@ namespace BPT_Service.Application.FunctionService.Query.GetListFunctionWithPermi
                                            IconCss = f.IconCss,
                                            Name = f.Name,
                                            ParentId = f.ParentId,
-                                           SortOrder = f.SortOrder,
                                            Status = f.Status,
                                            URL = f.URL,
                                        }).ToList();
 
                 functions.AddRange(getListFunction);
             }
-            var query = functions.GroupBy(x => new { x.Id, x.Name, x.ParentId, x.SortOrder, x.Status }).Where(x => x.Skip(1).Any()).ToArray();
+            var query = functions.GroupBy(x => new { x.Id, x.Name, x.ParentId, x.SortOrder, x.Status }).ToList();
 
             foreach (var item in query)
             {

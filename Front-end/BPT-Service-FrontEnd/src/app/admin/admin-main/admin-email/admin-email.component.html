@@ -1,0 +1,160 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Danh sách email</h3>
+    </div>
+
+    <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+                <input type="text" class="form-control" name="filter" (keyup.enter)="loadData()" [(ngModel)]="filter"
+                    placeholder="{{'typeAFunction'|translate}}">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" (click)="loadData()" type="button">{{'search'|translate}}</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <button class="btn btn-success" *ngIf="permission.canCreate"
+                            (click)="showAddModal()">{{'add'|translate}}</button>
+                    </li>
+                    <li>
+                        <select class="form-control" id="sel1" (change)="filterChanged($event.target.value)">
+                            <option value="0">All</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="card-body table-responsive p-0">
+
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>{{'name'|translate}}</th>
+                            <th>{{'description'|translate}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="permission.canRead">
+                        <tr *ngFor="let email of emails, let i=index">
+                            <td>{{email.name}}</td>
+                            <td>{{email.subject}}</td>
+                            <td>
+                                <button *ngIf="permission.canUpdate" class="btn btn-primary"
+                                    (click)="showEditModal(i)"><i class="fa fa-pencil-square-o"></i></button>
+                                <button *ngIf="permission.canDelete" class="btn btn-danger"
+                                    (click)="deleteItem(email.id,i)"><i class="fa fa-trash-o"></i></button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-12">
+
+                    <pagination [boundaryLinks]="true" [itemsPerPage]="pageSize" (pageChanged)="pageChanged($event)"
+                        [totalItems]="totalRow" [(ngModel)]="pageIndex" class="pagination-sm" previousText="&lsaquo;"
+                        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal add and edit-->
+<div bsModal #modalAddEdit="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{'addAndEdit'|translate}}</h4>
+                <button type="button" class="close pull-right" (click)="modalAddEdit.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" novalidate #addEditForm="ngForm"
+                    (ngSubmit)="saveChange(addEditForm.valid)" *ngIf="entity">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="hidden" [(ngModel)]="entity.id" name="id" />
+                            <input type="text" #name="ngModel" [(ngModel)]="entity.name" required minlength="3"
+                                name="name" class="form-control">
+                            <small [hidden]="name.valid || (name.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                {{'nameWarning'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">To</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #to="ngModel" [(ngModel)]="entity.to" name="to"
+                                class="form-control">
+                            <small [hidden]="to.valid || (to.pristine && !addEditForm.submitted)" class="text-danger">
+                                {{'nameWarning'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" #subject="ngModel" [(ngModel)]="entity.subject" required minlength="3"
+                                name="subject" class="form-control">
+                            <small [hidden]="subject.valid || (subject.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                {{'nameWarning'|translate}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <editor #message="ngModel" [(ngModel)]="entity.message" name="message"
+                                apiKey="ztc2nqv57d595lqblftjrhjfgqax9nsxltybl49jl02zys0x" [init]="{
+                                    height: 500,
+                                    menubar: true,
+                                    plugins: [
+                                      'advlist autolink lists link image charmap print',
+                                      'preview anchor searchreplace visualblocks code',
+                                      'fullscreen insertdatetime media table paste',
+                                      'help wordcount'
+                                    ],
+                                    toolbar:
+                                      'undo redo | formatselect | bold italic | \
+                                      alignleft aligncenter alignright alignjustify | \
+                                      bullist numlist outdent indent | help'
+                                  }"></editor>
+                            <small [hidden]="message.valid || (message.pristine && !addEditForm.submitted)"
+                                class="text-danger">
+                                Bạn phải nhập tên ít nhất 3 ký tự
+                            </small>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <button type="button" (click)="modalAddEdit.hide()"
+                                class="btn btn-primary">{{'cancel'|translate}}</button>
+                            <button type="submit" class="btn btn-success"
+                                [disabled]="!addEditForm.form.valid">{{'update'|translate}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

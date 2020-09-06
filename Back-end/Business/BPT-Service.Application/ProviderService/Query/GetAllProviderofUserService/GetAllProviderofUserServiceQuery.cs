@@ -29,11 +29,12 @@ namespace BPT_Service.Application.ProviderService.Query.GetAllProviderofUserServ
                 List<ProviderServiceViewModel> listService = getProviderOfUser.Select(x => new ProviderServiceViewModel
                 {
                     Id = x.Id.ToString(),
-                    ProviderName = x.ProviderName
+                    ProviderName = x.ProviderName,
+                    AvatarPath= x.AvartarPath
                 }).ToList();
                 return listService.ToList();
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
 
                 throw;

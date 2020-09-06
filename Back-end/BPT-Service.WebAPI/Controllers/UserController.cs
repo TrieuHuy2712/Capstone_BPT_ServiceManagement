@@ -6,6 +6,7 @@ using BPT_Service.Application.UserService.Command.DeleteUserAsync;
 using BPT_Service.Application.UserService.Command.UpdateUserAsync;
 using BPT_Service.Application.UserService.Query.GetAllAsync;
 using BPT_Service.Application.UserService.Query.GetAllPagingAsync;
+using BPT_Service.Application.UserService.Query.GetByContextUserAsync;
 using BPT_Service.Application.UserService.Query.GetByIdAsync;
 using BPT_Service.Application.UserService.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,7 @@ namespace BPT_Service.WebAPI.Controllers
         private readonly IGetAllPagingUserAsyncQuery _getPagingUserService;
         private readonly IGetAllUserAsyncQuery _getAllUserService;
         private readonly IGetByIdUserAsyncQuery _getByIdUserService;
+        private readonly IGetByContextUserAsync _getUserByContext;
         public UserController(IAddCustomerAsyncCommand addCustomerService,
         IAddExternalAsyncCommand addExternalService,
         IAddUserAsyncCommand addUserService,
@@ -32,7 +34,8 @@ namespace BPT_Service.WebAPI.Controllers
         IUpdateUserAsyncCommand updateUserService,
         IGetAllPagingUserAsyncQuery getPagingUserService,
         IGetAllUserAsyncQuery getAllUserService,
-        IGetByIdUserAsyncQuery getByIdUserService)
+        IGetByIdUserAsyncQuery getByIdUserService,
+        IGetByContextUserAsync getUserByContext)
         {
             _addCustomerService = addCustomerService;
             _addExternalService = addExternalService;
@@ -42,9 +45,11 @@ namespace BPT_Service.WebAPI.Controllers
             _getPagingUserService = getPagingUserService;
             _getAllUserService = getAllUserService;
             _getByIdUserService = getByIdUserService;
+            _getUserByContext = getUserByContext;
         }
 
         #region GET API
+        [AllowAnonymous]
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {
@@ -65,6 +70,13 @@ namespace BPT_Service.WebAPI.Controllers
             var model = await _getByIdUserService.ExcecuteAsync(id);
             return new ObjectResult(model);
         }
+
+        [HttpGet("GetByContext")]
+        public async Task<IActionResult> GetByContext()
+        {
+            var model = await _getUserByContext.ExcecuteAsync();
+            return new ObjectResult(model);
+        }
         #endregion
 
         #region PUT API
@@ -78,6 +90,7 @@ namespace BPT_Service.WebAPI.Controllers
 
         #region POST API
         [HttpPost("CreateNewuser")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateNewuser([FromBody]AppUserViewModelinUserService userVm)
         {
             var model = await _addCustomerService.ExecuteAsync(userVm);

@@ -5,6 +5,6 @@ namespace BPT_Service.Application.PermissionService.Query.GetPermissionRoleQuery
 {
     public interface IGetPermissionRoleQuery
     {
-         Task<PermissionSingleViewModel> ExecuteAsync(string userName, string functionId);
+         Task<PermissionSingleViewModel> ExecuteAsync(string functionId);
     }
 }

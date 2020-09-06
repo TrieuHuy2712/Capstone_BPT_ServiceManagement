@@ -2,6 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
 import { Routes, RouterModule } from '@angular/router';
+import { SlickModule } from 'ngx-slick';
+import { ModalModule} from 'ngx-bootstrap/modal';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/core/common/SharedModule';
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 const homeRoutes: Routes=[
   {path:'', redirectTo:'index',pathMatch:'full'},
   {path:'index', component: HomeComponent}
@@ -11,7 +19,15 @@ const homeRoutes: Routes=[
   declarations: [HomeComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(homeRoutes)
+    PaginationModule,
+    FormsModule,
+    ModalModule.forRoot(),
+    RouterModule.forChild(homeRoutes),
+    SharedModule,
+    SlickModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    EditorModule,
+
   ]
 })
 export class HomeModule { }

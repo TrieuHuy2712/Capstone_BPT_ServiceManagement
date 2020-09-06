@@ -40,6 +40,7 @@ namespace BPT_Service.WebAPI.Controllers
             _getByIdCityProvinceService = getByIdCityProvinceService;
         }
         #region GET API
+        [AllowAnonymous]
         [HttpGet("GetAllLocation")]
         public async Task<IActionResult> GetAllCategory()
         {

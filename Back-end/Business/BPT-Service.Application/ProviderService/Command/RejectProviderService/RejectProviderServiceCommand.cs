@@ -1,73 +1,127 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using BPT_Service.Application.EmailService.Query.GetAllEmailService;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Application.ProviderService.Query.CheckUserIsProvider;
 using BPT_Service.Application.ProviderService.ViewModel;
+using BPT_Service.Common;
+using BPT_Service.Common.Constants;
+using BPT_Service.Common.Constants.EmailConstant;
+using BPT_Service.Common.Dtos;
 using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Enums;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using BPT_Service.Model.IRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
 {
     public class RejectProviderServiceCommand : IRejectProviderServiceCommand
     {
-        private readonly IRepository<Provider, Guid> _providerRepository;
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly ICheckUserIsProviderQuery _checkUserIsProviderQuery;
+        private readonly IGetAllEmailServiceQuery _getAllEmailServiceQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<EmailConfigModel> _config;
+        private readonly IRepository<Provider, Guid> _providerRepository;
         private readonly UserManager<AppUser> _userRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly RoleManager<AppRole> _roleRepository;
 
-        public RejectProviderServiceCommand(IHttpContextAccessor httpContextAccessor,
-        IRepository<Provider, Guid> providerRepository,
-        UserManager<AppUser> userRepository)
+        public RejectProviderServiceCommand(
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            ICheckUserIsProviderQuery checkUserIsProviderQuery,
+            IGetAllEmailServiceQuery getAllEmailServiceQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<EmailConfigModel> config,
+            IRepository<Provider, Guid> providerRepository,
+            UserManager<AppUser> userRepository,
+            IUserRoleRepository userRoleRepository,
+            RoleManager<AppRole> roleRepository)
         {
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _checkUserIsProviderQuery = checkUserIsProviderQuery;
+            _getAllEmailServiceQuery = getAllEmailServiceQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
             _httpContextAccessor = httpContextAccessor;
+            _config = config;
             _providerRepository = providerRepository;
             _userRepository = userRepository;
+            _userRoleRepository = userRoleRepository;
+            _roleRepository = roleRepository;
         }
 
-        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(ProviderServiceViewModel vm)
+        public async Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId, string reason)
         {
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = _userRepository.FindByIdAsync(userId).Result.UserName;
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
-                if (userId == null)
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.PROVIDER, ActionSetting.CanUpdate))
                 {
-                    return new CommandResult<ProviderServiceViewModel>
-                    {
-                        isValid = false,
-                        myModel = null
-                    };
-                }
-                var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(vm.Id));
-                if (mappingProvider != null)
-                {
-                    return new CommandResult<ProviderServiceViewModel>
-                    {
-                        isValid = false,
-                        myModel = null
-                    };
-                }
-                mappingProvider.Status = Status.InActive;
-                _providerRepository.Update(mappingProvider);
-                await _providerRepository.SaveAsync();
+                    var mappingProvider = await _providerRepository.FindByIdAsync(Guid.Parse(providerId));
 
-                var getEmail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
-                //Set content for email
-                var content = "Your provider: " + getEmail.Email + " has been rejected. Because it is not suitable with my policy. "+vm.Reason;
-                ContentEmail(KeySetting.SENDGRIDKEY, ApproveProviderEmailSetting.Subject,
-                                content, mappingProvider.AppUser.Email).Wait();
-                return new CommandResult<ProviderServiceViewModel>
+                    if (mappingProvider == null)
+                    {
+                        return new CommandResult<ProviderServiceViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                        };
+                    }
+                    //Check user is Provider
+                    if (_checkUserIsProviderQuery.ExecuteAsync(userId).Result.isValid == true)
+                    {
+                        var providerRole = await _roleRepository.FindByNameAsync(ConstantRoles.Provider);
+                        _userRoleRepository.DeleteUserRole(mappingProvider.UserId, providerRole.Id);
+                    }
+                    mappingProvider.Status = Status.InActive;
+                    _providerRepository.Update(mappingProvider);
+                    await _providerRepository.SaveAsync();
+                    var userMail = await _userRepository.FindByIdAsync(mappingProvider.UserId.ToString());
+
+                    //Set content for email
+                    var getEmailContent = await _getAllEmailServiceQuery.ExecuteAsync();
+                    var getFirstEmail = getEmailContent.Where(x => x.Name == EmailName.Reject_Provider).FirstOrDefault();
+                    getFirstEmail.Message = getFirstEmail.Message.Replace(EmailKey.UserNameKey, userMail.Email).Replace(EmailKey.ReasonKey, reason);
+                    ContentEmail(_config.Value.SendGridKey, getFirstEmail.Subject,
+                                    getFirstEmail.Message, userMail.Email).Wait();
+
+                    await LoggingUser<RejectProviderServiceCommand>.
+                   InformationAsync(mappingProvider.UserId.ToString(), userName, userName + "Nhà cung cấp :" + mappingProvider.ProviderName + "của bạn đã bị từ chối.Kiểm tra mail để xem lí do");
+                    await Logging<RejectProviderServiceCommand>.
+                        InformationAsync(ActionCommand.COMMAND_REJECT, userName, mappingProvider.ProviderName + "has been rejected");
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = true,
+                    };
+                }
+                else
                 {
-                    isValid = true,
-                    myModel = null,
-                };
+                    await Logging<RejectProviderServiceCommand>.
+                       WarningAsync(ActionCommand.COMMAND_REJECT, userName, ErrorMessageConstant.ERROR_UPDATE_PERMISSION);
+                    return new CommandResult<ProviderServiceViewModel>
+                    {
+                        isValid = false,
+                        errorMessage = ErrorMessageConstant.ERROR_UPDATE_PERMISSION
+                    };
+                }
             }
             catch (Exception ex)
             {
+                await Logging<RejectProviderServiceCommand>.
+                       ErrorAsync(ex, ActionCommand.COMMAND_REJECT, userName, "Has error");
                 return new CommandResult<ProviderServiceViewModel>
                 {
                     isValid = false,
@@ -79,7 +133,7 @@ namespace BPT_Service.Application.ProviderService.Command.RejectProviderService
         private async Task ContentEmail(string apiKey, string subject1, string message, string email)
         {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(RejectProviderEmailSetting.FromUserEmail, ApproveProviderEmailSetting.FullNameUser);
+            var from = new EmailAddress(_config.Value.FromUserEmail, _config.Value.FullUserName);
             var subject = subject1;
             var to = new EmailAddress(email);
             var plainTextContent = message;

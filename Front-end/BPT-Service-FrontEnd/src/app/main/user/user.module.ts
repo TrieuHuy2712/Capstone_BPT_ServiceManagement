@@ -11,6 +11,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { UploadService } from 'src/app/core/services/upload.service';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { SharedModule } from 'src/app/core/common/SharedModule';
 const userRoutes: Routes = [
   //localhost:4200/main/user
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -25,7 +26,8 @@ const userRoutes: Routes = [
     MultiselectDropdownModule,
     Daterangepicker,
     ModalModule.forRoot(),
-    RouterModule.forChild(userRoutes)
+    RouterModule.forChild(userRoutes),
+    SharedModule
   ],
   declarations: [UserComponent],
   providers: [DataService, NotificationService, UploadService]

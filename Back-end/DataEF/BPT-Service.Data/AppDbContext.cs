@@ -1,18 +1,18 @@
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using BPT_Service.Model;
 using BPT_Service.Model.Entities;
-using BPT_Service.Model.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using Microsoft.EntityFrameworkCore.Design;
 using BPT_Service.Model.Entities.ServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel;
 using BPT_Service.Model.Entities.ServiceModel.UserServiceModel;
+using BPT_Service.Model.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace BPT_Service.Data
 {
@@ -21,6 +21,7 @@ namespace BPT_Service.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
+
         public DbSet<Function> Functions { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
@@ -33,11 +34,15 @@ namespace BPT_Service.Data
         public DbSet<ServiceFollowing> ServiceFollowings { get; set; }
         public DbSet<ServiceImage> ServiceImages { get; set; }
         public DbSet<ServiceComment> ServiceComments { get; set; }
-        public DbSet<ServiceRating> ServiceRatings {get; set; }
-        public DbSet<UserService> UserServices {get; set;}
-        public DbSet<ProviderService> ProviderServices {get; set;}
-        public DbSet<TagService> TagServices{get; set;}
+        public DbSet<ServiceRating> ServiceRatings { get; set; }
+        public DbSet<UserService> UserServices { get; set; }
+        public DbSet<ProviderService> ProviderServices { get; set; }
+        public DbSet<TagService> TagServices { get; set; }
         public DbSet<CityProvince> CityProvinces { get; set; }
+        public DbSet<ProviderFollowing> ProviderFollowings { get; set; }
+        public DbSet<Email> Emails { get; set; }
+        public DbSet<Recommendation> Recommendations { get; set; }
+        public DbSet<UserRecommendation> UserRecommendations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -90,7 +95,7 @@ namespace BPT_Service.Data
                 .AddJsonFile("appsettings.json").Build();
             var builder = new DbContextOptionsBuilder<AppDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlite(connectionString);
+            builder.UseSqlServer(connectionString);
             return new AppDbContext(builder.Options);
         }
     }

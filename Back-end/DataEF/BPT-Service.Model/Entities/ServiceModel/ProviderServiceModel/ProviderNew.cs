@@ -14,7 +14,8 @@ namespace BPT_Service.Model.Entities.ServiceModel.ProviderServiceModel
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public Status Status { get; set; }
-
+        public string ImgPath { get; set; }
+        public string CodeConfirm { get; set; }
         public Guid ProviderId {get; set;}
 
         [ForeignKey("ProviderId")]

@@ -15,10 +15,6 @@ namespace BPT_Service.Application.FunctionService.Query.ReOrderFunctionService
         {
             var source = await _functionRepository.FindByIdAsync(sourceId);
             var target = await _functionRepository.FindByIdAsync(targetId);
-            int tempOrder = source.SortOrder;
-
-            source.SortOrder = target.SortOrder;
-            target.SortOrder = tempOrder;
 
             _functionRepository.Update(source);
             _functionRepository.Update(target);

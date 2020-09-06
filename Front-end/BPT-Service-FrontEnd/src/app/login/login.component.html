@@ -1,58 +1,160 @@
-<div class="full-page login-page ">
-  <div class=" content">
-    <div class=" container">
-      <div class=" col-lg-4 col-md-6 ml-auto mr-auto">
-        <form class=" form">
-          <div class=" card card-login card-white">
-            <div class=" card-header">
-              <img alt="" src="assets/img/card-primary.png">
-              <h1 class=" card-title px-3">Log in</h1>
-            </div>
-            <div class=" card-body">
-              <!-- body -->
-              <section class="login_content">
-                <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-                  <div [ngClass]="{ 'has-error' : f.submitted && !username.valid }">
-                    <input autofocus autocomplete="off" placeholder="Username" type="text" class="form-control input-group-addon" name="username"
-                      [(ngModel)]="model.username" #username="ngModel" required />
-                    <div *ngIf="f.submitted && !username.valid" class="help-block">Tên đăng nhập yêu cầu</div>
-                  </div>
-                  <div [ngClass]="{ 'has-error' : f.submitted && !password.valid }" style="margin-top: 10px;">
-                    <input placeholder="Password" type="password" class="form-control input-group-addon" name="password"
-                      [(ngModel)]="model.password" #password="ngModel" required />
-                    <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
-                  </div>
-                  <div *ngIf="blocked">
-                    <p>You was blocked out in 5 minutes</p>
-        
-                  </div>
-                  <div class="text-center mb-2">
-                    <button class="btn btn-default mx-auto" style="display: block; margin-top: 20px;">Đăng nhập</button>
-                    <a class="reset_pass" href="#">Quên mật khẩu</a>
-                  </div>
-                  <!-- <div class="row mb-2">
-                    <div class="col-md-12 text-center">ĐĂNG NHẬP BẰNG</div>
-                  </div> -->
-                  <div class="row justify-content-end px-3">
-                      <button (click)="socialSignIn('facebook')" class="loginBtn loginBtn--facebook mr-2">
-                        <i class="fab fa-facebook-square"></i>
-                      </button>
-                      <button (click)="socialSignIn('google')" class="loginBtn loginBtn--google">
-                        <i class="fab fa-google"></i>
-                      </button>
-                  </div>
-                </form>
-              </section>
-            </div>
+<!-- <div>
+  <a class="hiddenanchor" id="signup"></a>
+  <a class="hiddenanchor" id="signin"></a>
+
+  <div class="login_wrapper">
+    <div class="animate form login_form">
+      <section class="login_content" style="padding-top: 0;">
+        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+          <img class="img-shadow" src="assets/images/card-primary.png">
+          <h1 style="font-size: 40px; color: blueviolet;">Đăng nhập</h1>
+          <div [ngClass]="{ 'has-error' : f.submitted && !username.valid }" class="ip">
+            <input placeholder="Username" type="text" class="form-control input-group-addon" name="username" [(ngModel)]="model.username" #username="ngModel"
+              required />
+            <div *ngIf="f.submitted && !username.valid" class="help-block">Tên đăng nhập yêu cầu</div>
+          </div>
+          <div [ngClass]="{ 'has-error' : f.submitted && !password.valid }" class="ip">
+            <input placeholder="Password" type="password" class="form-control input-group-addon" name="password" [(ngModel)]="model.password" #password="ngModel"
+              required />
+            <div *ngIf="f.submitted && !password.valid" class="help-block">Mật khẩu được yêu cầu</div>
+          </div>
+          <div *ngIf="blocked">
+            <p>You was blocked out in 5 minutes</p>
             
-              <div class="px-3 pull-left">
-                <h6><a class=" link footer-link" href="javascript:void(0)"> Create Account </a></h6>
-              </div>
-              <div class="px-3 pull-right">
-                <h6><a class=" link footer-link" href="javascript:void(0)"> Need Help? </a></h6>
-              </div>
+          </div>
+          <div class="ip">
+            <button class="btn btn-default" style="background-color: blueviolet; color: white;">Đăng nhập</button>
+            <img *ngIf="loading"
+              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <a class="reset_pass" href="#">Quên mật khẩu</a>
+          </div>
+          <hr style="border-top: 1px solid #eee;">
+          <div class="row">
+            <div class="col-md-12">ĐĂNG NHẬP BẰNG</div>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-md-6">
+              <button (click)="socialSignIn('facebook')" class="loginBtn loginBtn--facebook btnAnother">
+                <i class="fab fa-facebook-square"></i>
+              </button>
+
+            </div>
+            <div class="col-md-6">
+              <button (click)="socialSignIn('google')" class="loginBtn loginBtn--google btnAnother">
+                <i class="fab fa-google"></i>
+              </button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+
+          <div class="separator">
+            <div class="clearfix"></div>
+            <br/>
+            <div class="caption">
+              <p>©2020 All Rights Reserved. By <a href="#"><strong>Service Management Team</strong></a></p>
+            </div>
           </div>
         </form>
+      </section>
+    </div>
+  </div>
+</div> -->
+
+<div class="register-title">
+  <div class="main-titlte-login">
+    <p>
+    </p>
+    <h2>Chào mừng đến với hệ thống <a href="/main/home/index" style="font-size: 120%; color: black;">BPT Service</a>
+    </h2>
+    <p></p>
+  </div>
+</div>
+<div class="section" style="background-image: url(../../assets/images/login.jpg);">
+  <div class="container container--sm">
+    <div class="row">
+
+      <div class="col-md-4 col-xs-12 first-xs">
+        <div class="account">
+          <form autocomplete="off" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+            <h3 class="account__title">Đăng nhập</h3>
+            <div class="dropdown-divider"></div>
+            <div><label class="input-group__label bold is-block" style="margin-bottom: -10px;">Tên đăng nhập</label>
+              <div class="input-group__icon is-relative">
+                <div class="input-group">
+                  <div class="input-group__icon is-relative" style="width: 100%;"><input (keyup)=emailValid($event)
+                      name="username" type="text" class="input mt--0" aria-required="true" aria-invalid="false"
+                      placeholder="Nhập tên đăng nhập..." required [(ngModel)]="model.username" #username="ngModel">
+                    <span class="is-absolute input-icon"><i class="far fa-user"></i></span>
+                    <span class="c-gray-9" [hidden]="email">
+                      Tối thiểu 5 ký tự</span></div>
+                </div>
+                <div style="margin-top: 30px; margin-bottom: 20px;" class="mb--18"><label
+                    class="input-group__label is-block"><span class="bold">Mật
+                      khẩu</span> </label>
+                  <div class="input-group__icon is-relative"><input (keyup)=passValid($event) name="password"
+                      type="password" placeholder="Nhập mật khẩu..." autocomplete="password" class="input"
+                      aria-required="true" aria-invalid="false" required [(ngModel)]="model.password"
+                      #password="ngModel"> <span class="is-absolute input-icon"><i class="fas fa-unlock-alt"></i>
+                    </span> <span class="c-gray-9" [hidden]="pass"> Tối thiểu 7 ký tự
+                    </span></div>
+                </div>
+
+                <div *ngIf="blocked">
+                  <p>You was blocked out in 5 minutes</p>
+
+                </div>
+                <!-- this function is in process -->
+                <a class="reset_pass" href="#">Quên mật khẩu</a>
+              </div>
+            </div>
+            <div class="account__body"><button type="submit"
+                class="account__btn btn btn-grad--primary btn--shadow btn--md btn--radius btn--full bold"
+                [disabled]="registerBtn">Đăng
+                nhập</button>
+              <div class="center-xs">
+                Bạn chưa có tài khoản ?
+                <a href="/register/index"><span class="text-orange bold" style="cursor: pointer;">Đăng kí</span></a>
+              </div>
+              <div class="caption center-xs">
+                Tôi đồng ý với
+                <a href="/vi/privacy-policy" target="_blank" rel="noopener" class="bold">Bảo mật</a>
+                và
+                <a href="/vi/tos" rel="noopener" target="_blank" class="bold">Điều khoản hoạt
+                  động</a> của trang web.
+              </div>
+              <div class="account__3rd">
+                <div>
+                  <div class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative">
+                    <span style="position: absolute; top: 30%; left: 20%;">Đăng nhập với Facebook</span> <i class="fab fa-facebook-square"
+                      style="float: right; position: absolute; top: 40%; color: blue;"></i></div>
+                </div>
+                <div class="mt-2">
+                  <div id="g-signin-btn" class="btn btn-outline--secondary btn--md btn--radius btn--full is-relative">
+                    <span style="position: absolute; top: 30%; left: 20%;">Đăng nhập với Google</span> <svg version="1.1" viewBox="0 0 16 16"
+                      class="is-absolute svg-icon svg-fill">
+                      <g fill="none">
+                        <path pid="0" fill="#557EBF"
+                          d="M15.85 8.2c0-.55-.05-1.1-.15-1.65H8.15v3.1h4.3c-.2 1-.75 1.85-1.6 2.4v2h2.6c1.5-1.4 2.4-3.45 2.4-5.85z">
+                        </path>
+                        <path pid="1" fill="#36A852"
+                          d="M8.15 16c2.15 0 3.95-.7 5.3-1.95l-2.6-2c-.7.5-1.65.75-2.7.75-2.1 0-3.85-1.4-4.5-3.3H1v2.05C2.35 14.2 5.05 16 8.15 16z">
+                        </path>
+                        <path pid="2" fill="#F9BC15"
+                          d="M3.7 9.5c-.15-.5-.25-1-.25-1.5s.1-1.05.25-1.5V4.4H1C.45 5.5.15 6.7.15 8c0 1.3.3 2.5.85 3.6l2.7-2.1z">
+                        </path>
+                        <path pid="3" fill="#EA4535"
+                          d="M8.15 3.2c1.15 0 2.25.4 3.05 1.2l2.3-2.3C12.15.8 10.3 0 8.15 0 5.05 0 2.35 1.8 1 4.4l2.7 2.1c.6-1.9 2.4-3.3 4.45-3.3z">
+                        </path>
+                      </g>
+                    </svg></div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-8 col-xs-12 last-xs first-md">
+
       </div>
     </div>
   </div>

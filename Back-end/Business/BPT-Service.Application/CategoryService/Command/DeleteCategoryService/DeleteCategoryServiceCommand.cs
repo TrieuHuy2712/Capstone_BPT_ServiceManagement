@@ -1,48 +1,92 @@
-using System.Threading.Tasks;
 using BPT_Service.Application.CategoryService.ViewModel;
+using BPT_Service.Application.PermissionService.Query.CheckUserIsAdmin;
+using BPT_Service.Application.PermissionService.Query.GetPermissionAction;
+using BPT_Service.Common;
+using BPT_Service.Common.Constants;
+using BPT_Service.Common.Helpers;
+using BPT_Service.Common.Logging;
 using BPT_Service.Model.Entities;
 using BPT_Service.Model.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace BPT_Service.Application.CategoryService.Command.DeleteCategoryService
 {
     public class DeleteCategoryServiceCommand : IDeleteCategoryServiceCommand
     {
         private readonly IRepository<Category, int> _categoryRepository;
-        public DeleteCategoryServiceCommand(IRepository<Category, int> categoryRepository, IUnitOfWork unitOfWork)
+        private readonly ICheckUserIsAdminQuery _checkUserIsAdminQuery;
+        private readonly IGetPermissionActionQuery _getPermissionActionQuery;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
+
+        public DeleteCategoryServiceCommand(IRepository<Category, int> categoryRepository,
+            ICheckUserIsAdminQuery checkUserIsAdminQuery,
+            IGetPermissionActionQuery getPermissionActionQuery,
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<AppUser> userManager)
         {
             _categoryRepository = categoryRepository;
+            _checkUserIsAdminQuery = checkUserIsAdminQuery;
+            _getPermissionActionQuery = getPermissionActionQuery;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
+
         public async Task<CommandResult<CategoryServiceViewModel>> ExecuteAsync(int id)
         {
+            var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var userName = await _userManager.FindByIdAsync(userId);
             try
             {
-                var CategoryDel = await _categoryRepository.FindByIdAsync(id);
-                if (CategoryDel != null)
+                if (await _checkUserIsAdminQuery.ExecuteAsync(userId) || await _getPermissionActionQuery.ExecuteAsync(userId, ConstantFunctions.CATEGORY, ActionSetting.CanDelete))
                 {
-                    _categoryRepository.Remove(CategoryDel);
-                    await _categoryRepository.SaveAsync();
-                    return new CommandResult<CategoryServiceViewModel>
+                    var categoryDel = await _categoryRepository.FindByIdAsync(id);
+                    if (categoryDel != null)
                     {
-                        isValid = true,
-                        myModel = new CategoryServiceViewModel
+                        _categoryRepository.Remove(categoryDel);
+                        await _categoryRepository.SaveAsync();
+                        var myModelReturn = new CategoryServiceViewModel
                         {
-                            CategoryName = CategoryDel.CategoryName,
-                            Description = CategoryDel.Description,
-                            Id = CategoryDel.Id
-                        }
-                    };
+                            CategoryName = categoryDel.CategoryName,
+                            Description = categoryDel.Description,
+                            Id = categoryDel.Id
+                        };
+                        await Logging<DeleteCategoryServiceCommand>.
+                            InformationAsync(ActionCommand.COMMAND_DELETE, userName.UserName, JsonConvert.SerializeObject(myModelReturn));
+                        return new CommandResult<CategoryServiceViewModel>
+                        {
+                            isValid = true,
+                            myModel = myModelReturn
+                        };
+                    }
+                    else
+                    {
+                        await Logging<DeleteCategoryServiceCommand>
+                            .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_CANNOT_FIND_ID);
+                        return new CommandResult<CategoryServiceViewModel>
+                        {
+                            isValid = false,
+                            errorMessage = ErrorMessageConstant.ERROR_CANNOT_FIND_ID
+                        };
+                    }
                 }
                 else
                 {
+                    await Logging<DeleteCategoryServiceCommand>
+                           .WarningAsync(ActionCommand.COMMAND_DELETE, userName.UserName, ErrorMessageConstant.ERROR_DELETE_PERMISSION);
                     return new CommandResult<CategoryServiceViewModel>
                     {
                         isValid = false,
-                        errorMessage = "Cannot find your Id"
+                        errorMessage = ErrorMessageConstant.ERROR_DELETE_PERMISSION
                     };
                 }
             }
             catch (System.Exception ex)
             {
+                await Logging<DeleteCategoryServiceCommand>.ErrorAsync(ex, ActionCommand.COMMAND_DELETE, "Has error");
                 return new CommandResult<CategoryServiceViewModel>
                 {
                     isValid = false,

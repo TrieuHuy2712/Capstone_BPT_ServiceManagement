@@ -16,7 +16,8 @@ namespace BPT_Service.Model.Entities.ServiceModel
         public Status Status { get; set; }
 
         public Guid ServiceId {get; set;}
-        
+        public bool isAvatar { get; set; }
+
         [ForeignKey("ServiceId")]
         public virtual Service Service { get; set; }
     }

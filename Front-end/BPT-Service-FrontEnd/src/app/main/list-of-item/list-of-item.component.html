@@ -1,0 +1,353 @@
+<!-- main content -->
+<div id="__nuxt" style="margin-left: -250px;">
+    <!---->
+    <div id="__layout">
+        <div class="position-relative h-100 message-mobile layout-default fixed-header has-search"><i
+                class="d-none"></i>
+            <div class="wapper">
+                <div class="c-search-group shadow-2">
+                    
+                </div>
+                <div class="container container--md">
+                    <!---->
+                </div>
+
+                <div id="popular-area">
+                    <ngx-slick class="carousel" #slickModal="slick-modal" [config]="sliderConfigPopular"
+                        (afterChange)="afterChange($event)">
+                        <div ngxSlickItem *ngFor="let item of locations">
+                            <!-- 1st -->
+                            <div style="width: 100%;" alt=slider>
+                                <div><a href="/vi/s?page=1&amp;location=Nha%CC%80%20Th%C6%A1%CC%80%20Con%20Ga%CC%80,%20%C4%90%C3%A0%20L%E1%BA%A1t,%20L%C3%A2m%20%C4%90%E1%BB%93ng&amp;sid=8503&amp;stype=popular"
+                                        class="popular-area" tabindex="0" style="width: 100%; display: inline-block;">
+                                        <p class="mb--6 popular-area__title">{{item.city}}</p>
+                                        <p class="popular-area__desc mb--0"><span>
+                                                {{item.province}}
+                                                , </span></p>
+                                    </a></div>
+                            </div>
+                        </div>
+                    </ngx-slick>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row mt--30">
+                                <div class="col-lg-12">
+                                    <div class="title">
+                                        <h2 class="mb--0 p--giant"> Các dịch vụ khả dụng ở {{newId}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <div *ngFor="let service of services" class="col-md-3">
+
+                                        <div *ngFor="let item of service.listService" class="c-product-card--grid">
+                                            <div class="promo is-relative" routerLinkActive="active"><a
+                                                    [routerLink]="['/main/detailItem',item.id]" data-value="23052">
+                                                    <div class="promo__image">
+                                                        <div class="promo__image-wrap"><img class="w--100"
+                                                                [src]="item.avtService" lazy="loaded">
+                                                            <!---->
+                                                        </div>
+                                                        <div class="is-absolute promo__label-wrap"><span
+                                                                class="promo__label is-promotion">-0% Hôm nay</span>
+                                                            <!---->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <!---->
+                                                <div class="promo__content">
+                                                    <div class="promo__type bold" style="-webkit-box-orient: vertical;">
+                                                        {{item.categoryName}}
+                                                        <!---->
+                                                    </div>
+                                                    <div class="is-relative"><a href="/vi/rooms/23052" class=""
+                                                            target="_blank" id="room-item" data-value="23052">
+                                                            <div class="promo__title extra-bold"
+                                                                style="-webkit-box-orient: vertical;"><svg version="1.1"
+                                                                    viewBox="0 0 20 20"
+                                                                    class="is-instant-book mr--6 svg-icon svg-fill"
+                                                                    style="width: 20px; height: 20px;">
+
+                                                                    <defs>
+                                                                        <linearGradient x1="100%" y1="50%" x2="0%"
+                                                                            y2="50%" id="svgicon_instant_book_a">
+                                                                            <stop stop-color="#F68A39" offset="0%">
+                                                                            </stop>
+                                                                            <stop stop-color="#F65E39" offset="100%">
+                                                                            </stop>
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <g fill="none" fill-rule="evenodd">
+                                                                        <circle pid="0"
+                                                                            fill="url(#svgicon_instant_book_a)" cx="10"
+                                                                            cy="10" r="10"></circle>
+                                                                        <path pid="1"
+                                                                            d="M10.42 15.158l3.037-6.073A.75.75 0 0 0 12.787 8H10V5.177a.75.75 0 0 0-1.42-.335l-3.037 6.073A.75.75 0 0 0 6.213 12H9v2.823a.75.75 0 0 0 1.42.335z"
+                                                                            fill="#FFF"></path>
+                                                                    </g>
+                                                                </svg>
+                                                                {{item.serviceName}}
+                                                            </div>
+                                                        </a>
+                                                        <div class="promo__description my--6 text-lowercase">
+                                                            {{item.author}}</div>
+                                                        <div class="promo__price mb--6">
+                                                            <!----> <span
+                                                                class="extra-bold"><span>{{item.priceOfService}}</span>vnd</span>
+                                                            <span
+                                                                class="strike c-gray-9 ml--6">{{item.priceOfService - - item.priceOfService*0.25}}vnd</span>
+                                                        </div>
+                                                        <div class="promo__add mb--6 promo__add mb--6"><a
+                                                                href="/vi/vietnam/lam-dong/da-lat"
+                                                                class="nuxt-link-exact-active nuxt-link-active">Inprocess</a>
+                                                            <!---->
+                                                        </div>
+                                                        <div class="promo__review">
+                                                            <div class="star-rating d-inline-block"><svg version="1.1"
+                                                                    viewBox="0 0 14 14" class="mr--3 svg-icon svg-fill"
+                                                                    style="width: 14px; height: 14px;">
+                                                                    <path fill="#ffb025" stroke="none" pid="0"
+                                                                        d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                                                                        _fill-rule="evenodd"></path>
+                                                                </svg></div> <span
+                                                                class="promo__review-count p--small">{{item.rating}}</span>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2nd hand -->
+                                <div class="row">
+                                    <div *ngFor="let service of services2" class="col-md-3">
+
+                                        <div class="c-product-card--grid">
+                                            <div class="promo is-relative" routerLinkActive="active"><a
+                                                    [routerLink]="['/main/detailItem',service.id]" data-value="23052">
+                                                    <div class="promo__image">
+                                                        <div class="promo__image-wrap"><img class="w--100"
+                                                                [src]="service.avtService" lazy="loaded">
+                                                            <!---->
+                                                        </div>
+                                                        <div class="is-absolute promo__label-wrap"><span
+                                                                class="promo__label is-promotion">-0% Hôm nay</span>
+                                                            <!---->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <!---->
+                                                <div class="promo__content">
+                                                    <div class="promo__type bold" style="-webkit-box-orient: vertical;">
+                                                        {{service.categoryName}}
+                                                        <!---->
+                                                    </div>
+                                                    <div class="is-relative"><a href="/vi/rooms/23052" class=""
+                                                            target="_blank" id="room-item" data-value="23052">
+                                                            <div class="promo__title extra-bold"
+                                                                style="-webkit-box-orient: vertical;"><svg version="1.1"
+                                                                    viewBox="0 0 20 20"
+                                                                    class="is-instant-book mr--6 svg-icon svg-fill"
+                                                                    style="width: 20px; height: 20px;">
+
+                                                                    <defs>
+                                                                        <linearGradient x1="100%" y1="50%" x2="0%"
+                                                                            y2="50%" id="svgicon_instant_book_a">
+                                                                            <stop stop-color="#F68A39" offset="0%">
+                                                                            </stop>
+                                                                            <stop stop-color="#F65E39" offset="100%">
+                                                                            </stop>
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <g fill="none" fill-rule="evenodd">
+                                                                        <circle pid="0"
+                                                                            fill="url(#svgicon_instant_book_a)" cx="10"
+                                                                            cy="10" r="10"></circle>
+                                                                        <path pid="1"
+                                                                            d="M10.42 15.158l3.037-6.073A.75.75 0 0 0 12.787 8H10V5.177a.75.75 0 0 0-1.42-.335l-3.037 6.073A.75.75 0 0 0 6.213 12H9v2.823a.75.75 0 0 0 1.42.335z"
+                                                                            fill="#FFF"></path>
+                                                                    </g>
+                                                                </svg>
+                                                                {{service.serviceName}}
+                                                            </div>
+                                                        </a>
+                                                        <div class="promo__description my--6 text-lowercase">
+                                                            {{service.author}}</div>
+                                                        <div class="promo__price mb--6">
+                                                            <!----> <span
+                                                                class="extra-bold"><span>{{service.priceOfService}}</span>vnd</span>
+                                                            <span
+                                                                class="strike c-gray-9 ml--6">{{service.priceOfService - - service.priceOfService*0.25}}vnd</span>
+                                                        </div>
+                                                        <div class="promo__add mb--6 promo__add mb--6"><a
+                                                                href="/vi/vietnam/lam-dong/da-lat"
+                                                                class="nuxt-link-exact-active nuxt-link-active">Inprocess</a>
+                                                            <!---->
+                                                        </div>
+                                                        <div class="promo__review">
+                                                            <div class="star-rating d-inline-block"><svg version="1.1"
+                                                                    viewBox="0 0 14 14" class="mr--3 svg-icon svg-fill"
+                                                                    style="width: 14px; height: 14px;">
+                                                                    <path fill="#ffb025" stroke="none" pid="0"
+                                                                        d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                                                                        _fill-rule="evenodd"></path>
+                                                                </svg></div> <span
+                                                                class="promo__review-count p--small">{{service.rating}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 3rd search data -->
+                                <div class="row">
+                                    <div *ngFor="let service of services3" class="col-md-3">
+
+                                        <div class="c-product-card--grid">
+                                            <div class="promo is-relative" routerLinkActive="active"><a
+                                                    [routerLink]="['/main/detailItem',service.id]">
+                                                    <div class="promo__image">
+                                                        <div class="promo__image-wrap"><img class="w--100"
+                                                                [src]="service.avtService" lazy="loaded">
+                                                        </div>
+                                                        <div class="is-absolute promo__label-wrap"><span
+                                                                class="promo__label is-promotion">-0% Hôm nay</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <!---->
+                                                <div class="promo__content">
+                                                    <div class="promo__type bold" style="-webkit-box-orient: vertical;">
+                                                        {{service.categoryName}}
+                                                        <!---->
+                                                    </div>
+                                                    <div class="is-relative"><a href="/vi/rooms/23052" class=""
+                                                            target="_blank" id="room-item" data-value="23052">
+                                                            <div class="promo__title extra-bold"
+                                                                style="-webkit-box-orient: vertical;">
+                                                                {{service.serviceName}}
+                                                            </div>
+                                                        </a>
+                                                        <div class="promo__description my--6 text-lowercase">
+                                                            {{service.author}}</div>
+                                                        <div class="promo__price mb--6">
+                                                            <!----> <span
+                                                                class="extra-bold"><span>{{service.priceOfService}}</span>vnd</span>
+                                                            <span
+                                                                class="strike c-gray-9 ml--6">{{service.priceOfService - - service.priceOfService*0.25}}vnd</span>
+                                                        </div>
+                                                        <div class="promo__add mb--6 promo__add mb--6"><a
+                                                                href="/vi/vietnam/lam-dong/da-lat"
+                                                                class="nuxt-link-exact-active nuxt-link-active">Inprocess</a>
+                                                            <!---->
+                                                        </div>
+                                                        <div class="promo__review">
+                                                            <div class="star-rating d-inline-block"><svg version="1.1"
+                                                                    viewBox="0 0 14 14" class="mr--3 svg-icon svg-fill"
+                                                                    style="width: 14px; height: 14px;">
+                                                                    <path fill="#ffb025" stroke="none" pid="0"
+                                                                        d="M14 5.425c0 .13-.073.27-.219.424l-3.054 3.123.724 4.41c.005.042.008.1.008.177 0 .123-.03.228-.088.313a.292.292 0 0 1-.257.128.658.658 0 0 1-.336-.106L7 11.812l-3.778 2.082a.69.69 0 0 1-.336.106c-.118 0-.206-.043-.265-.128a.538.538 0 0 1-.089-.313 1.5 1.5 0 0 1 .017-.177l.724-4.41L.21 5.849C.07 5.69 0 5.549 0 5.425c0-.217.157-.353.471-.405l4.224-.644L6.588.362C6.694.12 6.832 0 7 0c.168 0 .306.12.412.362l1.893 4.014 4.224.644c.314.052.471.188.471.405z"
+                                                                        _fill-rule="evenodd"></path>
+                                                                </svg></div> <span
+                                                                class="promo__review-count p--small">{{service.rating}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="py--30"></div>
+                                <div class="section">
+                                    <div class="text-center">
+                                        <nav aria-hidden="false" class="text--center">
+                                            <ul role="menubar" aria-disabled="false" aria-label="Pagination"
+                                                class="pagination b-pagination pagination-md">
+                                                <li role="none presentation" aria-hidden="true"
+                                                    class="page-item disabled"><span role="menuitem"
+                                                        aria-label="Go to first page" aria-disabled="true"
+                                                        class="page-link">«</span></li>
+                                                <li role="none presentation" aria-hidden="true"
+                                                    class="page-item disabled"><span role="menuitem"
+                                                        aria-label="Go to previous page" aria-disabled="true"
+                                                        class="page-link">‹</span></li>
+                                                <!---->
+                                                <li role="none presentation" class="page-item active"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=1" class="page-link"
+                                                        role="menuitemradio" aria-label="Go to page 1"
+                                                        aria-checked="true" aria-posinset="1" aria-setsize="69"
+                                                        tabindex="0">1</a>
+                                                </li>
+                                                <li role="none presentation" class="page-item"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=2" class="page-link"
+                                                        role="menuitemradio" aria-label="Go to page 2"
+                                                        aria-checked="false" aria-posinset="2" aria-setsize="69"
+                                                        tabindex="-1">2</a>
+                                                </li>
+                                                <li role="none presentation" class="page-item"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=3" class="page-link"
+                                                        role="menuitemradio" aria-label="Go to page 3"
+                                                        aria-checked="false" aria-posinset="3" aria-setsize="69"
+                                                        tabindex="-1">3</a>
+                                                </li>
+                                                <li role="none presentation" class="page-item bv-d-xs-down-none"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=4" class="page-link"
+                                                        role="menuitemradio" aria-label="Go to page 4"
+                                                        aria-checked="false" aria-posinset="4" aria-setsize="69"
+                                                        tabindex="-1">4</a>
+                                                </li>
+                                                <li role="separator" class="page-item disabled bv-d-xs-down-none">
+                                                    <span class="page-link">…</span></li>
+                                                <li role="none presentation" class="page-item"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=2" class="page-link"
+                                                        role="menuitem" tabindex="-1" aria-label="Go to next page">›</a>
+                                                </li>
+                                                <li role="none presentation" class="page-item"><a
+                                                        href="/vi/vietnam/lam-dong/da-lat?page=69" class="page-link"
+                                                        role="menuitem" tabindex="-1" aria-label="Go to last page">»</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                        <div class="mt--12 mb--12 text--center text-lowercase">{{indexOfServices}} dịch
+                                            vụ khả dụng</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                        </div>
+                        <div class="col-md-5 search-map__wrapper" style="display: none;">
+                            <div class="search-map__action bg-white px--12 py--6 rounded"><label role="checkbox"
+                                    class="el-checkbox ml-0"><span aria-checked="mixed" class="el-checkbox__input"><span
+                                            class="el-checkbox__inner"></span><input type="checkbox" aria-hidden="true"
+                                            class="el-checkbox__original" value=""></span><span
+                                        class="el-checkbox__label">
+                                        Tìm kiếm theo di chuyển bản đồ
+                                        <!----></span></label></div>
+                            <!---->
+                            <!---->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div id="footer" class="footer__bottom">
+                    <div class="container-fluid container--md">
+                        <div class="row middle-md center-xs start-md">
+                            <div class="col-xs-12 text-center">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

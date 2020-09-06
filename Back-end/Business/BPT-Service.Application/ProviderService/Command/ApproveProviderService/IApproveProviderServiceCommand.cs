@@ -6,6 +6,6 @@ namespace BPT_Service.Application.ProviderService.Command.ApproveProviderService
 {
     public interface IApproveProviderServiceCommand
     {
-         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string providerId);
+         Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userProvider, string providerId);
     }
 }

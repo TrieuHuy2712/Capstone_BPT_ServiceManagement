@@ -1,0 +1,132 @@
+<div class="app-container  host mt--30 wapper" style="margin-left: -250px;">
+  <div class="row row--wide flex-lg-row">
+    <div class="col-md-2 host__info">
+      <div class="rounded bg-gray-f pt--24 pb--36">
+        <div class="text-center px--18 pb--18">
+          <div class="image-box image-box--circle image-box--large mx--auto"><img [src]="avaPath"></div>
+          <h1 class="p--giant mt--6 c-gray-3 mb--0">{{provName}}</h1>
+          <p class="c-gray-9 mb--6">Việt Nam</p>
+          <p class="c-gray-6 mb--0"><span>
+              <button id="addtocart-btn" *ngIf="!isFollowedProvider" (click)="followAProvider()"
+                class="btn btn-grad--primary px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
+                  style="color: #fff; font-weight: 600;">Theo dõi</span></button>
+              <button id="addtocart-btn" *ngIf="isFollowedProvider" (click)="unFollowAProvider()"
+                class="unfollow-button px--6 btn--sm btn--full mt--30 bold rounded btn--shadow-primary"><span
+                  style="color: #fff; font-weight: 600;">Đã theo dõi</span></button> <span
+                style="display: none;">...</span> <span style="display: none;">Nương tựa vào Thiên nhiên và Biết ơn Mẹ
+                Đất!</span> <br> <a class="btn color-i pointer mt--6" style="display: none;">Đọc thêm </a></span></p>
+          <!---->
+        </div>
+        <div style="display: none;">
+          <hr>
+          <div class="px--18 pt--6">
+            <p class="mb--12 c-gray-6 bold">Thông tin đã xác minh</p>
+            <div class="is-flex align-center jbetween" style="display: none;"><span class="c-gray-6">Địa chỉ
+                email</span> <svg version="1.1" viewBox="0 0 30 30" class="svg-icon svg-fill"
+                style="width: 20px; height: 20px;">
+                <g fill="none" fill-rule="evenodd">
+                  <path pid="0" fill="#28CA6E"
+                    d="M13.281 29.595l-.057.041a1.933 1.933 0 0 1-2.836-.661l-.034-.063a2.973 2.973 0 0 0-3.097-1.525l-.07.012c-1.068.18-2.076-.56-2.251-1.652a2.046 2.046 0 0 1-.023-.202l-.004-.071c-.077-1.286-.934-2.385-2.143-2.748l-.067-.02c-1.039-.312-1.633-1.426-1.328-2.487.019-.065.04-.13.066-.192l.026-.066a3.107 3.107 0 0 0-.765-3.426l-.052-.048a2.035 2.035 0 0 1 0-2.974l.052-.048a3.107 3.107 0 0 0 .765-3.426l-.026-.066c-.41-1.025.072-2.194 1.074-2.612.061-.026.124-.048.188-.067l.067-.02c1.209-.363 2.066-1.462 2.143-2.748l.004-.071C4.98 3.35 5.91 2.51 6.99 2.578c.066.004.132.012.198.023l.069.012a2.973 2.973 0 0 0 3.097-1.525l.034-.063a1.938 1.938 0 0 1 2.836-.661l.057.04a2.94 2.94 0 0 0 3.438 0l.057-.04a1.933 1.933 0 0 1 2.836.661l.034.063a2.973 2.973 0 0 0 3.097 1.525l.07-.012c1.068-.18 2.076.56 2.251 1.652.011.067.018.134.023.202l.004.071c.077 1.286.934 2.385 2.143 2.748l.067.02c1.039.312 1.633 1.426 1.328 2.487a1.81 1.81 0 0 1-.066.192l-.026.066a3.107 3.107 0 0 0 .765 3.426l.052.048a2.035 2.035 0 0 1 0 2.974l-.052.048a3.107 3.107 0 0 0-.765 3.426l.026.066c.41 1.025-.072 2.194-1.074 2.612a1.931 1.931 0 0 1-.188.067l-.067.02c-1.209.363-2.066 1.462-2.143 2.748l-.004.071c-.067 1.105-.997 1.945-2.077 1.877a1.919 1.919 0 0 1-.198-.023l-.069-.012a2.973 2.973 0 0 0-3.097 1.525l-.034.063a1.938 1.938 0 0 1-2.836.661l-.057-.04a2.94 2.94 0 0 0-3.438 0z">
+                  </path>
+                  <path pid="1" fill="#FFF" d="M19.166 10l-6 6.206-2.332-2.412L9 15.69 13.166 20 21 11.897z"></path>
+                </g>
+              </svg></div>
+            <div class="is-flex align-center jbetween mt--6" style="display: none;"><span class="c-gray-6">Số điện
+                thoại</span> <svg version="1.1" viewBox="0 0 30 30" class="svg-icon svg-fill"
+                style="width: 20px; height: 20px;">
+                <g fill="none" fill-rule="evenodd">
+                  <path pid="0" fill="#28CA6E"
+                    d="M13.281 29.595l-.057.041a1.933 1.933 0 0 1-2.836-.661l-.034-.063a2.973 2.973 0 0 0-3.097-1.525l-.07.012c-1.068.18-2.076-.56-2.251-1.652a2.046 2.046 0 0 1-.023-.202l-.004-.071c-.077-1.286-.934-2.385-2.143-2.748l-.067-.02c-1.039-.312-1.633-1.426-1.328-2.487.019-.065.04-.13.066-.192l.026-.066a3.107 3.107 0 0 0-.765-3.426l-.052-.048a2.035 2.035 0 0 1 0-2.974l.052-.048a3.107 3.107 0 0 0 .765-3.426l-.026-.066c-.41-1.025.072-2.194 1.074-2.612.061-.026.124-.048.188-.067l.067-.02c1.209-.363 2.066-1.462 2.143-2.748l.004-.071C4.98 3.35 5.91 2.51 6.99 2.578c.066.004.132.012.198.023l.069.012a2.973 2.973 0 0 0 3.097-1.525l.034-.063a1.938 1.938 0 0 1 2.836-.661l.057.04a2.94 2.94 0 0 0 3.438 0l.057-.04a1.933 1.933 0 0 1 2.836.661l.034.063a2.973 2.973 0 0 0 3.097 1.525l.07-.012c1.068-.18 2.076.56 2.251 1.652.011.067.018.134.023.202l.004.071c.077 1.286.934 2.385 2.143 2.748l.067.02c1.039.312 1.633 1.426 1.328 2.487a1.81 1.81 0 0 1-.066.192l-.026.066a3.107 3.107 0 0 0 .765 3.426l.052.048a2.035 2.035 0 0 1 0 2.974l-.052.048a3.107 3.107 0 0 0-.765 3.426l.026.066c.41 1.025-.072 2.194-1.074 2.612a1.931 1.931 0 0 1-.188.067l-.067.02c-1.209.363-2.066 1.462-2.143 2.748l-.004.071c-.067 1.105-.997 1.945-2.077 1.877a1.919 1.919 0 0 1-.198-.023l-.069-.012a2.973 2.973 0 0 0-3.097 1.525l-.034.063a1.938 1.938 0 0 1-2.836.661l-.057-.04a2.94 2.94 0 0 0-3.438 0z">
+                  </path>
+                  <path pid="1" fill="#FFF" d="M19.166 10l-6 6.206-2.332-2.412L9 15.69 13.166 20 21 11.897z"></path>
+                </g>
+              </svg></div>
+          </div>
+        </div>
+        <div>
+          <hr>
+          <div class="px--18">
+            <p class="my--12 c-gray-6 bold">Tài khoản đã liên kết</p>
+            <div class="is-flex align-center jbetween" style="display: none;">
+              <div class="is-flex align-center jbetween"><svg version="1.1" viewBox="0 0 16 16"
+                  class="svg-icon svg-fill" style="width: 20px; height: 20px;">
+                  <path pid="0" fill="#3A5999" fill-rule="evenodd"
+                    d="M15.115 0c.243 0 .451.087.625.26.173.174.26.382.26.625v14.23a.852.852 0 0 1-.26.625.852.852 0 0 1-.625.26h-4.073V9.802h2.073l.312-2.417h-2.385V5.844c0-.39.081-.68.244-.875.164-.195.481-.292.954-.292l1.27-.01V2.51c-.437-.062-1.055-.093-1.854-.093-.944 0-1.7.277-2.265.833-.566.556-.85 1.34-.85 2.354v1.781H6.459v2.417h2.084V16H.885a.852.852 0 0 1-.625-.26.852.852 0 0 1-.26-.625V.885C0 .642.087.434.26.26A.852.852 0 0 1 .885 0h14.23z">
+                  </path>
+                </svg> <span class="c-gray-6 pl--6">Facebook</span></div> <svg version="1.1" viewBox="0 0 30 30"
+                class="svg-icon svg-fill" style="width: 20px; height: 20px;">
+                <g fill="none" fill-rule="evenodd">
+                  <path pid="0" fill="#28CA6E"
+                    d="M13.281 29.595l-.057.041a1.933 1.933 0 0 1-2.836-.661l-.034-.063a2.973 2.973 0 0 0-3.097-1.525l-.07.012c-1.068.18-2.076-.56-2.251-1.652a2.046 2.046 0 0 1-.023-.202l-.004-.071c-.077-1.286-.934-2.385-2.143-2.748l-.067-.02c-1.039-.312-1.633-1.426-1.328-2.487.019-.065.04-.13.066-.192l.026-.066a3.107 3.107 0 0 0-.765-3.426l-.052-.048a2.035 2.035 0 0 1 0-2.974l.052-.048a3.107 3.107 0 0 0 .765-3.426l-.026-.066c-.41-1.025.072-2.194 1.074-2.612.061-.026.124-.048.188-.067l.067-.02c1.209-.363 2.066-1.462 2.143-2.748l.004-.071C4.98 3.35 5.91 2.51 6.99 2.578c.066.004.132.012.198.023l.069.012a2.973 2.973 0 0 0 3.097-1.525l.034-.063a1.938 1.938 0 0 1 2.836-.661l.057.04a2.94 2.94 0 0 0 3.438 0l.057-.04a1.933 1.933 0 0 1 2.836.661l.034.063a2.973 2.973 0 0 0 3.097 1.525l.07-.012c1.068-.18 2.076.56 2.251 1.652.011.067.018.134.023.202l.004.071c.077 1.286.934 2.385 2.143 2.748l.067.02c1.039.312 1.633 1.426 1.328 2.487a1.81 1.81 0 0 1-.066.192l-.026.066a3.107 3.107 0 0 0 .765 3.426l.052.048a2.035 2.035 0 0 1 0 2.974l-.052.048a3.107 3.107 0 0 0-.765 3.426l.026.066c.41 1.025-.072 2.194-1.074 2.612a1.931 1.931 0 0 1-.188.067l-.067.02c-1.209.363-2.066 1.462-2.143 2.748l-.004.071c-.067 1.105-.997 1.945-2.077 1.877a1.919 1.919 0 0 1-.198-.023l-.069-.012a2.973 2.973 0 0 0-3.097 1.525l-.034.063a1.938 1.938 0 0 1-2.836.661l-.057-.04a2.94 2.94 0 0 0-3.438 0z">
+                  </path>
+                  <path pid="1" fill="#FFF" d="M19.166 10l-6 6.206-2.332-2.412L9 15.69 13.166 20 21 11.897z"></path>
+                </g>
+              </svg>
+            </div>
+            <div class="is-flex align-center jbetween mt--6">
+              <div class="is-flex align-center jbetween"><svg version="1.1" viewBox="0 0 16 16"
+                  class="svg-icon svg-fill" style="width: 20px; height: 20px;">
+                  <g fill="none">
+                    <path pid="0" fill="#557EBF"
+                      d="M15.85 8.2c0-.55-.05-1.1-.15-1.65H8.15v3.1h4.3c-.2 1-.75 1.85-1.6 2.4v2h2.6c1.5-1.4 2.4-3.45 2.4-5.85z">
+                    </path>
+                    <path pid="1" fill="#36A852"
+                      d="M8.15 16c2.15 0 3.95-.7 5.3-1.95l-2.6-2c-.7.5-1.65.75-2.7.75-2.1 0-3.85-1.4-4.5-3.3H1v2.05C2.35 14.2 5.05 16 8.15 16z">
+                    </path>
+                    <path pid="2" fill="#F9BC15"
+                      d="M3.7 9.5c-.15-.5-.25-1-.25-1.5s.1-1.05.25-1.5V4.4H1C.45 5.5.15 6.7.15 8c0 1.3.3 2.5.85 3.6l2.7-2.1z">
+                    </path>
+                    <path pid="3" fill="#EA4535"
+                      d="M8.15 3.2c1.15 0 2.25.4 3.05 1.2l2.3-2.3C12.15.8 10.3 0 8.15 0 5.05 0 2.35 1.8 1 4.4l2.7 2.1c.6-1.9 2.4-3.3 4.45-3.3z">
+                    </path>
+                  </g>
+                </svg> <span class="c-gray-6 pl--6">Google</span></div> <svg version="1.1" viewBox="0 0 30 30"
+                class="svg-icon svg-fill" style="width: 20px; height: 20px;">
+                <g fill="none" fill-rule="evenodd">
+                  <path pid="0" fill="#28CA6E"
+                    d="M13.281 29.595l-.057.041a1.933 1.933 0 0 1-2.836-.661l-.034-.063a2.973 2.973 0 0 0-3.097-1.525l-.07.012c-1.068.18-2.076-.56-2.251-1.652a2.046 2.046 0 0 1-.023-.202l-.004-.071c-.077-1.286-.934-2.385-2.143-2.748l-.067-.02c-1.039-.312-1.633-1.426-1.328-2.487.019-.065.04-.13.066-.192l.026-.066a3.107 3.107 0 0 0-.765-3.426l-.052-.048a2.035 2.035 0 0 1 0-2.974l.052-.048a3.107 3.107 0 0 0 .765-3.426l-.026-.066c-.41-1.025.072-2.194 1.074-2.612.061-.026.124-.048.188-.067l.067-.02c1.209-.363 2.066-1.462 2.143-2.748l.004-.071C4.98 3.35 5.91 2.51 6.99 2.578c.066.004.132.012.198.023l.069.012a2.973 2.973 0 0 0 3.097-1.525l.034-.063a1.938 1.938 0 0 1 2.836-.661l.057.04a2.94 2.94 0 0 0 3.438 0l.057-.04a1.933 1.933 0 0 1 2.836.661l.034.063a2.973 2.973 0 0 0 3.097 1.525l.07-.012c1.068-.18 2.076.56 2.251 1.652.011.067.018.134.023.202l.004.071c.077 1.286.934 2.385 2.143 2.748l.067.02c1.039.312 1.633 1.426 1.328 2.487a1.81 1.81 0 0 1-.066.192l-.026.066a3.107 3.107 0 0 0 .765 3.426l.052.048a2.035 2.035 0 0 1 0 2.974l-.052.048a3.107 3.107 0 0 0-.765 3.426l.026.066c.41 1.025-.072 2.194-1.074 2.612a1.931 1.931 0 0 1-.188.067l-.067.02c-1.209.363-2.066 1.462-2.143 2.748l-.004.071c-.067 1.105-.997 1.945-2.077 1.877a1.919 1.919 0 0 1-.198-.023l-.069-.012a2.973 2.973 0 0 0-3.097 1.525l-.034.063a1.938 1.938 0 0 1-2.836.661l-.057-.04a2.94 2.94 0 0 0-3.438 0z">
+                  </path>
+                  <path pid="1" fill="#FFF" d="M19.166 10l-6 6.206-2.332-2.412L9 15.69 13.166 20 21 11.897z"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div _ngcontent-sjt-c5="" class="col-md-10">
+      <div _ngcontent-sjt-c5="" class="row mt--30">
+        <div _ngcontent-sjt-c5="" class="col-lg-12">
+          <div _ngcontent-sjt-c5="" class="title">
+            <h2 _ngcontent-sjt-c5="" class="mb--0 p--giant">{{viewOfService.length}} services are available</h2>
+          </div>
+        </div>
+      </div>
+      <div _ngcontent-sjt-c5="" class="row">
+        <div _ngcontent-sjt-c5="" *ngFor="let item of viewOfService, let i = index" class="col-md-3">
+          <a [routerLink]="[ '/main/detailItem',item.id]" rel="noopener noreferrer" target="_blank">
+            <div _ngcontent-sjt-c5="" class="c-product-card--grid">
+              <div _ngcontent-sjt-c5="" class="promo is-relative"><a _ngcontent-sjt-c5="" class="" data-value="23052">
+                  <div _ngcontent-sjt-c5="" class="promo__image">
+                    <div _ngcontent-sjt-c5="" class="promo__image-wrap img-in-view"><img _ngcontent-sjt-c5=""
+                        class="w--100" [src]="item.avtService" width="270">
+                    </div>
+                  </div>
+                </a>
+                <div _ngcontent-sjt-c5="" class="promo__content">
+                  <div _ngcontent-sjt-c5="" class="promo__type bold" style="-webkit-box-orient: vertical;">
+                    {{item.serviceName}} </div>
+                  <div _ngcontent-sjt-c5="" class="is-relative"><a>
+                      <div _ngcontent-sjt-c5="" class="promo__title extra-bold" style="-webkit-box-orient: vertical;">
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -22,7 +22,6 @@ namespace BPT_Service.Application.FunctionService.Query.GetByIdFunctionService
                 Id = function.Id,
                 Name = function.Name,
                 ParentId = function.ParentId,
-                SortOrder = function.SortOrder,
                 Status = function.Status,
                 URL = function.URL
             };

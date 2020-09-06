@@ -6,6 +6,6 @@ namespace BPT_Service.Application.ProviderService.Query.CheckUserIsProvider
 {
     public interface ICheckUserIsProviderQuery
     {
-        Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync();
+        Task<CommandResult<ProviderServiceViewModel>> ExecuteAsync(string userId);
     }
 }
